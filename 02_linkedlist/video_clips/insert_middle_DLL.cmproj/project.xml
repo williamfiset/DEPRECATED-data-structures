@@ -4,15 +4,15 @@
   <Comment></Comment>
   <System></System>
   <SourceBin id="3"  >
-    <Source id="4" src="./recordings/1467314563.626450/Rec 06-30-16 1.trec" lastMod="20160630T192210" rect="(0,0,816,331)" >
-      <SourceTrack range="(0,259)" type="0" editRate="25/1" trackRect="(0,0,816,331)" sampleRate="0/1" bitDepth="0" numChannels="0" filename="" metaData="2b7b6a01-7a1f-11e2-83d0-0017f200be7f;2b7b6af0-7a1f-11e2-83d0-0017f200be7f;2b7b6af1-7a1f-11e2-83d0-0017f200be7f;2b7b6af2-7a1f-11e2-83d0-0017f200be7f;2b7b6af3-7a1f-11e2-83d0-0017f200be7f;2b7b6af5-7a1f-11e2-83d0-0017f200be7f;2b7b6af6-7a1f-11e2-83d0-0017f200be7f;2b7b6af7-7a1f-11e2-83d0-0017f200be7f;2b7b6af8-7a1f-11e2-83d0-0017f200be7f;2b7b6af9-7a1f-11e2-83d0-0017f200be7f;2b7b6afa-7a1f-11e2-83d0-0017f200be7f;2b7b6afb-7a1f-11e2-83d0-0017f200be7f;2b7b6afc-7a1f-11e2-83d0-0017f200be7f;" />
-      <SourceTrack range="(0,460800)" type="2" editRate="44100/1" trackRect="(0,0,0,0)" sampleRate="44100/1" bitDepth="16" numChannels="2" filename="" metaData="" />
+    <Source id="4" src="./recordings/1467315545.971097/Rec 06-30-16 5.trec" lastMod="20160630T193859" rect="(0,0,789,356)" >
+      <SourceTrack range="(0,600)" type="0" editRate="25/1" trackRect="(0,0,789,356)" sampleRate="0/1" bitDepth="0" numChannels="0" filename="" metaData="2b7b6a01-7a1f-11e2-83d0-0017f200be7f;2b7b6af0-7a1f-11e2-83d0-0017f200be7f;2b7b6af1-7a1f-11e2-83d0-0017f200be7f;2b7b6af2-7a1f-11e2-83d0-0017f200be7f;2b7b6af3-7a1f-11e2-83d0-0017f200be7f;2b7b6af5-7a1f-11e2-83d0-0017f200be7f;2b7b6af6-7a1f-11e2-83d0-0017f200be7f;2b7b6af7-7a1f-11e2-83d0-0017f200be7f;2b7b6af8-7a1f-11e2-83d0-0017f200be7f;2b7b6af9-7a1f-11e2-83d0-0017f200be7f;2b7b6afa-7a1f-11e2-83d0-0017f200be7f;2b7b6afb-7a1f-11e2-83d0-0017f200be7f;2b7b6afc-7a1f-11e2-83d0-0017f200be7f;" />
+      <SourceTrack range="(0,1061888)" type="2" editRate="44100/1" trackRect="(0,0,0,0)" sampleRate="44100/1" bitDepth="16" numChannels="2" filename="" metaData="" />
     </Source>
   </SourceBin>
   <Timeline id="5"  >
    <Attributes>
-    <Attribute id="6" value="816" name="width"/>
-    <Attribute id="7" value="331" name="height"/>
+    <Attribute id="6" value="789" name="width"/>
+    <Attribute id="7" value="356" name="height"/>
     <Attribute id="8" value="(0,0,0,255)" name="backgroundColor"/>
    </Attributes>
     <GenericMixer id="9"  name="UnifiedMixer">
@@ -28,7 +28,7 @@
         <entry key="trackHeight" val="54"/>
        </MetaData>
        <Medias>
-        <ScreenVMFile id="14" start="0" duration="310" scalar="1/1" mediaStart="0/1" mediaDuration="310/1" trackNumber="0" src="4" >
+        <ScreenVMFile id="14" start="0" duration="720" scalar="1/1" mediaStart="0/1" mediaDuration="720/1" trackNumber="0" src="4" >
          <Transformer>
           <VectorParam id="15"  name="translation">
            <InterpolatingParam id="16" interp="linr"  time="0/1" value="0" leadInLength="0/1"  />
@@ -74,7 +74,7 @@
           <InterpolatingParam id="47" interp="linr"  time="0/1" value="1" leadInLength="0/1"  name="cursorScale"/>
          </Parameters>
          <Attributes>
-          <Attribute id="48" value="Rec 06-30-16 1" name="ident"/>
+          <Attribute id="48" value="Rec 06-30-16 5" name="ident"/>
          </Attributes>
          <MetaData>
           <entry key="clipSpeedAttribute" val="0" type="bool"/>
@@ -132,8 +132,8 @@
     <InterpolatingParam id="79" interp="linr"  time="0/1" value="6000" leadInLength="0/1"  name="farClipDistance"/>
    </Parameters>
    <MetaData>
-    <entry key="RecordingHeight" val="331"/>
-    <entry key="RecordingWidth" val="816"/>
+    <entry key="RecordingHeight" val="356"/>
+    <entry key="RecordingWidth" val="789"/>
    </MetaData>
   </Timeline>
  </Project>

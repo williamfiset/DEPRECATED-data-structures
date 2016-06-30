@@ -22,9 +22,9 @@
 		<integer>54</integer>
 	</array>
 	<key>DocPrefWindowSizePos</key>
-	<string>133 27 1231 991 0 0 1920 1057 </string>
+	<string>190 0 1231 991 0 0 1920 1057 </string>
 	<key>DocPrefZoomValue</key>
-	<string>3.57096774193548194276</string>
+	<string>1.53750000000000119904</string>
 	<key>SaveAsStandaloneProject</key>
 	<real>1</real>
 </dict>

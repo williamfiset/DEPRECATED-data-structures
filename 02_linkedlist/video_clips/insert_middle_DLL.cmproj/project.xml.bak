@@ -6,8 +6,8 @@
   <SourceBin id="3"  />
   <Timeline id="4"  >
    <Attributes>
-    <Attribute id="5" value="816" name="width"/>
-    <Attribute id="6" value="331" name="height"/>
+    <Attribute id="5" value="826" name="width"/>
+    <Attribute id="6" value="361" name="height"/>
     <Attribute id="7" value="(0,0,0,255)" name="backgroundColor"/>
    </Attributes>
     <GenericMixer id="8"  name="UnifiedMixer">

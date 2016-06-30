@@ -76,6 +76,25 @@ public class ArrayTest {
   }
 
   @Test
+  public void testRemoving2() {
+
+    Array<String> list = new Array<>();
+    String[] strs = {"a", "b", "c", "d"};
+    for (String s : strs) list.add(s);
+    
+    assertTrue(list.remove("a"));
+    assertTrue(list.remove("b"));
+    assertTrue(list.remove("c"));
+    assertTrue(list.remove("d"));
+
+    assertFalse(list.remove("a"));
+    assertFalse(list.remove("b"));
+    assertFalse(list.remove("c"));
+    assertFalse(list.remove("d"));
+
+  }
+
+  @Test
   public void testAddingElements() {
     
     Array<Integer> list = new Array<>();
@@ -90,6 +109,55 @@ public class ArrayTest {
 
   }
 
+  @Test
+  public void testAddAndRemove() {
+    
+    Array<Long> list = new Array<>(0);
+    
+    for (int i = 0; i < 55; i++) list.add(44L);
+    for (int i = 0; i < 55; i++) list.remove(44L);
+    assertTrue(list.isEmpty());
+
+    for (int i = 0; i < 55; i++) list.add(44L);
+    for (int i = 0; i < 55; i++) list.removeAt(0);
+    assertTrue(list.isEmpty());
+
+    for (int i = 0; i < 155; i++) list.add(44L);
+    for (int i = 0; i < 155; i++) list.remove(44L);
+    assertTrue(list.isEmpty());
+
+    for (int i = 0; i < 155; i++) list.add(44L);
+    for (int i = 0; i < 155; i++) list.removeAt(0);
+    assertTrue(list.isEmpty());
+
+  }
+
+
+  @Test
+  public void testAddSetRemove() {
+    
+    Array<Long> list = new Array<>(0);
+    
+    for (int i = 0; i < 55; i++) list.add(44L);
+    for (int i = 0; i < 55; i++) list.set(i, 33L);
+    for (int i = 0; i < 55; i++) list.remove(33L);
+    assertTrue(list.isEmpty());
+
+    for (int i = 0; i < 55; i++) list.add(44L);
+    for (int i = 0; i < 55; i++) list.set(i, 33L);
+    for (int i = 0; i < 55; i++) list.removeAt(0);
+    assertTrue(list.isEmpty());
+
+    for (int i = 0; i < 155; i++) list.add(44L);
+    for (int i = 0; i < 155; i++) list.set(i, 33L);
+    for (int i = 0; i < 155; i++) list.remove(33L);
+    assertTrue(list.isEmpty());
+
+    for (int i = 0; i < 155; i++) list.add(44L);
+    for (int i = 0; i < 155; i++) list.removeAt(0);
+    assertTrue(list.isEmpty());
+
+  }
 
   @Test
   public void testGetSize() {

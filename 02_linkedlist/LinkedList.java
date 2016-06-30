@@ -1,4 +1,3 @@
-
 import java.util.Iterator;
 
 interface ILinkedList <T> {
@@ -17,7 +16,7 @@ interface ILinkedList <T> {
 
 }
 
-class Linked_List <T> implements ILinkedList <T>, Iterable <T> {
+public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
   
   private Node <T> head = null;
   private Node <T> tail = null;
@@ -117,28 +116,3 @@ class Linked_List <T> implements ILinkedList <T>, Iterable <T> {
   }
 
 }
-
-public class Video02 {
-    
-    public static void main(String[] args) {
-      
-
-
-    }
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-

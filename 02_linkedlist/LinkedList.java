@@ -5,8 +5,8 @@ interface ILinkedList <T> {
   public int getSize();
   public boolean isEmpty();
 
-  public T removeHead();
-  public T removeTail();
+  public T removeFirst();
+  public T removeLast();
 
   public T peekFirst();
   public T peekLast();
@@ -40,7 +40,7 @@ public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
     return size == 0; 
   }
 
-  public T removeHead() {
+  public T removeFirst() {
 
     if (isEmpty()) throw new RuntimeException("Empty list");
     
@@ -55,7 +55,7 @@ public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
 
   }
 
-  public T removeTail() {
+  public T removeLast() {
 
     if (isEmpty()) throw new RuntimeException("Empty list");
     

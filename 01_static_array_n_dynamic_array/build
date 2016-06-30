@@ -1,0 +1,3 @@
+#!/bin/sh
+javac -cp .:../junit-4.12.jar Array.java ArrayTest.java
+

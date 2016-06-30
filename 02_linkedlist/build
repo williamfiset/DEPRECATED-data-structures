@@ -1,2 +1,3 @@
 #!/bin/sh
-javac -cp .:../junit-4.12.jar LinkedList.*java
+javac -cp .:../junit-4.12.jar LinkedList.java LinkedListTest.java
+

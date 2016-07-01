@@ -1,0 +1,3 @@
+#!/bin/sh
+javac -cp .:../junit-4.12.jar Stack.java StackTest.java StackMain.java ../02_linkedlist/LinkedList.java
+

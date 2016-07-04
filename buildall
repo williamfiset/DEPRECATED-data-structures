@@ -1,0 +1,12 @@
+#!/bin/sh
+
+for DIR in */
+do
+  cd $DIR
+  if [ -e "build" ]; then
+    echo "BUILDING $DIR"
+    ./build
+    echo ""
+  fi
+  cd ..
+done

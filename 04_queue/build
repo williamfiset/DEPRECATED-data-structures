@@ -1,0 +1,3 @@
+#!/bin/sh
+javac -cp .:../junit-4.12.jar Queue.java QueueTest.java QueueMain.java ../02_linkedlist/LinkedList.java
+

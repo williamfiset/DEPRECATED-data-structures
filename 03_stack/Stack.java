@@ -11,7 +11,7 @@ interface IStack <T> {
 
 }
 
-class Stack <T> implements IStack <T>, Iterable <T> {
+public class Stack <T> implements IStack <T>, Iterable <T> {
   
   private LinkedList <T> list = new LinkedList <T>();
 

@@ -9,8 +9,8 @@ interface IPQueue <T> {
   public boolean contains(T elem);
   public boolean remove(T elem);
   public boolean isEmpty();
-  public void clear();
   public void add(T elem);
+  public void clear();
   public int size();
   public T peek();
   public T poll();
@@ -21,6 +21,7 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
 
   int heap_size = 0;
   Array <T> heap = null;
+  HashMap<Integer, T> index_mapping = new HashMap<>();
 
   public PQueue () {
     heap = new Array<>();
@@ -43,8 +44,15 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
   }
 
   public boolean remove(T elem) {
-    heap_size--;
+
+    for (int i = 0; i < heap_size; i++) {
+      if (elem.equals(heap.get(i))) {
+        removeAt(i);
+        return true;
+      }
+    }
     return false;
+
   }
 
   public void clear() {
@@ -75,13 +83,14 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
   }
 
   public void add(T elem) {
+    if (elem == null) throw new NullPointerException();
     heap.add(elem);
+    index_mapping.put(heap_size, elem);
     swim(heap_size++); // bubble up element
   }
 
   public T peek() {
-    if (isEmpty())
-      throw new IllegalStateException("Priority queue is empty, cannot peek");
+    if (isEmpty()) return null;
     return heap.get(0);
   }
 
@@ -92,19 +101,29 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
       heap.set(heap_size+1, null);
       sink(0); // Restore heap property
       return root;
-    } else throw new IllegalStateException("Priority queue is empty, cannot poll");
+    } else return null;
+  }
+
+  private void removeAt(int i) {
+    assert i >= 0 && i < heap_size;
+    
+    // Still need to implement remove at
+
+    heap_size--;
   }
 
   // Swap Two nodes 
   private void swap(int i, int j) {
-    T tmp = heap.get(i);
-    heap.set(i, heap.get(j));
-    heap.set(j, tmp);
+    T i_elem = heap.get(i);
+    T j_elem = heap.get(j);
+    index_mapping.put(i, j_elem);
+    index_mapping.put(j, i_elem);
+    heap.set(i, j_elem);
+    heap.set(j, i_elem);
   }
 
   // Test if node i < node j
   private boolean less(int i, int j) {
-
     // Assume child1 & child2 are not null
     T child1 = heap.get(i);
     T child2 = heap.get(j);

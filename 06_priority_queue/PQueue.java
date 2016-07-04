@@ -8,6 +8,7 @@ interface IPQueue <T> {
   
   public boolean contains(T elem);
   public boolean remove(T elem);
+  public boolean isEmpty();
   public void clear();
   public void add(T elem);
   public int size();
@@ -16,7 +17,7 @@ interface IPQueue <T> {
 
 }
 
-class PQueue <T> implements IPQueue <T> {
+class PQueue <T extends Comparable<T> > implements IPQueue <T> {
 
   int heap_size = 0;
   Array <T> heap = null;
@@ -37,52 +38,61 @@ class PQueue <T> implements IPQueue <T> {
       add(elems[i]);
   }
 
-  // Tests if an element is in the heap in O(log(n)) time
-  public boolean contains(T elem) {
-
-    return false;
+  public boolean isEmpty() {
+    return heap_size == 0;
   }
 
-
   public boolean remove(T elem) {
-
     heap_size--;
     return false;
   }
 
   public void clear() {
-    this(0);
+    heap = new Array<>();
+    heap_size = 0;
   }
-
-  public void add(T elem) {
-    heap_size++;
-  }
-
   public int size() {
     return heap_size;
   }
 
+  // Tests if an element is in the heap in O(log(n)) time
+  public boolean contains(T elem) {
+    int k = 0;
+    while(2*k < heap_size) {
+      
+      // Found element
+      if ( heap.get(k).equals(elem) )
+        return true;
+      
+      // Dig into heap
+      int j = 2*k;
+      if (j < heap_size && less(j, j+1)) j++;
+      swap(k, j);
+      k = j;
+
+    }
+    return heap.get(k).equals(elem);
+  }
+
+  public void add(T elem) {
+    heap.add(elem);
+    swim(heap_size++); // bubble up element
+  }
+
   public T peek() {
-    if (sz > 0)
-      return heap.get(0);
-    throw new Exception("No elements, heap empty");
+    if (isEmpty())
+      throw new IllegalStateException("Priority queue is empty, cannot peek");
+    return heap.get(0);
   }
 
   public T poll() {
-    if (sz > 0) {
+    if (!isEmpty()) {
       T root = heap.get(0);
-      heap.set(0, heap.get(heap_size-1));
-      heap_size--;
-      for (int i = 0; i < heap_size; i++) {
-        Boolean left_is_smaller = less(i*2, i*2+1);
-        if (left_is_smaller) {
-          swap( i, i*2 );
-        } else if (left_is_smaller == false) {
-          swap( i, i*2 + 1 );
-        } // else { } // already at bottom
-      }
+      swap(0, heap_size--);
+      heap.set(heap_size+1, null);
+      sink(0); // Restore heap property
       return root;
-    } else throw new Exception("No elements, heap empty")
+    } else throw new IllegalStateException("Priority queue is empty, cannot poll");
   }
 
   // Swap Two nodes 
@@ -92,12 +102,8 @@ class PQueue <T> implements IPQueue <T> {
     heap.set(j, tmp);
   }
 
-  // Test if node i < node j. Return null if i or j are out of bounds
-  private Boolean less(int i, int j) {
-
-    // Indecisive 
-    if (i >= heap_size || j >= heap_size)
-      return null;
+  // Test if node i < node j
+  private boolean less(int i, int j) {
 
     // Assume child1 & child2 are not null
     T child1 = heap.get(i);
@@ -109,14 +115,21 @@ class PQueue <T> implements IPQueue <T> {
 
   // Bottom up re-heapify 
   private void swim(int k) {
-
+    while(k > 0 && less(k/2, k)) {
+      swap(k/2, k);
+      k /= 2;
+    }
   }
 
   // Top down re-heapify
   private void sink(int k) {
-
+    while(2*k < heap_size) {
+      int j = 2*k;
+      if (j < heap_size && less(j, j+1)) j++;
+      swap(k, j);
+      k = j;
+    }
   }
-
 
 }
 

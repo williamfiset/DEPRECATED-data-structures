@@ -1,2 +1,2 @@
 #!/bin/sh
-java -cp .:../02_linkedlist StackMain
+java -cp .:../bin BinaryTreeMain

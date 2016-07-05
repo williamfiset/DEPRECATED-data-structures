@@ -124,25 +124,16 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
   private Iterator <T> preOrderTraversal () {
     return new Iterator <T> () {
       
-      Node trav = root;
       Stack <Node> stack = new Stack <>(root);
 
       @Override public boolean hasNext() {
-        return trav != null;
+        return !stack.isEmpty();
       }
       @Override public T next () {
 
         Node node = stack.pop();
-
         if (node.left != null) stack.push(node.left);
         if (node.right != null) stack.push(node.right);
-
-        // Done traversal
-        if (stack.isEmpty()) 
-          trav = null;
-        else 
-          trav = node;
-
         return node.data;
 
       }
@@ -150,41 +141,71 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
   }
 
   private Iterator <T> inOrderTraversal () {
-    return null; // Let listener implement
+    return new Iterator <T> () {
+      
+      Stack <Node> stack = new Stack <>(root);
+
+      @Override public boolean hasNext() {
+        return !stack.isEmpty();
+      }
+      @Override public T next () {
+        
+        // Dig left to find smallest node
+        Node left_node = stack.pop();
+        while( left_node.left != null )
+          left_node = left_node.left;
+        
+        Node right_node = left_node;
+        
+        while( right_node.right != null ) {
+          stack.push(right_node.right);
+          right_node = right_node.right;
+        }
+        return left_node;
+      }
+    };
   }
 
   private Iterator <T> postOrderTraversal () {
-    return null; // Let listener implement
+    return new Iterator <T> () {
+      
+      Stack <Node> stack = new Stack <>(root);
+
+      @Override public boolean hasNext() {
+        return !stack.isEmpty();
+      }
+      @Override public T next () {
+        Node node = stack.pop();
+        if (node.right != null) stack.push(node.right);
+        if (node.left  != null) stack.push(node.left);
+        return node.data;
+      }
+    };
   }  
 
   private Iterator <T> levelOrderTraversal () {
     return new Iterator <T> () {
       
-      Node trav = root;
       Queue<Node> queue = new Queue<>(root);
 
       @Override public boolean hasNext() {
-        return trav != null;
+        return !queue.isEmpty();
       }
       @Override public T next () {
 
         Node node = queue.poll();
-
         if (node.right != null) queue.offer(node.right);
         if (node.left != null) queue.offer(node.left);
-
-        // Done traversal
-        if (queue.isEmpty()) 
-          trav = null;
-        else 
-          trav = node;
-
         return node.data;
 
       }
     };
   }
 
+  // Should we allow the user to modify the values of the nodes as they 
+  // are being traversed? Sounds like building a car as your driving it,
+  // perhaps not the best idea. Checking for concurrent modification will
+  // slow iteration slightly at the cost of safety if implemented.
   @Override public Iterator <T> traverse(TreeTraversalOrder order) {
     switch (order) {
       case PRE_ORDER: return preOrderTraversal();

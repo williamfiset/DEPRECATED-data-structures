@@ -3,12 +3,12 @@
 for DIR in */
 do
 
-  #cd $DIR
-  #if [ -e "test" ]; then
-  #  echo "TESTING $DIR"
-  #  ./test
-  #  echo ""
-  #fi
-  #cd ..
+  cd $DIR
+  if [ -e "test" ]; then
+    echo "TESTING $DIR"
+    ./test
+    echo ""
+  fi
+  cd ..
 
 done

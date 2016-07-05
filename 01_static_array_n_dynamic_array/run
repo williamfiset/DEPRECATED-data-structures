@@ -1,2 +1,2 @@
 #!/bin/sh
-java -cp ../bin ArrayMain
+java -cp .:../bin ArrayMain

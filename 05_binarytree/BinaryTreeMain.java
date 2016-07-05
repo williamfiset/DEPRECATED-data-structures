@@ -1,6 +1,6 @@
 import java.util.Iterator;
 
-public class BinaryTreeMain {
+public class BinarySearchTreeMain {
   public static void main(String[] args) {
     
     BinaryTree<Integer> tree = new BinaryTree<>();

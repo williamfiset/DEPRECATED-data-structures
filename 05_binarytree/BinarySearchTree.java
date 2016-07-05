@@ -1,6 +1,6 @@
 import java.util.Iterator;
 
-interface IBinaryTree <T extends Comparable<T> > {
+interface IBinarySearchTree <T extends Comparable<T> > {
 
   public boolean isEmpty();
   public int getSize();
@@ -12,7 +12,7 @@ interface IBinaryTree <T extends Comparable<T> > {
 
 }
 
-public class BinaryTree <T extends Comparable<T>> implements IBinaryTree <T> {
+public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearchTree <T> {
   
   private Node root = null;
   private int nodeCount = 0;
@@ -37,24 +37,26 @@ public class BinaryTree <T extends Comparable<T>> implements IBinaryTree <T> {
 
   public void add ( T elem ) {
     nodeCount++;
-    root = _add(root, elem);
+    root = add(root, elem);
   }
-  private Node _add(Node node, T elem) {
+  private Node add(Node node, T elem) {
     if (node == null) {
       node = new Node (null, null, elem);
     } else {
       if (node.data.compareTo(elem) <= 0) {
-        node.left = _add(node.left, elem);
+        node.left = add(node.left, elem);
       } else {
-        node.right = _add(node.right, elem);
+        node.right = add(node.right, elem);
       }
     }
     return node;
   }
 
   public void remove ( T elem ) {
-    nodeCount--;
-    root = remove(root, elem);
+    if (root != null) {
+      nodeCount--;
+      root = remove(root, elem);
+    }
   }
   private Node remove(Node node, T elem) {
     
@@ -96,9 +98,9 @@ public class BinaryTree <T extends Comparable<T>> implements IBinaryTree <T> {
 
 
   public boolean find (T elem) {
-    return _find(root, elem);
+    return find(root, elem);
   }
-  private boolean _find(Node node, T elem) {
+  private boolean find(Node node, T elem) {
     
     // Reached bottom, value not found
     if (node == null) return false;
@@ -106,24 +108,24 @@ public class BinaryTree <T extends Comparable<T>> implements IBinaryTree <T> {
     int cmp = node.data.compareTo(elem);
     
     if (cmp == 0) return true;
-    else if (cmp == 1) return _find(node.right, elem);
-    else return _find(node.left, elem);
+    else if (cmp == 1) return find(node.right, elem);
+    else return find(node.left, elem);
 
   }
 
   public int height() {
-    return _height(root);
+    return height(root);
   }
-  private int _height(Node node) {
+  private int height(Node node) {
     if (node == null) return 0;
-    return Math.max( _height(node.left), _height(node.right) ) + 1;
+    return Math.max( height(node.left), height(node.right) ) + 1;
   }
 
   private Iterator <T> preOrderTraversal () {
     return new Iterator <T> () {
       
       Node trav = root;
-      Stack<Node> stack = new Stack<>(root);
+      Stack <Node> stack = new Stack <>(root);
 
       @Override public boolean hasNext() {
         return trav != null;

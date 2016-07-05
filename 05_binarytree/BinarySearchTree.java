@@ -143,25 +143,46 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
   private Iterator <T> inOrderTraversal () {
     return new Iterator <T> () {
       
+      Node trav = root;
       Stack <Node> stack = new Stack <>(root);
+      // Queue <Node> queue = new Queue <>(root);
 
       @Override public boolean hasNext() {
         return !stack.isEmpty();
       }
       @Override public T next () {
+
+        Node ret = null;
+        while(trav != null && trav.left != null) {
+          stack.push(trav.left);
+          // queue.offer(trav.left);
+          trav = trav.left;
+        }
+        
+        // Node r = queue.poll();
+        ret = stack.pop();
+        
+        if (ret.right != null) {
+          stack.push(ret.right);
+          // queue.offer(ret.right);
+          trav = ret.right;
+        }
+        
+        return ret.data;
         
         // Dig left to find smallest node
-        Node left_node = stack.pop();
-        while( left_node.left != null )
-          left_node = left_node.left;
-        
-        Node right_node = left_node;
-        
-        while( right_node.right != null ) {
-          stack.push(right_node.right);
-          right_node = right_node.right;
-        }
-        return left_node;
+        // Node left_node = stack.pop();
+        // while( left_node.left != null ) {
+        //   stack.push(left_node);
+        //   left_node = left_node.left;
+        // }
+        // Node right_node = left_node;
+        // 
+        // while( right_node.right != null ) {
+        //   stack.push(right_node);
+        //   right_node = right_node.right;
+        // }
+        // return left_node.data;
       }
     };
   }

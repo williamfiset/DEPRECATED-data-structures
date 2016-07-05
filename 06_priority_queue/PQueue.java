@@ -4,6 +4,9 @@ Remember that you can always turn a max heap into a min heap by inserting negate
 and re-negating the values after they are removed from the heap
 */
 
+
+import java.util.HashMap;
+
 interface IPQueue <T> {
   
   public boolean contains(T elem);
@@ -17,7 +20,7 @@ interface IPQueue <T> {
 
 }
 
-class PQueue <T extends Comparable<T> > implements IPQueue <T> {
+class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
   int heap_size = 0;
   Array <T> heap = null;
@@ -56,8 +59,8 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
   }
 
   public void clear() {
-    heap = new Array<>();
     heap_size = 0;
+    heap = new Array<>();
   }
   public int size() {
     return heap_size;
@@ -86,7 +89,8 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
     if (elem == null) throw new NullPointerException();
     heap.add(elem);
     index_mapping.put(heap_size, elem);
-    swim(heap_size++); // bubble up element
+    swim(heap_size); // bubble up element
+    heap_size++;
   }
 
   public T peek() {
@@ -97,8 +101,9 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
   public T poll() {
     if (!isEmpty()) {
       T root = heap.get(0);
-      swap(0, heap_size--);
-      heap.set(heap_size+1, null);
+      heap_size--;
+      swap(0, heap_size);
+      heap.set(heap_size, null);
       sink(0); // Restore heap property
       return root;
     } else return null;
@@ -109,7 +114,7 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
     
     // Still need to implement remove at
 
-    heap_size--;
+    // heap_size--;
   }
 
   // Swap Two nodes 
@@ -144,7 +149,8 @@ class PQueue <T extends Comparable<T> > implements IPQueue <T> {
   private void sink(int k) {
     while(2*k < heap_size) {
       int j = 2*k;
-      if (j < heap_size && less(j, j+1)) j++;
+      if (j+1 < heap_size && less(j, j+1)) j++;
+      if (!less(k, j)) break;
       swap(k, j);
       k = j;
     }

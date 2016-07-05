@@ -2,6 +2,7 @@
 
 for DIR in */
 do
+
   cd $DIR
   if [ -e "build" ]; then
     echo "BUILDING $DIR"
@@ -9,4 +10,7 @@ do
     echo ""
   fi
   cd ..
+
+  echo $DIR
+
 done

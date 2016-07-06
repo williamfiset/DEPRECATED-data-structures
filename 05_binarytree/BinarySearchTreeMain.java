@@ -3,7 +3,7 @@ import java.util.Iterator;
 public class BinarySearchTreeMain {
   public static void main(String[] args) {
     
-    BinaryTree<Integer> tree = new BinaryTree<>();
+    BinarySearchTree<Integer> tree = new BinarySearchTree<>();
     tree.add(3);
     tree.add(5);
     tree.add(1);

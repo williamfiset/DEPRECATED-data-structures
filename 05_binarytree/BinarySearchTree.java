@@ -14,10 +14,12 @@ interface IBinarySearchTree <T extends Comparable<T> > {
 
 public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearchTree <T> {
   
-  private Node root = null;
-  private int nodeCount = 0;
+  // Make private
+  Node root = null;
+  int nodeCount = 0;
 
-  private class Node {
+  // Make private
+  public class Node {
     T data;
     Node left, right;
     public Node (Node left, Node right, T elem) {
@@ -43,7 +45,8 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     if (node == null) {
       node = new Node (null, null, elem);
     } else {
-      if (node.data.compareTo(elem) <= 0) {
+      // Place lower elem values on left
+      if ( elem.compareTo(node.data) <= 0) {
         node.left = add(node.left, elem);
       } else {
         node.right = add(node.right, elem);
@@ -127,15 +130,13 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
       Stack <Node> stack = new Stack <>(root);
 
       @Override public boolean hasNext() {
-        return !stack.isEmpty();
+        return root != null && !stack.isEmpty();
       }
       @Override public T next () {
-
         Node node = stack.pop();
-        if (node.left != null) stack.push(node.left);
         if (node.right != null) stack.push(node.right);
+        if (node.left != null) stack.push(node.left);
         return node.data;
-
       }
     };
   }
@@ -148,77 +149,62 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
       // Queue <Node> queue = new Queue <>(root);
 
       @Override public boolean hasNext() {
-        return !stack.isEmpty();
+        return root != null && !stack.isEmpty();
       }
       @Override public T next () {
 
         Node ret = null;
         while(trav != null && trav.left != null) {
           stack.push(trav.left);
-          // queue.offer(trav.left);
           trav = trav.left;
         }
         
-        // Node r = queue.poll();
         ret = stack.pop();
         
         if (ret.right != null) {
           stack.push(ret.right);
-          // queue.offer(ret.right);
           trav = ret.right;
         }
         
         return ret.data;
-        
-        // Dig left to find smallest node
-        // Node left_node = stack.pop();
-        // while( left_node.left != null ) {
-        //   stack.push(left_node);
-        //   left_node = left_node.left;
-        // }
-        // Node right_node = left_node;
-        // 
-        // while( right_node.right != null ) {
-        //   stack.push(right_node);
-        //   right_node = right_node.right;
-        // }
-        // return left_node.data;
       }
     };
   }
 
   private Iterator <T> postOrderTraversal () {
+    Stack <Node> stack1 = new Stack <>(root);
+    Stack <Node> stack2 = new Stack <>();
+    while(!stack1.isEmpty()) {
+      Node node = stack1.pop();
+      if (node != null) {
+        stack2.push(node);
+        if (node.left != null)  stack1.push(node.left);
+        if (node.right != null) stack1.push(node.right);
+      }
+    }
     return new Iterator <T> () {
-      
-      Stack <Node> stack = new Stack <>(root);
-
       @Override public boolean hasNext() {
-        return !stack.isEmpty();
+        return !stack2.isEmpty();
       }
       @Override public T next () {
-        Node node = stack.pop();
-        if (node.right != null) stack.push(node.right);
-        if (node.left  != null) stack.push(node.left);
-        return node.data;
+        return stack2.pop().data;
       }
     };
-  }  
+  } 
 
   private Iterator <T> levelOrderTraversal () {
     return new Iterator <T> () {
       
-      Queue<Node> queue = new Queue<>(root);
+      Queue <Node> queue = new Queue <>(root);
 
       @Override public boolean hasNext() {
-        return !queue.isEmpty();
+        return root != null && !queue.isEmpty();
       }
       @Override public T next () {
-
         Node node = queue.poll();
-        if (node.right != null) queue.offer(node.right);
         if (node.left != null) queue.offer(node.left);
+        if (node.right != null) queue.offer(node.right);
         return node.data;
-
       }
     };
   }

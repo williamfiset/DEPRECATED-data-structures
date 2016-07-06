@@ -1,11 +1,6 @@
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.junit.runner.RunWith;
-import static org.junit.Assert.assertTrue;
-// import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -18,26 +13,77 @@ public class BinarySearchTreeTest {
     
   }
 
-  @Test public void adding() {
+  @Test public void testIsEmpty() {
     
-    BinarySearchTree <Integer> tree = new BinarySearchTree<>();
-    tree.add(7);
-    tree.add(2);
-    tree.add(1);
+    BinarySearchTree <String> tree = new BinarySearchTree<>();
+    assertTrue( tree.isEmpty() );
     
-    assertTrue( tree.root.data == 7 ); 
-    assertTrue( tree.root.left.data == 2 ); 
-    assertTrue( tree.root.left.left.data == 1 ); 
-    assertTrue( tree.root.left.left.left == null ); 
-    assertTrue( tree.root.left.left.right == null ); 
+    tree.add("Hello World!");
+    assertFalse( tree.isEmpty() );
+    
+  }
+
+  @Test public void testSize() {
+    BinarySearchTree <String> tree = new BinarySearchTree<>();
+    assertEquals( tree.getSize(), 0 );
+    
+    tree.add("Hello World!");
+    assertEquals( tree.getSize(), 1 );
+  }
+
+  @Test public void testHeight() {
+    BinarySearchTree <String> tree = new BinarySearchTree<>();
+    
+    // Tree should look like:
+    //        M
+    //      J  S
+    //    B   N Z
+    //  A
+    
+    // No tree
+    assertEquals( tree.height(), 0 );
+    
+    // Layer One
+    tree.add("M");
+    assertEquals( tree.height(), 1 );
+    
+    // Layer Two
+    tree.add("J");
+    assertEquals( tree.height(), 2 );
+    tree.add("S");
+    assertEquals( tree.height(), 2 );    
+    
+    // Layer Three
+    tree.add("B");
+    assertEquals( tree.height(), 3 );
+    tree.add("N");
+    assertEquals( tree.height(), 3 );        
+    tree.add("Z");
+    assertEquals( tree.height(), 3 );
+    
+    // Layer 4
+    tree.add("A");
+    assertEquals( tree.height(), 4 );    
+    
+  }
+
+  @Test public void testRemove() {
+    
+  }
+
+  @Test public void testFind() {
+    
+  }
+  
+  // Tests a mixture of methods working together
+  @Test public void testGeneralCase() {
     
   }
 
   public boolean validateTreeTraversal( TreeTraversalOrder trav_order, Integer[] in, Integer[] expected ) {
     
-    if (in.length != expected.length) {
+    if (in.length != expected.length)
       System.out.println("ARRAYS NOT THE SAME LENGTH!");
-    }
     
     int i = 0;
     int N = in.length;
@@ -49,7 +95,6 @@ public class BinarySearchTreeTest {
     
     while(iter.hasNext()) {
       out[i] = iter.next();
-      // System.out.println("ELEM: " + out[i]);
       i++;
     }
     for (i = 0; i < N; i++ )
@@ -61,18 +106,34 @@ public class BinarySearchTreeTest {
   
   // Process self, then left subtree, then right subtree
   @Test public void testPreOrderTraversal() {
-    // 
-    // Integer[] in = new Integer[] { 10, 5, 11, 3, 7 };
-    // Integer[] ex = new Integer[] { 10, 5, 3, 7, 11 };
-    // assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, in, ex) );
-    // 
+    
+    Integer[] in = new Integer[] {  };
+    Integer[] ex = new Integer[] {  };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, in, ex) );
+    
+    in = new Integer[] { 4 };
+    ex = new Integer[] { 4 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, in, ex) );        
+    
+    in = new Integer[] { 10, 5, 11, 3, 7 };
+    ex = new Integer[] { 10, 5, 3, 7, 11 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, in, ex) );
+    
   }
   
   // Process left subtree, then self, then right
   @Test public void testInOrderTraversal() {
     
-    Integer[] in = new Integer[] { 10, 5, 11, 3, 7 };
-    Integer[] ex = new Integer[] { 3, 5, 7, 10, 11 };
+    Integer[] in = new Integer[] {  };
+    Integer[] ex = new Integer[] {  };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
+    
+    in = new Integer[] { 4 };
+    ex = new Integer[] { 4 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );        
+    
+    in = new Integer[] { 10, 5, 11, 3, 7 };
+    ex = new Integer[] { 3, 5, 7, 10, 11 };
     assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
 
     in = new Integer[] { 31, 29, 30, 27, 15, 16, 20, 21, 19, 18 };
@@ -97,26 +158,49 @@ public class BinarySearchTreeTest {
       Arrays.sort(ex);
       assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
     }
-    
-    System.out.println();
+
   }
 
   // Process left subtree, then right subtree, then left
   @Test public void testPostOrderTraversal() {
+
+    Integer[] in = new Integer[] {  };
+    Integer[] ex = new Integer[] {  };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );
     
-    // Integer[] in = new Integer[] { 40, 25, 78, 10, 32 };
-    // Integer[] ex = new Integer[] { 10, 32, 25, 78, 40 };
-    // assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );
-    // 
+    in = new Integer[] { 4 };
+    ex = new Integer[] { 4 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );    
+    
+    in = new Integer[] { 40, 25, 78, 10, 32 };
+    ex = new Integer[] { 10, 32, 25, 78, 40 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );
+
+    in = new Integer[] { 30, 25, 10, 27, 26, 40, 35, 33 };
+    ex = new Integer[] { 10, 26, 27, 25, 33, 35, 40, 30 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );
+
   }  
 
   // Process left subtree, then right subtree, then left
   @Test public void testLevelOrderTraversal() {
     
-    // Integer[] in = new Integer[] { 40, 78, 25, 10, 32 };
-    // Integer[] ex = new Integer[] { 40, 25, 78, 10, 32 };
-    // assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) );
-    // 
+    Integer[] in = new Integer[] {  };
+    Integer[] ex = new Integer[] {  };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) );
+    
+    in = new Integer[] { 4 };
+    ex = new Integer[] { 4 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) ); 
+    
+    in = new Integer[] { 40, 78, 25, 10, 32 };
+    ex = new Integer[] { 40, 25, 78, 10, 32 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) );
+    
+    in = new Integer[] { 30, 25, 10, 27, 26, 40, 35, 33 };
+    ex = new Integer[] { 30, 25, 40, 10, 27, 35, 26, 33 };
+    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) );    
+    
   } 
 
 }

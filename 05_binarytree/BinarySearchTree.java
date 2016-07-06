@@ -8,18 +8,18 @@ interface IBinarySearchTree <T extends Comparable<T> > {
   public void remove ( T elem );
   public boolean find (T elem);
   public int height();
+  
+  // Provide multiple iterators to traverse the tree
   public Iterator traverse(TreeTraversalOrder order);
 
 }
 
 public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearchTree <T> {
   
-  // Make private
-  Node root = null;
-  int nodeCount = 0;
+  private Node root = null;
+  private int nodeCount = 0;
 
-  // Make private
-  public class Node {
+  private class Node {
     T data;
     Node left, right;
     public Node (Node left, Node right, T elem) {
@@ -151,21 +151,22 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
         return root != null && !stack.isEmpty();
       }
       @Override public T next () {
-
-        Node ret = null;
+        
+        // Dig left
         while(trav != null && trav.left != null) {
           stack.push(trav.left);
           trav = trav.left;
         }
         
-        ret = stack.pop();
+        Node node = stack.pop();
         
-        if (ret.right != null) {
-          stack.push(ret.right);
-          trav = ret.right;
+        // Try moving down right once
+        if (node.right != null) {
+          stack.push(node.right);
+          trav = node.right;
         }
         
-        return ret.data;
+        return node.data;
       }
     };
   }
@@ -183,7 +184,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     }
     return new Iterator <T> () {
       @Override public boolean hasNext() {
-        return !stack2.isEmpty();
+        return root != null && !stack2.isEmpty();
       }
       @Override public T next () {
         return stack2.pop().data;

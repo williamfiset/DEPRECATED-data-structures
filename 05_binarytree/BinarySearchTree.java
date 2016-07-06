@@ -46,7 +46,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
       node = new Node (null, null, elem);
     } else {
       // Place lower elem values on left
-      if ( elem.compareTo(node.data) <= 0) {
+      if ( elem.compareTo(node.data) < 0) {
         node.left = add(node.left, elem);
       } else {
         node.right = add(node.right, elem);
@@ -140,13 +140,12 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
       }
     };
   }
-
+  
   private Iterator <T> inOrderTraversal () {
     return new Iterator <T> () {
       
       Node trav = root;
       Stack <Node> stack = new Stack <>(root);
-      // Queue <Node> queue = new Queue <>(root);
 
       @Override public boolean hasNext() {
         return root != null && !stack.isEmpty();

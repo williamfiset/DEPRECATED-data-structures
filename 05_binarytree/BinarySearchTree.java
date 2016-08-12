@@ -37,6 +37,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     return nodeCount;
   }
 
+  // TODO: Make sure duplicate values are not allowed in BST
   public void add ( T elem ) {
     nodeCount++;
     root = add(root, elem);
@@ -55,9 +56,10 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     return node;
   }
 
+  // TODO: Fix remove method
   public void remove ( T elem ) {
     if (root != null) {
-      nodeCount--;
+      nodeCount--; // This is wrong, what if elem doesn't exist in the tree
       root = remove(root, elem);
     }
   }
@@ -82,7 +84,9 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
         return node.left;
       }
 
-      // Do node swap
+      // Do node swap.
+      // When removing node from a binary tree with two links the succussor is the 
+      // smallest node in the right subtree (the leftmost node in the right subtree)
       Node tmp = findMinValueNode(node.right);
       node.data = tmp.data;
       node.right = remove(node.right, tmp.data);
@@ -210,9 +214,9 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
   }
 
   // Should we allow the user to modify the values of the nodes as they 
-  // are being traversed? Sounds like building a car as your driving it,
-  // perhaps not the best idea. Checking for concurrent modification will
-  // slow iteration slightly at the cost of safety if implemented.
+  // are being traversed? Sounds like it's perhaps not the best idea, however
+  // checking for concurrent modification will cause slower iteration
+  // at the cost of safety if implemented. Humm... 
   @Override public Iterator <T> traverse(TreeTraversalOrder order) {
     switch (order) {
       case PRE_ORDER: return preOrderTraversal();

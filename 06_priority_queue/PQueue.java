@@ -46,11 +46,14 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     return heap_size == 0;
   }
 
+  // Wrong
   public boolean remove(T elem) {
 
     for (int i = 0; i < heap_size; i++) {
       if (elem.equals(heap.get(i))) {
+
         removeAt(i);
+
         return true;
       }
     }
@@ -66,23 +69,14 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     return heap_size;
   }
 
-  // Tests if an element is in the heap in O(log(n)) time
+  // O(n) linear scan to test if element is in heap
+  // You can optionally use a Set<T> if element is hashable
+  // to test if the element is in the heap
   public boolean contains(T elem) {
-    int k = 0;
-    while(2*k < heap_size) {
-      
-      // Found element
-      if ( heap.get(k).equals(elem) )
+    for(int i = 0; i < heap_size; i++)
+      if (heap.get(i).equals(elem))
         return true;
-      
-      // Dig into heap
-      int j = 2*k;
-      if (j < heap_size && less(j, j+1)) j++;
-      swap(k, j);
-      k = j;
-
-    }
-    return heap.get(k).equals(elem);
+    return false;
   }
 
   public void add(T elem) {
@@ -111,10 +105,10 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
   private void removeAt(int i) {
     assert i >= 0 && i < heap_size;
+    heap_size--;
     
     // Still need to implement remove at
 
-    // heap_size--;
   }
 
   // Swap Two nodes 

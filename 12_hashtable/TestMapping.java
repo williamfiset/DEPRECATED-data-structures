@@ -31,18 +31,12 @@ public class TestMapping {
 
   static void putting() {
     
-    Mapping<Integer, Integer> map = new Mapping<>(3);
-    
-    map.put(4, 5);
-    map.put(4, 6);
-    map.put(5, 77);
-    map.put(66, -567);
-    // map.put(67, -567);
-
-    System.out.println( map.entries() );
-    System.out.println( map.get(4) );
-    System.out.println( map.get(5) );
-    System.out.println( map.get(66) );
+    for(int map_size = 0; map_size < 100; map_size++) {
+      Mapping<Integer, Integer> map = new Mapping<>(map_size);
+      for(int i = 0; i < 100; i++) {
+        map.put(i, i);
+      }
+    }
 
   }
 

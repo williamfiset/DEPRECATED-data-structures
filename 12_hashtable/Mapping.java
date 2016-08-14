@@ -50,9 +50,10 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
 
   // Make these private
   int capacity, threshold, size = 0;
+  int prime = 2;
   double loadFactor = 0.75;
 
-  private Entry <K,V> table[];
+  Entry <K,V> table[];
   private static final java.math.BigInteger maxTableSZ = new java.math.BigInteger(String.valueOf(Integer.MAX_VALUE));
 
   public Mapping (  ) { this(11); }
@@ -60,14 +61,15 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
   // Designated constructor
   public Mapping (int capacity) {
     if (capacity < 0) throw new IllegalArgumentException("Capacity cannot be less than zero");
-    this.capacity = Math.max(1, capacity);
-    table = (Entry<K,V>[]) java.lang.reflect.Array.newInstance(Entry.class, capacity);
-    threshold = (int) (capacity * loadFactor);
+    this.capacity = Math.max(3, capacity);
+    findPrime();
+    table = (Entry<K,V>[]) java.lang.reflect.Array.newInstance(Entry.class, this.capacity);
+    threshold = (int) (this.capacity * loadFactor);
   }
 
   public Mapping (int capacity, double loadFactor) {
     this(capacity);
-    if (loadFactor <= 0 || Double.isNaN(loadFactor) ) 
+    if (loadFactor <= 0 || loadFactor > 1.0 || Double.isNaN(loadFactor) ) 
       throw new IllegalArgumentException("Illegal loadFactor: " + loadFactor);
     this.loadFactor = loadFactor;
   }
@@ -79,7 +81,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
 
   // Returns a positive number
   private int hash2(int keyHash ) {
-    return 31 - keyHash % 31;
+    return prime - keyHash % prime;
   }
 
   public List<K> keys() {
@@ -124,6 +126,9 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     // Do not allow null key
     if (key == null) return;
 
+    // Deal with threshold
+    if (size >= threshold) rehash();
+
     int index = adjustIndex(key.hashCode());
     int step  = hash2(index);
     boolean insertedElem = false;
@@ -150,21 +155,16 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
 
     }
 
-    // Deal with threshold
-    if (size >= threshold) {
-      // rehash();
-    }
-
   }
 
   // Searches table for key
   public V get(K key) {
-
+    
     int index = adjustIndex(key.hashCode());
-    int step  = hash2(index); 
+    int step  = hash2(index);
 
     while ( table[index] != null ) {
-      if (table[index].equals(key))
+      if (table[index].key.equals(key))
         return table[index].value;
       index = adjustIndex(index + step);
     }
@@ -176,7 +176,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
   public V remove(K key) {
 
     int index = adjustIndex(key.hashCode());
-    int step  = hash2(index);
+    int step = hash2(index);
     V retVal = null;
 
     while(table[index] != null) {
@@ -215,8 +215,27 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     if (table[index] != null)
       table[index].value = table[index].value + 1;
     */
-
   } 
+
+  private static boolean isPrime(final long n) {
+    if (n < 2) return false;
+    if (n == 2 || n == 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+    int limit = (int) Math.sqrt(n);
+    for (int i = 5; i <= limit; i += 6)
+      if (n % i == 0 || n % (i + 2) == 0)
+        return false;
+    return true;
+  }
+
+  private void findPrime() {
+    prime = capacity-1;
+    if (prime <= 2)
+      prime = 2;
+    else 
+      while( !isPrime(prime) )
+        prime--;
+  }
 
   public int size() {
     return size;
@@ -234,13 +253,50 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     java.math.BigInteger bigCapacity = new java.math.BigInteger(String.valueOf(capacity));
     bigCapacity = bigCapacity.shiftLeft(1); // Multiply by two
     capacity =  bigCapacity.nextProbablePrime().min( maxTableSZ ).intValue();      
-    
+    findPrime();
+
   }
 
   // should be private
   void rehash() {
     
-    increaseCapacity( );
+    int oldCap = capacity;
+    int oldPrime = prime;
+    increaseCapacity();
+    
+    Entry<K,V>[] newTable = (Entry<K,V>[]) java.lang.reflect.Array.newInstance(Entry.class, capacity);
+
+    for (int i = 0; i < oldCap; i++) {
+      if (table[i] != null) {
+
+        Entry oldEntry = table[i];
+        int index = adjustIndex(oldEntry.hash);
+        int step  = hash2(index);
+        boolean insertedElem = false;
+
+        while(!insertedElem) {
+
+          Entry <K,V> entry = newTable[index];
+          
+          // Found empty slot
+          if (entry == null) {
+            table[index] = oldEntry;
+            insertedElem = true;
+          // Keep searching
+          } else {
+            index = adjustIndex(index + step);
+          }
+
+        }
+
+        table[i] = null; // Memory Leak
+
+      }
+    }
+
+    table = newTable;
+    threshold = (int) (loadFactor * capacity);
+    // System.gc();
 
   }
 

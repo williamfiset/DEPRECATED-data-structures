@@ -175,8 +175,7 @@
           */
          public Hashtable(int initialCapacity, float loadFactor) {
              if (initialCapacity < 0)
-                 throw new IllegalArgumentException("Illegal Capacity: "+
-                                                    initialCapacity);
+                 throw new IllegalArgumentException("Illegal Capacity: "+initialCapacity);
              if (loadFactor <= 0 || Float.isNaN(loadFactor))
                  throw new IllegalArgumentException("Illegal Load: "+loadFactor);
      

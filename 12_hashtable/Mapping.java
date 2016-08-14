@@ -49,11 +49,10 @@ class Entry <K, V> {
 public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
 
   // Make these private
-  int capacity, threshold, deletedItems = 0, size = 0;
+  int capacity, threshold, size = 0;
   double loadFactor = 0.70;
 
   private Entry <K,V> table[];
-  private static final Object DELETED_ENTRY = new Object();
   private static final java.math.BigInteger maxTableSZ = new java.math.BigInteger(String.valueOf(Integer.MAX_VALUE));
 
   public Mapping (  ) { this(11); }
@@ -86,7 +85,7 @@ public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
   public List<K> keys() {
     List<K> keys = new ArrayList<>();
     for(int i = 0; i < capacity; i++)
-      if (table[i] != null && table[i] != DELETED_ENTRY)
+      if (table[i] != null)
         keys.add(table[i].key);
     return keys;
   }
@@ -94,7 +93,7 @@ public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
   public List<V> values() {
     List<V> values = new ArrayList<>();
     for(int i = 0; i < capacity; i++)
-      if (table[i] != null && table[i] != DELETED_ENTRY)
+      if (table[i] != null)
         values.add(table[i].value);
     return values;
   }
@@ -102,13 +101,23 @@ public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
   public List<Entry<K,V>> entries() {
     List<Entry<K,V>> entries = new ArrayList<>();
     for(int i = 0; i < capacity; i++)
-      if (table[i] != null && table[i] != DELETED_ENTRY)
+      if (table[i] != null)
         entries.add(table[i]);
     return entries;
   }
 
   public boolean containsKey(K key) {
+    
+    int index = hash1(key.hashCode());
+    int step  = hash2(index);
+    while( table[index] != null ) {
+      if(table[index].key.equals(key))
+        return true;
+      index += step;
+      index = (index & 0x7fffffff) % capacity;
+    }
     return false;
+
   }
 
   // Applies only if V is a number
@@ -134,20 +143,25 @@ public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
 
     Entry <K,V> newEntry = new Entry<>(key, value);
     int index = hash1(newEntry.hash);
-    int step  = hash2(index); 
+    int step  = hash2(index);
     boolean insertedElem = false;
 
     while (!insertedElem) {
 
       Entry <K,V> entry = table[index];
-      if (entry == null || entry == DELETED_ENTRY) {
+
+      // Found empty slot for this Key
+      if (entry == null) {
         table[index] = newEntry;
         insertedElem = true;
-        deletedItems--;
         size++;
+
+      // Update existing key with new value
       } else if ( entry.equals(newEntry) ) {
         entry.value = value;
         insertedElem = true;
+
+      // Keep searching
       } else {
         index += step;
         index = (index & 0x7fffffff) % capacity;
@@ -157,24 +171,27 @@ public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
 
   }
 
+  // Searches table for key
   public V get(K key) {
 
     int index = hash1(key.hashCode());
     int step  = hash2(index); 
 
-    while ( table[index] == DELETED_ENTRY ) {
+    while ( table[index] != null ) {
+      if (table[index].equals(key))
+        return table[index].value;
       index += step;
       index = (index & 0x7fffffff) % capacity;
     }
 
-    if (table[index] != null)
-      return table[index].value;
     return null;
 
   }
 
   public V remove(K key) {
+    
     return null;
+
   }
 
   public int size() {

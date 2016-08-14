@@ -35,6 +35,7 @@ public class TestMapping {
     map.put(4, 5);
     map.put(4, 6);
     System.out.println( map.entries() );
+    System.out.println( map.get(4) );
 
   }
 

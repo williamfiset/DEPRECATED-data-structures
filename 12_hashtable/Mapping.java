@@ -113,10 +113,21 @@ public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
 
   // Applies only if V is a number
   public void inc(K key) {
-    // Find entry
-    // if it exists do:
-      // if entry.isNumber do entry.value++; 
-    // else set it to one
+
+    /*
+    int index = hash1(key.hashCode());
+    int step  = hash2(index); 
+
+    while ( table[index] == DELETED_ENTRY ) {
+      index += step;
+      index = (index & 0x7fffffff) % capacity;
+    }
+
+    // Check if it is a number type
+    if (table[index] != null)
+      table[index].value = table[index].value + 1;
+    */
+
   } 
 
   public void put( K key, V value) {
@@ -147,7 +158,19 @@ public class Mapping <K, V> implements IMap<K, V>, Iterable <K> {
   }
 
   public V get(K key) {
+
+    int index = hash1(key.hashCode());
+    int step  = hash2(index); 
+
+    while ( table[index] == DELETED_ENTRY ) {
+      index += step;
+      index = (index & 0x7fffffff) % capacity;
+    }
+
+    if (table[index] != null)
+      return table[index].value;
     return null;
+
   }
 
   public V remove(K key) {

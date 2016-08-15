@@ -142,9 +142,9 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
         table[index] = new Entry<>(key, value);
         insertedElem = true;
         size++;
-
+// 
       // Update existing key with new value
-      } else if ( entry.equals(table[index]) ) {
+      } else if ( entry.key.equals(key) ) {
         entry.value = value;
         insertedElem = true;
 
@@ -173,26 +173,50 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
 
   }
 
+  // Remove a key from the table. When removing a key we need to be careful
+  // to also 'push back' the other keys which also hashed to the key we 
+  // are removing otherwise we might end up with orphan keys!
   public V remove(K key) {
 
-    int index = adjustIndex(key.hashCode());
+    int originalHash = key.hashCode();
+    int index = adjustIndex(originalHash);
+    int lastIndex = index;
     int step = hash2(index);
+    boolean removedItem = false;
     V retVal = null;
 
-    while(table[index] != null) {
+    while(true) {
 
-      if (table[index].key.equals(key)) {
+      Entry <K,V> thisEntry = table[index];
+
+      if (thisEntry == null) break;
+      else if (thisEntry.hash != originalHash) break;
+      
+      // Found the element we want to remove
+      else if (thisEntry.key.equals(key)) {
         retVal = table[index].value;
         table[index] = null;
+        removedItem = true;
+        size--;
+      
+      // This is an element which hashed to the same value as the key we are removing
+      // meaning we want to reinsert it so that it doesn't get lost
       } else {
-        Entry<K,V> thisEntry = table[index];
-        table[index] = null;
-        put(thisEntry.key, thisEntry.value);
+        if (removedItem) {
 
-        // Item was reinserted were it was b4, so we're done
-        if (table[index] != null) break;
+          table[index] = null;
+          // put(thisEntry.key, thisEntry.value);
+          table[lastIndex] = thisEntry;
+          
+        }
       }
+
+      // Move to the next index even if we removed the element we 
+      // were looking for. We still need to cleanup the table of elements
+      // who hashed to the same place as the one we removed.
+      lastIndex = index;
       index = adjustIndex(index + step);
+
     }
 
     return retVal;
@@ -230,11 +254,8 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
 
   private void findPrime() {
     prime = capacity-1;
-    if (prime <= 2)
-      prime = 2;
-    else 
-      while( !isPrime(prime) )
-        prime--;
+    if (prime <= 2) prime = 2;
+    else while( !isPrime(prime) ) prime--;
   }
 
   public int size() {
@@ -269,7 +290,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     for (int i = 0; i < oldCap; i++) {
       if (table[i] != null) {
 
-        Entry oldEntry = table[i];
+        Entry <K,V> oldEntry = table[i];
         int index = adjustIndex(oldEntry.hash);
         int step  = hash2(index);
         boolean insertedElem = false;
@@ -288,8 +309,9 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
           }
 
         }
-
-        table[i] = null; // Memory Leak
+        
+        // Avoid memory leak, this object no longer needs to be referenced!
+        table[i] = null;
 
       }
     }
@@ -304,8 +326,18 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     return size == 0;
   }
 
+  // Iterates through the keys of the Map
   public Iterator <K> iterator() {
-    return null;
+    return new Iterator<K> () {
+      private int i = 0;
+      @Override public boolean hasNext() {
+        while(i < capacity && table[i] == null) i++;
+        return i < capacity;
+      }
+      @Override public K next() {
+        return table[i++].key;
+      }
+    };
   }
 
 }

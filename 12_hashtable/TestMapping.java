@@ -2,6 +2,28 @@ import static java.lang.Math.*;
 import java.util.*;
 import java.io.*;
 
+class ConstHashObj {
+
+  Long data;
+  public ConstHashObj (Long data) {
+    this.data = data;
+  }
+
+  @Override public int hashCode() {
+    return 4; // Hash is constant, great for collison tests
+  }
+
+  @Override public boolean equals(Object o) {
+    ConstHashObj c = (ConstHashObj)o;
+    return data.equals(c.data);
+  }
+
+  @Override public String toString() {
+    return ""+data;
+  }
+
+}
+
 public class TestMapping {
 
   static boolean isPrime(final long n) {
@@ -40,11 +62,75 @@ public class TestMapping {
 
   }
 
+  static void testIterator() {
+
+    Mapping<String, Long> map = new Mapping<>();
+
+    map.put("34", 35L);
+    map.put("456", 456L);
+    map.put("666", 666L);
+    map.put("-Hellos dfsdf", 0L);
+    map.put("34", 35L);
+    map.put("456", 456L);
+
+    System.out.println(map);
+
+    for(String k : map) {
+      System.out.println(k);
+    }
+
+  }
+
+  static void removeTests() {
+
+    Mapping<String, String> map = new Mapping<>();
+
+    map.put("A", "B");
+    map.put("B", "C");
+    map.put("C", "D");
+
+    map.remove("B");
+    map.remove("C");
+    map.remove("A");
+
+    System.out.println( map.size() == 0 );
+
+    Mapping<ConstHashObj, Integer> map2 = new Mapping<>();
+    ConstHashObj o1 = new ConstHashObj(1L);
+    ConstHashObj o2 = new ConstHashObj(2L);
+    ConstHashObj o3 = new ConstHashObj(3L);
+    ConstHashObj o4 = new ConstHashObj(4L);
+
+    map2.put(o1, 111);
+    System.out.println( Arrays.toString(map2.table) );
+    map2.put(o2, 111);
+    System.out.println( Arrays.toString(map2.table) );
+    map2.put(o3, 111);
+    System.out.println( Arrays.toString(map2.table) );
+    map2.put(o4, 111);
+    System.out.println( Arrays.toString(map2.table) );
+
+    System.out.println("Finished Adding");
+    map2.remove(o2);
+    System.out.println( Arrays.toString(map2.table) );
+    map2.remove(o3);
+    System.out.println( Arrays.toString(map2.table) );
+    map2.remove(o1);
+    System.out.println( Arrays.toString(map2.table) );
+    map2.remove(o4);
+    System.out.println( Arrays.toString(map2.table) );
+
+    System.out.println(map2.size());
+
+  }
+
   public static void main(String[] args) {
 
     // int h = 3;
     // System.out.println( Number.class.isInstance(null) );
-    putting();
+    // putting();
+    // testIterator();
+    removeTests();
 
 
   }

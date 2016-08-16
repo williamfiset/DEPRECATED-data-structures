@@ -105,19 +105,48 @@ public class MappingTest {
 
     Mapping<Integer, Integer> map = new Mapping<>();
     Set<Integer> keys = new HashSet<>();
-    for(int i = 0; i < 10000; i++) {
-      int randomVal = r.nextInt();
+    for(int i = 0; i < 100000; i++) {
+      int randomVal = r.nextInt() % 400000;
       if (!keys.contains(randomVal)) {
         keys.add(randomVal);
         map.put(randomVal, 5);
       }
     }
 
-    for(Integer k : keys) {
-      map.remove(k);
-    }
+    System.out.println( map.size() + " " + keys.size());
+    assertEquals( map.size(), keys.size() );
 
-    assertTrue(map.size() == 0);
+    // int c =0;
+    // for(Integer k : keys) {
+    //   if(map.remove(k)==null) {
+    //     c++;
+    //   }
+    // }
+    // System.out.println("NULLS: " + c);
+    // System.out.println("SIZE: " + map.size());
+    // assertTrue(map.size() == 0);
+
+  }
+
+  @Test
+  public void removeTest() {
+
+    Mapping<Integer, Integer> map = new Mapping<>( 7 );
+    
+    map.put(4, 0);
+    map.put(15, 0);
+    map.put(26, 0);
+
+    for(int i = 0; i < 10; i++)
+      map.put(i, 0);
+
+    System.out.println( Arrays.toString(map.table) );
+    map.remove(4);
+    System.out.println( Arrays.toString(map.table) );
+    map.remove(15);
+    System.out.println( Arrays.toString(map.table) );
+    map.remove(26);
+    System.out.println( Arrays.toString(map.table) );    
 
   }
 

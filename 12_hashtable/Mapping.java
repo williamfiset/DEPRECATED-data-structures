@@ -201,13 +201,13 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
       // This is an element which hashed to the same value as the key we are removing
       // meaning we want to reinsert it so that it doesn't get lost
       } else {
-        if (removedItem) {
+        // if (removedItem) {
 
           size--;
           table[index] = null;
           put(thisEntry.key, thisEntry.value);
           
-        }
+        // }
       }
 
       // Move to the next index even if we removed the element we 
@@ -292,6 +292,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
         int step  = hash2(index);
         boolean insertedElem = false;
 
+        // Add old element into new table
         while(!insertedElem) {
 
           Entry <K,V> entry = newTable[index];

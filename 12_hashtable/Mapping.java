@@ -203,6 +203,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
       } else {
         if (removedItem) {
 
+          size--;
           table[index] = null;
           put(thisEntry.key, thisEntry.value);
           
@@ -281,7 +282,6 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     int oldCap = capacity;
     int oldPrime = prime;
     increaseCapacity();
-    
     Entry<K,V>[] newTable = (Entry<K,V>[]) java.lang.reflect.Array.newInstance(Entry.class, capacity);
 
     for (int i = 0; i < oldCap; i++) {
@@ -298,7 +298,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
           
           // Found empty slot
           if (entry == null) {
-            table[index] = oldEntry;
+            newTable[index] = oldEntry;
             insertedElem = true;
           // Keep searching
           } else {

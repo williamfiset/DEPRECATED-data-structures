@@ -5,29 +5,23 @@ import static java.lang.Math.*;
 import java.util.*;
 import java.io.*;
 
+// You can set the hash value of this object to be whatever you want
+// This makes it great for testing special cases.
 class ConstHashObj {
-
-  Long data;
-  public ConstHashObj (Long data) {
+  int hash, data;
+  public ConstHashObj (int hash, int data) {
+    this.hash = hash;
     this.data = data;
   }
-
-  @Override public int hashCode() {
-    return 4; // Hash is constant, great for collison tests
-  }
-
+  @Override public int hashCode() { return hash; }
   @Override public boolean equals(Object o) {
-    ConstHashObj c = (ConstHashObj)o;
-    return data.equals(c.data);
+    return data == ((ConstHashObj)o).data;
   }
-
-  @Override public String toString() {
-    return ""+data;
-  }
-
 }
 
 public class MappingTest {
+
+  static Random r = new Random();
 
   @Before
   public void setup() {
@@ -107,42 +101,62 @@ public class MappingTest {
   }
 
   @Test
+  public void randomRemove() {
+
+    Mapping<Integer, Integer> map = new Mapping<>();
+    Set<Integer> keys = new HashSet<>();
+    for(int i = 0; i < 10000; i++) {
+      int randomVal = r.nextInt();
+      if (!keys.contains(randomVal)) {
+        keys.add(randomVal);
+        map.put(randomVal, 5);
+      }
+    }
+
+    for(Integer k : keys) {
+      map.remove(k);
+    }
+
+    assertTrue(map.size() == 0);
+
+  }
+
+  @Test
   public void removeTestComplex1() {
 
     Mapping<ConstHashObj, Integer> map = new Mapping<>();
-    ConstHashObj o1 = new ConstHashObj(1L);
-    ConstHashObj o2 = new ConstHashObj(2L);
-    ConstHashObj o3 = new ConstHashObj(3L);
-    ConstHashObj o4 = new ConstHashObj(4L);
+    ConstHashObj o1 = new ConstHashObj(88, 1);
+    ConstHashObj o2 = new ConstHashObj(88, 2);
+    ConstHashObj o3 = new ConstHashObj(88, 3);
+    ConstHashObj o4 = new ConstHashObj(88, 4);
 
 
-    System.out.println(map.size());
+    // System.out.println(map.size());
     map.put(o1, 111);
     // System.out.println( Arrays.toString(map.table) );
-    System.out.println(map.size());
+    // System.out.println(map.size());
     map.put(o2, 111);
-    System.out.println(map.size());
+    // System.out.println(map.size());
     // System.out.println( Arrays.toString(map.table) );
     map.put(o3, 111);
-    System.out.println(map.size());
+    // System.out.println(map.size());
     // System.out.println( Arrays.toString(map.table) );
     map.put(o4, 111);
     // System.out.println( Arrays.toString(map.table) );
-    System.out.println("After ADD:" + map.size());
+    // System.out.println("After ADD:" + map.size());
 
     map.remove(o2);
-    System.out.println( Arrays.toString(map.table) );
-    System.out.println(map.size());
+    // System.out.println( Arrays.toString(map.table) );
+    // System.out.println(map.size());
     map.remove(o3);
-    System.out.println(map.size());
+    // System.out.println(map.size());
     // System.out.println( Arrays.toString(map.table) );
     map.remove(o1);
-    System.out.println(map.size());
+    // System.out.println(map.size());
     // System.out.println( Arrays.toString(map.table) );
     map.remove(o4);
-    System.out.println(map.size());
-    
-    System.out.println( Arrays.toString(map.table) );
+    // System.out.println(map.size());
+    // System.out.println( Arrays.toString(map.table) );
 
     assertTrue(map.size() == 0);    
   }

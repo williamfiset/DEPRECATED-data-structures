@@ -1,12 +1,12 @@
 import java.util.Iterator;
 
-interface IBinarySearchTree <T extends Comparable<T> > {
+interface IBinarySearchTree <T extends Comparable<T>> {
 
   public boolean isEmpty();
   public int getSize();
-  public void add ( T elem );
-  public void remove ( T elem );
-  public boolean find (T elem);
+  public void add(T elem);
+  public boolean remove(T elem);
+  public boolean find(T elem);
   public int height();
   
   // Provide multiple iterators to traverse the tree
@@ -47,7 +47,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
       node = new Node (null, null, elem);
     } else {
       // Place lower elem values on left
-      if ( elem.compareTo(node.data) < 0) {
+      if (elem.compareTo(node.data) < 0) {
         node.left = add(node.left, elem);
       } else {
         node.right = add(node.right, elem);
@@ -56,23 +56,24 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     return node;
   }
 
-  // TODO: Fix remove method
-  public void remove ( T elem ) {
-    if (root != null) {
-      nodeCount--; // This is wrong, what if elem doesn't exist in the tree
+  public boolean remove(T elem) {
+    if (find(elem)) {
+      nodeCount--;
       root = remove(root, elem);
+      return true;
     }
+    return false;
   }
   private Node remove(Node node, T elem) {
     
     if (node == null) return null;
     
     // Dig into left subtree
-    if ( node.data.compareTo(elem) < 0 ) {
+    if (elem.compareTo(node.data) < 0) {
       node.left = remove(node.left, elem);
     
     // Dig into right subtree
-    } else if (node.data.compareTo(elem) > 0) {
+    } else if (elem.compareTo(node.data) > 0) {
       node.right = remove(node.right, elem);
 
     } else {
@@ -104,7 +105,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
   }
 
 
-  public boolean find (T elem) {
+  public boolean find(T elem) {
     return find(root, elem);
   }
   private boolean find(Node node, T elem) {
@@ -112,11 +113,11 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     // Reached bottom, value not found
     if (node == null) return false;
 
-    int cmp = node.data.compareTo(elem);
+    int cmp = elem.compareTo(node.data);
     
     if (cmp == 0) return true;
-    else if (cmp == 1) return find(node.right, elem);
-    else return find(node.left, elem);
+    else if (cmp == -1) return find(node.left, elem);
+    else return find(node.right, elem);
 
   }
 

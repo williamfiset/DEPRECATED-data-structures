@@ -180,7 +180,6 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
 
     int originalHash = key.hashCode();
     int index = adjustIndex(originalHash);
-    int lastIndex = index;
     int step = hash2(index);
     boolean removedItem = false;
     V retVal = null;
@@ -190,7 +189,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
       Entry <K,V> thisEntry = table[index];
 
       if (thisEntry == null) break;
-      else if (thisEntry.hash != originalHash) break;
+      // else if (thisEntry.hash != originalHash) break;
       
       // Found the element we want to remove
       else if (thisEntry.key.equals(key)) {
@@ -205,8 +204,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
         if (removedItem) {
 
           table[index] = null;
-          // put(thisEntry.key, thisEntry.value);
-          table[lastIndex] = thisEntry;
+          put(thisEntry.key, thisEntry.value);
           
         }
       }
@@ -214,7 +212,6 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
       // Move to the next index even if we removed the element we 
       // were looking for. We still need to cleanup the table of elements
       // who hashed to the same place as the one we removed.
-      lastIndex = index;
       index = adjustIndex(index + step);
 
     }

@@ -1,3 +1,6 @@
+
+import static org.junit.Assert.*;
+import org.junit.*;
 import static java.lang.Math.*;
 import java.util.*;
 import java.io.*;
@@ -24,7 +27,12 @@ class ConstHashObj {
 
 }
 
-public class TestMapping {
+public class MappingTest {
+
+  @Before
+  public void setup() {
+
+  }
 
   static boolean isPrime(final long n) {
 
@@ -81,7 +89,8 @@ public class TestMapping {
 
   }
 
-  static void removeTests() {
+  @Test
+  public void removeTestSimple1() {
 
     Mapping<String, String> map = new Mapping<>();
 
@@ -93,45 +102,49 @@ public class TestMapping {
     map.remove("C");
     map.remove("A");
 
-    System.out.println( map.size() == 0 );
+    assertTrue( map.size() == 0 );
 
-    Mapping<ConstHashObj, Integer> map2 = new Mapping<>();
+  }
+
+  @Test
+  public void removeTestComplex1() {
+
+    Mapping<ConstHashObj, Integer> map = new Mapping<>();
     ConstHashObj o1 = new ConstHashObj(1L);
     ConstHashObj o2 = new ConstHashObj(2L);
     ConstHashObj o3 = new ConstHashObj(3L);
     ConstHashObj o4 = new ConstHashObj(4L);
 
-    map2.put(o1, 111);
-    System.out.println( Arrays.toString(map2.table) );
-    map2.put(o2, 111);
-    System.out.println( Arrays.toString(map2.table) );
-    map2.put(o3, 111);
-    System.out.println( Arrays.toString(map2.table) );
-    map2.put(o4, 111);
-    System.out.println( Arrays.toString(map2.table) );
 
-    System.out.println("Finished Adding");
-    map2.remove(o2);
-    System.out.println( Arrays.toString(map2.table) );
-    map2.remove(o3);
-    System.out.println( Arrays.toString(map2.table) );
-    map2.remove(o1);
-    System.out.println( Arrays.toString(map2.table) );
-    map2.remove(o4);
-    System.out.println( Arrays.toString(map2.table) );
+    System.out.println(map.size());
+    map.put(o1, 111);
+    // System.out.println( Arrays.toString(map.table) );
+    System.out.println(map.size());
+    map.put(o2, 111);
+    System.out.println(map.size());
+    // System.out.println( Arrays.toString(map.table) );
+    map.put(o3, 111);
+    System.out.println(map.size());
+    // System.out.println( Arrays.toString(map.table) );
+    map.put(o4, 111);
+    // System.out.println( Arrays.toString(map.table) );
+    System.out.println("After ADD:" + map.size());
 
-    System.out.println(map2.size());
+    map.remove(o2);
+    System.out.println( Arrays.toString(map.table) );
+    System.out.println(map.size());
+    map.remove(o3);
+    System.out.println(map.size());
+    // System.out.println( Arrays.toString(map.table) );
+    map.remove(o1);
+    System.out.println(map.size());
+    // System.out.println( Arrays.toString(map.table) );
+    map.remove(o4);
+    System.out.println(map.size());
+    
+    System.out.println( Arrays.toString(map.table) );
 
+    assertTrue(map.size() == 0);    
   }
 
-  public static void main(String[] args) {
-
-    // int h = 3;
-    // System.out.println( Number.class.isInstance(null) );
-    // putting();
-    // testIterator();
-    removeTests();
-
-
-  }
 }

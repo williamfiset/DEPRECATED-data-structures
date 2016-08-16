@@ -3,8 +3,10 @@ import org.junit.Test;
 import org.junit.Before;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
  
 public class BinarySearchTreeTest {
 
@@ -67,6 +69,20 @@ public class BinarySearchTreeTest {
     
   }
 
+  @Test public void testAdd() {
+
+    // Add element which does not yet exist
+    BinarySearchTree<Character> tree = new BinarySearchTree<>();
+    assertTrue(tree.add('A'));
+
+    // Add duplicate element
+    assertFalse(tree.add('A'));
+
+    // Add a second element which is not a duplicate
+    assertTrue(tree.add('B'));
+
+  }
+
   @Test public void testRemove() {
    
     // Try removing an element which doesn't exist
@@ -81,10 +97,12 @@ public class BinarySearchTreeTest {
     assertEquals(tree.getSize(), 2);
     assertTrue(tree.remove('B'));
     assertEquals(tree.getSize(), 1);
+    assertEquals(tree.height(), 1);
 
     // Try removing the root
     assertTrue(tree.remove('A'));
     assertEquals(tree.getSize(), 0);
+    assertEquals(tree.height(), 0);
 
   }
 
@@ -179,19 +197,26 @@ public class BinarySearchTreeTest {
     ex = new Integer[] { -40, -5, -3, 3, 24, 30, 33, 60, 66, 100, 110, 111, 122, 133 };
     assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
     
-    // Generate random numbers and see if they come out in order
+    // Generate random unique numbers and see if they come out in order
     Random rand = new Random();
     int min_val = -100000, max_val = 100000, num_elems = 100, num_tests = 3000;
     
     for (int i = 0; i < num_tests; i++) {
       in = new Integer[num_elems];
       ex = new Integer[num_elems];
+      Set<Integer> set = new HashSet<>();
       for (int j = 0; j < num_elems; j++ ) {
         int random_num = min_val + rand.nextInt((max_val - min_val) + 1);
-        in[j] = ex[j] = random_num;
+        if (set.contains(random_num)) {
+          j--;
+          continue;
+        } else {
+          set.add(random_num);
+          in[j] = ex[j] = random_num;
+        }
       }
       Arrays.sort(ex);
-      assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
+      assertTrue(validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex));
     }
 
   }

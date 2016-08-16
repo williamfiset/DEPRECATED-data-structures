@@ -4,7 +4,7 @@ interface IBinarySearchTree <T extends Comparable<T>> {
 
   public boolean isEmpty();
   public int getSize();
-  public void add(T elem);
+  public boolean add(T elem);
   public boolean remove(T elem);
   public boolean find(T elem);
   public int height();
@@ -37,10 +37,14 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     return nodeCount;
   }
 
-  // TODO: Make sure duplicate values are not allowed in BST
-  public void add ( T elem ) {
-    nodeCount++;
-    root = add(root, elem);
+  public boolean add(T elem) {
+    if (find(elem)) {
+      return false;
+    } else {
+      nodeCount++;
+      root = add(root, elem);
+      return true;
+    }
   }
   private Node add(Node node, T elem) {
     if (node == null) {

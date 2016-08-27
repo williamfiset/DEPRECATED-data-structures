@@ -5,7 +5,6 @@ interface IMap <K, V> {
 
   public List<K> keys();
   public List<V> values();
-  public List<Entry<K,V>> entries();
 
   public boolean containsKey(K key);
   public void inc(K key);
@@ -28,7 +27,7 @@ class Entry <K, V> {
   public Entry(K key, V value) {
     this.key = key;
     this.value = value;
-    this.hash = key.hashCode(); // key != null ? key.hashCode() : -1; // Compute hash and store it
+    this.hash = key.hashCode();
     // this.isNumber = Number.class.isInstance(value);
   }
 
@@ -84,6 +83,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     return prime - keyHash % prime;
   }
 
+  // Returns a list (set) of keys, however the Iterator is preferable 
   public List<K> keys() {
     List<K> keys = new ArrayList<>();
     for (int i = 0; i < capacity; i++)
@@ -92,6 +92,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     return keys;
   }
 
+  // Returns a list of the values in this Mapping
   public List<V> values() {
     List<V> values = new ArrayList<>();
     for (int i = 0; i < capacity; i++)
@@ -100,19 +101,12 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     return values;
   }
 
-  public List<Entry<K,V>> entries() {
-    List<Entry<K,V>> entries = new ArrayList<>();
-    for (int i = 0; i < capacity; i++)
-      if (table[i] != null)
-        entries.add(table[i]);
-    return entries;
-  }
-
   public boolean containsKey(K key) {
-    
-    int index = adjustIndex(key.hashCode());
+      
+    int originalHash = key.hashCode();
+    int index = adjustIndex(originalHash);
     int step  = hash2(index);
-    while( table[index] != null ) {
+    while( table[index] != null && table[index].hash == originalHash) {
       if(table[index].key.equals(key))
         return true;
       index = adjustIndex(index + step);
@@ -126,7 +120,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
     // Do not allow null key
     if (key == null) return;
 
-    // Deal with threshold
+    // Deal with table being too full
     if (size >= threshold) rehash();
 
     int index = adjustIndex(key.hashCode());
@@ -142,7 +136,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
         table[index] = new Entry<>(key, value);
         insertedElem = true;
         size++;
-// 
+
       // Update existing key with new value
       } else if ( entry.key.equals(key) ) {
         entry.value = value;

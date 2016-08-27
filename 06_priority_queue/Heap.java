@@ -1,5 +1,5 @@
 import java.util.*;
-class Heap {
+public class Heap {
   int size = 0;
   List<Integer> ar = new ArrayList<>();
   public void add(int num) {
@@ -74,55 +74,3 @@ private void sink(int i) {
 }
 
 }
-
-public class H {
-  public static void main(String[] args) {
-    Heap h = new Heap();
-    h.add(6);
-    h.add(4);
-    h.add(2);
-    h.add(3);
-    h.add(8);
-    h.add(9);
-    h.add(10);
-    h.add(11);
-
-    System.out.println(h.ar);
-    System.out.println(h.getTop());
-    h.remove(2);
-    System.out.println(h.ar);
-    h.remove(3);
-    System.out.println(h.ar);
-    h.remove(4);
-    System.out.println(h.ar);
-    h.remove(6);
-    System.out.println(h.ar);
-    h.remove(11);
-    System.out.println(h.ar);
-    h.remove(10);
-    System.out.println(h.ar);
-    h.remove(8);
-    System.out.println(h.ar);
-    h.remove(9);
-    System.out.println(h.ar);
-    // h.remove(8);
-    // System.out.println(h.ar);
-
-    // System.out.println(h.getTop());
-    // h.remove(3);
-    // System.out.println(h.getTop());
-    // h.remove(4);
-    // System.out.println(h.getTop());
-    // h.remove(6);
-    // System.out.println(h.getTop());
-    // h.remove(8);
-    // System.out.println(h.getTop());
-    // h.remove(9);
-    // System.out.println(h.getTop());
-
-
-  }
-}
-
-
-

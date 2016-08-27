@@ -137,9 +137,61 @@ public class TrieTest {
   }
 
   @Test
+  public void testInsert() {
+
+    Trie t = new Trie();
+    assertFalse(t.insert("a"));
+    assertFalse(t.insert("b"));
+    assertFalse(t.insert("c"));
+    assertFalse(t.insert("d"));
+    assertFalse(t.insert("x"));
+
+    assertTrue(t.insert("ab"));
+    assertTrue(t.insert("xkcd"));
+    assertTrue(t.insert("dogs"));
+    assertTrue(t.insert("bears"));
+
+    assertFalse(t.insert("mo"));
+    assertTrue(t.insert("mooooose"));
+
+  }
+
+  @Test
   public void testClear() {
 
+    Trie t = new Trie();
+
+    assertFalse(t.insert("a"));
+    assertFalse(t.insert("b"));
+    assertFalse(t.insert("c"));
     
+    assertTrue(t.contains("a"));
+    assertTrue(t.contains("b"));
+    assertTrue(t.contains("c"));
+
+    t.clear();
+
+    assertFalse(t.contains("a"));
+    assertFalse(t.contains("b"));
+    assertFalse(t.contains("c"));
+
+    t.insert("aaaa");
+    t.insert("aaab");
+    t.insert("aaab5");
+    t.insert("aaac");
+    t.insert("aaacb");
+
+    assertTrue(t.contains("aaa"));
+    assertTrue(t.contains("aaacb"));
+    assertTrue(t.contains("aaab5"));
+
+    t.clear();
+
+    assertFalse(t.contains("aaaa"));
+    assertFalse(t.contains("aaab"));
+    assertFalse(t.contains("aaab5"));
+    assertFalse(t.contains("aaac"));
+    assertFalse(t.contains("aaacb"));
 
   }
 

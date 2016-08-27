@@ -73,6 +73,8 @@ public class Trie implements ITrie {
     // We cannot delete something that doesn't exist
     if (contains(key)) {
 
+      if (numDeletions <= 0) throw new IllegalArgumentException("numDeletions has to be positive");
+
       Node node = root;
       for(int i = 0; i < key.length(); i++) {
 

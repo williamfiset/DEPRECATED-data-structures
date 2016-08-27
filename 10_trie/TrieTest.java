@@ -6,6 +6,28 @@ public class TrieTest {
   // @Before public void setup() { }
 
   @Test(expected=IllegalArgumentException.class)
+  public void testBadTrieDelete1() {
+    Trie t = new Trie();
+    t.insert("some string");
+    t.delete("some string", 0);
+  } 
+
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testBadTrieDelete2() {
+    Trie t = new Trie();
+    t.insert("some string");
+    t.delete("some string", -1);
+  } 
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testBadTrieDelete3() {
+    Trie t = new Trie();
+    t.insert("some string");
+    t.delete("some string", -345);
+  } 
+
+  @Test(expected=IllegalArgumentException.class)
   public void testBadTrieInsert() {
     (new Trie()).insert(null);
   }  
@@ -281,6 +303,12 @@ public class TrieTest {
     assertFalse(t.delete("$B"));
     assertFalse(t.delete("$C"));
 
+    t.clear();
+    
+    t.insert("CAT", 3);
+    t.insert("DOG", 3);
+
+    assertFalse(t.delete("parrot", 50));
 
   }
 

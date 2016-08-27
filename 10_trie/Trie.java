@@ -4,11 +4,13 @@ import java.util.HashMap;
 
 public class Trie implements ITrie {
 
+  private Node root = new Node('\0');
+
   private static class Node {
 
     char ch;
     int count = 0;
-    boolean isLeaf = false;
+    boolean isWordEnding = false;
     Map<Character, Node> children = new HashMap<>();
 
     public Node(char ch) { this.ch = ch; }
@@ -17,16 +19,10 @@ public class Trie implements ITrie {
       children.put(c, node);
     }
 
-    @Override public String toString() {
-      return ch + " - " + Integer.toString(count);
-    }
-
   }
 
-  Node root = new Node('\0');
-
   // Returns true if the string being inserted
-  // is already a prefix in the trie  
+  // contains a prefix already in the trie  
   public boolean insert(String key) {
 
     if (key == null)
@@ -36,21 +32,22 @@ public class Trie implements ITrie {
     boolean created_new_node = false;
     boolean is_prefix = false;
 
+    // Process each character one at a time
     for (int i = 0; i < key.length(); ++i) {
 
       char ch = key.charAt(i);
       Node nextNode = node.children.get(ch);
 
-      // The next character in the sequence does not yet exist in trie
+      // The next character in this string does not yet exist in trie
       if (nextNode == null) {
 
         nextNode = new Node(ch);
         node.addChild(nextNode, ch);
         created_new_node = true;
 
-      // next character exists in trie
+      // Next character exists in trie.
       } else {
-        if (nextNode.isLeaf)
+        if (nextNode.isWordEnding)
           is_prefix = true;
       }
 
@@ -59,9 +56,9 @@ public class Trie implements ITrie {
 
     }
 
-    // The root is not a leaf it's just a placeholder
+    // The root itself is not a word ending. It is simply a placeholder.
     if (node != root)
-      node.isLeaf = true;
+      node.isWordEnding = true;
 
     return is_prefix || !created_new_node;
 
@@ -72,19 +69,20 @@ public class Trie implements ITrie {
     return count(key) != 0;
   }
 
-  // Should return the cont of a particular prefix
+  // Returns the count of a particular prefix
   public int count(String key) {
 
     if (key == null)
       throw new IllegalArgumentException("Null not permitted");
 
     Node node = root;
+
+    // Dig down into trie until we reach the bottom or stop 
+    // early because the string we're looking for doesn't exist
     for(int i = 0; i < key.length(); i++) {
-      
       char ch = key.charAt(i);
       if (node == null) return 0;
       node = node.children.get(ch);
-
     }
 
     if (node != null) 

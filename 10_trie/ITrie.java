@@ -2,17 +2,18 @@
 
 public interface ITrie {
 
-  // Should return true if this string
-  public boolean insert(String s);
+  public boolean insert(String key);
 
-  // Should return true if the string being inserted
-  // is a new prefix in the trie
-  public boolean contains(String s);
+  public boolean insert(String key, int numInserts);
 
-  // Should return the cont of a particular prefix
-  public int count(String prefix);
+  public boolean delete(String key);
 
-  // Should clear the trie
+  public boolean delete(String key, int numDeletions);
+
+  public boolean contains(String key);
+  
+  public int count(String key);
+
   public void clear();
 
 }

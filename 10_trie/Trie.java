@@ -21,12 +21,10 @@ public class Trie implements ITrie {
 
   }
 
-  // Returns true if the string being inserted
-  // contains a prefix already in the trie  
-  public boolean insert(String key) {
-
-    if (key == null)
-      throw new IllegalArgumentException("Null not permitted in trie");
+  public boolean insert(String key, int numInserts) {
+    
+    if (key == null) throw new IllegalArgumentException("Null not permitted in trie");
+    if (numInserts <= 0) throw new IllegalArgumentException("numInserts has to be greater than zero");
 
     Node node = root;
     boolean created_new_node = false;
@@ -52,7 +50,7 @@ public class Trie implements ITrie {
       }
 
       node = nextNode;
-      node.count++;
+      node.count += numInserts;
 
     }
 
@@ -62,6 +60,44 @@ public class Trie implements ITrie {
 
     return is_prefix || !created_new_node;
 
+  }
+
+  // Returns true if the string being inserted
+  // contains a prefix already in the trie  
+  public boolean insert(String key) {
+    return insert(key, 1);
+  }
+
+  public boolean delete(String key, int numDeletions) {
+
+    // We cannot delete something that doesn't exist
+    if (contains(key)) {
+
+      Node node = root;
+      for(int i = 0; i < key.length(); i++) {
+
+        char ch = key.charAt(i);
+        Node curNode = node.children.get(ch);
+        curNode.count -= numDeletions;
+
+        // Cut this edge if the current node has a count <= 0
+        // This means that all the prefixes below this point are inaccessible
+        if (curNode.count <= 0) {
+          node.children.remove(ch);
+          curNode.children = null;
+          curNode = null;
+          return true;
+        }
+
+        node = curNode;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  public boolean delete(String key) {
+    return delete(key, 1);
   }
 
   // Returns true if this string is contained inside the trie

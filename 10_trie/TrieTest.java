@@ -196,6 +196,95 @@ public class TrieTest {
   }
 
   @Test
+  public void testDelete() {
+
+    Trie t = new Trie();
+    t.insert("AAC");
+    t.insert("AA");
+    t.insert("A");
+
+    assertTrue(t.delete("AAC"));
+    assertFalse(t.contains("AAC"));
+    assertTrue(t.contains("AA"));
+    assertTrue(t.contains("A"));
+
+    assertTrue(t.delete("AA"));
+    assertFalse(t.contains("AAC"));
+    assertFalse(t.contains("AA"));
+    assertTrue(t.contains("A"));
+
+    assertTrue(t.delete("A"));
+    assertFalse(t.contains("AAC"));
+    assertFalse(t.contains("AA"));
+    assertFalse(t.contains("A"));
+
+    t.clear();
+    
+    t.insert("AAC");
+    t.insert("AA");
+    t.insert("A");
+
+    assertTrue(t.delete("AA"));
+    assertTrue(t.delete("AA"));
+
+    assertFalse(t.contains("AAC"));
+    assertFalse(t.contains("AA"));
+    assertTrue(t.contains("A"));
+
+    t.clear();
+    
+    t.insert("$A");
+    t.insert("$B");
+    t.insert("$C");
+
+    assertTrue(t.delete("$", 3));
+    
+    assertFalse(t.delete("$"));
+    assertFalse(t.contains("$"));
+    assertFalse(t.contains("$A"));
+    assertFalse(t.contains("$B"));
+    assertFalse(t.contains("$C"));
+    assertFalse(t.delete("$A"));
+    assertFalse(t.delete("$B"));
+    assertFalse(t.delete("$C"));
+
+    t.clear();
+    
+    t.insert("$A");
+    t.insert("$B");
+    t.insert("$C");
+
+    assertTrue(t.delete("$", 2));
+    assertTrue(t.delete("$"));
+
+    assertFalse(t.contains("$"));
+    assertFalse(t.contains("$A"));
+    assertFalse(t.contains("$B"));
+    assertFalse(t.contains("$C"));
+    assertFalse(t.delete("$A"));
+    assertFalse(t.delete("$B"));
+    assertFalse(t.delete("$C"));
+
+    t.clear();
+    
+    t.insert("$A");
+    t.insert("$B");
+    t.insert("$C");
+
+    assertTrue(t.delete("$", 2));
+    
+    assertTrue(t.contains("$"));
+    assertTrue(t.contains("$A"));
+    assertTrue(t.contains("$B"));
+    assertTrue(t.contains("$C"));
+    assertTrue(t.delete("$A"));
+    assertFalse(t.delete("$B"));
+    assertFalse(t.delete("$C"));
+
+
+  }
+
+  @Test
   public void testEdgeCases() {
 
     Trie t = new Trie();

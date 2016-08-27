@@ -6,18 +6,24 @@
 
 public class UnionFind {
 
+  private int size;
   private int[] sz;
   private int[] id;
   private int numComponents;
 
   public UnionFind(int size) {
+
+    if (size <= 0)
+      throw new IllegalArgumentException("Size <= 0 is not allowed");
+
+    this.size = numComponents = size;
     sz = new int[size];
     id = new int[size];
-    numComponents = size;
     for(int i = 0; i < size; i++) {
       id[i] = i; // Link to itself (self root)
       sz[i] = 1; // Each component is of size one originally
     }
+
   }
 
   public int find(int p) {
@@ -45,8 +51,13 @@ public class UnionFind {
   }
 
   // Return the size of the components/set 'p' belongs to
-  public int getSize(int p) {
-    return sz[find(p)];
+  public int getComponentSize(int p) {
+    return sz[find(p)];  
+  }
+
+  // Return the number of elements in this UnionFind/Disjoint set
+  public int getSize() {
+    return size;
   }
 
   // Returns the number of remaining components/sets 
@@ -55,7 +66,7 @@ public class UnionFind {
   }
 
   // Unify the components/sets containing elements 'p' and 'q'
-  public void union(int p, int q) {
+  public void unify(int p, int q) {
 
     int root1 = find(p);
     int root2 = find(q);

@@ -4,7 +4,17 @@
 // This code is an inspired modification of the union find implementation found in 
 // 'Algorithms Fourth Edition' by Robert Sedgewick and Kevin Wayne.
 
-public class UnionFind {
+interface IDisjointSet {
+
+  public void unify(int p, int q);
+  public boolean connected(int p, int q);
+  public int getSize();
+  public int getComponentSize(int p);
+  public int numberOfComponentsLeft();
+
+}
+
+public class UnionFind implements IDisjointSet {
 
   private int size;
   private int[] sz;
@@ -61,7 +71,7 @@ public class UnionFind {
   }
 
   // Returns the number of remaining components/sets 
-  public int numberOfComponents() {
+  public int numberOfComponentsLeft() {
     return numComponents;
   }
 

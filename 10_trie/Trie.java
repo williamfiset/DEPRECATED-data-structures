@@ -67,22 +67,9 @@ public class Trie implements ITrie {
 
   }
 
-  // Should return true if part of this string 
-  // is a prefix of another word already in the trie
+  // Returns true if this string is contained inside the trie
   public boolean contains(String key) {
-
-    if (key == null) return false;
-      
-    Node node = root;
-    for(int i = 0; i < key.length(); i++) {
-
-      char ch = key.charAt(i);
-      if (node == null) return false;
-      node = node.children.get(ch);
-
-    }
-    return node != null;
-
+    return count(key) != 0;
   }
 
   // Should return the cont of a particular prefix

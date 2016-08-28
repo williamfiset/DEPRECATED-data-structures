@@ -21,6 +21,8 @@ public class Trie implements ITrie {
 
   }
 
+  // Returns true if the string being inserted
+  // contains a prefix already in the trie  
   public boolean insert(String key, int numInserts) {
     
     if (key == null) throw new IllegalArgumentException("Null not permitted in trie");
@@ -68,39 +70,39 @@ public class Trie implements ITrie {
     return insert(key, 1);
   }
 
-  // This delete function allows you to delete keys which
-  // were not previously inserted into the trie. This means
-  // that it may be the case that you delete a prefix which
+  // This delete function allows you to delete keys from the trie
+  // (even those which were not previously inserted into the trie).
+  // This means that it may be the case that you delete a prefix which
   // cuts off the access to numerous other strings starting with
   // that prefix.
   public boolean delete(String key, int numDeletions) {
 
     // We cannot delete something that doesn't exist
-    if (contains(key)) {
+    if (!contains(key)) return false;
+    
+    if (numDeletions <= 0)
+      throw new IllegalArgumentException("numDeletions has to be positive");
 
-      if (numDeletions <= 0) throw new IllegalArgumentException("numDeletions has to be positive");
+    Node node = root;
+    for(int i = 0; i < key.length(); i++) {
 
-      Node node = root;
-      for(int i = 0; i < key.length(); i++) {
+      char ch = key.charAt(i);
+      Node curNode = node.children.get(ch);
+      curNode.count -= numDeletions;
 
-        char ch = key.charAt(i);
-        Node curNode = node.children.get(ch);
-        curNode.count -= numDeletions;
-
-        // Cut this edge if the current node has a count <= 0
-        // This means that all the prefixes below this point are inaccessible
-        if (curNode.count <= 0) {
-          node.children.remove(ch);
-          curNode.children = null;
-          curNode = null;
-          return true;
-        }
-
-        node = curNode;
+      // Cut this edge if the current node has a count <= 0
+      // This means that all the prefixes below this point are inaccessible
+      if (curNode.count <= 0) {
+        node.children.remove(ch);
+        curNode.children = null;
+        curNode = null;
+        return true;
       }
-      return true;
+
+      node = curNode;
+
     }
-    return false;
+    return true;
   }
 
   public boolean delete(String key) {

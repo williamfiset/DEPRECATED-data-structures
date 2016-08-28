@@ -176,6 +176,25 @@ public class TrieTest {
     assertFalse(t.insert("mo"));
     assertTrue(t.insert("mooooose"));
 
+    t.clear();
+
+    assertFalse(t.insert("aaaa", 4));
+    assertEquals(t.count("aaaa"), 4);
+
+    assertTrue(t.insert("aaa", 3));
+    assertEquals(t.count("a"), 7);
+    assertEquals(t.count("aa"), 7);
+    assertEquals(t.count("aaa"), 7);
+    assertEquals(t.count("aaaa"), 4);
+    assertEquals(t.count("aaaaa"), 0);
+    
+    assertTrue(t.insert("a", 5));
+    assertEquals(t.count("a"), 12);
+    assertEquals(t.count("aa"), 7);
+    assertEquals(t.count("aaa"), 7);
+    assertEquals(t.count("aaaa"), 4);
+    assertEquals(t.count("aaaaa"), 0);
+
   }
 
   @Test
@@ -309,6 +328,62 @@ public class TrieTest {
     t.insert("DOG", 3);
 
     assertFalse(t.delete("parrot", 50));
+
+    t.clear();
+
+    t.insert("1234");
+    t.insert("122", 2);
+    t.insert("123", 3);
+
+    assertTrue(t.delete("12", 6));
+    assertFalse(t.delete("12"));
+    assertFalse(t.delete("1"));
+    assertFalse(t.contains("1234"));
+    assertFalse(t.contains("123"));
+    assertFalse(t.contains("12"));
+    assertFalse(t.contains("1"));
+
+    t.clear();
+
+    t.insert("1234");
+    t.insert("122", 2);
+    t.insert("123", 3);
+
+    t.delete("12", 999999);
+
+    assertFalse(t.contains("1234"));
+    assertFalse(t.contains("123"));
+    assertFalse(t.contains("12"));
+    assertFalse(t.contains("1"));
+
+    t.clear();
+
+    t.insert("1234");
+    t.insert("122", 2);
+    t.insert("123", 3);
+
+    t.delete("12", 999999);
+
+    assertFalse(t.contains("1234"));
+    assertFalse(t.contains("123"));
+    assertFalse(t.contains("12"));
+    assertFalse(t.contains("1"));
+
+    t.clear();
+
+    t.insert("1234");
+    t.insert("122", 2);
+    t.insert("123", 3);
+
+    assertTrue(t.delete("1234"));
+    assertTrue(t.delete("123", 4));
+    assertTrue(t.delete("122", 2));
+
+    assertFalse(t.contains("1"));
+    assertFalse(t.contains("12"));
+    assertFalse(t.contains("122"));
+    assertFalse(t.contains("123"));
+    assertFalse(t.contains("1234"));
 
   }
 

@@ -68,6 +68,11 @@ public class Trie implements ITrie {
     return insert(key, 1);
   }
 
+  // This delete function allows you to delete keys which
+  // were not previously inserted into the trie. This means
+  // that it may be the case that you delete a prefix which
+  // cuts off the access to numerous other strings starting with
+  // that prefix.
   public boolean delete(String key, int numDeletions) {
 
     // We cannot delete something that doesn't exist

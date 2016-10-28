@@ -81,6 +81,46 @@ public class LinkedListTest {
   }
 
   @Test
+  public void testPeeking() {
+    
+    // 5
+    list.addFirst(5);
+    assertTrue(list.peekFirst() == 5);
+    assertTrue(list.peekLast() == 5);
+
+    // 6 - 5
+    list.addFirst(6);
+    assertTrue(list.peekFirst() == 6);
+    assertTrue(list.peekLast() == 5);
+
+    // 7 - 6 - 5
+    list.addFirst(7);
+    assertTrue(list.peekFirst() == 7);
+    assertTrue(list.peekLast() == 5);
+
+    // 7 - 6 - 5 - 8
+    list.addLast(8);
+    assertTrue(list.peekFirst() == 7);
+    assertTrue(list.peekLast() == 8);
+
+    // 7 - 6 - 5
+    list.removeLast();
+    assertTrue(list.peekFirst() == 7);
+    assertTrue(list.peekLast() == 5);
+
+    // 7 - 6
+    list.removeLast();
+    assertTrue(list.peekFirst() == 7);
+    assertTrue(list.peekLast() == 6);
+
+    // 6
+    list.removeFirst();
+    assertTrue(list.peekFirst() == 6);
+    assertTrue(list.peekLast() == 6);
+
+  }
+
+  @Test
   public void testExhaustively() {
     assertTrue(list.isEmpty());
     list.addFirst(2);

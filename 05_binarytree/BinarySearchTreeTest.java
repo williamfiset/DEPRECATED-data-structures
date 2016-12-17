@@ -81,7 +81,7 @@ class TestTreeNode {
 
 public class BinarySearchTreeTest {
 
-  static final int LOOPS = 500;
+  static final int LOOPS = 1000;
 
   @Before
   public void setup() { }
@@ -199,8 +199,8 @@ public class BinarySearchTreeTest {
     assertTrue(tree.find('C'));
 
   }
-  
-  @Test public void randomRemove() {
+
+  @Test public void randomRemoveTests() {
 
     for (int i = 0; i < LOOPS; i++) {
       
@@ -214,8 +214,10 @@ public class BinarySearchTreeTest {
       for (int j = 0; j < size; j++) {
         
         Integer value = lst.get(j);
+
         assertTrue(tree.remove(value));
         assertFalse(tree.find(value));
+        assertEquals(tree.getSize(), size - j - 1);
 
       }
 
@@ -224,11 +226,6 @@ public class BinarySearchTreeTest {
     }
 
 
-  }
-
-  // Tests a mixture of methods working together
-  @Test public void testGeneralCase() {
-    
   }
 
   static List <Integer> genRandList(int sz) {
@@ -276,7 +273,6 @@ public class BinarySearchTreeTest {
     
   }
   
-  // Process self, then left subtree, then right subtree
   @Test public void testPreOrderTraversal() {
 
     for (int i = 0; i < LOOPS; i++) {
@@ -286,7 +282,6 @@ public class BinarySearchTreeTest {
 
   }
   
-  // Process left subtree, then self, then right
   @Test public void testInOrderTraversal() {
     
     for (int i = 0; i < LOOPS; i++) {
@@ -296,7 +291,6 @@ public class BinarySearchTreeTest {
 
   }
 
-  // Process left subtree, then right subtree, then left
   @Test public void testPostOrderTraversal() {
 
     for (int i = 0; i < LOOPS; i++) {
@@ -306,7 +300,6 @@ public class BinarySearchTreeTest {
 
   }  
 
-  // Process left subtree, then right subtree, then left
   @Test public void testLevelOrderTraversal() {
     
     for (int i = 0; i < LOOPS; i++) {

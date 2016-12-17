@@ -109,10 +109,10 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     return cur;
   }
 
-
   public boolean find(T elem) {
     return find(root, elem);
   }
+  
   private boolean find(Node node, T elem) {
     
     // Reached bottom, value not found

@@ -4,21 +4,11 @@ import java.util.*;
 
 public class PQueueTest {
 
+  static final int LOOPS = 500;
+
   /*
   @Before
   public void setup() {
-    // list = new LinkedList<>();
-  }
-
-  @Test
-  public void addingTest() {
-    PQueue<Integer> q = new PQueue<>();
-    q.add(1);
-    q.add(2);
-    q.add(3);
-    q.add(4);
-    q.add(5);
-    
   }
 
   @Test
@@ -33,24 +23,22 @@ public class PQueueTest {
   @Test
   public void testHeapProperty () {
     
-    PQueue<Integer> q = new PQueue<>();
-    int[] nums = { 3,2,5,6,7,9,4,8,1 };
+    PQueue <Integer> q = new PQueue<>();
+    Integer[] nums = { 3,2,5,6,7,9,4,8,1 };
 
     // Try manually creating heap
     for (int n : nums) q.add(n);
     for (int i = 1; i <= 9; i++)
-      assertTrue( q.poll() == i );
+      assertTrue( i == q.poll() );
     
-    // Try heapify constructor 
-    Integer [] numbers = new Integer[9];
-    for (int i = 0; i < 9; i++) numbers[i] = nums[i];
-    q = new PQueue<>(numbers);
+    q.clear();
 
+    // Try heapify constructor 
+    q = new PQueue<>(nums);
     for (int i = 1; i <= 9; i++)
-      assertTrue( q.poll() == i );
+      assertTrue( i == q.poll() );
 
   }
-  */
 
   @Test
   public void testPeekAndPoll() {
@@ -166,6 +154,17 @@ public class PQueueTest {
   }
 
   @Test
+  public void remove() {
+
+    Integer[] nums = { 0,1,2,3,4,5,6,7,8,9,10 };
+    PQueue <Integer> pq = new PQueue<>(nums);
+
+    pq.remove(1);
+    System.out.println(pq.heap);
+
+  }
+
+  @Test
   public void testPolling1() {
 
     Integer[] nums = {  };
@@ -180,14 +179,198 @@ public class PQueueTest {
     assertTrue( 8 == pq.poll() );
 
   }
+  */
 
   @Test
-  public void testRandomOperations() {
+  public void testRemoving() {
 
-    for (int i = 0; i < 500; i++) {
+    // Integer[] nums = { 1,2,1,2,2,1,3 };
+    Integer[] nums = {  };
+    PQueue <Integer> pq = new PQueue<>(nums);
+
+    /*
+    pq.remove(1,1,1);
+    assertTrue(pq.poll() == 2);
+
+    pq.remove(2,2,2);
+    assertTrue(pq.poll() == 3);
+
+    pq.add(1,1,1);
+    pq.add(2,2,2);
+    pq.remove(2,2,2);
+
+    assertTrue(pq.poll() == 1);
+    assertTrue(pq.poll() == 1);
+    assertTrue(pq.poll() == 1);
+
+    assertTrue(pq.isEmpty());
+    pq.add(1,2,3,4,5,6,7);
+    assertTrue(pq.isMinHeap(0));
+    
+    assertTrue( pq.peek() == 1);
+    pq.remove(1);
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue( pq.peek() == 2 );
+    pq.remove(3);
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue( pq.peek() == 2 );
+    pq.remove(6);
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue( pq.peek() == 2 );
+    pq.remove(4);
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue( pq.peek() == 2 );
+    pq.remove(5);
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue( pq.peek() == 2 );
+    pq.remove(7);
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue( pq.poll() == 2 );
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue(pq.isEmpty());
+
+
+
+    pq.add(1,2,3,4,5,6,7,8,9,10,11);
+    pq.remove(7);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(4);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(6);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(10);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(2);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(5);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+
+    pq.remove(11);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+
+    pq.remove(3);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+
+    pq.remove(1);
+    assertTrue(pq.peek() == 8);
+    assertTrue(pq.isMinHeap(0));
+
+
+    pq.remove(8);
+    assertTrue(pq.peek() == 9);
+    assertTrue(pq.isMinHeap(0));
+
+    assertTrue(pq.poll() == 9);
+    assertTrue(pq.isEmpty());
+    
+
+    pq = new PQueue<Integer>();
+
+    pq.add(8, 1, 3, 3, 5, 3);
+    // 3, 3, 5, 8, 1, 3
+
+    System.out.println(pq.heap);
+    pq.remove(3);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(3);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(5);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));    
+
+    pq.remove(8);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(1);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 3);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(3);
+    System.out.println(pq.heap);
+    assertTrue(pq.isMinHeap(0));
+    assertTrue(pq.isEmpty());
+
+    */
+
+    pq = new PQueue<Integer>();
+    pq.add(7, 7, 3, 1, 1, 2);
+    // 2, 7, 1, 3, 7, 1
+
+
+    System.out.println(pq.heap);
+    pq.remove(2);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(7);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(1);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));    
+
+    pq.remove(3);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 1);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(7);
+    System.out.println(pq.heap);
+    assertTrue(pq.peek() == 3);
+    assertTrue(pq.isMinHeap(0));
+
+    pq.remove(3);
+    System.out.println(pq.heap);
+    assertTrue(pq.isMinHeap(0));
+    assertTrue(pq.isEmpty());
+
+  }
+
+  /*
+  @Test
+  public void testGeneralOperations1() {
+
+    for (int i = 0; i < LOOPS; i++) {
       
       int sz = i;
-      List <Integer> randNums = genUniqueRandList(sz);
+      List <Integer> randNums = genRandList(sz);
       PriorityQueue <Integer> pq1 = new PriorityQueue<>();
       PQueue <Integer> pq2 = new PQueue<>();
 
@@ -199,22 +382,73 @@ public class PQueueTest {
 
       while( !pq1.isEmpty() ) {
 
+        assertTrue(pq2.isMinHeap(0));
         assertEquals( pq1.size(), pq2.size() );
         assertEquals( pq1.peek(), pq2.peek() );
         pq1.poll(); pq2.poll();
         assertEquals( pq1.peek(), pq2.peek() );
         assertEquals( pq1.size(), pq2.size() );
+        assertTrue(pq2.isMinHeap(0));
 
       }
 
     }
 
   }
+  */
+
+
+  @Test
+  public void testEmptyPQueue() {
+    PQueue <Integer> pq = new PQueue<>();
+    assertTrue(pq.isMinHeap(0));
+  }
+
+  // @Test
+  // public void testGeneralOperations2() {
+
+  //   for (int i = 0; i < LOOPS; i++) {
+      
+  //     int sz = i;
+  //     List <Integer> randNums = genRandList(sz);
+  //     PriorityQueue <Integer> pq1 = new PriorityQueue<>();
+  //     PQueue <Integer> pq2 = new PQueue<>();
+
+  //     // Add all the elements to both priority queues
+  //     for (Integer value : randNums) {
+  //       pq1.offer(value);
+  //       pq2.add(value);
+  //     }
+
+  //     System.out.println("Entered Order: " + randNums);
+  //     Collections.shuffle(randNums);
+  //     System.out.println("Shuffled Order: " + randNums);
+  //     System.out.println();
+  //     int index = 0;
+
+  //     while( !pq1.isEmpty() ) {
+
+  //       int removeNum = randNums.get(index++);
+
+  //       assertTrue(pq2.isMinHeap(0));
+  //       assertEquals( pq1.size(), pq2.size() );
+  //       assertEquals( pq1.peek(), pq2.peek() );
+  //       pq1.remove(removeNum); pq2.remove(removeNum);
+  //       assertEquals( pq1.peek(), pq2.peek() );
+  //       assertEquals( pq1.size(), pq2.size() );
+  //       assertTrue(pq2.isMinHeap(0));
+
+  //     }
+
+  //   }
+
+  // }
+
 
   static List <Integer> genRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++)
-      lst.add( (int) (Math.random()*100000) );
+      lst.add( (int) (Math.random()*10) );
     return lst;
   }
 

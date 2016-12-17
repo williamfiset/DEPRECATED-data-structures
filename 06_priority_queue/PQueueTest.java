@@ -168,16 +168,19 @@ public class PQueueTest {
   @Test
   public void testPolling1() {
 
-    Integer[] nums = { 8,14,20,31,25,21,22 };
+    Integer[] nums = {  };
     PQueue <Integer> pq = new PQueue<>(nums);
-    System.out.println(pq.heap);
+    pq.add(4);
+    assertTrue( 4 == pq.poll() );
 
-    System.out.println( pq.poll() );
-    System.out.println( pq.heap );
+    pq.add(5);
+    pq.add(8);
+
+    assertTrue( 5 == pq.poll() );
+    assertTrue( 8 == pq.poll() );
 
   }
 
-  /*
   @Test
   public void testRandomOperations() {
 
@@ -207,7 +210,6 @@ public class PQueueTest {
     }
 
   }
-  */
 
   static List <Integer> genRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);

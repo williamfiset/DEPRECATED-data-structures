@@ -46,6 +46,13 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
       add(elems[i]);
   }
 
+  // Heapify
+  public PQueue (Array <T> elems) {
+    this(elems.size());
+    for (int i = 0; i < elems.size(); i++ )
+      add(elems.get(i));
+  }
+
   public boolean isEmpty() {
     return heap_size == 0;
   }
@@ -136,57 +143,47 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   private boolean less(int i, int j) {
 
     // Check if in bounds
-    if (i >= heap_size || j >= heap_size) return false;
+    // if (i > heap_size || j > heap_size) return false;
 
-    // Assumes child1 & child2 are not null
     T child1 = heap.get(i);
     T child2 = heap.get(j);
 
+    if (child1 == null || child2 == null) return false;
     return child1.compareTo(child2) < 0;
     
   }
 
   // Bottom up re-heapify 
   private void swim(int k) {
-    while(k > 0 && less(k/2, k)) {
-      swap(k/2, k);
-      k /= 2;
+    int parent = (k-1) / 2;
+    while(k > 0 && less(k, parent)) {
+      // System.out.println("Swapping: " + (k) + " and "+ ( (k-1)/2));
+      swap( parent, k);
+      k = parent;
+      parent = (k-1) / 2;
     }
   }
 
   // Top down re-heapify
   private void sink(int k) {
-    while(2 * k < heap_size) {
-
-      // children
-      int i = 2*k;
-      int j = 2*k+1;
-
-      // Go with j, it has the smaller value. Better for min heap
-      if ( less(j, i) ) {
-
-        swap(j, i);
-        k = j;
-
-      // Go with i, it has the smaller value. Better for min heap
-      } else if ( less(i, k) ) {
-
-        swap(i, k);
-        k = i;
-
-      // k <= i, we cannot sink anymore
-      } else break;
-
+    while ( true ) {
+      int i = 2*k + 1;
+      int j = 2*k + 2;
+      // Find which is smaller. i or j
+      if ( j < heap_size && less(j, i) ) i++;
+      if (!less(i, k)) break;
+      swap(i, k);
+      k = i;
     }
   }
 
   // Recursively checks if this heap is a min heap
   public boolean isMinHeap(int k) {
-    if (k > heap_size) return true;
-    int left  = 2 * k;
-    int right = 2 * k + 1;
-    if (left  < heap_size && less(k, left))  return false;
-    if (right < heap_size && less(k, right)) return false;
+    if (k >= heap_size) return true;
+    int left  = 2 * k + 1;
+    int right = 2 * k + 2;
+    if (left  < heap_size  && less(left, k))  return false;
+    if (right < heap_size  && less(right, k)) return false;
     return isMinHeap(left) && isMinHeap(right);
   }  
 

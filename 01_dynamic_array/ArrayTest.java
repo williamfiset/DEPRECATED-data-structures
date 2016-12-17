@@ -160,14 +160,14 @@ public class ArrayTest {
   }
 
   @Test
-  public void testGetSize() {
+  public void testSize() {
     
     Array<Integer> list = new Array<>();
     
     int[] elems = {-76, 45, 66, 3, 234, 54, 33};
     for (int i = 0, sz = 1; i < elems.length; i++, sz++) {
       list.add(elems[i]);
-      assertEquals(list.getSize(), sz);
+      assertEquals(list.size(), sz);
     }
 
   }

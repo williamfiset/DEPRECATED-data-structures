@@ -58,92 +58,88 @@ public class PQueueTest {
     PQueue<String> q = new PQueue<>();
     
     // Add elements
-    q.add("a"); System.out.println(q.heap);
+    q.add("a"); 
     assertEquals("a", q.peek());
     assertEquals(1, q.size());
-    q.add("b"); System.out.println(q.heap);
+    q.add("b"); 
     assertEquals("a", q.peek());
     assertEquals(2, q.size());
-    q.add("c"); System.out.println(q.heap);
+    q.add("c"); 
     assertEquals("a", q.peek());
     assertEquals(3, q.size());
-    q.add("d"); System.out.println(q.heap);
+    q.add("d"); 
     assertEquals("a", q.peek());
     assertEquals(4, q.size());
 
     // Remove elements
     assertEquals("a", q.poll());
     assertEquals(3, q.size());
-    System.out.println(q.heap);
+    
     assertEquals("b", q.poll());
     assertEquals(2, q.size());
-    System.out.println(q.heap);
+    
     assertEquals("c", q.poll());
     assertEquals(1, q.size());
-    System.out.println(q.heap);
+    
     assertEquals("d", q.poll());
     assertEquals(0, q.size());
-    System.out.println(q.heap);
+    
 
     // Redo ^^
 
     // Add elements
-    q.add("a"); System.out.println(q.heap);
+    q.add("a"); 
     assertEquals("a", q.peek());
     assertEquals(1, q.size());
-    q.add("b"); System.out.println(q.heap);
+    q.add("b"); 
     assertEquals("a", q.peek());
     assertEquals(2, q.size());
-    q.add("c"); System.out.println(q.heap);
+    q.add("c"); 
     assertEquals("a", q.peek());
     assertEquals(3, q.size());
-    q.add("d"); System.out.println(q.heap);
+    q.add("d"); 
     assertEquals("a", q.peek());
     assertEquals(4, q.size());
 
     // Remove elements
     assertEquals("a", q.poll());
     assertEquals(3, q.size());
-    System.out.println(q.heap);
+    
     assertEquals("b", q.poll());
     assertEquals(2, q.size());
-    System.out.println(q.heap);
+    
     assertEquals("c", q.poll());
     assertEquals(1, q.size());
-    System.out.println(q.heap);
+    
     assertEquals("d", q.poll());
     assertEquals(0, q.size());
-    System.out.println(q.heap);
+    
 
     // ^^^ Redo
 
     // Add elements
-    q.add("a"); System.out.println(q.heap);
+    q.add("a"); 
     assertEquals("a", q.peek());
     assertEquals(1, q.size());
-    q.add("b"); System.out.println(q.heap);
+    q.add("b"); 
     assertEquals("a", q.peek());
     assertEquals(2, q.size());
-    q.add("c"); System.out.println(q.heap);
+    q.add("c"); 
     assertEquals("a", q.peek());
     assertEquals(3, q.size());
-    q.add("d"); System.out.println(q.heap);
+    q.add("d"); 
     assertEquals("a", q.peek());
     assertEquals(4, q.size());
 
     // Remove elements
     assertEquals("a", q.poll());
     assertEquals(3, q.size());
-    System.out.println(q.heap);
     assertEquals("b", q.poll());
     assertEquals(2, q.size());
-    System.out.println(q.heap);
     assertEquals("c", q.poll());
     assertEquals(1, q.size());
-    System.out.println(q.heap);
     assertEquals("d", q.poll());
     assertEquals(0, q.size());
-    System.out.println(q.heap);    
 
   }
 
@@ -169,6 +165,18 @@ public class PQueueTest {
 
   }
 
+  @Test
+  public void testPolling1() {
+
+    Integer[] nums = { 8,14,20,31,25,21,22 };
+    PQueue <Integer> pq = new PQueue<>(nums);
+    System.out.println(pq.heap);
+
+    System.out.println( pq.poll() );
+    System.out.println( pq.heap );
+
+  }
+
   /*
   @Test
   public void testRandomOperations() {
@@ -176,22 +184,30 @@ public class PQueueTest {
     for (int i = 0; i < 500; i++) {
       
       int sz = i;
-      List <Integer> randNums = genRandList(sz);
+      List <Integer> randNums = genUniqueRandList(sz);
       PriorityQueue <Integer> pq1 = new PriorityQueue<>();
       PQueue <Integer> pq2 = new PQueue<>();
 
+      // Add all the elements to both priority queues
       for (Integer value : randNums) {
         pq1.offer(value);
         pq2.add(value);
       }
 
-      assertEquals( pq1.size(), pq2.size() );
-      
+      while( !pq1.isEmpty() ) {
+
+        assertEquals( pq1.size(), pq2.size() );
+        assertEquals( pq1.peek(), pq2.peek() );
+        pq1.poll(); pq2.poll();
+        assertEquals( pq1.peek(), pq2.peek() );
+        assertEquals( pq1.size(), pq2.size() );
+
+      }
+
     }
 
-
-
   }
+  */
 
   static List <Integer> genRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);
@@ -199,7 +215,13 @@ public class PQueueTest {
       lst.add( (int) (Math.random()*100000) );
     return lst;
   }
-  */
+
+  static List <Integer> genUniqueRandList(int sz) {
+    List <Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++) lst.add( i );
+    Collections.shuffle( lst );
+    return lst;
+  }  
 
 }
 

@@ -2,7 +2,7 @@
 
 interface IArray <T> {
 
-  public int getSize();
+  public int size();
   public T get(int index);
   public void set(int index, T val);
   public void add(T elem);
@@ -28,7 +28,7 @@ class Array <T> implements IArray <T> {
     arr = (T[]) new Object[capacity];
   }
 
-  public int getSize() { return len; }
+  public int size() { return len; }
   public boolean isEmpty() { return len == 0; }
 
   public T get(int index) { return arr[index]; }

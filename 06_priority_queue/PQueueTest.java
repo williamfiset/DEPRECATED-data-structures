@@ -1,8 +1,10 @@
 import static org.junit.Assert.*;
 import org.junit.*;
+import java.util.*;
 
 public class PQueueTest {
 
+  /*
   @Before
   public void setup() {
     // list = new LinkedList<>();
@@ -48,76 +50,109 @@ public class PQueueTest {
       assertTrue( q.poll() == i );
 
   }
+  */
 
   @Test
   public void testPeekAndPoll() {
 
     PQueue<String> q = new PQueue<>();
     
-    q.add("a");
-    assertEquals(q.peek(), "a");
-    assertEquals(q.size(), 1);
+    // Add elements
+    q.add("a"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(1, q.size());
+    q.add("b"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(2, q.size());
+    q.add("c"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(3, q.size());
+    q.add("d"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(4, q.size());
 
-    q.add("b");
-    assertEquals(q.peek(), "b");
-    assertEquals(q.size(), 2);
-
-    q.add("c");
-    assertEquals(q.peek(), "c");
-    assertEquals(q.size(), 3);
-
-    q.add("d");
-    assertEquals(q.peek(), "d");
-    assertEquals(q.size(), 4);
-
-    assertEquals(q.poll(), "d");
-    assertEquals(q.size(), 3);
-
-    assertEquals(q.poll(), "c");
-    assertEquals(q.size(), 2);
-
-    assertEquals(q.poll(), "b");
-    assertEquals(q.size(), 1);
-
-    assertEquals(q.poll(), "a");
-    assertEquals(q.size(), 0);
+    // Remove elements
+    assertEquals("a", q.poll());
+    assertEquals(3, q.size());
+    System.out.println(q.heap);
+    assertEquals("b", q.poll());
+    assertEquals(2, q.size());
+    System.out.println(q.heap);
+    assertEquals("c", q.poll());
+    assertEquals(1, q.size());
+    System.out.println(q.heap);
+    assertEquals("d", q.poll());
+    assertEquals(0, q.size());
+    System.out.println(q.heap);
 
     // Redo ^^
 
-    q.add("a");
-    assertEquals(q.peek(), "a");
-    assertEquals(q.size(), 1);
+    // Add elements
+    q.add("a"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(1, q.size());
+    q.add("b"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(2, q.size());
+    q.add("c"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(3, q.size());
+    q.add("d"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(4, q.size());
 
-    q.add("b");
-    assertEquals(q.peek(), "b");
-    assertEquals(q.size(), 2);
+    // Remove elements
+    assertEquals("a", q.poll());
+    assertEquals(3, q.size());
+    System.out.println(q.heap);
+    assertEquals("b", q.poll());
+    assertEquals(2, q.size());
+    System.out.println(q.heap);
+    assertEquals("c", q.poll());
+    assertEquals(1, q.size());
+    System.out.println(q.heap);
+    assertEquals("d", q.poll());
+    assertEquals(0, q.size());
+    System.out.println(q.heap);
 
-    q.add("c");
-    assertEquals(q.peek(), "c");
-    assertEquals(q.size(), 3);
+    // ^^^ Redo
 
-    q.add("d");
-    assertEquals(q.peek(), "d");
-    assertEquals(q.size(), 4);
+    // Add elements
+    q.add("a"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(1, q.size());
+    q.add("b"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(2, q.size());
+    q.add("c"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(3, q.size());
+    q.add("d"); System.out.println(q.heap);
+    assertEquals("a", q.peek());
+    assertEquals(4, q.size());
 
-    assertEquals(q.poll(), "d");
-    assertEquals(q.size(), 3);
-
-    assertEquals(q.poll(), "c");
-    assertEquals(q.size(), 2);
-
-    assertEquals(q.poll(), "b");
-    assertEquals(q.size(), 1);
-
-    assertEquals(q.poll(), "a");
-    assertEquals(q.size(), 0);
+    // Remove elements
+    assertEquals("a", q.poll());
+    assertEquals(3, q.size());
+    System.out.println(q.heap);
+    assertEquals("b", q.poll());
+    assertEquals(2, q.size());
+    System.out.println(q.heap);
+    assertEquals("c", q.poll());
+    assertEquals(1, q.size());
+    System.out.println(q.heap);
+    assertEquals("d", q.poll());
+    assertEquals(0, q.size());
+    System.out.println(q.heap);    
 
   }
+
+
 
   @Test
   public void testClear() {
 
-    PQueue<String> q;
+    PQueue <String> q;
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
     
     q = new PQueue<>(strs);
@@ -133,6 +168,38 @@ public class PQueueTest {
     assertTrue(q.isEmpty());
 
   }
+
+  /*
+  @Test
+  public void testRandomOperations() {
+
+    for (int i = 0; i < 500; i++) {
+      
+      int sz = i;
+      List <Integer> randNums = genRandList(sz);
+      PriorityQueue <Integer> pq1 = new PriorityQueue<>();
+      PQueue <Integer> pq2 = new PQueue<>();
+
+      for (Integer value : randNums) {
+        pq1.offer(value);
+        pq2.add(value);
+      }
+
+      assertEquals( pq1.size(), pq2.size() );
+      
+    }
+
+
+
+  }
+
+  static List <Integer> genRandList(int sz) {
+    List <Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++)
+      lst.add( (int) (Math.random()*100000) );
+    return lst;
+  }
+  */
 
 }
 

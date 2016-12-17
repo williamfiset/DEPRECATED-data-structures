@@ -1,10 +1,14 @@
 
 /*
 Remember that you can always turn a max heap into a min heap by inserting negated values 
-and re-negating the values after they are removed from the heap
+and re-negating the values after they are removed from the heap.
+
+Some of this software was inspired by the works of Robert Sedgewick and Kevin Wayne
+
 */
 
 
+// Eventually replace with custom Map
 import java.util.HashMap;
 
 interface IPQueue <T> {
@@ -23,15 +27,15 @@ interface IPQueue <T> {
 class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
   int heap_size = 0;
+  int heap_capacity = 0;
   Array <T> heap = null;
-  HashMap<Integer, T> index_mapping = new HashMap<>();
+  HashMap <Integer, T> index_mapping = new HashMap<>();
 
   public PQueue () {
-    heap = new Array<>();
+    this(0);
   }
 
   public PQueue(int sz) {
-    heap_size = sz;
     heap = new Array<>(sz);
   }
 
@@ -46,7 +50,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     return heap_size == 0;
   }
 
-  // Wrong
+  // Wrong. Needs work
   public boolean remove(T elem) {
 
     for (int i = 0; i < heap_size; i++) {
@@ -62,9 +66,10 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   }
 
   public void clear() {
+    heap.clear();
     heap_size = 0;
-    heap = new Array<>();
   }
+
   public int size() {
     return heap_size;
   }
@@ -81,9 +86,14 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
   public void add(T elem) {
     if (elem == null) throw new NullPointerException();
-    heap.add(elem);
+    if (heap_size < heap_capacity) {
+      heap.set(heap_size, elem);
+    } else {
+      heap.add(elem);
+      heap_capacity++;
+    }
     index_mapping.put(heap_size, elem);
-    swim(heap_size); // bubble up element
+    swim(heap_size); 
     heap_size++;
   }
 
@@ -97,13 +107,14 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
       T root = heap.get(0);
       heap_size--;
       swap(0, heap_size);
-      heap.set(heap_size, null);
+      heap.set(heap_size, null); // Memory cleanup
       sink(0); // Restore heap property
       return root;
     } else return null;
   }
 
   private void removeAt(int i) {
+
     assert i >= 0 && i < heap_size;
     heap_size--;
     
@@ -123,7 +134,11 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
   // Test if node i < node j
   private boolean less(int i, int j) {
-    // Assume child1 & child2 are not null
+
+    // Check if in bounds
+    if (i >= heap_size || j >= heap_size) return false;
+
+    // Assumes child1 & child2 are not null
     T child1 = heap.get(i);
     T child2 = heap.get(j);
 
@@ -141,14 +156,39 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
   // Top down re-heapify
   private void sink(int k) {
-    while(2*k < heap_size) {
-      int j = 2*k;
-      if (j+1 < heap_size && less(j, j+1)) j++;
-      if (!less(k, j)) break;
-      swap(k, j);
-      k = j;
+    while(2 * k < heap_size) {
+
+      // children
+      int i = 2*k;
+      int j = 2*k+1;
+
+      // Go with j, it has the smaller value. Better for min heap
+      if ( less(j, i) ) {
+
+        swap(j, i);
+        k = j;
+
+      // Go with i, it has the smaller value. Better for min heap
+      } else if ( less(i, k) ) {
+
+        swap(i, k);
+        k = i;
+
+      // k <= i, we cannot sink anymore
+      } else break;
+
     }
   }
+
+  // Recursively checks if this heap is a min heap
+  public boolean isMinHeap(int k) {
+    if (k > heap_size) return true;
+    int left  = 2 * k;
+    int right = 2 * k + 1;
+    if (left  < heap_size && less(k, left))  return false;
+    if (right < heap_size && less(k, right)) return false;
+    return isMinHeap(left) && isMinHeap(right);
+  }  
 
 }
 

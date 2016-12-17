@@ -7,6 +7,7 @@ interface IArray <T> {
   public void set(int index, T val);
   public void add(T elem);
   public void removeAt(int rm_index);
+  public void clear();
   public boolean remove(T elem);
   public boolean isEmpty();
 
@@ -32,6 +33,12 @@ class Array <T> implements IArray <T> {
 
   public T get(int index) { return arr[index]; }
   public void set(int index, T elem) { arr[index] = elem; }
+
+  public void clear() {
+    for(int i = 0; i < capacity; i++)
+      arr[i] = null;
+    len = 0;
+  }
 
   public void add(T elem) {
     if (len+1 >= capacity) {

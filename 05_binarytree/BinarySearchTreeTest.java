@@ -181,6 +181,7 @@ public class BinarySearchTreeTest {
     
     // Setup tree
     BinarySearchTree<Character> tree = new BinarySearchTree<>();
+
     tree.add('B');
     tree.add('A');
     tree.add('C');
@@ -199,6 +200,32 @@ public class BinarySearchTreeTest {
 
   }
   
+  @Test public void randomRemove() {
+
+    for (int i = 0; i < LOOPS; i++) {
+      
+      int size = i;
+      BinarySearchTree <Integer> tree = new BinarySearchTree<>();
+      List <Integer> lst = genRandList(size);
+      for (Integer value : lst) tree.add(value);
+
+      Collections.shuffle(lst);
+      // Remove all the elements we just placed in the tree
+      for (int j = 0; j < size; j++) {
+        
+        Integer value = lst.get(j);
+        assertTrue(tree.remove(value));
+        assertFalse(tree.find(value));
+
+      }
+
+      assertTrue(tree.isEmpty());
+
+    }
+
+
+  }
+
   // Tests a mixture of methods working together
   @Test public void testGeneralCase() {
     
@@ -211,7 +238,7 @@ public class BinarySearchTreeTest {
     return lst;
   }
 
-  public boolean validateTreeTraversal( TreeTraversalOrder trav_order, List <Integer> in ) {
+  public boolean validateTreeTraversal( TreeTraversalOrder trav_order, List <Integer> input ) {
 
     List <Integer> out = new ArrayList<>();
     List <Integer> expected = new ArrayList<>();
@@ -220,9 +247,9 @@ public class BinarySearchTreeTest {
     BinarySearchTree <Integer> tree = new BinarySearchTree<>();
 
     // Construct Binary Tree and test tree
-    for (Integer v : in ) {
-      testTree = TestTreeNode.add( testTree, v);
-      tree.add(v);
+    for (Integer value : input ) {
+      testTree = TestTreeNode.add( testTree, value);
+      tree.add(value);
     }
 
     // Generate the expected output for the particular traversal

@@ -9,7 +9,7 @@ interface IBinarySearchTree <T extends Comparable<T>> {
   public boolean find(T elem);
   public int height();
   
-  // Provide multiple iterators to traverse the tree
+  // Provides multiple iterators to traverse the tree
   public Iterator traverse(TreeTraversalOrder order);
 
 }
@@ -68,6 +68,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     }
     return false;
   }
+
   private Node remove(Node node, T elem) {
     
     if (node == null) return null;
@@ -128,6 +129,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
   public int height() {
     return height(root);
   }
+
   private int height(Node node) {
     if (node == null) return 0;
     return Math.max( height(node.left), height(node.right) ) + 1;
@@ -218,10 +220,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     };
   }
 
-  // Should we allow the user to modify the values of the nodes as they 
-  // are being traversed? Sounds like it's perhaps not the best idea, however
-  // checking for concurrent modification will cause slower iteration
-  // at the cost of safety if implemented. Humm... 
+  // Todo: Check for concurrent modification
   @Override public Iterator <T> traverse(TreeTraversalOrder order) {
     switch (order) {
       case PRE_ORDER: return preOrderTraversal();

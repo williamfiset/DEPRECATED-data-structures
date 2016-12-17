@@ -2,18 +2,89 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Set;
- 
+import java.util.*;
+
+class TestTreeNode {
+  
+  Integer data;
+  TestTreeNode left, right;
+  
+  public TestTreeNode(Integer data, TestTreeNode l, TestTreeNode r) {
+    this.data = data;
+    this.right = r;
+    this.left = l;
+  }
+
+  static TestTreeNode add(TestTreeNode node, int data) {
+    
+    if (node == null) {
+      node = new TestTreeNode (data, null, null);
+    } else {
+      // Place lower elem values on left
+      if (data < node.data) {
+        node.left = add(node.left, data);
+      } else {
+        node.right = add(node.right, data);
+      }
+    }
+    return node;
+
+  }
+
+  static void preOrder(List <Integer> lst, TestTreeNode node) {
+    
+    if (node == null) return;
+
+    lst.add(node.data);
+    if (node.left != null) preOrder(lst, node.left);
+    if (node.right != null) preOrder(lst, node.right);
+
+  }
+
+  static void inOrder(List <Integer> lst, TestTreeNode node) {
+    
+    if (node == null) return;
+
+    if (node.left != null) inOrder(lst, node.left);
+    lst.add(node.data);
+    if (node.right != null) inOrder(lst, node.right);
+
+  }
+
+  static void postOrder(List <Integer> lst, TestTreeNode node) {
+    
+    if (node == null) return;
+
+    if (node.left != null) postOrder(lst, node.left);
+    if (node.right != null) postOrder(lst, node.right);
+    lst.add(node.data);
+
+  }
+
+  static void levelOrder(List <Integer> lst, TestTreeNode node) {
+
+    Deque <TestTreeNode> q = new ArrayDeque<>();
+    if (node != null) q.offer(node);
+
+    while(!q.isEmpty()) {
+
+      node = q.poll();
+      lst.add(node.data);
+      if (node.left != null) q.offer(node.left);
+      if (node.right != null) q.offer(node.right);
+
+    }
+
+  }
+
+}
+
 public class BinarySearchTreeTest {
 
+  static final int LOOPS = 500;
+
   @Before
-  public void setup() {
-    
-  }
+  public void setup() { }
 
   @Test public void testIsEmpty() {
     
@@ -133,90 +204,67 @@ public class BinarySearchTreeTest {
     
   }
 
-  public boolean validateTreeTraversal( TreeTraversalOrder trav_order, Integer[] in, Integer[] expected ) {
+  static List <Integer> genRandList(int sz) {
+    List <Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++) lst.add( i );
+    Collections.shuffle( lst );
+    return lst;
+  }
+
+  public boolean validateTreeTraversal( TreeTraversalOrder trav_order, List <Integer> in ) {
+
+    List <Integer> out = new ArrayList<>();
+    List <Integer> expected = new ArrayList<>();
     
-    if (in.length != expected.length)
-      System.out.println("ARRAYS NOT THE SAME LENGTH!");
-    
-    int i = 0;
-    int N = in.length;
-    Integer[] out = new Integer[N];
+    TestTreeNode testTree = null;
     BinarySearchTree <Integer> tree = new BinarySearchTree<>();
-    
-    for (Integer v : in ) tree.add(v);
-    Iterator <Integer> iter = tree.traverse(trav_order);
-    
-    while(iter.hasNext()) {
-      out[i] = iter.next();
-      i++;
+
+    // Construct Binary Tree and test tree
+    for (Integer v : in ) {
+      testTree = TestTreeNode.add( testTree, v);
+      tree.add(v);
     }
-    for (i = 0; i < N; i++ )
-      if ( !expected[i].equals(out[i]) )
+
+    // Generate the expected output for the particular traversal
+    switch (trav_order) {
+      case PRE_ORDER:   TestTreeNode.preOrder(expected, testTree);   break;
+      case IN_ORDER:    TestTreeNode.inOrder(expected, testTree);    break;
+      case POST_ORDER:  TestTreeNode.postOrder(expected, testTree);  break;
+      case LEVEL_ORDER: TestTreeNode.levelOrder(expected, testTree); break;
+    }
+
+    // Get traversal output
+    Iterator <Integer> iter = tree.traverse(trav_order);
+    while(iter.hasNext()) out.add(iter.next());
+
+    // The output and the expected size better be the same size
+    if (out.size() != expected.size()) return false;
+
+    // Compare output to expected
+    for (int i = 0; i < out.size(); i++ )
+      if ( !expected.get(i).equals(out.get(i)) )
         return false;
+
     return true;
     
   }
   
   // Process self, then left subtree, then right subtree
   @Test public void testPreOrderTraversal() {
-    
-    Integer[] in = new Integer[] {  };
-    Integer[] ex = new Integer[] {  };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, in, ex) );
-    
-    in = new Integer[] { 4 };
-    ex = new Integer[] { 4 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, in, ex) );        
-    
-    in = new Integer[] { 10, 5, 11, 3, 7 };
-    ex = new Integer[] { 10, 5, 3, 7, 11 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, in, ex) );
-    
+
+    for (int i = 0; i < LOOPS; i++) {
+      List <Integer> input = genRandList(i);
+      assertTrue( validateTreeTraversal(TreeTraversalOrder.PRE_ORDER, input ) );
+    }
+
   }
   
   // Process left subtree, then self, then right
   @Test public void testInOrderTraversal() {
     
-    Integer[] in = new Integer[] {  };
-    Integer[] ex = new Integer[] {  };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
-    
-    in = new Integer[] { 4 };
-    ex = new Integer[] { 4 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );        
-    
-    in = new Integer[] { 10, 5, 11, 3, 7 };
-    ex = new Integer[] { 3, 5, 7, 10, 11 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
-
-    in = new Integer[] { 31, 29, 30, 27, 15, 16, 20, 21, 19, 18 };
-    ex = new Integer[] { 15, 16, 18, 19, 20, 21, 27, 29, 30, 31 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
-    
-    in = new Integer[] { -40, 60, 30, 3, 66, 33, 24, 100, 110, 111, 133, 122, -3, -5 };
-    ex = new Integer[] { -40, -5, -3, 3, 24, 30, 33, 60, 66, 100, 110, 111, 122, 133 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex) );
-    
-    // Generate random unique numbers and see if they come out in order
-    Random rand = new Random();
-    int min_val = -100000, max_val = 100000, num_elems = 100, num_tests = 3000;
-    
-    for (int i = 0; i < num_tests; i++) {
-      in = new Integer[num_elems];
-      ex = new Integer[num_elems];
-      Set<Integer> set = new HashSet<>();
-      for (int j = 0; j < num_elems; j++ ) {
-        int random_num = min_val + rand.nextInt((max_val - min_val) + 1);
-        if (set.contains(random_num)) {
-          j--;
-          continue;
-        } else {
-          set.add(random_num);
-          in[j] = ex[j] = random_num;
-        }
-      }
-      Arrays.sort(ex);
-      assertTrue(validateTreeTraversal(TreeTraversalOrder.IN_ORDER, in, ex));
+    for (int i = 0; i < LOOPS; i++) {
+      List <Integer> input = genRandList(i);
+      assertTrue( validateTreeTraversal(TreeTraversalOrder.IN_ORDER, input ) );
     }
 
   }
@@ -224,44 +272,23 @@ public class BinarySearchTreeTest {
   // Process left subtree, then right subtree, then left
   @Test public void testPostOrderTraversal() {
 
-    Integer[] in = new Integer[] {  };
-    Integer[] ex = new Integer[] {  };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );
-    
-    in = new Integer[] { 4 };
-    ex = new Integer[] { 4 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );    
-    
-    in = new Integer[] { 40, 25, 78, 10, 32 };
-    ex = new Integer[] { 10, 32, 25, 78, 40 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );
-
-    in = new Integer[] { 30, 25, 10, 27, 26, 40, 35, 33 };
-    ex = new Integer[] { 10, 26, 27, 25, 33, 35, 40, 30 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, in, ex) );
+    for (int i = 0; i < LOOPS; i++) {
+      List <Integer> input = genRandList(i);
+      assertTrue( validateTreeTraversal(TreeTraversalOrder.POST_ORDER, input ) );
+    }
 
   }  
 
   // Process left subtree, then right subtree, then left
   @Test public void testLevelOrderTraversal() {
     
-    Integer[] in = new Integer[] {  };
-    Integer[] ex = new Integer[] {  };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) );
-    
-    in = new Integer[] { 4 };
-    ex = new Integer[] { 4 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) ); 
-    
-    in = new Integer[] { 40, 78, 25, 10, 32 };
-    ex = new Integer[] { 40, 25, 78, 10, 32 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) );
-    
-    in = new Integer[] { 30, 25, 10, 27, 26, 40, 35, 33 };
-    ex = new Integer[] { 30, 25, 40, 10, 27, 35, 26, 33 };
-    assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, in, ex) );    
+    for (int i = 0; i < LOOPS; i++) {
+      List <Integer> input = genRandList(i);
+      assertTrue( validateTreeTraversal(TreeTraversalOrder.LEVEL_ORDER, input ) );
+    }
     
   } 
+  
 
 }
 

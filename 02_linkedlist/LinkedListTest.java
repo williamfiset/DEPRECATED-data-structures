@@ -148,14 +148,14 @@ public class LinkedListTest {
   @Test
   public void testRemoveAt() {
     
-    list.add("a");
-    list.add("b");
-    list.add("c");
-    list.add("d");
+    list.add(1);
+    list.add(2);
+    list.add(3);
+    list.add(4);
     list.removeAt(0);
     list.removeAt(2);
-    assertEquals( list.peekFirst(), "b" );
-    assertEquals( list.peekLast(), "c" );
+    assertTrue( list.peekFirst() == 2 );
+    assertTrue( list.peekLast()  == 3 );
     list.removeAt(1);
     list.removeAt(0);
     assertEquals( list.size(), 0 );
@@ -163,6 +163,19 @@ public class LinkedListTest {
 
   @Test
   public void testClear() {
+
+    list.add(22);
+    list.add(33);
+    list.add(44);
+    assertEquals(list.size(), 3);
+    list.clear();
+    assertEquals(list.size(), 0);
+    list.add(22);
+    list.add(33);
+    list.add(44);
+    assertEquals(list.size(), 3);
+    list.clear();
+    assertEquals(list.size(), 0);
 
   }
 
@@ -190,32 +203,63 @@ public class LinkedListTest {
 
     }
 
-    assertEquals(lst.size(), 1);
+    assertEquals(list.size(), 1);
 
   }
 
   @Test
   public void testRandomizedRemoveAt() {
 
-    java.util.LinkedList <Integer> LST = new java.util.LinkedList<>();
-    LinkedList <Integer> lst = new LinkedList<>();
+    java.util.LinkedList <Integer> LIST = new java.util.LinkedList<>();
+    LinkedList <Integer> list = new LinkedList<>();
 
     List <Integer> randNums = genRandList(TEST_SZ);
     for (Integer value : randNums) {
-      LST.add(value);
-      lst.add(value);
+      LIST.add(value);
+      list.add(value);
     }
 
     for (int i = 0; i < randNums.size()-1; i++ ) {
       
-      int rm_index = (int)(lst.size() * (Math.random()));
+      int rm_index = (int)(list.size() * (Math.random()));
 
-      Integer num1 = LST.remove(rm_index);
-      Integer num2 = lst.removeAt(rm_index);
+      Integer num1 = LIST.remove(rm_index);
+      Integer num2 = list.removeAt(rm_index);
       assertEquals(num1, num2);
 
-      java.util.Iterator <Integer> iter1 = LST.iterator();
-      java.util.Iterator <Integer> iter2 = lst.iterator();
+      java.util.Iterator <Integer> iter1 = LIST.iterator();
+      java.util.Iterator <Integer> iter2 = list.iterator();
+      while(iter1.hasNext()) assertEquals(iter1.next(), iter2.next());
+
+    }
+
+  }
+
+
+  @Test
+  public void testRandomizedIndexOf() {
+
+    java.util.LinkedList <Integer> LIST = new java.util.LinkedList<>();
+    LinkedList <Integer> list = new LinkedList<>();
+
+    List <Integer> randNums = genUniqueRandList(TEST_SZ);
+    for (Integer value : randNums) {
+      LIST.add(value);
+      list.add(value);
+    }
+
+    Collections.shuffle(randNums);
+
+    for (int i = 0; i < randNums.size()-1; i++ ) {
+      
+      Integer elem = randNums.get(i);
+      Integer index1 = LIST.indexOf(elem);
+      Integer index2 = list.indexOf(elem);
+
+      assertEquals(index1, index2);
+
+      java.util.Iterator <Integer> iter1 = LIST.iterator();
+      java.util.Iterator <Integer> iter2 = list.iterator();
       while(iter1.hasNext()) assertEquals(iter1.next(), iter2.next());
 
     }
@@ -229,6 +273,14 @@ public class LinkedListTest {
       lst.add( (int) (Math.random()*250) );
     return lst;
   }
+
+  // Generate a list of unique random numbers
+  static List <Integer> genUniqueRandList(int sz) {
+    List <Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++) lst.add( i );
+    Collections.shuffle( lst );
+    return lst;
+  }  
 
 }
 

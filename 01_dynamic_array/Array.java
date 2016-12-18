@@ -1,20 +1,7 @@
 
 
-interface IArray <T> {
-
-  public int size();
-  public T get(int index);
-  public void set(int index, T val);
-  public void add(T elem);
-  public void removeAt(int rm_index);
-  public void clear();
-  public boolean remove(T elem);
-  public boolean isEmpty();
-
-}
-
 @SuppressWarnings("unchecked")
-class Array <T> implements IArray <T>, Iterable <T> {
+class Array <T> implements IList <T>, Iterable <T> {
 
   private int capacity = 0; // Actual array size
   private int len = 0;      // length user thinks array is
@@ -29,7 +16,7 @@ class Array <T> implements IArray <T>, Iterable <T> {
   }
 
   public int size() { return len; }
-  public boolean isEmpty() { return len == 0; }
+  public boolean isEmpty() { return size() == 0; }
 
   public T get(int index) { return arr[index]; }
   public void set(int index, T elem) { arr[index] = elem; }
@@ -53,21 +40,34 @@ class Array <T> implements IArray <T>, Iterable <T> {
   }
 
   // Removes the element at the specified index in this list. 
-  public void removeAt(int rm_index) {
+  public T removeAt(int rm_index) {
     if (rm_index >= len && rm_index < 0) throw new IndexOutOfBoundsException();
+    T data = arr[rm_index];
     T[] new_arr = (T[]) new Object[len-1];
     for (int i = 0, j = 0; i < len; i++, j++)
       if (i == rm_index) j--; // Skip over rm_index by fixing j temporarily
       else new_arr[j] = arr[i];
     arr = new_arr;
     capacity = --len;
+    return data;
   }
 
-  public boolean remove(T elem) {
+  public boolean remove(Object obj) {
     for (int i = 0; i < len; i++) {
-      if (arr[i].equals(elem)) {
+      if (arr[i].equals(obj)) {
         removeAt(i); return true; } }
     return false;
+  }
+
+  public int indexOf(Object obj) {
+    for (int i = 0; i < len; i++)
+      if (arr[i].equals(obj))
+        return i;
+    return -1;
+  }
+
+  public boolean contains(Object obj) {
+    return indexOf(obj) != -1;
   }
 
   // Iterator is still fast but not as fast as iterative for loop

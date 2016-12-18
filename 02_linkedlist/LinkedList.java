@@ -1,26 +1,28 @@
 import java.util.Iterator;
 
-interface ILinkedList <T> {
+// This probably shouldn't be an interface
+// The linked list should inherit from the IList interface
+// interface ILinkedList <T> {
 
-  public int size();
-  public boolean isEmpty();
+//   public int size();
+//   public boolean isEmpty();
 
-  public T removeFirst();
-  public T removeLast();
+//   public T removeFirst();
+//   public T removeLast();
 
-  public T peekFirst();
-  public T peekLast();
+//   public T peekFirst();
+//   public T peekLast();
 
-  public void addFirst(T elem);
-  public void addLast(T elem);
+//   public void addFirst(T elem);
+//   public void addLast(T elem);
 
-}
+// }
 
-public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
+public class LinkedList <T> implements IList <T>, Iterable <T> {
   
+  private int size = 0;
   private Node <T> head = null;
   private Node <T> tail = null;
-  private int size = 0;
 
   private class Node <T> {
     T data;
@@ -32,12 +34,24 @@ public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
     }
   }
 
+  public void clear() {
+    Node trav = head;
+    while(trav != null) {
+      Node next = trav.next;
+      trav.prev = trav.next = null;
+      trav.data = null;
+      trav = next;
+    }
+    head = tail = trav = null;
+    size = 0;
+  }
+
   public int size() {
     return size;
   }
 
   public boolean isEmpty() {
-    return size == 0; 
+    return size() == 0; 
   }
 
   public T removeFirst() {
@@ -80,6 +94,10 @@ public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
     return tail.data;
   }
 
+  public void add(T elem) {
+    addFirst(elem);
+  }
+
   public void addFirst(T elem) {
     if (head == null) {
       head = tail = new Node <T> ( elem, null, null );
@@ -98,6 +116,19 @@ public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
       tail = tail.next;
     }
     size++;
+  }
+
+  public int indexOf(Object obj) {
+    int index = 0;
+    Node trav = head;
+    while(trav != null) {
+      Node next = trav.next;
+      if ( (trav.data == obj) || trav.data.equals(obj))
+        return index;
+      trav = next;
+      index++;
+    }
+    return -1;
   }
 
   @Override public Iterator <T> iterator () {

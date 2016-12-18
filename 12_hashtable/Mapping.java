@@ -28,7 +28,6 @@ public class Mapping <K,V> implements IMap <K, V> { // also implement iterable
 
   private final double LOAD_FACTOR = 0.75;
 
-  int num_keys = 0;
   int capacity, threshold, size = 0;
   Array <LinkedList<Entry<K,V>>> table;
 
@@ -43,9 +42,14 @@ public class Mapping <K,V> implements IMap <K, V> { // also implement iterable
     table = new Array<>(capacity);
   }
 
+  // Converts a hash value to an index.
+  private int normalizeIndex(int keyHash ) {
+    return (keyHash & 0x7fffffff) % capacity;
+  }
+
   public Array <K> keys() {
 
-    Array <K> keys = new Array<>(num_keys);
+    Array <K> keys = new Array<>(size);
     for(LinkedList<Entry<K,V>> links : table)
       for (Entry <K,V> entry : links)
         keys.add(entry.key);
@@ -54,10 +58,15 @@ public class Mapping <K,V> implements IMap <K, V> { // also implement iterable
   }
 
   public Array <V> values() {
-    return null;
+
+    Array <K> values = new Array<>(size);
+    for(LinkedList<Entry<K,V>> links : table)
+      for (Entry <K,V> entry : links)
+        values.add(entry.value);
+    return values;
+
   }
 
-  // These do the same thing
   public boolean hasKey(K key) {
     return false;
   }
@@ -71,29 +80,54 @@ public class Mapping <K,V> implements IMap <K, V> { // also implement iterable
   }
 
   public void add(K key, V value) {
-
+    Entry <K, V> new_entry = new Entry<>(key, value);
+    int index = normalizeIndex(new_entry.hash);
+    insertAt(index, new_entry);
   }
 
-  // public void inc(K key) // Should be for only for IntMap/LongMap
+  private void insertAt(int index, Entry <K,V> entry) {
+    LinkedList<Entry<K,V>> links = table.get(index);
+    if (links == null) {
+      links = new LinkedList<>();
+      links.add(entry);
+      table.set(index, links);
+    } else {
+      if (!containsAt(index))
+        links.add(entry);
+    }
+  }
+
+  private int containsAt(int index, Entry <K, V> entry ) {
+    LinkedList<Entry<K,V>> links = table.get(index);
+    if (links == null) return -1;
+    for (int i = 0; i < links.size(); i++)
+      if (links.get(i).equals(entry))
+        return i;
+    return -1;
+  }
 
   public V get(K key) {
-    return null;
+    int index = normalizeIndex(key.hashCode());
+
   }
 
   public V remove(K key) {
+    int index = normalizeIndex(key.hashCode());
     return null;
   }
 
   public int size() {
-    return 0;
+    return size;
   }
 
   public void clear() {
-    
+    for (int i = 0; i < table.size(); i++)
+      table.set(i, null);
+    size = 0;
   }
   
   public boolean isEmpty() {
-    return false;
+    return size() == 0;
   }  
 
 }

@@ -103,7 +103,7 @@ public class Mapping <K, V> implements IMap <K, V>, Iterable <K> {
   }
 
   public boolean containsKey(K key) {
-      
+
     int originalHash = key.hashCode();
     int index = adjustIndex(originalHash);
     int step  = hash2(index);

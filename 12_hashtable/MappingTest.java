@@ -3,6 +3,8 @@ import static java.lang.Math.*;
 import static org.junit.Assert.*;
 import org.junit.*;
 import java.util.Random;
+import java.util.Set;
+import java.util.HashSet;
 import java.io.*;
 
 // You can set the hash value of this object to be whatever you want
@@ -138,7 +140,6 @@ public class MappingTest {
     ConstHashObj o2 = new ConstHashObj(88, 2);
     ConstHashObj o3 = new ConstHashObj(88, 3);
     ConstHashObj o4 = new ConstHashObj(88, 4);
-
 
     // System.out.println(map.size());
     map.put(o1, 111);

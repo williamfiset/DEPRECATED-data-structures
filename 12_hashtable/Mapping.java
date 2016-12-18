@@ -25,7 +25,7 @@ class Entry <K, V> {
 }
 
 @SuppressWarnings("unchecked")
-public class Mapping <K,V> implements IMap <K, V> { // should also implement iterable
+public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
@@ -142,15 +142,17 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
     LinkedList <Entry<K,V>> new_table [] = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
     
     for (int i = 0; i < table.length; i++ ) {
-      for (Entry <K,V> entry : table[i]) {
+      if (table[i] != null) {
+        for (Entry <K,V> entry : table[i]) {
 
-        int bucket_index = normalizeIndex(entry.hash);
-        LinkedList<Entry<K,V>> links = new_table[bucket_index];
-        if (links == null) new_table[bucket_index] = links = new LinkedList<>();
-        links.add(entry);
+          int bucket_index = normalizeIndex(entry.hash);
+          LinkedList<Entry<K,V>> links = new_table[bucket_index];
+          if (links == null) new_table[bucket_index] = links = new LinkedList<>();
+          links.add(entry);
 
+        }
+        table[i] = null; // Avoid memory leak. Help the GC
       }
-      table[i] = null; // Avoid memory leak. Help the GC
     }
 
     table = new_table;
@@ -175,6 +177,28 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
         values.add(entry.value);
     return values;
 
+  }
+
+  // Test for concurrent modification error..
+  @Override public java.util.Iterator <K> iterator() {
+    int table_sz = size;
+    return new java.util.Iterator <K> () {
+      
+      int bucket_index = 0;
+      LinkedList <Entry<K,V>> bucket = null;
+      java.util.Iterator <Entry<K,V>> bucket_iter = null;
+
+      public boolean hasNext() {
+        if (table_sz != size) throw new java.util.ConcurrentModificationException();
+        while( bucket_iter == null && bucket_index < table_sz)
+          if (table[bucket_index] != null)
+            bucket_iter = table[bucket_index].iterator();
+        return bucket_index < table_sz && bucket_iter != null && bucket_iter.hasNext();
+      }
+      public K next() {
+        return bucket_iter.next().key;
+      }
+    };
   }
 
   @Override public String toString() {

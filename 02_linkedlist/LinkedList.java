@@ -35,9 +35,9 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
   }
 
   public void clear() {
-    Node trav = head;
+    Node <T> trav = head;
     while(trav != null) {
-      Node next = trav.next;
+      Node <T> next = trav.next;
       trav.prev = trav.next = null;
       trav.data = null;
       trav = next;
@@ -118,17 +118,58 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
     size++;
   }
 
-  public int indexOf(Object obj) {
-    int index = 0;
-    Node trav = head;
-    while(trav != null) {
-      Node next = trav.next;
-      if ( (trav.data == obj) || trav.data.equals(obj))
-        return index;
-      trav = next;
-      index++;
+  public T removeAt(int index) {
+
+    if (index < 0 || index >= size) throw new IllegalArgumentException();
+    
+    T data = null;
+
+    // Search bottom up
+    if (index < size/2) {
+
+    // Search bottom down
+    } else {
+
     }
+
+    return data;
+
+  }
+
+  public boolean remove(Object obj) {
+    return false;
+  }
+
+  public int indexOf(Object obj) {
+    
+    int index = 0;
+    Node <T> trav = head;
+    
+    // Support searching for null
+    if (obj == null) {
+      while(trav != null) {
+        Node <T> next = trav.next;
+        if (trav.data == null)
+          return index;
+        index++;
+      }
+
+    // Search for non null object
+    } else {
+      while(trav != null) {
+        Node <T> next = trav.next;
+        if (obj.equals(trav.data))
+          return index;        
+        trav = next;
+        index++;
+      }
+    }
+    
     return -1;
+  }
+
+  public boolean contains(Object obj) {
+    return indexOf(obj) != -1;
   }
 
   @Override public Iterator <T> iterator () {

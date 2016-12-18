@@ -24,22 +24,31 @@ class Entry <K, V> {
 
 }
 
+@SuppressWarnings("unchecked")
 public class Mapping <K,V> implements IMap <K, V> { // should also implement iterable
 
-  private final double LOAD_FACTOR = 0.75;
+  private static final int DEFAULT_CAPACITY = 3;
+  private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
+  double load_factor;
   int capacity, threshold, size = 0;
-  Array <LinkedList<Entry<K,V>>> table;
+  LinkedList <Entry<K,V>> [] table;
 
   public Mapping () {
-    this(3);
+    this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
   }
 
   public Mapping (int capacity) {
+    this(capacity, DEFAULT_LOAD_FACTOR);
+  }
+
+  // Designated constructor
+  public Mapping (int capacity, double load_factor) {
     if (capacity < 0) throw new IllegalArgumentException("Capacity cannot be less than zero");
-    this.capacity = Math.max(3, capacity);
-    threshold = (int) (this.capacity * LOAD_FACTOR);
-    table = new Array<>(capacity);
+    this.load_factor = load_factor;
+    this.capacity = Math.max(DEFAULT_CAPACITY, capacity);
+    threshold = (int) (this.capacity * load_factor);
+    table = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
   }
 
   public int size() {
@@ -56,8 +65,8 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
   }
 
   public void clear() {
-    for (int i = 0; i < table.size(); i++)
-      table.set(i, null);
+    for (int i = 0; i < capacity; i++)
+      table[i] = null;
     size = 0;
   }
 
@@ -102,17 +111,15 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
   }
 
   private void bucketRemoveEntry(int bucket_index, Entry <K,V> entry) {
-    LinkedList <Entry<K,V>> links = table.get(bucket_index);
+    LinkedList <Entry<K,V>> links = table[bucket_index];
     links.remove(entry);
     --size;
   }
 
   private void bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
-    LinkedList<Entry<K,V>> links = table.get(bucket_index);
-    if (links == null) {
-      links = new LinkedList<>();
-      table.set(bucket_index, links);
-    }
+    LinkedList<Entry<K,V>> links = table[bucket_index];
+    if (links == null)
+      table[bucket_index] = links = new LinkedList<>();
     if (bucketSeekEntry(bucket_index, entry.key) == null) {
       links.add(entry);
       if (++size > threshold) resizeTable();
@@ -120,7 +127,7 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
   }
 
   private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {
-    LinkedList <Entry<K,V>> links = table.get(bucket_index);
+    LinkedList <Entry<K,V>> links = table[bucket_index];
     if (links == null) return null;
     for (Entry <K,V> entry : links)
       if (entry.key.equals(key))
@@ -128,12 +135,25 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
     return null;
   }
 
-
   private void resizeTable() {
-    
+
     capacity *= 2;
-    // create new table
-    // re distribute elements with new MOD value
+    threshold = (int) (capacity * load_factor);
+    LinkedList <Entry<K,V>> new_table [] = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
+    
+    for (int i = 0; i < table.length; i++ ) {
+      for (Entry <K,V> entry : table[i]) {
+
+        int bucket_index = normalizeIndex(entry.hash);
+        LinkedList<Entry<K,V>> links = new_table[bucket_index];
+        if (links == null) new_table[bucket_index] = links = new LinkedList<>();
+        links.add(entry);
+
+      }
+      table[i] = null; // Avoid memory leak. Help the GC
+    }
+
+    table = new_table;
 
   }
 
@@ -159,15 +179,16 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
 
   @Override public String toString() {
 
-    StringBuilder sb = StringBuilder();
+    StringBuilder sb = new StringBuilder();
     sb.append("[ ");
     for (int i = 0; i < size(); i++) {
-      LinkedList<Entry<K,V>> links = table.get(i);
+      LinkedList<Entry<K,V>> links = table[i];
       for (Entry <K,V> entry : links) {
         sb.append( entry + ", ");
       }
     }
     sb.append(" ]");
+    return sb.toString();
 
   }
 

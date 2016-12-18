@@ -75,7 +75,6 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
 
   public T removeFirst() {
 
-    // System.out.println("first");
     if (isEmpty()) throw new RuntimeException("Empty list");
     
     T data = head.data;
@@ -91,7 +90,6 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
 
   public T removeLast() {
 
-    // System.out.println("last");
     if (isEmpty()) throw new RuntimeException("Empty list");
     
     T data = tail.data;
@@ -193,7 +191,6 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
     return new java.util.Iterator <T> () {
       private Node <T> trav = head;
       @Override public boolean hasNext() {
-        // if (trav.next == trav) throw new NullPointerException();
         return trav != null;
       }
       @Override public T next () {

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class PQueueTest {
 
-  static final int LOOPS = 500;
+  static final int LOOPS = 1000;
 
   /*
   @Before
@@ -193,13 +193,10 @@ public class PQueueTest {
       
       int elem = removeOrder[i];
 
-      System.out.println(pq.heap + " " + PQ);
-
       assertTrue(pq.peek() == PQ.peek());
       pq.remove(elem);
-      PQ.remove(elem); 
-      
-      System.out.println(pq.heap + " " + PQ);
+      PQ.remove(elem);
+      assertTrue(pq.size() == PQ.size());
       assertTrue(pq.isMinHeap(0));
 
     }
@@ -238,7 +235,6 @@ public class PQueueTest {
 
   }
 
-  /*
   @Test
   public void testGeneralOperations1() {
 
@@ -270,7 +266,6 @@ public class PQueueTest {
     }
 
   }
-  */
 
 
   @Test
@@ -280,7 +275,6 @@ public class PQueueTest {
     assertTrue(pq.isMinHeap(0));
   }
 
-  /*
   @Test
   public void testGeneralOperations2() {
 
@@ -297,10 +291,7 @@ public class PQueueTest {
         pq2.add(value);
       }
 
-      System.out.println("Entered Order: " + randNums);
       Collections.shuffle(randNums);
-      System.out.println("Shuffled Order: " + randNums);
-      System.out.println();
       int index = 0;
 
       while( !pq1.isEmpty() ) {
@@ -320,12 +311,11 @@ public class PQueueTest {
     }
 
   }
-  */
 
   static List <Integer> genRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++)
-      lst.add( (int) (Math.random()*100) );
+      lst.add( (int) (Math.random()*250) );
     return lst;
   }
 

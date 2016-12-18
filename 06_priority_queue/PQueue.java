@@ -67,11 +67,40 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   public boolean remove(T element) {
     for (int i = 0; i < heap_size; i++) {
       if (element.equals(heap.get(i))) {
+        // System.out.println("FOUND " + element + " AT: " + i);
         removeAt(i);
         return true;
       }
     }
     return false;
+  }
+
+  private T removeAt(int i) {
+    
+    // Just for debugging
+    assert i >= 0 && i < heap_size;
+    
+    if (isEmpty()) return null;
+
+    T removed_data = heap.get(i);
+    heap_size--;
+
+    // Removed last element
+    if (i == heap_size) return removed_data;
+
+    swap(i, heap_size);
+    heap.set(heap_size, null);
+    T elem = heap.get(i);
+
+    // Try sinking element.
+    sink(i);
+
+    // If sinking did not work try swimming
+    if ( heap.get(i).equals(elem) )
+      swim(i);
+
+    return removed_data;
+
   }
 
   public void clear() {
@@ -125,22 +154,6 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
       heap.set(heap_size, null); // Memory cleanup
       sink(0); // Restore heap property
       return root;
-    } else return null;
-
-  }
-
-  private T removeAt(int i) {
-    
-    // Just for debugging
-    assert i >= 0 && i < heap_size;
-    
-    if (!isEmpty()) {
-      T data = heap.get(i);
-      heap_size--;
-      swap(i, heap_size);
-      heap.set(heap_size, null); // Memory cleanup
-      sink(i); // Restore heap property
-      return data;
     } else return null;
 
   }
@@ -200,11 +213,11 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     int right = 2 * k + 2;
 
     if (left  < heap_size  && !less(k, left))  {
-      System.out.println( "LEFT:" + k + " " + left + " " + heap.get(k) + " "  + heap.get(left) + " " + heap_size);
+      // System.out.println( "LEFT:" + k + " " + left + " " + heap.get(k) + " "  + heap.get(left) + " " + heap_size);
       return false;
     }
     if (right < heap_size  && !less(k, right)) {
-      System.out.println( "RIGHt:" + k + " " + left + " " + heap.get(k) + " " +  heap.get(right) + " " + heap_size);
+      // System.out.println( "RIGHt:" + k + " " + left + " " + heap.get(k) + " " +  heap.get(right) + " " + heap_size);
       return false;
     }
     return isMinHeap(left) && isMinHeap(right);

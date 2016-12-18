@@ -4,11 +4,10 @@ import java.util.*;
 
 public class PQueueTest {
 
-  static final int LOOPS = 1000;
+  static final int LOOPS = 500;
   
   @Before
-  public void setup() {
-  }
+  public void setup() { }
 
   @Test
   public void testEmpty() {
@@ -39,98 +38,6 @@ public class PQueueTest {
 
   }
 
-  @Test
-  public void testPeekAndPoll() {
-
-    PQueue<String> q = new PQueue<>();
-    
-    // Add elements
-    q.add("a"); 
-    assertEquals("a", q.peek());
-    assertEquals(1, q.size());
-    q.add("b"); 
-    assertEquals("a", q.peek());
-    assertEquals(2, q.size());
-    q.add("c"); 
-    assertEquals("a", q.peek());
-    assertEquals(3, q.size());
-    q.add("d"); 
-    assertEquals("a", q.peek());
-    assertEquals(4, q.size());
-
-    // Remove elements
-    assertEquals("a", q.poll());
-    assertEquals(3, q.size());
-    
-    assertEquals("b", q.poll());
-    assertEquals(2, q.size());
-    
-    assertEquals("c", q.poll());
-    assertEquals(1, q.size());
-    
-    assertEquals("d", q.poll());
-    assertEquals(0, q.size());
-    
-
-    // Redo ^^
-
-    // Add elements
-    q.add("a"); 
-    assertEquals("a", q.peek());
-    assertEquals(1, q.size());
-    q.add("b"); 
-    assertEquals("a", q.peek());
-    assertEquals(2, q.size());
-    q.add("c"); 
-    assertEquals("a", q.peek());
-    assertEquals(3, q.size());
-    q.add("d"); 
-    assertEquals("a", q.peek());
-    assertEquals(4, q.size());
-
-    // Remove elements
-    assertEquals("a", q.poll());
-    assertEquals(3, q.size());
-    
-    assertEquals("b", q.poll());
-    assertEquals(2, q.size());
-    
-    assertEquals("c", q.poll());
-    assertEquals(1, q.size());
-    
-    assertEquals("d", q.poll());
-    assertEquals(0, q.size());
-    
-
-    // ^^^ Redo
-
-    // Add elements
-    q.add("a"); 
-    assertEquals("a", q.peek());
-    assertEquals(1, q.size());
-    q.add("b"); 
-    assertEquals("a", q.peek());
-    assertEquals(2, q.size());
-    q.add("c"); 
-    assertEquals("a", q.peek());
-    assertEquals(3, q.size());
-    q.add("d"); 
-    assertEquals("a", q.peek());
-    assertEquals(4, q.size());
-
-    // Remove elements
-    assertEquals("a", q.poll());
-    assertEquals(3, q.size());
-    assertEquals("b", q.poll());
-    assertEquals(2, q.size());
-    assertEquals("c", q.poll());
-    assertEquals(1, q.size());
-    assertEquals("d", q.poll());
-    assertEquals(0, q.size());
-
-  }
-
-
 
   @Test
   public void testClear() {
@@ -144,8 +51,7 @@ public class PQueueTest {
 
   }
 
-
-  public void testSequentialRemoving(Integer[] in, Integer[] removeOrder) {
+  public void sequentialRemoving(Integer[] in, Integer[] removeOrder) {
 
     assertEquals(in.length, removeOrder.length);
     
@@ -174,27 +80,26 @@ public class PQueueTest {
 
     Integer [] in = {1,2,3,4,5,6,7};
     Integer [] removeOrder = { 1,3,6,4,5,7,2 };
-    testSequentialRemoving(in, removeOrder);
+    sequentialRemoving(in, removeOrder);
 
     in = new Integer[] {1,2,3,4,5,6,7,8,9,10,11};
     removeOrder = new Integer[] {7,4,6,10,2,5,11,3,1,8,9};
-    testSequentialRemoving(in, removeOrder);
+    sequentialRemoving(in, removeOrder);
 
     in = new Integer[] {8, 1, 3, 3, 5, 3};
     removeOrder = new Integer[] {3,3,5,8,1,3};
-    testSequentialRemoving(in, removeOrder);
+    sequentialRemoving(in, removeOrder);
 
     in = new Integer[] {7, 7, 3, 1, 1, 2};
     removeOrder = new Integer[] {2, 7, 1, 3, 7, 1};
-    testSequentialRemoving(in, removeOrder);
+    sequentialRemoving(in, removeOrder);
 
     in = new Integer[] {32, 66, 93, 42, 41, 91, 54, 64, 9, 35};
     removeOrder = new Integer[] {64, 93, 54, 41, 35, 9, 66, 42, 32, 91};
-    testSequentialRemoving(in, removeOrder);
+    sequentialRemoving(in, removeOrder);
 
   }
 
-  /*
   @Test
   public void testRandomizedPolling() {
 
@@ -216,7 +121,10 @@ public class PQueueTest {
         assertTrue(pq2.isMinHeap(0));
         assertEquals( pq1.size(), pq2.size() );
         assertEquals( pq1.peek(), pq2.peek() );
-        pq1.poll(); pq2.poll();
+        
+        pq1.poll();
+        pq2.poll();
+        
         assertEquals( pq1.peek(), pq2.peek() );
         assertEquals( pq1.size(), pq2.size() );
         assertTrue(pq2.isMinHeap(0));
@@ -263,7 +171,6 @@ public class PQueueTest {
     }
 
   }
-  */
 
   @Test
   public void testPQReusability() {
@@ -275,7 +182,8 @@ public class PQueueTest {
 
     for (int sz : SZs) {
       
-      pq.clear(); PQ.clear();
+      pq.clear();
+      PQ.clear();
 
       List <Integer> nums = genRandList(sz);
       for (int n : nums) {
@@ -287,6 +195,7 @@ public class PQueueTest {
 
       for (int i = 0; i < sz/2; i++) {
         
+        // Sometimes add a new number into the Pqueue
         if (0.25 < Math.random()) {
           int randNum = (int) (Math.random() * 10000);
           PQ.add(randNum);
@@ -298,7 +207,10 @@ public class PQueueTest {
         assertTrue(pq.isMinHeap(0));
         assertEquals( PQ.size(), pq.size() );
         assertEquals( PQ.peek(), pq.peek() );
-        PQ.remove(removeNum); pq.remove(removeNum);
+
+        PQ.remove(removeNum);
+        pq.remove(removeNum);
+        
         assertEquals( PQ.peek(), pq.peek() );
         assertEquals( PQ.size(), pq.size() );
         assertTrue(pq.isMinHeap(0));

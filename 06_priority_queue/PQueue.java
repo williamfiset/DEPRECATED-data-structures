@@ -9,17 +9,12 @@ Should we support adding null elements inside the heap?
 
 */
 
-
-// Eventually replace with custom Map
-import java.util.Map;
-import java.util.HashMap;
-
 interface IPQueue <T> {
   
   public boolean contains(T elem);
   public boolean remove(T elem);
   public boolean isEmpty();
-  public void add(T ... elem);
+  public void add(T elem);
   public void clear();
   public int size();
   public T peek();
@@ -32,10 +27,6 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   int heap_size = 0;
   int heap_capacity = 0;
   Array <T> heap = null;
-
-  // Eventually replace with custom Map (but ok for video series)
-  // What if elements are not unique?
-  Map <Integer, LinkedList<T>> index_mapping = new HashMap<>();
 
   public PQueue () {
     this(0);
@@ -73,7 +64,6 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     return heap_size;
   }
 
-
   public T peek() {
     if (isEmpty()) return null;
     return heap.get(0);
@@ -94,9 +84,6 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   }
 
   private T removeAt(int i) {
-    
-    // Just for debugging
-    assert i >= 0 && i < heap_size;
     
     if (isEmpty()) return null;
 
@@ -131,27 +118,22 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     return false;
   }
 
-  public void add(T ... elems) {
-    for ( T elem : elems ) {
-      if (elem == null) throw new NullPointerException();
-      if (heap_size < heap_capacity) {
-        heap.set(heap_size, elem);
-      } else {
-        heap.add(elem);
-        heap_capacity++;
-      }
-      // index_mapping.put(heap_size, elem);
-      swim(heap_size); 
-      heap_size++;
+  public void add(T elem) {
+    if (elem == null) throw new NullPointerException();
+    if (heap_size < heap_capacity) {
+      heap.set(heap_size, elem);
+    } else {
+      heap.add(elem);
+      heap_capacity++;
     }
+    swim(heap_size); 
+    heap_size++;
   }
 
   // Swap Two nodes 
   private void swap(int i, int j) {
     T i_elem = heap.get(i);
     T j_elem = heap.get(j);
-    // index_mapping.put(i, j_elem);
-    // index_mapping.put(j, i_elem);
     heap.set(i, j_elem);
     heap.set(j, i_elem);
   }

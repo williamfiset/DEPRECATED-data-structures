@@ -24,7 +24,7 @@ class Entry <K, V> {
 
 }
 
-public class Mapping <K,V> implements IMap <K, V> { // also implement iterable
+public class Mapping <K,V> implements IMap <K, V> { // should also implement iterable
 
   private final double LOAD_FACTOR = 0.75;
 
@@ -42,29 +42,23 @@ public class Mapping <K,V> implements IMap <K, V> { // also implement iterable
     table = new Array<>(capacity);
   }
 
+  public int size() {
+    return size;
+  }
+  
+  public boolean isEmpty() {
+    return size() == 0;
+  }
+
   // Converts a hash value to an index.
   private int normalizeIndex(int keyHash ) {
     return (keyHash & 0x7fffffff) % capacity;
   }
 
-  public Array <K> keys() {
-
-    Array <K> keys = new Array<>(size);
-    for(LinkedList<Entry<K,V>> links : table)
-      for (Entry <K,V> entry : links)
-        keys.add(entry.key);
-    return keys;
-
-  }
-
-  public Array <V> values() {
-
-    Array <K> values = new Array<>(size);
-    for(LinkedList<Entry<K,V>> links : table)
-      for (Entry <K,V> entry : links)
-        values.add(entry.value);
-    return values;
-
+  public void clear() {
+    for (int i = 0; i < table.size(); i++)
+      table.set(i, null);
+    size = 0;
   }
 
   public boolean hasKey(K key) {
@@ -81,54 +75,74 @@ public class Mapping <K,V> implements IMap <K, V> { // also implement iterable
 
   public void add(K key, V value) {
     Entry <K, V> new_entry = new Entry<>(key, value);
-    int index = normalizeIndex(new_entry.hash);
-    insertAt(index, new_entry);
-  }
-
-  private void insertAt(int index, Entry <K,V> entry) {
-    LinkedList<Entry<K,V>> links = table.get(index);
-    if (links == null) {
-      links = new LinkedList<>();
-      links.add(entry);
-      table.set(index, links);
-    } else {
-      if (!containsAt(index))
-        links.add(entry);
-    }
-  }
-
-  private int containsAt(int index, Entry <K, V> entry ) {
-    LinkedList<Entry<K,V>> links = table.get(index);
-    if (links == null) return -1;
-    for (int i = 0; i < links.size(); i++)
-      if (links.get(i).equals(entry))
-        return i;
-    return -1;
+    int bucket_index = normalizeIndex(new_entry.hash);
+    bucketInsertEntry(bucket_index, new_entry);
   }
 
   public V get(K key) {
-    int index = normalizeIndex(key.hashCode());
-
-  }
-
-  public V remove(K key) {
-    int index = normalizeIndex(key.hashCode());
+    int bucket_index = normalizeIndex(key.hashCode());
+    Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
+    if (entry != null) return entry.value;
     return null;
   }
 
-  public int size() {
-    return size;
+  public V remove(K key) {
+
+    int bucket_index = normalizeIndex(key.hashCode());
+    Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
+    
+    if (entry != null) {
+      bucketRemoveEntry(bucket_index, entry);
+      return entry.value;
+    }
+
+    return null;
+
   }
 
-  public void clear() {
-    for (int i = 0; i < table.size(); i++)
-      table.set(i, null);
-    size = 0;
+  private void bucketRemoveEntry(int bucket_index, Entry <K,V> entry) {
+    LinkedList <Entry<K,V>> links = table.get(bucket_index);
+    links.remove(entry);
+    --size;
   }
-  
-  public boolean isEmpty() {
-    return size() == 0;
-  }  
+
+  private void bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
+    LinkedList<Entry<K,V>> links = table.get(bucket_index);
+    if (links == null) {
+      links = new LinkedList<>();
+      table.set(bucket_index, links);
+    }
+    if (bucketSeekEntry(bucket_index, entry.key) == null)
+      links.add(entry);
+  }
+
+  private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {
+    LinkedList <Entry<K,V>> links = table.get(bucket_index);
+    if (links == null) return null;
+    for (Entry <K,V> entry : links)
+      if (entry.key.equals(key))
+        return entry;
+    return null;
+  }
+
+  public Array <K> keys() {
+
+    Array <K> keys = new Array<>(size);
+    for(LinkedList<Entry<K,V>> links : table)
+      for (Entry <K,V> entry : links)
+        keys.add(entry.key);
+    return keys;
+
+  }
+
+  public Array <V> values() {
+
+    Array <V> values = new Array<>(size);
+    for(LinkedList<Entry<K,V>> links : table)
+      for (Entry <K,V> entry : links)
+        values.add(entry.value);
+    return values;
+
+  }
 
 }
-

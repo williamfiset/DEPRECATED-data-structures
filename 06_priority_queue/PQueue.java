@@ -1,11 +1,14 @@
 
 /*
-Remember that you can always turn a max heap into a min heap by inserting negated values 
-and re-negating the values after they are removed from the heap.
+Remember that you can always turn a max heap into a min heap by inserting negated values and re-negating the values after they are removed from the heap.
 
 Some of this software was inspired by the works of Robert Sedgewick and Kevin Wayne
 
-Should we support adding null elements inside the heap?
+Should we support adding null elements inside the heap? Currently no.
+
+In the future we can try making removing O(log(n)) using a Map to track
+element indexes. This makes the code a bit more messy and adds a bit more space
+but it probably worth it overall. This could be added for the fastjavadss
 
 */
 
@@ -24,9 +27,9 @@ interface IPQueue <T> {
 
 class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
-  int heap_size = 0;
-  int heap_capacity = 0;
-  Array <T> heap = null;
+  private int heap_size = 0;
+  private int heap_capacity = 0;
+  private Array <T> heap = null;
 
   public PQueue () {
     this(0);
@@ -74,6 +77,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   } 
 
   public boolean remove(T element) {
+    if (element == null) return false;
     for (int i = 0; i < heap_size; i++) {
       if (element.equals(heap.get(i))) {
         removeAt(i);
@@ -87,8 +91,8 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     
     if (isEmpty()) return null;
 
-    T removed_data = heap.get(i);
     heap_size--;
+    T removed_data = heap.get(i);
 
     // Removed last element
     if (i == heap_size) return removed_data;
@@ -97,7 +101,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     heap.set(heap_size, null);
     T elem = heap.get(i);
 
-    // Try sinking element.
+    // Try sinking element
     sink(i);
 
     // If sinking did not work try swimming
@@ -109,9 +113,10 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   } 
 
   // O(n) linear scan to test if element is in heap
-  // You can optionally use a Set<T> if element is hashable
+  // You can optionally use a Map<T, List<Integer>> if element is hashable
   // to test if the element is in the heap
   public boolean contains(T elem) {
+    if (elem == null) return false;
     for(int i = 0; i < heap_size; i++)
       if (heap.get(i).equals(elem))
         return true;
@@ -130,7 +135,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     heap_size++;
   }
 
-  // Swap Two nodes 
+  // Swap two nodes. Assumes i & j are valid
   private void swap(int i, int j) {
     T i_elem = heap.get(i);
     T j_elem = heap.get(j);
@@ -138,8 +143,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     heap.set(j, i_elem);
   }
 
-  // Test if node i <= node j
-  // Assumes i and j are valid
+  // Test if node i <= node j. Assumes i & j are valid
   private boolean less(int i, int j) {
 
     T child1 = heap.get(i);

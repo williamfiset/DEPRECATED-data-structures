@@ -152,6 +152,7 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
           remove(trav);
           return true;
         }
+        
     // Search for non null object
     } else {
       for(trav = head; trav != null; trav = trav.next)
@@ -209,8 +210,6 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
       sb.append(trav.data + ", ");
       trav = trav.next;
     }
-    // sb.deleteCharAt(sb.length()-1);
-    // sb.deleteCharAt(sb.length()-1);
     sb.append(" ]");
     return sb.toString();
   }

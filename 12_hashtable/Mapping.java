@@ -80,9 +80,13 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
   }
   
   public void add(K key, V value) {
+
+    if (key == null) return;
     Entry <K, V> new_entry = new Entry<>(key, value);
     int bucket_index = normalizeIndex(new_entry.hash);
+    System.out.println(bucket_index);
     bucketInsertEntry(bucket_index, new_entry);
+
   }
 
   public void put(K key, V value) {
@@ -90,18 +94,23 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
   }
 
   public V get(K key) {
+
+    if (key == null) return null;
     int bucket_index = normalizeIndex(key.hashCode());
     Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
     if (entry != null) return entry.value;
     return null;
+
   }
 
   public V remove(K key) {
 
+    if (key == null) return null;
     int bucket_index = normalizeIndex(key.hashCode());
     Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
-    
+    // System.out.println("BUCKET: " + bucket_index);
     if (entry != null) {
+      // System.out.println("FOUND ENTRY");
       bucketRemoveEntry(bucket_index, entry);
       return entry.value;
     }
@@ -118,24 +127,34 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   private void bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
     LinkedList<Entry<K,V>> links = table[bucket_index];
-    if (links == null)
-      table[bucket_index] = links = new LinkedList<>();
+    // System.out.println("LINKS: " + links);
+    if (links == null) {
+      links = new LinkedList<>();
+      table[bucket_index] = links;
+    }
     if (bucketSeekEntry(bucket_index, entry.key) == null) {
       links.add(entry);
-      if (++size > threshold) resizeTable();
+      ++size;
+      if (size > threshold) resizeTable();
     }
   }
 
   private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {
+
+    if (key == null) return null;
     LinkedList <Entry<K,V>> links = table[bucket_index];
     if (links == null) return null;
     for (Entry <K,V> entry : links)
       if (entry.key.equals(key))
         return entry;
     return null;
+
   }
 
   private void resizeTable() {
+
+    System.out.println("TABLE RESIZE");
+    System.out.println(java.util.Arrays.toString(table));
 
     capacity *= 2;
     threshold = (int) (capacity * load_factor);
@@ -144,10 +163,14 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     for (int i = 0; i < table.length; i++ ) {
       if (table[i] != null) {
         for (Entry <K,V> entry : table[i]) {
-
+          // System.out.println("ENTRY: " + entry);
           int bucket_index = normalizeIndex(entry.hash);
           LinkedList<Entry<K,V>> links = new_table[bucket_index];
-          if (links == null) new_table[bucket_index] = links = new LinkedList<>();
+          if (links == null) {
+            links = new LinkedList<>();
+            // System.out.println("NEW BUCKET INDEX: " + bucket_index);
+            new_table[bucket_index] = links;
+          }
           links.add(entry);
 
         }
@@ -206,10 +229,9 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     StringBuilder sb = new StringBuilder();
     sb.append("[ ");
     for (int i = 0; i < size(); i++) {
-      LinkedList<Entry<K,V>> links = table[i];
-      for (Entry <K,V> entry : links) {
+      if (table[i] == null) continue;
+      for (Entry <K,V> entry : table[i])
         sb.append( entry + ", ");
-      }
     }
     sb.append(" ]");
     return sb.toString();

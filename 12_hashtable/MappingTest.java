@@ -30,108 +30,108 @@ public class MappingTest {
 
   }
 
-  static void testCapacity() {
+  // static void testCapacity() {
 
-    Mapping<Integer, Integer> map = new Mapping<>();
+  //   Mapping<Integer, Integer> map = new Mapping<>();
     
-  }
+  // }
 
-  static void putting() {
+  // static void putting() {
     
-    for(int map_size = 0; map_size < 100; map_size++) {
-      Mapping<Integer, Integer> map = new Mapping<>(map_size);
-      for(int i = 0; i < 100; i++) {
-        map.put(i, i);
-      }
-    }
+  //   for(int map_size = 0; map_size < 100; map_size++) {
+  //     Mapping<Integer, Integer> map = new Mapping<>(map_size);
+  //     for(int i = 0; i < 100; i++) {
+  //       map.put(i, i);
+  //     }
+  //   }
 
-  }
+  // }
 
-  static void testIterator() {
+  // static void testIterator() {
 
-    Mapping<String, Long> map = new Mapping<>();
+  //   Mapping<String, Long> map = new Mapping<>();
 
-    map.put("34", 35L);
-    map.put("456", 456L);
-    map.put("666", 666L);
-    map.put("-Hellos dfsdf", 0L);
-    map.put("34", 35L);
-    map.put("456", 456L);
+  //   map.put("34", 35L);
+  //   map.put("456", 456L);
+  //   map.put("666", 666L);
+  //   map.put("-Hellos dfsdf", 0L);
+  //   map.put("34", 35L);
+  //   map.put("456", 456L);
 
-    System.out.println(map);
+  //   System.out.println(map);
 
-    for(String k : map)
-      System.out.println(k);
+  //   for(String k : map)
+  //     System.out.println(k);
 
-  }
+  // }
 
-  @Test
-  public void removeTestSimple1() {
+  // @Test
+  // public void removeTestSimple1() {
 
-    Mapping<String, String> map = new Mapping<>();
+  //   Mapping<String, String> map = new Mapping<>();
 
-    map.put("A", "B");
-    map.put("B", "C");
-    map.put("C", "D");
+  //   map.put("A", "B");
+  //   map.put("B", "C");
+  //   map.put("C", "D");
 
-    map.remove("B");
-    map.remove("C");
-    map.remove("A");
+  //   map.remove("B");
+  //   map.remove("C");
+  //   map.remove("A");
 
-    assertEquals( 0, map.size() );
+  //   assertEquals( 0, map.size() );
 
-  }
+  // }
 
-  @Test
-  public void randomRemove() {
+  // @Test
+  // public void randomRemove() {
 
-    Mapping<Integer, Integer> map = new Mapping<>();
-    Set<Integer> keys = new HashSet<>();
-    for(int i = 0; i < 100000; i++) {
-      int randomVal = r.nextInt() % 400000;
-      if (!keys.contains(randomVal)) {
-        keys.add(randomVal);
-        map.put(randomVal, 5);
-      }
-    }
+  //   Mapping<Integer, Integer> map = new Mapping<>();
+  //   Set<Integer> keys = new HashSet<>();
+  //   for(int i = 0; i < 100000; i++) {
+  //     int randomVal = r.nextInt() % 400000;
+  //     if (!keys.contains(randomVal)) {
+  //       keys.add(randomVal);
+  //       map.put(randomVal, 5);
+  //     }
+  //   }
 
-    System.out.println( map.size() + " " + keys.size());
-    assertEquals( map.size(), keys.size() );
+  //   System.out.println( map.size() + " " + keys.size());
+  //   assertEquals( map.size(), keys.size() );
 
-    // int c =0;
-    // for(Integer k : keys) {
-    //   if(map.remove(k)==null) {
-    //     c++;
-    //   }
-    // }
-    // System.out.println("NULLS: " + c);
-    // System.out.println("SIZE: " + map.size());
-    // assertTrue(map.size() == 0);
-
-  }
+  // }
 
   @Test
   public void removeTest() {
 
-    Mapping<Integer, Integer> map = new Mapping<>( 7 );
+    Mapping <Integer, Integer> map = new Mapping<>( 7 );
     
-    map.put(4, 0);
-    map.put(15, 0);
-    map.put(26, 0);
+    // Add three elements
+    map.put(11, 0); map.put(12, 0); map.put(13, 0);
+    System.out.println("FIRST: " + map);
+    assertEquals(3, map.size());
+    System.out.println("SIZE: " + map.size());
 
-    for(int i = 0; i < 10; i++)
-      map.put(i, 0);
+    // Add ten more
+    for(int i = 1; i <= 10; i++) map.put(i, 0);
+    System.out.println("SECOND: " + map);
+    assertEquals(13, map.size());
+    System.out.println("SIZE: " + map.size());
 
-    System.out.println( map.table );
-    map.remove(4);
-    System.out.println( map.table );
-    map.remove(15);
-    System.out.println( map.table );
-    map.remove(26);
-    System.out.println( map.table );    
+    // remove ten
+    for(int i = 1; i <= 10; i++) map.remove(i);
+    System.out.println("THIRD: " + map);
+    assertEquals(3, map.size());
+    System.out.println("SIZE: " + map.size());
+
+    // remove three
+    map.remove(13); map.remove(15); map.remove(26);
+    System.out.println("FOURTH: " + map);
+    assertEquals(0, map.size());
+    System.out.println("SIZE: " + map.size());
 
   }
 
+  /*
   @Test
   public void removeTestComplex1() {
 
@@ -170,5 +170,6 @@ public class MappingTest {
 
     assertTrue(map.size() == 0);    
   }
+  */
 
 }

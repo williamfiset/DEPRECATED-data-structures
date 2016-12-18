@@ -6,37 +6,37 @@ public class UnionFindTest {
   // @Before public void setup() { }
 
   @Test
-  public void testNumberOfComponentsLeft() {
+  public void testNumComponents() {
 
     UnionFind uf = new UnionFind(5);
-    assertEquals(uf.numberOfComponentsLeft(), 5);
+    assertEquals(uf.components(), 5);
 
     uf.unify(0,1);
-    assertEquals(uf.numberOfComponentsLeft(), 4);
+    assertEquals(uf.components(), 4);
     
     uf.unify(1,0);
-    assertEquals(uf.numberOfComponentsLeft(), 4);
+    assertEquals(uf.components(), 4);
 
     uf.unify(1,2);
-    assertEquals(uf.numberOfComponentsLeft(), 3);
+    assertEquals(uf.components(), 3);
     
     uf.unify(0,2);
-    assertEquals(uf.numberOfComponentsLeft(), 3);
+    assertEquals(uf.components(), 3);
 
     uf.unify(2,1);
-    assertEquals(uf.numberOfComponentsLeft(), 3);
+    assertEquals(uf.components(), 3);
 
     uf.unify(3,4);
-    assertEquals(uf.numberOfComponentsLeft(), 2);
+    assertEquals(uf.components(), 2);
 
     uf.unify(4,3);
-    assertEquals(uf.numberOfComponentsLeft(), 2);
+    assertEquals(uf.components(), 2);
 
     uf.unify(1,3);
-    assertEquals(uf.numberOfComponentsLeft(), 1);
+    assertEquals(uf.components(), 1);
 
     uf.unify(4,0);
-    assertEquals(uf.numberOfComponentsLeft(), 1);
+    assertEquals(uf.components(), 1);
 
   }
 
@@ -44,74 +44,74 @@ public class UnionFindTest {
   public void testComponentSize() {
 
     UnionFind uf = new UnionFind(5);
-    assertEquals(uf.getComponentSize(0), 1);
-    assertEquals(uf.getComponentSize(1), 1);
-    assertEquals(uf.getComponentSize(2), 1);
-    assertEquals(uf.getComponentSize(3), 1);
-    assertEquals(uf.getComponentSize(4), 1);
+    assertEquals(uf.componentSize(0), 1);
+    assertEquals(uf.componentSize(1), 1);
+    assertEquals(uf.componentSize(2), 1);
+    assertEquals(uf.componentSize(3), 1);
+    assertEquals(uf.componentSize(4), 1);
 
     uf.unify(0,1);
-    assertEquals(uf.getComponentSize(0), 2);
-    assertEquals(uf.getComponentSize(1), 2);
-    assertEquals(uf.getComponentSize(2), 1);
-    assertEquals(uf.getComponentSize(3), 1);
-    assertEquals(uf.getComponentSize(4), 1);    
+    assertEquals(uf.componentSize(0), 2);
+    assertEquals(uf.componentSize(1), 2);
+    assertEquals(uf.componentSize(2), 1);
+    assertEquals(uf.componentSize(3), 1);
+    assertEquals(uf.componentSize(4), 1);    
     
     uf.unify(1,0);
-    assertEquals(uf.getComponentSize(0), 2);
-    assertEquals(uf.getComponentSize(1), 2);
-    assertEquals(uf.getComponentSize(2), 1);
-    assertEquals(uf.getComponentSize(3), 1);
-    assertEquals(uf.getComponentSize(4), 1);      
+    assertEquals(uf.componentSize(0), 2);
+    assertEquals(uf.componentSize(1), 2);
+    assertEquals(uf.componentSize(2), 1);
+    assertEquals(uf.componentSize(3), 1);
+    assertEquals(uf.componentSize(4), 1);      
 
     uf.unify(1,2);
-    assertEquals(uf.getComponentSize(0), 3);
-    assertEquals(uf.getComponentSize(1), 3);
-    assertEquals(uf.getComponentSize(2), 3);
-    assertEquals(uf.getComponentSize(3), 1);
-    assertEquals(uf.getComponentSize(4), 1);    
+    assertEquals(uf.componentSize(0), 3);
+    assertEquals(uf.componentSize(1), 3);
+    assertEquals(uf.componentSize(2), 3);
+    assertEquals(uf.componentSize(3), 1);
+    assertEquals(uf.componentSize(4), 1);    
     
     uf.unify(0,2);
-    assertEquals(uf.getComponentSize(0), 3);
-    assertEquals(uf.getComponentSize(1), 3);
-    assertEquals(uf.getComponentSize(2), 3);
-    assertEquals(uf.getComponentSize(3), 1);
-    assertEquals(uf.getComponentSize(4), 1);    
+    assertEquals(uf.componentSize(0), 3);
+    assertEquals(uf.componentSize(1), 3);
+    assertEquals(uf.componentSize(2), 3);
+    assertEquals(uf.componentSize(3), 1);
+    assertEquals(uf.componentSize(4), 1);    
 
     uf.unify(2,1);
-    assertEquals(uf.getComponentSize(0), 3);
-    assertEquals(uf.getComponentSize(1), 3);
-    assertEquals(uf.getComponentSize(2), 3);
-    assertEquals(uf.getComponentSize(3), 1);
-    assertEquals(uf.getComponentSize(4), 1);    
+    assertEquals(uf.componentSize(0), 3);
+    assertEquals(uf.componentSize(1), 3);
+    assertEquals(uf.componentSize(2), 3);
+    assertEquals(uf.componentSize(3), 1);
+    assertEquals(uf.componentSize(4), 1);    
 
     uf.unify(3,4);
-    assertEquals(uf.getComponentSize(0), 3);
-    assertEquals(uf.getComponentSize(1), 3);
-    assertEquals(uf.getComponentSize(2), 3);
-    assertEquals(uf.getComponentSize(3), 2);
-    assertEquals(uf.getComponentSize(4), 2);
+    assertEquals(uf.componentSize(0), 3);
+    assertEquals(uf.componentSize(1), 3);
+    assertEquals(uf.componentSize(2), 3);
+    assertEquals(uf.componentSize(3), 2);
+    assertEquals(uf.componentSize(4), 2);
     
     uf.unify(4,3);
-    assertEquals(uf.getComponentSize(0), 3);
-    assertEquals(uf.getComponentSize(1), 3);
-    assertEquals(uf.getComponentSize(2), 3);
-    assertEquals(uf.getComponentSize(3), 2);
-    assertEquals(uf.getComponentSize(4), 2);    
+    assertEquals(uf.componentSize(0), 3);
+    assertEquals(uf.componentSize(1), 3);
+    assertEquals(uf.componentSize(2), 3);
+    assertEquals(uf.componentSize(3), 2);
+    assertEquals(uf.componentSize(4), 2);    
 
     uf.unify(1,3);
-    assertEquals(uf.getComponentSize(0), 5);
-    assertEquals(uf.getComponentSize(1), 5);
-    assertEquals(uf.getComponentSize(2), 5);
-    assertEquals(uf.getComponentSize(3), 5);
-    assertEquals(uf.getComponentSize(4), 5);     
+    assertEquals(uf.componentSize(0), 5);
+    assertEquals(uf.componentSize(1), 5);
+    assertEquals(uf.componentSize(2), 5);
+    assertEquals(uf.componentSize(3), 5);
+    assertEquals(uf.componentSize(4), 5);     
 
     uf.unify(4,0);
-    assertEquals(uf.getComponentSize(0), 5);
-    assertEquals(uf.getComponentSize(1), 5);
-    assertEquals(uf.getComponentSize(2), 5);
-    assertEquals(uf.getComponentSize(3), 5);
-    assertEquals(uf.getComponentSize(4), 5);
+    assertEquals(uf.componentSize(0), 5);
+    assertEquals(uf.componentSize(1), 5);
+    assertEquals(uf.componentSize(2), 5);
+    assertEquals(uf.componentSize(3), 5);
+    assertEquals(uf.componentSize(4), 5);
 
   }
 
@@ -192,31 +192,31 @@ public class UnionFindTest {
   }
 
   @Test
-  public void testGetSize() {
+  public void testSize() {
 
     UnionFind uf = new UnionFind(5);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.unify(0,1);
     uf.find(3);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.unify(1,2);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.unify(0,2);
     uf.find(1);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.unify(2,1);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.unify(3,4);
     uf.find(0);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.unify(4,3);
     uf.find(3);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.unify(1,3);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
     uf.find(2);
     uf.unify(4,0);
-    assertEquals(uf.getSize(), 5);
+    assertEquals(uf.size(), 5);
 
   }
 

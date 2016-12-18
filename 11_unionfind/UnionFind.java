@@ -8,9 +8,9 @@ interface IDisjointSet {
 
   public void unify(int p, int q);
   public boolean connected(int p, int q);
-  public int getSize();
-  public int getComponentSize(int p);
-  public int numberOfComponentsLeft();
+  public int size();
+  public int components();
+  public int componentSize(int p);
 
 }
 
@@ -61,17 +61,17 @@ public class UnionFind implements IDisjointSet {
   }
 
   // Return the size of the components/set 'p' belongs to
-  public int getComponentSize(int p) {
+  public int componentSize(int p) {
     return sz[find(p)];  
   }
 
   // Return the number of elements in this UnionFind/Disjoint set
-  public int getSize() {
+  public int size() {
     return size;
   }
 
   // Returns the number of remaining components/sets 
-  public int numberOfComponentsLeft() {
+  public int components() {
     return numComponents;
   }
 

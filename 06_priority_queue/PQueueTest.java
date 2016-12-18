@@ -5,8 +5,7 @@ import java.util.*;
 public class PQueueTest {
 
   static final int LOOPS = 1000;
-
-  /*
+  
   @Before
   public void setup() {
   }
@@ -138,14 +137,6 @@ public class PQueueTest {
 
     PQueue <String> q;
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
-    
-    q = new PQueue<>(strs);
-    q.clear();
-    assertEquals(q.size(), 0);
-    assertTrue(q.isEmpty());
-
-    // Repeat ^^ 
-
     q = new PQueue<>(strs);
     q.clear();
     assertEquals(q.size(), 0);
@@ -153,33 +144,6 @@ public class PQueueTest {
 
   }
 
-  @Test
-  public void remove() {
-
-    Integer[] nums = { 0,1,2,3,4,5,6,7,8,9,10 };
-    PQueue <Integer> pq = new PQueue<>(nums);
-
-    pq.remove(1);
-    System.out.println(pq.heap);
-
-  }
-
-  @Test
-  public void testPolling1() {
-
-    Integer[] nums = {  };
-    PQueue <Integer> pq = new PQueue<>(nums);
-    pq.add(4);
-    assertTrue( 4 == pq.poll() );
-
-    pq.add(5);
-    pq.add(8);
-
-    assertTrue( 5 == pq.poll() );
-    assertTrue( 8 == pq.poll() );
-
-  }
-  */
 
   public void testSequentialRemoving(Integer[] in, Integer[] removeOrder) {
 
@@ -210,33 +174,29 @@ public class PQueueTest {
 
     Integer [] in = {1,2,3,4,5,6,7};
     Integer [] removeOrder = { 1,3,6,4,5,7,2 };
-
     testSequentialRemoving(in, removeOrder);
 
     in = new Integer[] {1,2,3,4,5,6,7,8,9,10,11};
     removeOrder = new Integer[] {7,4,6,10,2,5,11,3,1,8,9};
-
     testSequentialRemoving(in, removeOrder);
 
     in = new Integer[] {8, 1, 3, 3, 5, 3};
     removeOrder = new Integer[] {3,3,5,8,1,3};
-
     testSequentialRemoving(in, removeOrder);
 
     in = new Integer[] {7, 7, 3, 1, 1, 2};
     removeOrder = new Integer[] {2, 7, 1, 3, 7, 1};
-
     testSequentialRemoving(in, removeOrder);
 
     in = new Integer[] {32, 66, 93, 42, 41, 91, 54, 64, 9, 35};
     removeOrder = new Integer[] {64, 93, 54, 41, 35, 9, 66, 42, 32, 91};
-
     testSequentialRemoving(in, removeOrder);
 
   }
 
+  /*
   @Test
-  public void testGeneralOperations1() {
+  public void testRandomizedPolling() {
 
     for (int i = 0; i < LOOPS; i++) {
       
@@ -267,16 +227,8 @@ public class PQueueTest {
 
   }
 
-
   @Test
-  public void testMinHeapMethod() {
-    Integer[] nums = {1,1,7,7,3};
-    PQueue <Integer> pq = new PQueue<>(nums);
-    assertTrue(pq.isMinHeap(0));
-  }
-
-  @Test
-  public void testGeneralOperations2() {
+  public void testRandomizedRemoving() {
 
     for (int i = 0; i < LOOPS; i++) {
       
@@ -307,6 +259,52 @@ public class PQueueTest {
         assertTrue(pq2.isMinHeap(0));
 
       }
+
+    }
+
+  }
+  */
+
+  @Test
+  public void testPQReusability() {
+
+    List <Integer> SZs = genUniqueRandList(LOOPS);
+
+    PriorityQueue <Integer> PQ = new PriorityQueue<>();
+    PQueue <Integer> pq = new PQueue<>();
+
+    for (int sz : SZs) {
+      
+      pq.clear(); PQ.clear();
+
+      List <Integer> nums = genRandList(sz);
+      for (int n : nums) {
+        pq.add(n);
+        PQ.add(n);
+      }
+
+      Collections.shuffle(nums);
+
+      for (int i = 0; i < sz/2; i++) {
+        
+        if (0.25 < Math.random()) {
+          int randNum = (int) (Math.random() * 10000);
+          PQ.add(randNum);
+          pq.add(randNum);
+        }
+
+        int removeNum = nums.get(i);
+
+        assertTrue(pq.isMinHeap(0));
+        assertEquals( PQ.size(), pq.size() );
+        assertEquals( PQ.peek(), pq.peek() );
+        PQ.remove(removeNum); pq.remove(removeNum);
+        assertEquals( PQ.peek(), pq.peek() );
+        assertEquals( PQ.size(), pq.size() );
+        assertTrue(pq.isMinHeap(0));
+
+      }
+
 
     }
 

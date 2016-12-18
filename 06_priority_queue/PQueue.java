@@ -63,11 +63,29 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     return heap_size == 0;
   }
 
-  // Wrong. Needs work.
+  public void clear() {
+    for (int i = 0; i < heap_size; i++)
+      heap.set(i, null);
+    heap_size = 0;
+  }
+
+  public int size() {
+    return heap_size;
+  }
+
+
+  public T peek() {
+    if (isEmpty()) return null;
+    return heap.get(0);
+  }
+
+  public T poll() {
+    return removeAt(0);
+  } 
+
   public boolean remove(T element) {
     for (int i = 0; i < heap_size; i++) {
       if (element.equals(heap.get(i))) {
-        // System.out.println("FOUND " + element + " AT: " + i);
         removeAt(i);
         return true;
       }
@@ -101,16 +119,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
 
     return removed_data;
 
-  }
-
-  public void clear() {
-    heap.clear();
-    heap_size = 0;
-  }
-
-  public int size() {
-    return heap_size;
-  }
+  } 
 
   // O(n) linear scan to test if element is in heap
   // You can optionally use a Set<T> if element is hashable
@@ -123,7 +132,6 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   }
 
   public void add(T ... elems) {
-    if (elems == null) throw new NullPointerException();
     for ( T elem : elems ) {
       if (elem == null) throw new NullPointerException();
       if (heap_size < heap_capacity) {
@@ -138,26 +146,6 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     }
   }
 
-  public T peek() {
-    if (isEmpty()) return null;
-    return heap.get(0);
-  }
-
-  public T poll() {
-    
-    // replace with return removeAt(0);
-
-    if (!isEmpty()) {
-      T root = heap.get(0);
-      heap_size--;
-      swap(0, heap_size);
-      heap.set(heap_size, null); // Memory cleanup
-      sink(0); // Restore heap property
-      return root;
-    } else return null;
-
-  }
-
   // Swap Two nodes 
   private void swap(int i, int j) {
     T i_elem = heap.get(i);
@@ -168,7 +156,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
     heap.set(j, i_elem);
   }
 
-  // Test if node i < node j
+  // Test if node i <= node j
   // Assumes i and j are valid
   private boolean less(int i, int j) {
 
@@ -206,20 +194,11 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   // Recursively checks if this heap is a min heap
   // This method is just for testing purposes 
   public boolean isMinHeap(int k) {
-    
     if (k >= heap_size) return true;
-
     int left  = 2 * k + 1;
     int right = 2 * k + 2;
-
-    if (left  < heap_size  && !less(k, left))  {
-      // System.out.println( "LEFT:" + k + " " + left + " " + heap.get(k) + " "  + heap.get(left) + " " + heap_size);
-      return false;
-    }
-    if (right < heap_size  && !less(k, right)) {
-      // System.out.println( "RIGHt:" + k + " " + left + " " + heap.get(k) + " " +  heap.get(right) + " " + heap_size);
-      return false;
-    }
+    if (left  < heap_size  && !less(k, left))  return false;
+    if (right < heap_size  && !less(k, right)) return false;
     return isMinHeap(left) && isMinHeap(right);
   }  
 

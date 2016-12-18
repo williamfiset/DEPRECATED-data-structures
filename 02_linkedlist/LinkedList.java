@@ -13,6 +13,9 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
       this.prev = prev;
       this.next = next;
     }
+    @Override public String toString() {
+      return data.toString();
+    }
   }
 
   public void clear() {
@@ -72,6 +75,7 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
 
   public T removeFirst() {
 
+    // System.out.println("first");
     if (isEmpty()) throw new RuntimeException("Empty list");
     
     T data = head.data;
@@ -87,6 +91,7 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
 
   public T removeLast() {
 
+    // System.out.println("last");
     if (isEmpty()) throw new RuntimeException("Empty list");
     
     T data = tail.data;
@@ -105,11 +110,8 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
     if (node.prev == null) return removeFirst();
     if (node.next == null) return removeLast();
 
-    // We know node is a middle node    
-    Node <T> prev = node.prev;
-    Node <T> next = node.next;
-    prev.next = next;
-    next.prev = prev;
+    node.next.prev = node.prev;
+    node.prev.next = node.next;
 
     T data = node.data;
     node.data = null;
@@ -124,56 +126,41 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
 
     if (index < 0 || index >= size) throw new IllegalArgumentException();
 
-    T data = null;
+    int i;
     Node <T> trav;
 
     // Search bottom up for element
     if (index < size/2) {
-      
-      trav = head;
-      for (int i = 0; i != index; i++)
+      for(i = 0, trav = head; i != index; i++ )
         trav = trav.next;
 
     // Search top down for element
-    } else {
-
-      trav = tail;
-      for (int i = size - 1; i != index; i--)
+    } else
+      for(i = size-1, trav = tail; i != index; i--)
         trav = trav.prev;
-
-    }
-
+  
     return remove(trav);
 
   }
 
   public boolean remove(Object obj) {
     
-    int index = 0;
     Node <T> trav = head;
     
     // Support searching for null
     if (obj == null) {
-      while(trav != null) {
-        Node <T> next = trav.next;
+      for(trav = head; trav != null; trav = trav.next)
         if (trav.data == null) {
           remove(trav);
           return true;
         }
-        index++;
-      }
-
     // Search for non null object
     } else {
-      while(trav != null) {
-        Node <T> next = trav.next;
+      for(trav = head; trav != null; trav = trav.next)
         if (obj.equals(trav.data)) {
           remove(trav);
           return true;
         }
-        trav = next;
-        index++;
-      }
     }
     return false;
   }
@@ -185,23 +172,15 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
     
     // Support searching for null
     if (obj == null) {
-      while(trav != null) {
-        Node <T> next = trav.next;
+      for(trav = head; trav != null; trav = trav.next, index++)
         if (trav.data == null)
           return index;
-        index++;
-      }
 
     // Search for non null object
-    } else {
-      while(trav != null) {
-        Node <T> next = trav.next;
+    } else
+      for(trav = head; trav != null; trav = trav.next, index++)
         if (obj.equals(trav.data))
-          return index;        
-        trav = next;
-        index++;
-      }
-    }
+          return index;
     
     return -1;
   }
@@ -214,6 +193,7 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
     return new java.util.Iterator <T> () {
       private Node <T> trav = head;
       @Override public boolean hasNext() {
+        // if (trav.next == trav) throw new NullPointerException();
         return trav != null;
       }
       @Override public T next () {
@@ -229,7 +209,7 @@ public class LinkedList <T> implements IList <T>, Iterable <T> {
     sb.append("[ ");
     Node <T> trav = head;
     while(trav != null) {
-      sb.append(trav.data.toString() + ", ");
+      sb.append(trav.data + ", ");
       trav = trav.next;
     }
     // sb.deleteCharAt(sb.length()-1);

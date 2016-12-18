@@ -11,7 +11,7 @@ public class StackMain {
     stack.push("is");
     stack.push("Will");
 
-    System.out.println(stack.getSize());
+    System.out.println(stack.size());
     System.out.println(stack.isEmpty());
 
     for (String w : stack) {

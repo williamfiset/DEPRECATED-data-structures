@@ -1,7 +1,7 @@
 import java.util.Iterator;
 
 interface IQueue <T> {
-  public int getSize();
+  public int size();
   public boolean isEmpty();
   public T peek();
   public T poll();
@@ -18,12 +18,12 @@ public class Queue <T> implements IQueue <T>, Iterable <T> {
     offer(firstElem);
   }
 
-  public int getSize() {
-    return list.getSize();
+  public int size() {
+    return list.size();
   }
 
   public boolean isEmpty() {
-    return getSize() == 0;
+    return size() == 0;
   }
 
   public T peek() {

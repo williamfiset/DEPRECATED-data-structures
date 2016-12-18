@@ -2,7 +2,7 @@ import java.util.Iterator;
 
 interface ILinkedList <T> {
 
-  public int getSize();
+  public int size();
   public boolean isEmpty();
 
   public T removeFirst();
@@ -32,7 +32,7 @@ public class LinkedList <T> implements ILinkedList <T>, Iterable <T> {
     }
   }
 
-  public int getSize() {
+  public int size() {
     return size;
   }
 

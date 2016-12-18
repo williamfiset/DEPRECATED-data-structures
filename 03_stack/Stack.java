@@ -3,7 +3,7 @@ import java.util.EmptyStackException;
 
 interface IStack <T> {
 
-  public int getSize();
+  public int size();
   public boolean isEmpty();
   public void push(T elem);
   public T pop();
@@ -21,12 +21,12 @@ public class Stack <T> implements IStack <T>, Iterable <T> {
     push(firstElem);
   }
 
-  public int getSize() {
-    return list.getSize();
+  public int size() {
+    return list.size();
   }
 
   public boolean isEmpty() {
-    return getSize() == 0;
+    return size() == 0;
   }
 
   public void push(T elem) {

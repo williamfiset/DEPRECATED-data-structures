@@ -13,7 +13,7 @@ public class LinkedListTest {
   @Test
   public void testEmptyList() {
     assertTrue(list.isEmpty());
-    assertEquals(list.getSize(), 0);
+    assertEquals(list.size(), 0);
   }
   
   @Test(expected=Exception.class)
@@ -39,17 +39,17 @@ public class LinkedListTest {
   @Test
   public void testAddFirst() {
     list.addFirst(3);
-    assertEquals(list.getSize(), 1);
+    assertEquals(list.size(), 1);
     list.addFirst(5);
-    assertEquals(list.getSize(), 2);
+    assertEquals(list.size(), 2);
   }
   
   @Test
   public void testAddLast() {
     list.addLast(3);
-    assertEquals(list.getSize(), 1);
+    assertEquals(list.size(), 1);
     list.addLast(5);
-    assertEquals(list.getSize(), 2);
+    assertEquals(list.size(), 2);
   }
   
   @Test
@@ -70,14 +70,14 @@ public class LinkedListTest {
   public void testPeekFirst() {
     list.addFirst(4);
     assertTrue(list.peekFirst() == 4);
-    assertEquals(list.getSize(), 1);
+    assertEquals(list.size(), 1);
   }
   
   @Test
   public void testPeekLast() {
     list.addLast(4);
     assertTrue(list.peekLast() == 4);
-    assertEquals(list.getSize(), 1);
+    assertEquals(list.size(), 1);
   }
 
   @Test
@@ -130,7 +130,7 @@ public class LinkedListTest {
     assertTrue(list.peekFirst() == 1);
     assertTrue(list.peekLast() == 3);
     assertTrue(list.removeFirst() == 1);
-    assertEquals(list.getSize(), 2);
+    assertEquals(list.size(), 2);
     assertTrue(list.removeFirst() == 2);
     assertTrue(list.removeLast() == 3);
     assertTrue(list.isEmpty());

@@ -193,9 +193,13 @@ public class PQueueTest {
       
       int elem = removeOrder[i];
 
+      System.out.println(pq.heap + " " + PQ);
+
       assertTrue(pq.peek() == PQ.peek());
       pq.remove(elem);
       PQ.remove(elem); 
+      
+      System.out.println(pq.heap + " " + PQ);
       assertTrue(pq.isMinHeap(0));
 
     }
@@ -224,6 +228,13 @@ public class PQueueTest {
 
     in = new Integer[] {7, 7, 3, 1, 1, 2};
     removeOrder = new Integer[] {2, 7, 1, 3, 7, 1};
+
+    testSequentialRemoving(in, removeOrder);
+
+    in = new Integer[] {32, 66, 93, 42, 41, 91, 54, 64, 9, 35};
+    removeOrder = new Integer[] {64, 93, 54, 41, 35, 9, 66, 42, 32, 91};
+
+    testSequentialRemoving(in, removeOrder);
 
   }
 

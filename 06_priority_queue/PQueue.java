@@ -193,11 +193,20 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   // Recursively checks if this heap is a min heap
   // This method is just for testing purposes 
   public boolean isMinHeap(int k) {
+    
     if (k >= heap_size) return true;
+
     int left  = 2 * k + 1;
     int right = 2 * k + 2;
-    if (left  < heap_size  && !less(k, left))  return false;
-    if (right < heap_size  && !less(k, right)) return false;
+
+    if (left  < heap_size  && !less(k, left))  {
+      System.out.println( "LEFT:" + k + " " + left + " " + heap.get(k) + " "  + heap.get(left) + " " + heap_size);
+      return false;
+    }
+    if (right < heap_size  && !less(k, right)) {
+      System.out.println( "RIGHt:" + k + " " + left + " " + heap.get(k) + " " +  heap.get(right) + " " + heap_size);
+      return false;
+    }
     return isMinHeap(left) && isMinHeap(right);
   }  
 

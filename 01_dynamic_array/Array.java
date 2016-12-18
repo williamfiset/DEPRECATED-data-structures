@@ -14,7 +14,7 @@ interface IArray <T> {
 }
 
 @SuppressWarnings("unchecked")
-class Array <T> implements IArray <T> {
+class Array <T> implements IArray <T>, Iterable <T> {
 
   private int capacity = 0; // Actual array size
   private int len = 0;      // length user thinks array is
@@ -70,6 +70,15 @@ class Array <T> implements IArray <T> {
     return false;
   }
 
+  // Iterator is still fast but not as fast as iterative for loop
+  @Override public java.util.Iterator <T> iterator () {
+    return new java.util.Iterator <T> () {
+      int index = 0;
+      public boolean hasNext() { return index < len; }
+      public T next() { return arr[index++]; }
+    };
+  }
+
   @Override public String toString() {
     if (len == 0) return "[]";
     else {
@@ -81,5 +90,4 @@ class Array <T> implements IArray <T> {
   }
 
 }
-
 

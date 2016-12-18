@@ -62,21 +62,22 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
   }
 
   public boolean hasKey(K key) {
-    return false;
+    int bucket_index = normalizeIndex(key.hashCode());
+    return bucketSeekEntry(bucket_index, key) != null;
   }
 
   public boolean containsKey(K key) {
     return hasKey(key);
   }
   
-  public void put(K key, V value) {
-    add(key, value);
-  }
-
   public void add(K key, V value) {
     Entry <K, V> new_entry = new Entry<>(key, value);
     int bucket_index = normalizeIndex(new_entry.hash);
     bucketInsertEntry(bucket_index, new_entry);
+  }
+
+  public void put(K key, V value) {
+    add(key, value);
   }
 
   public V get(K key) {
@@ -112,8 +113,10 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
       links = new LinkedList<>();
       table.set(bucket_index, links);
     }
-    if (bucketSeekEntry(bucket_index, entry.key) == null)
+    if (bucketSeekEntry(bucket_index, entry.key) == null) {
       links.add(entry);
+      if (++size > threshold) resizeTable();
+    }
   }
 
   private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {
@@ -123,6 +126,15 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
       if (entry.key.equals(key))
         return entry;
     return null;
+  }
+
+
+  private void resizeTable() {
+    
+    capacity *= 2;
+    // create new table
+    // re distribute elements with new MOD value
+
   }
 
   public Array <K> keys() {
@@ -142,6 +154,20 @@ public class Mapping <K,V> implements IMap <K, V> { // should also implement ite
       for (Entry <K,V> entry : links)
         values.add(entry.value);
     return values;
+
+  }
+
+  @Override public String toString() {
+
+    StringBuilder sb = StringBuilder();
+    sb.append("[ ");
+    for (int i = 0; i < size(); i++) {
+      LinkedList<Entry<K,V>> links = table.get(i);
+      for (Entry <K,V> entry : links) {
+        sb.append( entry + ", ");
+      }
+    }
+    sb.append(" ]");
 
   }
 

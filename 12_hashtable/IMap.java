@@ -12,8 +12,6 @@ public interface IMap <K, V> {
   public void put(K key, V value);
   public void add(K key, V value);
 
-  // public void inc(K key); // Should be for only for IntMap/LongMap
-
   public V get(K key);
   public V remove(K key);
 

@@ -44,7 +44,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   // Designated constructor
   public Mapping (int capacity, double load_factor) {
-    if (capacity < 0) throw new IllegalArgumentException("Capacity cannot be less than zero");
+    if (capacity <= 0 || load_factor <= 0 || load_factor > 1.0) throw new IllegalArgumentException();
     this.load_factor = load_factor;
     this.capacity = Math.max(DEFAULT_CAPACITY, capacity);
     threshold = (int) (this.capacity * load_factor);
@@ -81,10 +81,10 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
   
   public void add(K key, V value) {
 
-    if (key == null) return;
+    if (key == null) throw new IllegalArgumentException("Null key");
     Entry <K, V> new_entry = new Entry<>(key, value);
     int bucket_index = normalizeIndex(new_entry.hash);
-    System.out.println(bucket_index);
+    // System.out.println(bucket_index);
     bucketInsertEntry(bucket_index, new_entry);
 
   }
@@ -153,8 +153,8 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   private void resizeTable() {
 
-    System.out.println("TABLE RESIZE");
-    System.out.println(java.util.Arrays.toString(table));
+    // System.out.println("TABLE RESIZE");
+    // System.out.println(java.util.Arrays.toString(table));
 
     capacity *= 2;
     threshold = (int) (capacity * load_factor);
@@ -204,19 +204,28 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   // Test for concurrent modification error..
   @Override public java.util.Iterator <K> iterator() {
-    int table_sz = size;
+    int element_count = size();
     return new java.util.Iterator <K> () {
       
       int bucket_index = 0;
-      LinkedList <Entry<K,V>> bucket = null;
-      java.util.Iterator <Entry<K,V>> bucket_iter = null;
+      // LinkedList <Entry<K,V>> bucket = null;
+      java.util.Iterator <Entry<K,V>> bucket_iter = (table[0] == null) ? null : table[0].iterator();
 
       public boolean hasNext() {
-        if (table_sz != size) throw new java.util.ConcurrentModificationException();
-        while( bucket_iter == null && bucket_index < table_sz)
-          if (table[bucket_index] != null)
-            bucket_iter = table[bucket_index].iterator();
-        return bucket_index < table_sz && bucket_iter != null && bucket_iter.hasNext();
+        
+        // An item was added or removed while iterating
+        if (element_count != size) throw new java.util.ConcurrentModificationException();
+        
+        if (bucket_iter == null || !bucket_iter.hasNext()) {
+          bucket_index++;
+          while(bucket_index < capacity)
+            if (table[bucket_index] != null) {
+              bucket_iter = table[bucket_index].iterator();
+              break;
+            } else bucket_index++;
+        }
+
+        return bucket_index < capacity && bucket_iter.hasNext();
       }
       public K next() {
         return bucket_iter.next().key;
@@ -228,7 +237,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
     StringBuilder sb = new StringBuilder();
     sb.append("[ ");
-    for (int i = 0; i < size(); i++) {
+    for (int i = 0; i < capacity; i++) {
       if (table[i] == null) continue;
       for (Entry <K,V> entry : table[i])
         sb.append( entry + ", ");

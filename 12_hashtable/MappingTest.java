@@ -4,8 +4,10 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import java.util.Random;
 import java.util.Set;
+import java.util.List;
 import java.util.HashSet;
-import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 // You can set the hash value of this object to be whatever you want
 // This makes it great for testing special cases.
@@ -25,80 +27,88 @@ public class MappingTest {
 
   static Random r = new Random();
 
+  static final int LOOPS = 1000;
+  static final int MAX_SIZE = 100;
+  static final int MAX_RAND_NUM = 250;
+
+  Mapping <Integer, Integer> map;
+
   @Before
   public void setup() {
+    map = new Mapping<>();
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testNullKey() {
+    map.put(null, 5);
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testIllegalCreation1() {
+    new Mapping<>(-3, 0.5);
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testIllegalCreation2() {
+    new Mapping<>(5, 1.01);
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testIllegalCreation3() {
+    new Mapping<>(6, -0.5);
+  }
+
+  @Test
+  public void testIllegalCreation4() {
+    new Mapping<>(6, 0.9);
+  }  
+
+  @Test
+  public void testIterator() {
+
+    for (int loop = 0; loop < LOOPS; loop++) {
+      
+      map.clear();
+      List <Integer> rand_nums = genRandList(MAX_SIZE);
+      for (Integer key : rand_nums) map.add(key, key);
+
+      int count = 0;
+      for (Integer key : map) {
+        assertEquals(key, map.get(key));
+        assertTrue(map.hasKey(key));
+        assertTrue(rand_nums.contains(key));
+        count++;
+      }
+
+      Set <Integer> set = new HashSet<>(rand_nums);
+      assertEquals( set.size() , count);
+
+    }
 
   }
 
-  // static void testCapacity() {
+  @Test
+  public void randomRemove() {
 
-  //   Mapping<Integer, Integer> map = new Mapping<>();
-    
-  // }
+    Mapping <Integer, Integer> map = new Mapping<>();
 
-  // static void putting() {
-    
-  //   for(int map_size = 0; map_size < 100; map_size++) {
-  //     Mapping<Integer, Integer> map = new Mapping<>(map_size);
-  //     for(int i = 0; i < 100; i++) {
-  //       map.put(i, i);
-  //     }
-  //   }
+    for (int loop = 0; loop < LOOPS; loop++) {
+      
+      map.clear();
 
-  // }
+      Set <Integer> keys = new HashSet<>();
+      for(int i = 0; i < MAX_SIZE; i++) {
+        int randomVal = r.nextInt() % 400000;
+        keys.add(randomVal);
+        map.put(randomVal, 5);
+      }
 
-  // static void testIterator() {
+      assertEquals( map.size(), keys.size() );
 
-  //   Mapping<String, Long> map = new Mapping<>();
+    }
 
-  //   map.put("34", 35L);
-  //   map.put("456", 456L);
-  //   map.put("666", 666L);
-  //   map.put("-Hellos dfsdf", 0L);
-  //   map.put("34", 35L);
-  //   map.put("456", 456L);
 
-  //   System.out.println(map);
-
-  //   for(String k : map)
-  //     System.out.println(k);
-
-  // }
-
-  // @Test
-  // public void removeTestSimple1() {
-
-  //   Mapping<String, String> map = new Mapping<>();
-
-  //   map.put("A", "B");
-  //   map.put("B", "C");
-  //   map.put("C", "D");
-
-  //   map.remove("B");
-  //   map.remove("C");
-  //   map.remove("A");
-
-  //   assertEquals( 0, map.size() );
-
-  // }
-
-  // @Test
-  // public void randomRemove() {
-
-  //   Mapping<Integer, Integer> map = new Mapping<>();
-  //   Set<Integer> keys = new HashSet<>();
-  //   for(int i = 0; i < 100000; i++) {
-  //     int randomVal = r.nextInt() % 400000;
-  //     if (!keys.contains(randomVal)) {
-  //       keys.add(randomVal);
-  //       map.put(randomVal, 5);
-  //     }
-  //   }
-
-  //   System.out.println( map.size() + " " + keys.size());
-  //   assertEquals( map.size(), keys.size() );
-
-  // }
+  }
 
   @Test
   public void removeTest() {
@@ -107,69 +117,60 @@ public class MappingTest {
     
     // Add three elements
     map.put(11, 0); map.put(12, 0); map.put(13, 0);
-    System.out.println("FIRST: " + map);
     assertEquals(3, map.size());
-    System.out.println("SIZE: " + map.size());
 
     // Add ten more
     for(int i = 1; i <= 10; i++) map.put(i, 0);
-    System.out.println("SECOND: " + map);
     assertEquals(13, map.size());
-    System.out.println("SIZE: " + map.size());
 
-    // remove ten
+    // Remove ten
     for(int i = 1; i <= 10; i++) map.remove(i);
-    System.out.println("THIRD: " + map);
     assertEquals(3, map.size());
-    System.out.println("SIZE: " + map.size());
 
     // remove three
-    map.remove(13); map.remove(15); map.remove(26);
-    System.out.println("FOURTH: " + map);
+    map.remove(11); map.remove(12); map.remove(13);
     assertEquals(0, map.size());
-    System.out.println("SIZE: " + map.size());
 
   }
 
-  /*
   @Test
   public void removeTestComplex1() {
 
     Mapping<ConstHashObj, Integer> map = new Mapping<>();
+    
     ConstHashObj o1 = new ConstHashObj(88, 1);
     ConstHashObj o2 = new ConstHashObj(88, 2);
     ConstHashObj o3 = new ConstHashObj(88, 3);
     ConstHashObj o4 = new ConstHashObj(88, 4);
 
-    // System.out.println(map.size());
-    map.put(o1, 111);
-    // System.out.println( Arrays.toString(map.table) );
-    // System.out.println(map.size());
-    map.put(o2, 111);
-    // System.out.println(map.size());
-    // System.out.println( Arrays.toString(map.table) );
-    map.put(o3, 111);
-    // System.out.println(map.size());
-    // System.out.println( Arrays.toString(map.table) );
-    map.put(o4, 111);
-    // System.out.println( Arrays.toString(map.table) );
-    // System.out.println("After ADD:" + map.size());
+    map.add(o1, 111);
+    map.add(o2, 111);
+    map.add(o3, 111);
+    map.add(o4, 111);
 
     map.remove(o2);
-    // System.out.println( Arrays.toString(map.table) );
-    // System.out.println(map.size());
     map.remove(o3);
-    // System.out.println(map.size());
-    // System.out.println( Arrays.toString(map.table) );
     map.remove(o1);
-    // System.out.println(map.size());
-    // System.out.println( Arrays.toString(map.table) );
     map.remove(o4);
-    // System.out.println(map.size());
-    // System.out.println( Arrays.toString(map.table) );
 
-    assertTrue(map.size() == 0);    
+    assertEquals(0, map.size());    
+
   }
-  */
+
+  // Generate a list of random numbers
+  static List <Integer> genRandList(int sz) {
+    List <Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++) lst.add( (int) (Math.random()*MAX_RAND_NUM ));
+    Collections.shuffle( lst );
+    return lst;
+  }
+
+  // Generate a list of unique random numbers
+  static List <Integer> genUniqueRandList(int sz) {
+    List <Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++) lst.add( i );
+    Collections.shuffle( lst );
+    return lst;
+  }  
 
 }

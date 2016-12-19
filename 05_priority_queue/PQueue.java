@@ -167,8 +167,8 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   // Top down re-heapify
   private void sink(int k) {
     while ( 2*k < heap_size ) {
-      int i = 2*k + 1;
-      int j = 2*k + 2;
+      int i = 2 * k + 1;
+      int j = 2 * k + 2;
       // Find which is smaller i or j
       if ( j < heap_size && less(j, i) ) i++;
       if (!less(i, k)) break;

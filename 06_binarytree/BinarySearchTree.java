@@ -10,7 +10,7 @@ interface IBinarySearchTree <T extends Comparable<T>> {
   public int height();
   
   // Provides multiple iterators to traverse the tree
-  public Iterator traverse(TreeTraversalOrder order);
+  public Iterator <T> traverse(TreeTraversalOrder order);
 
 }
 

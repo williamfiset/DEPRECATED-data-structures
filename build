@@ -1,3 +1,0 @@
-#!/bin/sh
-javac -Xlint -cp .:junit-4.12.jar:bin -d bin *.java
-

@@ -1,15 +1,3 @@
-import java.util.Iterator;
-import java.util.EmptyStackException;
-
-interface IStack <T> {
-
-  public int size();
-  public boolean isEmpty();
-  public void push(T elem);
-  public T pop();
-  public T peek();
-
-}
 
 public class Stack <T> implements IStack <T>, Iterable <T> {
   
@@ -35,18 +23,18 @@ public class Stack <T> implements IStack <T>, Iterable <T> {
 
   public T pop() {
     if (isEmpty())
-      throw new EmptyStackException();
+      throw new java.util.EmptyStackException();
     return list.removeLast();
   }
 
   public T peek() {
     if (isEmpty()) 
-      throw new EmptyStackException();
+      throw new java.util.EmptyStackException();
     return list.peekLast();
   }
 
-  @Override public Iterator <T> iterator () {
-    return new Iterator <T> () {
+  @Override public java.util.Iterator <T> iterator () {
+    return new java.util.Iterator <T> () {
       @Override public boolean hasNext() {
         return !isEmpty();
       }

@@ -1,12 +1,3 @@
-import java.util.Iterator;
-
-interface IQueue <T> {
-  public int size();
-  public boolean isEmpty();
-  public T peek();
-  public T poll();
-  public void offer(T elem);
-}
 
 public class Queue <T> implements IQueue <T>, Iterable <T> {
 
@@ -42,8 +33,8 @@ public class Queue <T> implements IQueue <T>, Iterable <T> {
     list.addLast(elem);
   }
 
-  @Override public Iterator <T> iterator () {
-    return new Iterator <T> () {
+  @Override public java.util.Iterator <T> iterator () {
+    return new java.util.Iterator <T> () {
       @Override public boolean hasNext() {
         return !isEmpty();
       }

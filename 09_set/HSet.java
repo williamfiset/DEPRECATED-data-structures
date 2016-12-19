@@ -46,7 +46,7 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
   }
 
   public java.util.Iterator <T> iterator() {
-    return null;
+    return map.iterator();
   }
 
 } 

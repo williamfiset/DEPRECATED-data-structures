@@ -30,9 +30,9 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
-  double load_factor;
-  int capacity, threshold, size = 0;
-  LinkedList <Entry<K,V>> [] table;
+  private double load_factor;
+  private int capacity, threshold, size = 0;
+  private LinkedList <Entry<K,V>> [] table;
 
   public Mapping () {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -44,7 +44,10 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   // Designated constructor
   public Mapping (int capacity, double load_factor) {
-    if (capacity <= 0 || load_factor <= 0 || load_factor > 1.0) throw new IllegalArgumentException();
+    if (capacity <= 0)
+      throw new IllegalArgumentException("Illegal capacity");
+    if (load_factor <= 0 || Double.isNaN(load_factor) || Double.isInfinite(load_factor))
+      throw new IllegalArgumentException("Illegal load_factor");
     this.load_factor = load_factor;
     this.capacity = Math.max(DEFAULT_CAPACITY, capacity);
     threshold = (int) (this.capacity * load_factor);
@@ -56,7 +59,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
   }
   
   public boolean isEmpty() {
-    return size() == 0;
+    return size == 0;
   }
 
   // Converts a hash value to an index.
@@ -70,27 +73,26 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     size = 0;
   }
 
+  public boolean containsKey(K key) {
+    return hasKey(key);
+  }
+
   public boolean hasKey(K key) {
     int bucket_index = normalizeIndex(key.hashCode());
     return bucketSeekEntry(bucket_index, key) != null;
   }
 
-  public boolean containsKey(K key) {
-    return hasKey(key);
+  public void put(K key, V value) {
+    add(key, value);
   }
-  
+
   public void add(K key, V value) {
 
     if (key == null) throw new IllegalArgumentException("Null key");
     Entry <K, V> new_entry = new Entry<>(key, value);
     int bucket_index = normalizeIndex(new_entry.hash);
-    // System.out.println(bucket_index);
     bucketInsertEntry(bucket_index, new_entry);
 
-  }
-
-  public void put(K key, V value) {
-    add(key, value);
   }
 
   public V get(K key) {
@@ -108,9 +110,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     if (key == null) return null;
     int bucket_index = normalizeIndex(key.hashCode());
     Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
-    // System.out.println("BUCKET: " + bucket_index);
     if (entry != null) {
-      // System.out.println("FOUND ENTRY");
       bucketRemoveEntry(bucket_index, entry);
       return entry.value;
     }
@@ -127,15 +127,10 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   private void bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
     LinkedList<Entry<K,V>> links = table[bucket_index];
-    // System.out.println("LINKS: " + links);
-    if (links == null) {
-      links = new LinkedList<>();
-      table[bucket_index] = links;
-    }
+    if (links == null) table[bucket_index] = links = new LinkedList<>();
     if (bucketSeekEntry(bucket_index, entry.key) == null) {
       links.add(entry);
-      ++size;
-      if (size > threshold) resizeTable();
+      if (++size > threshold) resizeTable();
     }
   }
 
@@ -153,9 +148,6 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   private void resizeTable() {
 
-    // System.out.println("TABLE RESIZE");
-    // System.out.println(java.util.Arrays.toString(table));
-
     capacity *= 2;
     threshold = (int) (capacity * load_factor);
     LinkedList <Entry<K,V>> new_table [] = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
@@ -163,14 +155,10 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     for (int i = 0; i < table.length; i++ ) {
       if (table[i] != null) {
         for (Entry <K,V> entry : table[i]) {
-          // System.out.println("ENTRY: " + entry);
+
           int bucket_index = normalizeIndex(entry.hash);
           LinkedList<Entry<K,V>> links = new_table[bucket_index];
-          if (links == null) {
-            links = new LinkedList<>();
-            // System.out.println("NEW BUCKET INDEX: " + bucket_index);
-            new_table[bucket_index] = links;
-          }
+          if (links == null) new_table[bucket_index] = links = new LinkedList<>();
           links.add(entry);
 
         }
@@ -186,8 +174,9 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
     Array <K> keys = new Array<>(size);
     for(LinkedList<Entry<K,V>> links : table)
-      for (Entry <K,V> entry : links)
-        keys.add(entry.key);
+      if (links != null)
+        for (Entry <K,V> entry : links)
+          keys.add(entry.key);
     return keys;
 
   }
@@ -196,19 +185,18 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
     Array <V> values = new Array<>(size);
     for(LinkedList<Entry<K,V>> links : table)
-      for (Entry <K,V> entry : links)
-        values.add(entry.value);
+      if (links != null)
+        for (Entry <K,V> entry : links)
+          values.add(entry.value);
     return values;
 
   }
 
-  // Test for concurrent modification error..
   @Override public java.util.Iterator <K> iterator() {
     int element_count = size();
     return new java.util.Iterator <K> () {
       
       int bucket_index = 0;
-      // LinkedList <Entry<K,V>> bucket = null;
       java.util.Iterator <Entry<K,V>> bucket_iter = (table[0] == null) ? null : table[0].iterator();
 
       public boolean hasNext() {

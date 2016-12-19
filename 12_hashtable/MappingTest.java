@@ -50,7 +50,7 @@ public class MappingTest {
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation2() {
-    new Mapping<>(5, 1.01);
+    new Mapping<>(5, Double.POSITIVE_INFINITY);
   }
 
   @Test(expected=IllegalArgumentException.class)
@@ -59,7 +59,7 @@ public class MappingTest {
   }
 
   @Test
-  public void testIllegalCreation4() {
+  public void testLegalCreation() {
     new Mapping<>(6, 0.9);
   }  
 
@@ -69,6 +69,8 @@ public class MappingTest {
     for (int loop = 0; loop < LOOPS; loop++) {
       
       map.clear();
+      assertTrue(map.isEmpty());
+
       List <Integer> rand_nums = genRandList(MAX_SIZE);
       for (Integer key : rand_nums) map.add(key, key);
 
@@ -87,6 +89,22 @@ public class MappingTest {
 
   }
 
+  @Test(expected=java.util.ConcurrentModificationException.class)
+  public void testConcurrentModificationException() {
+    map.add(1,1);
+    map.add(2,1);
+    map.add(3,1);
+    for (Integer key : map) map.add(4,4);
+  }
+
+  @Test(expected=java.util.ConcurrentModificationException.class)
+  public void testConcurrentModificationException2() {
+    map.add(1,1);
+    map.add(2,1);
+    map.add(3,1);
+    for (Integer key : map) map.remove(2);
+  }
+
   @Test
   public void randomRemove() {
 
@@ -96,17 +114,22 @@ public class MappingTest {
       
       map.clear();
 
-      Set <Integer> keys = new HashSet<>();
+      // Add some random values
+      Set <Integer> keys_set = new HashSet<>();
       for(int i = 0; i < MAX_SIZE; i++) {
         int randomVal = r.nextInt() % 400000;
-        keys.add(randomVal);
+        keys_set.add(randomVal);
         map.put(randomVal, 5);
       }
 
-      assertEquals( map.size(), keys.size() );
+      assertEquals( map.size(), keys_set.size() );
+
+      Array <Integer> keys = map.keys();
+      for (Integer key : keys) map.remove(key);
+      
+      assertTrue( map.isEmpty() );
 
     }
-
 
   }
 
@@ -137,7 +160,7 @@ public class MappingTest {
   public void removeTestComplex1() {
 
     Mapping<ConstHashObj, Integer> map = new Mapping<>();
-    
+
     ConstHashObj o1 = new ConstHashObj(88, 1);
     ConstHashObj o2 = new ConstHashObj(88, 2);
     ConstHashObj o3 = new ConstHashObj(88, 3);

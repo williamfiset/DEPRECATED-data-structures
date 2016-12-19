@@ -159,7 +159,7 @@ public class MappingTest {
   @Test
   public void removeTestComplex1() {
 
-    Mapping<ConstHashObj, Integer> map = new Mapping<>();
+    Mapping <ConstHashObj, Integer> map = new Mapping<>();
 
     ConstHashObj o1 = new ConstHashObj(88, 1);
     ConstHashObj o2 = new ConstHashObj(88, 2);

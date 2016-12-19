@@ -3,11 +3,10 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
 
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
-
   private static final Object DUMMY = new Object();
-  private Mapping <T, Object> map;
 
   private int size;
+  private Mapping <T, Object> map;
 
   public HSet () {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);

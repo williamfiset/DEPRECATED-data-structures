@@ -82,16 +82,16 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     return bucketSeekEntry(bucket_index, key) != null;
   }
 
-  public void put(K key, V value) {
-    add(key, value);
+  public V put(K key, V value) {
+    return add(key, value);
   }
 
-  public void add(K key, V value) {
+  public V add(K key, V value) {
 
     if (key == null) throw new IllegalArgumentException("Null key");
     Entry <K, V> new_entry = new Entry<>(key, value);
     int bucket_index = normalizeIndex(new_entry.hash);
-    bucketInsertEntry(bucket_index, new_entry);
+    return bucketInsertEntry(bucket_index, new_entry);
 
   }
 
@@ -125,13 +125,15 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     --size;
   }
 
-  private void bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
-    LinkedList<Entry<K,V>> links = table[bucket_index];
+  private V bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
+    LinkedList <Entry<K,V>> links = table[bucket_index];
     if (links == null) table[bucket_index] = links = new LinkedList<>();
     if (bucketSeekEntry(bucket_index, entry.key) == null) {
       links.add(entry);
       if (++size > threshold) resizeTable();
+      return entry.value;
     }
+    return null;
   }
 
   private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {

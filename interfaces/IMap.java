@@ -4,13 +4,11 @@ public interface IMap <K, V> {
   public Array <K> keys();
   public Array <V> values();
 
-  // These do the same thing
   public boolean hasKey(K key);
   public boolean containsKey(K key);
   
-  // These do the same thing
-  public void put(K key, V value);
-  public void add(K key, V value);
+  public V put(K key, V value);
+  public V add(K key, V value);
 
   public V get(K key);
   public V remove(K key);

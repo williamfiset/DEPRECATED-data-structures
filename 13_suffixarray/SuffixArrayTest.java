@@ -11,8 +11,8 @@ public class SuffixArrayTest {
   static final SecureRandom random = new SecureRandom();
   static final Random rand = new Random();
 
-  static final int LOOPS = 10000;
-  static final int TEST_SZ = 40;
+  static final int LOOPS = 1000;
+  static final int TEST_SZ = 1051;
   static final int NUM_NULLS = TEST_SZ / 5;
   static final int MAX_RAND_NUM = 250;
 
@@ -25,11 +25,12 @@ public class SuffixArrayTest {
     for (int i = 0; i < LOOPS; i++) {
       
       String r = randomString(randNum(1, TEST_SZ));
+      // System.out.println(r);
 
       SuffixArray sa = new SuffixArray(r);
       SuffixArrayNaive san = new SuffixArrayNaive(r);
 
-      int[] sa_arr = san.getSuffixPositions();
+      int[] sa_arr = sa.getSuffixPositions();
       int[] san_arr = san.getSuffixPositions();
 
       for (int k = 0; k < sa.len; k++ )
@@ -76,3 +77,51 @@ public class SuffixArrayTest {
 
 }
 
+
+/*
+  private void constructSuffixArray() {
+
+    // Tracks the position of the shuffled suffixes 
+    // in their partially sorted state.
+    int [] suffix_pos = new int[len];
+
+    // Initially sort the suffixes by their first two characters
+    Arrays.sort(suffixes);
+
+    for(int pos = 2; pos < len; pos *= 2) {
+
+      // Initialize first suffix values to zero
+      Suffix firstSuffix = suffixes[0];
+      int new_rank = suffix_pos[firstSuffix.index] = firstSuffix.rank.rank1 = 0;
+
+      // Update rank1
+      for (int i = 1; i < len; i++) {
+
+        Suffix prev_suffix = suffixes[i-1];
+        Suffix suffix = suffixes[i];
+        suffix_pos[ suffix.index ] = i;
+
+        // if ( suffix.rank.rank1 == prev_suffix.rank.rank2 )
+        if ( suffix.rank.rank1 != prev_suffix.rank.rank2 )
+          ++new_rank;
+        
+        // suffix.rank.rank1 = ++new_rank;
+
+      }
+
+      // Update rank2
+      for (int i = 0; i < len; i++) {
+        Suffix suffix = suffixes[i];
+        int nextIndex = suffix.index + pos;
+        if (nextIndex < len) {
+          Suffix nextSuffix = suffixes[suffix_pos[nextIndex]];
+          suffix.rank.rank2 = nextSuffix.rank.rank1;
+        } else suffix.rank.rank2 = -1;
+      }
+
+      Arrays.sort(suffixes);
+
+    }
+
+  }
+*/

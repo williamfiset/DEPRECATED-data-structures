@@ -27,14 +27,12 @@ class Suffix implements Comparable <Suffix> {
 
   public Suffix(char [] text, int index) {
 
-    // if (text.length() >= index) throw new IllegalArgumentException();
+    if (index >= text.length) throw new IllegalArgumentException();
     this.len = text.length - index;
     this.index = index;
     this.text = text;
     
     rank = new RankPair(text, index);
-
-    // System.out.println( Arrays.toString(text) + " " + index + " " + len );
   }
 
   @Override public int compareTo(Suffix other) {
@@ -42,7 +40,6 @@ class Suffix implements Comparable <Suffix> {
   }
 
   @Override public String toString() {
-    // System.out.println(Arrays.toString(text) + " " + len + " "  + index + " " + (len - index - 1));
     return new String(text, index, len);
   }
 
@@ -89,7 +86,6 @@ public class SuffixArray {
     this(text == null ? null : text.toCharArray());
   }
 
-  // http://www.geeksforgeeks.org/suffix-array-set-2-a-nlognlogn-algorithm/
   public SuffixArray(char[] text) {
     if (text == null) throw new IllegalArgumentException();
     this.text = text; len = text.length;
@@ -98,20 +94,22 @@ public class SuffixArray {
       suffixes[i] = new Suffix(text, i);
     constructSuffixArray();
     kasai();
-    // System.out.println(Arrays.toString(suffixes));
   }
 
+  // Inspired by implementation of:
   // http://www.geeksforgeeks.org/suffix-array-set-2-a-nlognlogn-algorithm/
+  // Runs in O(nlog(n)log(n)). Although the theoretical complexity can be reduced 
+  // to O(nlog(n)) with Radix sort some say this made the algorithm slower in practice
   private void constructSuffixArray() {
 
     // Tracks the position of the shuffled suffixes 
-    // in their paritally sorted state.
+    // in their partially sorted state.
     int [] suffix_pos = new int[len];
 
-    // Intially sort the suffixes by thier first two characters
+    // Initially sort the suffixes by their first two characters
     Arrays.sort(suffixes);
 
-    for(int pos = 2; pos < len; pos *= 2) {
+    for(int pos = 4; (pos/2) < len; pos *= 2) {
 
       int new_rank = 0;
       int prev_rank = suffixes[0].rank.rank1;
@@ -121,11 +119,12 @@ public class SuffixArray {
       // Update rank1
       for (int i = 1; i < len; i++) {
 
-        Suffix prev_suffix = suffixes[i-1];
         Suffix suffix = suffixes[i];
+        Suffix prev_suffix = suffixes[i-1];
         suffix_pos[ suffix.index ] = i;
 
-        if ( (suffix.rank.rank1 == prev_rank) && (suffix.rank.rank1 == prev_suffix.rank.rank2) ) {
+        if ( (suffix.rank.rank1 == prev_rank) &&
+             (suffix.rank.rank2 == prev_suffix.rank.rank2) ) {
           prev_rank = suffix.rank.rank1;
           suffix.rank.rank1 = new_rank;
         } else {
@@ -138,7 +137,7 @@ public class SuffixArray {
       // Update rank2
       for (int i = 0; i < len; i++) {
         Suffix suffix = suffixes[i];
-        int nextIndex = suffix.index + pos/2;
+        int nextIndex = suffix.index + pos / 2;
         if (nextIndex < len) {
           Suffix nextSuffix = suffixes[suffix_pos[nextIndex]];
           suffix.rank.rank2 = nextSuffix.rank.rank1;

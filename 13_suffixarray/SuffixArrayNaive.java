@@ -1,3 +1,20 @@
+/*
+Good read: 
+http://www.cs.yale.edu/homes/aspnes/pinewiki/SuffixArrays.html
+
+Generally speaking, suffix arrays are used to do multiple queries 
+efficiently on one piece of data rather than to do one operation 
+then move on to another piece of text.
+
+Some things suffix trees are great for are:
+1) Searching if a substring occurs in the text
+2) Finding all occurrences of a substring in the larger text
+3) Longest repeated substring
+4) Most frequently occurring substrings
+5) Longest duplicate substrings
+6) 
+
+*/
 
 import java.util.Arrays;
 
@@ -12,7 +29,7 @@ class Suffix implements Comparable <Suffix> {
     this.len = text.length - index;
     this.index = index;
     this.text = text;
-    System.out.println( Arrays.toString(text) + " " + index + " " + len );
+    // System.out.println( Arrays.toString(text) + " " + index + " " + len );
   }
 
   // Compare the two suffixes inspired by Robert Sedgewick and Kevin Wayne
@@ -60,6 +77,7 @@ public class SuffixArrayNaive {
       suffixes[i] = new Suffix(text, i);
     Arrays.sort(suffixes);
     kasai();
+    // System.out.println(Arrays.toString(suffixes));
   }
 
   // Constructs the LCP (longest common prefix) array in linear time
@@ -94,23 +112,51 @@ public class SuffixArrayNaive {
 
   }
 
-  // Counts the number of times the pattern appears
-  // in the text. This method runs in O(m + log(n)) where
-  // m is the length of the pattern. 
-  // NOTE: Without the LCP array out complexity would be O(mlog(n))
-  public int occurenceCount(String pattern) {
+  // Runs on O(mlog(n)) where m is the length of the substring
+  // and n is the length of the text.
+  // NOTE: This is the naive implementation. There exists an
+  // implementation which runs in O(m + log(n)) time
+  public boolean contains(String substr) {
 
-    int lo = 0, hi = len-1;
-    return -1;
+    if (substr == null) return false;
+
+    String suffix_str;
+    int lo = 0, hi = len - 1;
+    int substr_len = substr.length();
+
+    while( lo <= hi ) {
+
+      int mid = (lo + hi) / 2;
+      Suffix suffix = suffixes[mid];
+
+      // Extract part of the suffix we need to compare
+      if (suffix.len <= substr_len) suffix_str = suffix.toString();
+      else suffix_str = new String(text, suffix.index, substr_len);
+       
+      int cmp = suffix_str.compareTo(substr);
+
+      // Found a match
+      if ( cmp == 0 ) {
+        // To find the first occurrence linear scan down
+        // or keep doing binary search
+        return true;
+      
+      // Substring is found above
+      } else if (cmp < 0) {
+        lo = mid + 1;
+
+      // Substring is found below
+      } else {
+        hi = mid - 1;
+      }
+
+    }
+
+    return false;
 
   }
 
-  // Finds the longest common suffix for this string.
-  // NOTE: If you want the longest common prefix reverse the 
-  // text before you put it into the SuffixArray :)
-  public String longestCommonSuffix() {
-
-  }
+  
 
   // Finds the LRS (Longest Repeated Substring) that occurs in a string
   // Traditionally we are only interested in sub strings that appear at
@@ -118,25 +164,25 @@ public class SuffixArrayNaive {
   public String lrs() {
 
     int max_len = 0;
-    String ret = null;
+    Suffix suffix = null;
 
     for (int i = 0; i < len; i++) {
       if (LCP[i] > max_len) {
         max_len = LCP[i];
-        ret = suffixes[i].toString();
+        suffix = suffixes[i];
       }
     }
 
-    return ret == null ? null : ret.substring(0, max_len);
+    return suffix == null ? null : suffix.toString().substring(0, max_len);
 
   }
 
   public static void main(String[] args) {
     
-    SuffixArrayNaive sa = new SuffixArrayNaive("abc");
+    // SuffixArrayNaive sa = new SuffixArrayNaive("abc");
     // System.out.println( Arrays.toString(sa.suffixes) );
     // System.out.println( Arrays.toString(sa.LCP) );
-    System.out.println(sa.lrs());
+    // System.out.println(sa.lrs());
 
 
   }

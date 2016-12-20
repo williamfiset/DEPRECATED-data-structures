@@ -20,10 +20,12 @@ import java.util.Arrays;
 
 class Suffix implements Comparable <Suffix> {
 
+  // Ranks used for sorting suffixes during SuffixArray creation
+  int rank1, rank2;
+
   // Starting position of suffix in text
   final int index, len;
   final char [] text;
-  RankPair rank;
 
   public Suffix(char [] text, int index) {
 
@@ -32,40 +34,19 @@ class Suffix implements Comparable <Suffix> {
     this.index = index;
     this.text = text;
     
-    rank = new RankPair(text, index);
+    rank1 = text[index];
+    rank2 = (index+1 < text.length) ? text[index+1] : -1;
+
   }
 
   @Override public int compareTo(Suffix other) {
-    return rank.compareTo(other.rank);
+    int cmp = Integer.compare(rank1, other.rank1);
+    if (cmp == 0) return Integer.compare(rank2, other.rank2);
+    return cmp;
   }
 
   @Override public String toString() {
     return new String(text, index, len);
-  }
-
-}
-
-class RankPair implements Comparable <RankPair> {
-
-  int rank1, rank2;
-
-  public RankPair() { }
-
-  // Assign an initial rank to this suffix
-  public RankPair(char[] text, int index) {
-    rank1 = text[index];
-    if (index+1 < text.length)
-      rank2 = text[index+1];
-    else rank2 = -1;
-  }
-
-  // Update rankPair here?
-
-  // Sorts by the first character, then by the second
-  @Override public int compareTo(RankPair other) {
-    int cmp = Integer.compare(rank1, other.rank1);
-    if (cmp == 0) return Integer.compare(rank2, other.rank2);
-    return cmp;
   }
 
 }
@@ -99,7 +80,10 @@ public class SuffixArray {
   // Inspired by implementation of:
   // http://www.geeksforgeeks.org/suffix-array-set-2-a-nlognlogn-algorithm/
   // Runs in O(nlog(n)log(n)). Although the theoretical complexity can be reduced 
-  // to O(nlog(n)) with Radix sort some say this made the algorithm slower in practice
+  // to O(nlog(n)) with Radix sort some say this made the algorithm slower in practice.
+  // 
+  // NOTE: This code can probably be simplified a lot..
+  //
   private void constructSuffixArray() {
 
     // Tracks the position of the shuffled suffixes 
@@ -109,12 +93,12 @@ public class SuffixArray {
     // Initially sort the suffixes by their first two characters
     Arrays.sort(suffixes);
 
-    for(int pos = 4; (pos/2) < len; pos *= 2) {
+    // O(logn)
+    for(int pos = 2; pos < len; pos *= 2) {
 
-      int new_rank = 0;
-      int prev_rank = suffixes[0].rank.rank1;
-      suffixes[0].rank.rank1 = 0;
-      suffix_pos[suffixes[0].index] = 0;
+      Suffix firstSuffix = suffixes[0];
+      int prev_rank = firstSuffix.rank1;
+      int new_rank = suffix_pos[firstSuffix.index] = firstSuffix.rank1 = 0;
 
       // Update rank1
       for (int i = 1; i < len; i++) {
@@ -123,13 +107,13 @@ public class SuffixArray {
         Suffix prev_suffix = suffixes[i-1];
         suffix_pos[ suffix.index ] = i;
 
-        if ( (suffix.rank.rank1 == prev_rank) &&
-             (suffix.rank.rank2 == prev_suffix.rank.rank2) ) {
-          prev_rank = suffix.rank.rank1;
-          suffix.rank.rank1 = new_rank;
+        if ( (suffix.rank1 == prev_rank) &&
+             (suffix.rank2 == prev_suffix.rank2) ) {
+          prev_rank = suffix.rank1;
+          suffix.rank1 = new_rank;
         } else {
-          prev_rank = suffix.rank.rank1;
-          suffix.rank.rank1 = ++new_rank;
+          prev_rank = suffix.rank1;
+          suffix.rank1 = ++new_rank;
         }
 
       }
@@ -137,13 +121,14 @@ public class SuffixArray {
       // Update rank2
       for (int i = 0; i < len; i++) {
         Suffix suffix = suffixes[i];
-        int nextIndex = suffix.index + pos / 2;
+        int nextIndex = suffix.index + pos;
         if (nextIndex < len) {
           Suffix nextSuffix = suffixes[suffix_pos[nextIndex]];
-          suffix.rank.rank2 = nextSuffix.rank.rank1;
-        } else suffix.rank.rank2 = -1;
+          suffix.rank2 = nextSuffix.rank1;
+        } else suffix.rank2 = -1;
       }
 
+      // O(nlogn)
       Arrays.sort(suffixes);
 
     }
@@ -254,12 +239,58 @@ public class SuffixArray {
 
   }
 
+  // Find the Longest Common Substring (LCS) between two strings (generalizes to more)
+  // NOTE: The input for the SuffixArray must be 
+  // two strings and a unique separator character:
+  // i.e: "cabbage" + "#" + "garbage" => "cabbage#garbage"
+  // lcs("cabbage#garbage") => "bage"
+  public static String lcs(String s1, String s2, char separator) {
+    
+    int longestLen = 0, index = -1;
+    int L1 = s1.length(), L2 = s2.length();
+    SuffixArray sa = new SuffixArray(s1+separator+s2);
+
+    for (int i = 1; i < sa.len; i++) {
+      
+      Suffix suffix1 = sa.suffixes[i-1];
+      Suffix suffix2 = sa.suffixes[i];
+
+      // System.out.printf("%d %d %s %s %d %d\n", L1, L2, suffix1.toString(), suffix2.toString(), suffix1.len, suffix2.len );
+
+      // Make sure the two adjacent suffixes are from the two different strings s1 & s2
+      // Update the location of the lcs if a better one is found
+      if ( (suffix1.len) >= L2 || (suffix2.len) >= L2 ||
+           (suffix1.len) <= L2 || (suffix2.len) <= L2 ) {
+        int lcp_length = sa.LCP[i-1];
+        if (lcp_length > longestLen) {
+          longestLen = lcp_length;
+          index = suffix1.index;
+        }
+      }
+
+    }
+
+    if (index == -1) return null;
+    return new String(sa.text, index, longestLen);
+
+  }
+
+  @Override public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (Suffix suffix : suffixes)
+      sb.append( suffix.toString() + "\n");
+    return sb.toString();
+  }
+
   public static void main(String[] args) {
     
-    // SuffixArrayNaive sa = new SuffixArrayNaive("abc");
-    // System.out.println( Arrays.toString(sa.suffixes) );
-    // System.out.println( Arrays.toString(sa.LCP) );
-    // System.out.println(sa.lrs());
+    // SuffixArray sa = new SuffixArray("abcde#gear");
+    // System.out.println(sa);
+    // System.out.println( SuffixArray.lcs("abcde", "gear", '#') );
+    // System.out.println( SuffixArray.lcs("abcde", "xzy", '#') );
+    // System.out.println( SuffixArray.lcs("cabbage", "garbage", '#') );
+    // System.out.println( SuffixArray.lcs("12341", "341213", '#') );
+    // System.out.println( SuffixArray.lcs("123-345-4566", "4-345-4566-7653", '#') );
 
 
   }

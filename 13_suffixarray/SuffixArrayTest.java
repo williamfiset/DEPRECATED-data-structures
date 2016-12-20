@@ -40,26 +40,36 @@ public class SuffixArrayTest {
 
   }
 
-  // @Test
-  // public void testRandomizedContains() {
+  @Test
+  public void testRandomizedContains() {
 
-  //   for (int loop = 1; loop < LOOPS; loop++) {
-  //     String r = randomString(50);
+    for (int loop = 1; loop < LOOPS; loop++) {
+      String r = randomString(50);
 
-  //     for (int i = 0; i < TEST_SZ ;i++ ) {
+      for (int i = 0; i < TEST_SZ ;i++ ) {
         
-  //       int s = randNum(0, r.length()-1);
-  //       int e = randNum(s, r.length()-1);
-  //       if (s == e) continue;
-  //       String substr = r.substring(s,e);
-  //       SuffixArrayNaive sa = new SuffixArrayNaive( r );
-  //       assertTrue(sa.contains(substr));
+        int s = randNum(0, r.length()-1);
+        int e = randNum(s, r.length()-1);
+        if (s == e) continue;
+        String substr = r.substring(s,e);
+        SuffixArrayNaive sa = new SuffixArrayNaive( r );
+        assertTrue(sa.contains(substr));
 
-  //     }
+      }
 
-  //   }
+    }
 
-  // }
+  }
+
+  @Test
+  public void testLCS() {
+
+    assertEquals( SuffixArray.lcs("abcde", "gear", '#'), "a" );
+    assertEquals( SuffixArray.lcs("abcde", "xzy", '#'), null );
+    assertEquals( SuffixArray.lcs("cabbage", "garbage", '#'), "bage" );
+    assertEquals( SuffixArray.lcs("123-345-4566", "4-345-4566-7653", '#'), "-345-4566" );
+
+  }
 
   static int randNum(int min, int max) {
     int range = max - min + 1;
@@ -76,52 +86,3 @@ public class SuffixArrayTest {
   }
 
 }
-
-
-/*
-  private void constructSuffixArray() {
-
-    // Tracks the position of the shuffled suffixes 
-    // in their partially sorted state.
-    int [] suffix_pos = new int[len];
-
-    // Initially sort the suffixes by their first two characters
-    Arrays.sort(suffixes);
-
-    for(int pos = 2; pos < len; pos *= 2) {
-
-      // Initialize first suffix values to zero
-      Suffix firstSuffix = suffixes[0];
-      int new_rank = suffix_pos[firstSuffix.index] = firstSuffix.rank.rank1 = 0;
-
-      // Update rank1
-      for (int i = 1; i < len; i++) {
-
-        Suffix prev_suffix = suffixes[i-1];
-        Suffix suffix = suffixes[i];
-        suffix_pos[ suffix.index ] = i;
-
-        // if ( suffix.rank.rank1 == prev_suffix.rank.rank2 )
-        if ( suffix.rank.rank1 != prev_suffix.rank.rank2 )
-          ++new_rank;
-        
-        // suffix.rank.rank1 = ++new_rank;
-
-      }
-
-      // Update rank2
-      for (int i = 0; i < len; i++) {
-        Suffix suffix = suffixes[i];
-        int nextIndex = suffix.index + pos;
-        if (nextIndex < len) {
-          Suffix nextSuffix = suffixes[suffix_pos[nextIndex]];
-          suffix.rank.rank2 = nextSuffix.rank.rank1;
-        } else suffix.rank.rank2 = -1;
-      }
-
-      Arrays.sort(suffixes);
-
-    }
-
-  }
-*/

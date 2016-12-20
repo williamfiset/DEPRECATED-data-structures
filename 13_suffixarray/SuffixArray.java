@@ -18,7 +18,62 @@ Some things suffix trees are great for are:
 
 import java.util.Arrays;
 
-public class SuffixArrayNaive {
+class Suffix implements Comparable <Suffix> {
+
+  // Starting position of suffix in text
+  final int index, len;
+  final char [] text;
+  RankPair rank;
+
+  public Suffix(char [] text, int index) {
+
+    // if (text.length() >= index) throw new IllegalArgumentException();
+    this.len = text.length - index;
+    this.index = index;
+    this.text = text;
+    
+    rank = new RankPair(text, index);
+
+    // System.out.println( Arrays.toString(text) + " " + index + " " + len );
+  }
+
+  @Override public int compareTo(Suffix other) {
+    return rank.compareTo(other.rank);
+  }
+
+  @Override public String toString() {
+    // System.out.println(Arrays.toString(text) + " " + len + " "  + index + " " + (len - index - 1));
+    return new String(text, index, len);
+  }
+
+}
+
+class RankPair implements Comparable <RankPair> {
+
+  int rank1, rank2;
+
+  public RankPair() { }
+
+  // Assign an initial rank to this suffix
+  public RankPair(char[] text, int index) {
+    rank1 = text[index];
+    if (index+1 < text.length)
+      rank2 = text[index+1];
+    else rank2 = -1;
+  }
+
+  // Update rankPair here?
+
+  // Sorts by the first character, then by the second
+  @Override public int compareTo(RankPair other) {
+    int cmp = Integer.compare(rank1, other.rank1);
+    if (cmp == 0) return Integer.compare(rank2, other.rank2);
+    return cmp;
+  }
+
+}
+
+public class SuffixArray {
 
   int len;
   char[] text;
@@ -30,27 +85,73 @@ public class SuffixArrayNaive {
   // LCP[i] = longestCommonPrefixLength( suffixes[i], suffixes[i+1] ). Also, LCP[len-1] = 0
   int LCP [];
 
-  public SuffixArrayNaive(String text) {
+  public SuffixArray(String text) {
     this(text == null ? null : text.toCharArray());
   }
 
-  // O(n^2log(n)) construction. O(nlog(n)) for sorting, but
-  // each suffix takes O(n) comparison time
-  // Look into:
   // http://www.geeksforgeeks.org/suffix-array-set-2-a-nlognlogn-algorithm/
-  public SuffixArrayNaive(char[] text) {
+  public SuffixArray(char[] text) {
     if (text == null) throw new IllegalArgumentException();
-    this.text = text;
-    len = text.length;
+    this.text = text; len = text.length;
     suffixes = new Suffix[len];
     for (int i = 0; i < len; i++)
       suffixes[i] = new Suffix(text, i);
-    Arrays.sort(suffixes);
+    constructSuffixArray();
     kasai();
     // System.out.println(Arrays.toString(suffixes));
   }
 
-  // Constructs the LCP (longest common prefix) array in linear time
+  // http://www.geeksforgeeks.org/suffix-array-set-2-a-nlognlogn-algorithm/
+  private void constructSuffixArray() {
+
+    // Tracks the position of the shuffled suffixes 
+    // in their paritally sorted state.
+    int [] suffix_pos = new int[len];
+
+    // Intially sort the suffixes by thier first two characters
+    Arrays.sort(suffixes);
+
+    for(int pos = 2; pos < len; pos *= 2) {
+
+      int new_rank = 0;
+      int prev_rank = suffixes[0].rank.rank1;
+      suffixes[0].rank.rank1 = 0;
+      suffix_pos[suffixes[0].index] = 0;
+
+      // Update rank1
+      for (int i = 1; i < len; i++) {
+
+        Suffix prev_suffix = suffixes[i-1];
+        Suffix suffix = suffixes[i];
+        suffix_pos[ suffix.index ] = i;
+
+        if ( (suffix.rank.rank1 == prev_rank) && (suffix.rank.rank1 == prev_suffix.rank.rank2) ) {
+          prev_rank = suffix.rank.rank1;
+          suffix.rank.rank1 = new_rank;
+        } else {
+          prev_rank = suffix.rank.rank1;
+          suffix.rank.rank1 = ++new_rank;
+        }
+
+      }
+
+      // Update rank2
+      for (int i = 0; i < len; i++) {
+        Suffix suffix = suffixes[i];
+        int nextIndex = suffix.index + pos/2;
+        if (nextIndex < len) {
+          Suffix nextSuffix = suffixes[suffix_pos[nextIndex]];
+          suffix.rank.rank2 = nextSuffix.rank.rank1;
+        } else suffix.rank.rank2 = -1;
+      }
+
+      Arrays.sort(suffixes);
+
+    }
+
+  }
+
+  // Constructs the LCP (longest common prefix) array in linear time - O(n)
   // http://www.mi.fu-berlin.de/wiki/pub/ABI/RnaSeqP4/suffix-array.pdf
   private void kasai() {
 
@@ -163,38 +264,6 @@ public class SuffixArrayNaive {
 
 
   }
-
-class Suffix implements Comparable <Suffix> {
-
-  // Starting position of suffix in text
-  final int index, len;
-  final char [] text;
-
-  public Suffix(char [] text, int index) {
-    // if (text.length() >= index) throw new IllegalArgumentException();
-    this.len = text.length - index;
-    this.index = index;
-    this.text = text;
-    // System.out.println( Arrays.toString(text) + " " + index + " " + len );
-  }
-
-  // Compare the two suffixes inspired by Robert Sedgewick and Kevin Wayne
-  @Override public int compareTo(Suffix other) {
-    if (this == other) return 0;
-    int min_len = Math.min(len, other.len);
-    for (int i = 0; i < min_len; i++) {
-      if (text[index+i] < other.text[other.index+i]) return -1;
-      if (text[index+i] > other.text[other.index+i]) return +1;
-    }
-    return len - other.len;
-  }
-
-  @Override public String toString() {
-    // System.out.println(Arrays.toString(text) + " " + len + " "  + index + " " + (len - index - 1));
-    return new String(text, index, len);
-  }
-
-}  
 
 
 }

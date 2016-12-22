@@ -19,7 +19,7 @@ class GraphAdjacencyMatrix {
 
   // O(1)
   public void addDirectedEdge(int from, int to, int weight) {
-    if ( (0 > from && from >= N) || (0 > to && to >= N))
+    if ( from < 0 || from >= N || to < 0 || to >= N)
       throw new IllegalArgumentException();
     if (matrix[from][to] == null) edgeCount++;
     matrix[from][to] = weight;
@@ -32,12 +32,17 @@ class GraphAdjacencyMatrix {
   }
 
   // O(1)
-  public void removeEdge(int from, int to, int weight) {
-    if ( (0 > from && from >= N) || (0 > to && to >= N))
+  public void removeDirectedEdge(int from, int to) {
+    if ( from < 0 || from >= N || to < 0 || to >= N)
       throw new IllegalArgumentException();
     if (matrix[from][to] != null) edgeCount--;
     matrix[from][to] = null;
-    matrix[to][from] = null;
+  }
+
+  // O(1)
+  public void removeUndirectedEdge(int from, int to) {
+    removeDirectedEdge(from, to);
+    removeDirectedEdge(to, from);
   }
 
 }

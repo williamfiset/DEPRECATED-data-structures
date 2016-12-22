@@ -16,8 +16,6 @@ Some things suffix trees are great for are:
 
 */
 
-import java.util.Arrays;
-
 class Suffix implements Comparable <Suffix> {
 
   // Ranks used for sorting suffixes during SuffixArray creation
@@ -91,7 +89,7 @@ public class SuffixArray {
     int [] suffix_pos = new int[len];
 
     // Initially sort the suffixes by their first two characters
-    Arrays.sort(suffixes);
+    java.util.Arrays.sort(suffixes);
 
     // O(logn)
     for(int pos = 2; pos < len; pos *= 2) {
@@ -129,7 +127,7 @@ public class SuffixArray {
       }
 
       // O(nlogn)
-      Arrays.sort(suffixes);
+      java.util.Arrays.sort(suffixes);
 
     }
 
@@ -218,9 +216,7 @@ public class SuffixArray {
 
   }
 
-
-
-  // Finds the LRS (Longest Repeated Substring) that occurs in a string
+  // Finds the LRS (Longest Repeated Substring) that occurs in a string.
   // Traditionally we are only interested in sub strings that appear at
   // least twice, so this method returns null if this is the case.
   public String lrs() {
@@ -239,11 +235,8 @@ public class SuffixArray {
 
   }
 
-  // Find the Longest Common Substring (LCS) between two strings (generalizes to more)
-  // NOTE: The input for the SuffixArray must be 
-  // two strings and a unique separator character:
-  // i.e: "cabbage" + "#" + "garbage" => "cabbage#garbage"
-  // lcs("cabbage#garbage") => "bage"
+  // Find the Longest Common Substring (LCS) between two strings (generalizes to more strings if needed)
+  // NOTE: Make sure the separator is a unique character that is not found in s1 or s2
   public static String lcs(String s1, String s2, char separator) {
     
     int longestLen = 0, index = -1;
@@ -284,18 +277,20 @@ public class SuffixArray {
 
   public static void main(String[] args) {
     
-    // SuffixArray sa = new SuffixArray("abcde#gear");
-    // System.out.println(sa);
-    // System.out.println( SuffixArray.lcs("abcde", "gear", '#') );
-    // System.out.println( SuffixArray.lcs("abcde", "xzy", '#') );
-    // System.out.println( SuffixArray.lcs("cabbage", "garbage", '#') );
-    // System.out.println( SuffixArray.lcs("12341", "341213", '#') );
-    // System.out.println( SuffixArray.lcs("123-345-4566", "4-345-4566-7653", '#') );
+    String s = "aabaab";
+    System.out.println( new SuffixArray(s) );
+    System.out.println( java.util.Arrays.toString( (new SuffixArray(s)).LCP ) );
 
+    s = "aaaaa";
+    System.out.println( new SuffixArray(s) );
+    System.out.println( java.util.Arrays.toString( (new SuffixArray(s)).LCP ) );
+
+    s = "AaAaA";
+    System.out.println( new SuffixArray(s) );
+    System.out.println( java.util.Arrays.toString( (new SuffixArray(s)).LCP ) );
 
   }
 
 
 }
 
-// To build faster SA refer to http://zork.net/~st/jottings/sais.html

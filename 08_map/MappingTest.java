@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.List;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -76,17 +77,24 @@ public class MappingTest {
   @Test
   public void testIterator() {
 
+    HashMap <Integer, Integer> map2 = new HashMap<>();
+
     for (int loop = 0; loop < LOOPS; loop++) {
       
       map.clear();
+      map2.clear();
       assertTrue(map.isEmpty());
 
       List <Integer> rand_nums = genRandList(MAX_SIZE);
-      for (Integer key : rand_nums) map.add(key, key);
+      for (Integer key : rand_nums) {
+        map.add(key, key);
+        map2.put(key, key);
+      }
 
       int count = 0;
       for (Integer key : map) {
         assertEquals(key, map.get(key));
+        assertEquals(map.get(key), map2.get(key));
         assertTrue(map.hasKey(key));
         assertTrue(rand_nums.contains(key));
         count++;
@@ -94,6 +102,7 @@ public class MappingTest {
 
       Set <Integer> set = new HashSet<>(rand_nums);
       assertEquals( set.size() , count);
+      assertEquals( map2.size(), count );
 
     }
 
@@ -187,6 +196,43 @@ public class MappingTest {
     map.remove(o4);
 
     assertEquals(0, map.size());    
+
+  }
+
+  @Test
+  public void testRandomMapOperations() {
+
+    HashMap <Integer, Integer> map2 = new HashMap<>();
+
+    for (int loop = 0; loop < LOOPS; loop++) {
+      
+      List <Integer> nums = genRandList(MAX_SIZE);
+      map.clear();
+      map2.clear();
+
+      assertTrue(map.size() == map2.size());
+
+      for (int i = 0; i < MAX_SIZE; i++ ) {
+        
+        double r = Math.random();
+
+        if ( r < 0.5 ) {
+          map.put( nums.get(i), i );
+          map2.put( nums.get(i), i );
+        }
+
+        assertEquals( map.containsKey(nums.get(i)), map2.containsKey(nums.get(i)) );
+        assertEquals( map.size(), map2.size() );
+
+        if ( r > 0.5 ) assertEquals( map.remove( nums.get(i) ), map2.remove( nums.get(i) ) );
+
+        assertEquals( map.containsKey(nums.get(i)), map2.containsKey(nums.get(i)) );
+        assertEquals( map.size(), map2.size() );
+
+      }
+      
+    }
+
 
   }
 

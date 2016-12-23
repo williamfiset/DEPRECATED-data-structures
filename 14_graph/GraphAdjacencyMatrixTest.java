@@ -43,10 +43,9 @@ public class GraphAdjacencyMatrixTest {
     assertEquals( 3, m.numEdges() );
   }
 
-
   @Test
   public void testEdgeCountAdjMatrix() {
-    
+
     GraphAdjacencyMatrix m = new GraphAdjacencyMatrix(50);
 
     m.addDirectedEdge(0, 1, 5);
@@ -75,7 +74,6 @@ public class GraphAdjacencyMatrixTest {
     assertEquals( 6, m.numEdges() );
 
   }
-
 
   @Test
   public void testNumNodesAdjMatrix1() {

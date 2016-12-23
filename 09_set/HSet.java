@@ -5,7 +5,6 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
   private static final Object DUMMY = new Object();
 
-  private int size;
   private Mapping <T, Object> map;
 
   public HSet () {
@@ -21,7 +20,7 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
   }
 
   public int size() {
-    return size;
+    return map.size();
   }
 
   public void clear() {

@@ -50,7 +50,7 @@ public class GraphAdjacencyList {
   }
 
   // Add an edge to this graph, O(1)
-  public void addUndirectedEdge(int from, int to, int weight) {
+  public void addDirectedEdge(int from, int to, int weight) {
 
     Edge newEdge = new Edge(from, to, weight);
     HSet <Edge> edges = adjacencyList.get(from);
@@ -60,31 +60,33 @@ public class GraphAdjacencyList {
       adjacencyList.add( from, edges );
     }
 
-    edges.add(newEdge);
-    edgeCount++;
+    if (edges.add(newEdge)) edgeCount++;
 
   }
 
   // Add an edge to this graph, O(1)
-  public void addDirectedEdge(int from, int to, int weight) {
-    addUndirectedEdge(from, to, weight);
-    addUndirectedEdge(to, from, weight);
+  public void addUndirectedEdge(int from, int to, int weight) {
+    addDirectedEdge(from, to, weight);
+    addDirectedEdge(to, from, weight);
   }
 
   // Remove an edge from this Graph, O(E)
   public void removeDirectedEdge(int from, int to) {
     HSet <Edge> edges = getEdges(from);
     if (edges != null) {
+      
       Edge edgeToRemove = null;
+
       for (Edge edge : edges) {
         if ( edge.to == to ) {
           edgeToRemove = edge; break;
         }
       }
-      if (edgeToRemove != null) {
-        edges.remove(edgeToRemove);
-        edgeCount--;
-      }
+
+      if (edgeToRemove != null)
+        if (edges.remove(edgeToRemove))
+          edgeCount--;
+
     }
   }
 

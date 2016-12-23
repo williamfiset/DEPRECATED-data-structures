@@ -95,6 +95,9 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   }
 
+  // Gets a key's values from the map and returns the value.
+  // NOTE: returns null if the value is null AND also returns
+  // null if the key does not exists, so watch out..
   public V get(K key) {
 
     if (key == null) return null;
@@ -105,37 +108,47 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   }
 
+  // Removes a key from the map and returns the value.
+  // NOTE: returns null if the value is null AND also returns
+  // null if the key does not exists, so watch out..
   public V remove(K key) {
 
     if (key == null) return null;
     int bucket_index = normalizeIndex(key.hashCode());
+    return bucketRemoveEntry(bucket_index, key);
+
+  }
+
+  // Removes an entry from a given bucket if it exists
+  private V bucketRemoveEntry(int bucket_index, K key) {
+
     Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
     if (entry != null) {
-      bucketRemoveEntry(bucket_index, entry);
+      LinkedList <Entry<K,V>> links = table[bucket_index];
+      links.remove(entry);
+      --size;
       return entry.value;
-    }
-
-    return null;
+    } else return null;
 
   }
 
-  private void bucketRemoveEntry(int bucket_index, Entry <K,V> entry) {
-    LinkedList <Entry<K,V>> links = table[bucket_index];
-    links.remove(entry);
-    --size;
-  }
-
+  // Inserts an entry in a given bucket only if the entry does not already
+  // exist in the given bucket. If it does then the entry value if updated
   private V bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
+    
     LinkedList <Entry<K,V>> links = table[bucket_index];
     if (links == null) table[bucket_index] = links = new LinkedList<>();
-    if (bucketSeekEntry(bucket_index, entry.key) == null) {
+    
+    Entry <K, V> existantEntry = bucketSeekEntry(bucket_index, entry.key);
+    if (existantEntry == null) {
       links.add(entry);
       if (++size > threshold) resizeTable();
-      return entry.value;
-    }
-    return null;
+    } else existantEntry.value = entry.value;
+
+    return entry.value;
   }
 
+  // Finds and returns a particular entry in a given bucket if it exists returns null otherwise
   private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {
 
     if (key == null) return null;
@@ -148,6 +161,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   }
 
+  // Resizes the internal table holding buckets of entries
   private void resizeTable() {
 
     capacity *= 2;
@@ -214,8 +228,8 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
               break;
             } else bucket_index++;
         }
-
         return bucket_index < capacity && bucket_iter.hasNext();
+
       }
       public K next() {
         return bucket_iter.next().key;

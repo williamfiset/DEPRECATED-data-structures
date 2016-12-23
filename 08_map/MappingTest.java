@@ -61,7 +61,17 @@ public class MappingTest {
   @Test
   public void testLegalCreation() {
     new Mapping<>(6, 0.9);
-  }  
+  }
+
+  @Test
+  public void testUpdatingValues() {
+    map.add(1,1);
+    assertTrue(map.get(1) == 1);
+    map.add(1, 5);
+    assertTrue(map.get(1) == 5);
+    map.add(1, -7);
+    assertTrue(map.get(1) == -7);
+  }
 
   @Test
   public void testIterator() {

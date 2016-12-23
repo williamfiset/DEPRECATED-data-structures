@@ -1,8 +1,5 @@
 
-import java.util.Map;
-import java.util.HashMap;
-
-public class Trie implements ITrie {
+public class Trie {
 
   private Node root = new Node('\0');
 
@@ -11,7 +8,7 @@ public class Trie implements ITrie {
     char ch;
     int count = 0;
     boolean isWordEnding = false;
-    Map <Character, Node> children = new HashMap<>();
+    java.util.Map <Character, Node> children = new java.util.HashMap<>();
 
     public Node(char ch) { this.ch = ch; }
 

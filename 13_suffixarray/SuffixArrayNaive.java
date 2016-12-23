@@ -16,9 +16,37 @@ Some things suffix trees are great for are:
 
 */
 
-import java.util.Arrays;
-
 public class SuffixArrayNaive {
+
+  class Suffix implements Comparable <Suffix> {
+
+    // Starting position of suffix in text
+    final int index, len;
+    final char [] text;
+
+    public Suffix(char [] text, int index) {
+      // if (text.length() >= index) throw new IllegalArgumentException();
+      this.len = text.length - index;
+      this.index = index;
+      this.text = text;
+    }
+
+    // Compare the two suffixes inspired by Robert Sedgewick and Kevin Wayne
+    @Override public int compareTo(Suffix other) {
+      if (this == other) return 0;
+      int min_len = Math.min(len, other.len);
+      for (int i = 0; i < min_len; i++) {
+        if (text[index+i] < other.text[other.index+i]) return -1;
+        if (text[index+i] > other.text[other.index+i]) return +1;
+      }
+      return len - other.len;
+    }
+
+    @Override public String toString() {
+      return new String(text, index, len);
+    }
+
+  }
 
   int len;
   char[] text;
@@ -45,7 +73,7 @@ public class SuffixArrayNaive {
     suffixes = new Suffix[len];
     for (int i = 0; i < len; i++)
       suffixes[i] = new Suffix(text, i);
-    Arrays.sort(suffixes);
+    java.util.Arrays.sort(suffixes);
     kasai();
     // System.out.println(Arrays.toString(suffixes));
   }
@@ -133,8 +161,6 @@ public class SuffixArrayNaive {
 
   }
 
-
-
   // Finds the LRS (Longest Repeated Substring) that occurs in a string
   // Traditionally we are only interested in sub strings that appear at
   // least twice, so this method returns null if this is the case.
@@ -154,49 +180,5 @@ public class SuffixArrayNaive {
 
   }
 
-  public static void main(String[] args) {
-    
-    // SuffixArrayNaive sa = new SuffixArrayNaive("abc");
-    // System.out.println( Arrays.toString(sa.suffixes) );
-    // System.out.println( Arrays.toString(sa.LCP) );
-    // System.out.println(sa.lrs());
-
-
-  }
-
-class Suffix implements Comparable <Suffix> {
-
-  // Starting position of suffix in text
-  final int index, len;
-  final char [] text;
-
-  public Suffix(char [] text, int index) {
-    // if (text.length() >= index) throw new IllegalArgumentException();
-    this.len = text.length - index;
-    this.index = index;
-    this.text = text;
-    // System.out.println( Arrays.toString(text) + " " + index + " " + len );
-  }
-
-  // Compare the two suffixes inspired by Robert Sedgewick and Kevin Wayne
-  @Override public int compareTo(Suffix other) {
-    if (this == other) return 0;
-    int min_len = Math.min(len, other.len);
-    for (int i = 0; i < min_len; i++) {
-      if (text[index+i] < other.text[other.index+i]) return -1;
-      if (text[index+i] > other.text[other.index+i]) return +1;
-    }
-    return len - other.len;
-  }
-
-  @Override public String toString() {
-    // System.out.println(Arrays.toString(text) + " " + len + " "  + index + " " + (len - index - 1));
-    return new String(text, index, len);
-  }
-
-}  
-
-
 }
 
-// To build faster SA refer to http://zork.net/~st/jottings/sais.html

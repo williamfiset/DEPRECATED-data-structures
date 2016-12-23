@@ -248,8 +248,6 @@ public class SuffixArray {
       Suffix suffix1 = sa.suffixes[i-1];
       Suffix suffix2 = sa.suffixes[i];
 
-      // System.out.printf("%d %d %s %s %d %d\n", L1, L2, suffix1.toString(), suffix2.toString(), suffix1.len, suffix2.len );
-
       // Make sure the two adjacent suffixes are from the two different strings s1 & s2
       // Update the location of the lcs if a better one is found
       if ( (suffix1.len) >= L2 || (suffix2.len) >= L2 ||
@@ -274,23 +272,6 @@ public class SuffixArray {
       sb.append( suffix.toString() + "\n");
     return sb.toString();
   }
-
-  public static void main(String[] args) {
-    
-    String s = "aabaab";
-    System.out.println( new SuffixArray(s) );
-    System.out.println( java.util.Arrays.toString( (new SuffixArray(s)).LCP ) );
-
-    s = "aaaaa";
-    System.out.println( new SuffixArray(s) );
-    System.out.println( java.util.Arrays.toString( (new SuffixArray(s)).LCP ) );
-
-    s = "AaAaA";
-    System.out.println( new SuffixArray(s) );
-    System.out.println( java.util.Arrays.toString( (new SuffixArray(s)).LCP ) );
-
-  }
-
 
 }
 

@@ -1,25 +1,20 @@
 
-import java.util.Set;
-import java.util.Map;
-import java.util.HashSet;
-import java.util.HashMap;
-
 public class GraphAdjacencyList {
 
   private int edgeCount = 0;
-  IMap <Integer, HSet<Edge>> adjacencyList;
+  java.util.Map <Integer, java.util.HashSet<Edge>> adjacencyList;
 
   public GraphAdjacencyList () {
-    adjacencyList = new Mapping<>();
+    adjacencyList = new java.util.HashMap<>();
   }
 
   // Intializes adjacency matrix for nodes indexed
   // from [0, numNodes). Additional nodes can also be added later
   public GraphAdjacencyList(int numNodes) {
     if (numNodes <= 0) throw new IllegalArgumentException();
-    adjacencyList = new Mapping<>( numNodes );
+    adjacencyList = new java.util.HashMap<>( numNodes );
     for (int i = 0; i < numNodes; i++)
-      adjacencyList.put(i, new HSet<Edge>());
+      adjacencyList.put(i, new java.util.HashSet<Edge>());
   }
 
   // Returns the number of nodes in this graph
@@ -34,7 +29,7 @@ public class GraphAdjacencyList {
 
   // Get all the edges exiting node at nodeID
   // public Set <Edge> getEdges(int nodeID) {
-  public HSet <Edge> getEdges(int nodeID) {
+  public java.util.HashSet <Edge> getEdges(int nodeID) {
     return adjacencyList.get(nodeID);
   }
 
@@ -42,15 +37,15 @@ public class GraphAdjacencyList {
   public void addDirectedEdge(int from, int to, int weight) {
 
     Edge newEdge = new Edge(from, to, weight);
-    HSet <Edge> edges = adjacencyList.get(from);
+    java.util.HashSet <Edge> edges = adjacencyList.get(from);
 
     if (edges == null) {
-      edges = new HSet<>();
-      adjacencyList.add( from, edges );
+      edges = new java.util.HashSet<>();
+      adjacencyList.put( from, edges );
     }
 
     // If edge did not exist before
-    if (!edges.add(newEdge))
+    if (edges.add(newEdge))
       edgeCount++;
 
   }
@@ -65,7 +60,7 @@ public class GraphAdjacencyList {
   public void removeDirectedEdge(int from, int to) {
     
     // Set <Edge> edges = getEdges(from);
-    HSet <Edge> edges = getEdges(from);
+    java.util.HashSet <Edge> edges = getEdges(from);
 
     if (edges != null) {
 

@@ -19,7 +19,7 @@ class Edge {
 public class GraphAdjacencyList {
 
   private int edgeCount = 0;
-  private IMap <Integer, HSet<Edge>> adjacencyList;
+  IMap <Integer, HSet<Edge>> adjacencyList;
 
   public GraphAdjacencyList () {
     adjacencyList = new Mapping<>();
@@ -51,7 +51,8 @@ public class GraphAdjacencyList {
 
   // Add an edge to this graph, O(1)
   public void addDirectedEdge(int from, int to, int weight) {
-
+    
+    System.out.println("FROM: " + from + " TO: " + to + " weight: " + weight);
     Edge newEdge = new Edge(from, to, weight);
     HSet <Edge> edges = adjacencyList.get(from);
 
@@ -60,7 +61,10 @@ public class GraphAdjacencyList {
       adjacencyList.add( from, edges );
     }
 
-    if (edges.add(newEdge)) edgeCount++;
+    if (!edges.contains(newEdge)) {
+      edges.add(newEdge);
+      edgeCount++;
+    }
 
   }
 
@@ -84,8 +88,10 @@ public class GraphAdjacencyList {
       }
 
       if (edgeToRemove != null)
-        if (edges.remove(edgeToRemove))
+        if (edges.contains(edgeToRemove)) {
+          edges.remove(edgeToRemove);
           edgeCount--;
+        }
 
     }
   }

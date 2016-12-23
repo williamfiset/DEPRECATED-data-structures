@@ -1,20 +1,5 @@
-import java.util.Iterator;
 
-interface IBinarySearchTree <T extends Comparable<T>> {
-
-  public boolean isEmpty();
-  public int getSize();
-  public boolean add(T elem);
-  public boolean remove(T elem);
-  public boolean find(T elem);
-  public int height();
-  
-  // Provides multiple iterators to traverse the tree
-  public Iterator <T> traverse(TreeTraversalOrder order);
-
-}
-
-public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearchTree <T> {
+public class BinarySearchTree <T extends Comparable<T>> {
   
   private Node root = null;
   private int nodeCount = 0;
@@ -91,8 +76,8 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
       }
 
       // Do node swap.
-      // When removing node from a binary tree with two links the succussor is the 
-      // smallest node in the right subtree (the leftmost node in the right subtree)
+      // When removing a node from a binary tree with two links the succussor of the node being
+      // removed is the smallest node in the leftmost node in the right subtree.
       Node tmp = findMinValueNode(node.right);
       node.data = tmp.data;
       node.right = remove(node.right, tmp.data);
@@ -102,6 +87,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
 
   }
 
+  // Helper method for remove
   private Node findMinValueNode(Node node) {
     Node cur = node;
     while(cur.left != null) 
@@ -126,17 +112,20 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
 
   }
 
+  // Computes the height of the tree, O(n)
   public int height() {
     return height(root);
   }
 
+  // Recursive helper method of compute the height of the trees
   private int height(Node node) {
     if (node == null) return 0;
     return Math.max( height(node.left), height(node.right) ) + 1;
   }
 
-  private Iterator <T> preOrderTraversal () {
-    return new Iterator <T> () {
+  // Returns as iterator to traverse the tree in pre order
+  private java.util.Iterator <T> preOrderTraversal () {
+    return new java.util.Iterator <T> () {
       
       Stack <Node> stack = new Stack <>(root);
 
@@ -151,9 +140,10 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
       }
     };
   }
-  
-  private Iterator <T> inOrderTraversal () {
-    return new Iterator <T> () {
+
+  // Returns as iterator to traverse the tree in order
+  private java.util.Iterator <T> inOrderTraversal () {
+    return new java.util.Iterator <T> () {
       
       Node trav = root;
       Stack <Node> stack = new Stack <>(root);
@@ -182,7 +172,8 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     };
   }
 
-  private Iterator <T> postOrderTraversal () {
+  // Returns as iterator to traverse the tree in post order
+  private java.util.Iterator <T> postOrderTraversal () {
     Stack <Node> stack1 = new Stack <>(root);
     Stack <Node> stack2 = new Stack <>();
     while(!stack1.isEmpty()) {
@@ -193,7 +184,7 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
         if (node.right != null) stack1.push(node.right);
       }
     }
-    return new Iterator <T> () {
+    return new java.util.Iterator <T> () {
       @Override public boolean hasNext() {
         return root != null && !stack2.isEmpty();
       }
@@ -203,8 +194,9 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     };
   } 
 
-  private Iterator <T> levelOrderTraversal () {
-    return new Iterator <T> () {
+  // Returns as iterator to traverse the tree in level order  
+  private java.util.Iterator <T> levelOrderTraversal () {
+    return new java.util.Iterator <T> () {
       
       Queue <Node> queue = new Queue <>(root);
 
@@ -220,8 +212,9 @@ public class BinarySearchTree <T extends Comparable<T>> implements IBinarySearch
     };
   }
 
-  // Todo: Check for concurrent modification
-  @Override public Iterator <T> traverse(TreeTraversalOrder order) {
+  // This method returns an iterator for a given TreeTraversalOrder
+  // TODO: Check for concurrent modification
+  public java.util.Iterator <T> traverse(TreeTraversalOrder order) {
     switch (order) {
       case PRE_ORDER: return preOrderTraversal();
       case IN_ORDER: return inOrderTraversal();

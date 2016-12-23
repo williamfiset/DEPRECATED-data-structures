@@ -28,9 +28,9 @@ public class MappingTest {
 
   static Random r = new Random();
 
-  static final int LOOPS = 1000;
-  static final int MAX_SIZE = 100;
-  static final int MAX_RAND_NUM = 250;
+  static final int LOOPS = 10000;
+  static final int MAX_SIZE = 1000;
+  static final int MAX_RAND_NUM = 25;
 
   Mapping <Integer, Integer> map;
 

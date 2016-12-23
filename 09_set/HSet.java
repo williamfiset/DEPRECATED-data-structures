@@ -1,9 +1,9 @@
 
 public class HSet <T> implements ISet <T>, Iterable <T> {
 
+  private static final Object DUMMY = new Object();
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
-  private static final Object DUMMY = new Object();
 
   private Mapping <T, Object> map;
 
@@ -45,6 +45,12 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
 
   public java.util.Iterator <T> iterator() {
     return map.iterator();
+  }
+
+  @Override public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (T key : map) sb.append(key + " ");
+    return sb.toString();
   }
 
 } 

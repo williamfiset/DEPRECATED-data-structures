@@ -125,10 +125,11 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   // Returns as iterator to traverse the tree in pre order
   private java.util.Iterator <T> preOrderTraversal () {
+    
+    java.util.Stack <Node> stack = new java.util.Stack<>();
+    stack.push(root);
+    
     return new java.util.Iterator <T> () {
-      
-      Stack <Node> stack = new Stack <>(root);
-
       @Override public boolean hasNext() {
         return root != null && !stack.isEmpty();
       }
@@ -143,11 +144,12 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   // Returns as iterator to traverse the tree in order
   private java.util.Iterator <T> inOrderTraversal () {
-    return new java.util.Iterator <T> () {
-      
-      Node trav = root;
-      Stack <Node> stack = new Stack <>(root);
 
+    java.util.Stack <Node> stack = new java.util.Stack <>();
+    stack.push(root);
+
+    return new java.util.Iterator <T> () {
+      Node trav = root;
       @Override public boolean hasNext() {
         return root != null && !stack.isEmpty();
       }
@@ -174,8 +176,9 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   // Returns as iterator to traverse the tree in post order
   private java.util.Iterator <T> postOrderTraversal () {
-    Stack <Node> stack1 = new Stack <>(root);
-    Stack <Node> stack2 = new Stack <>();
+    java.util.Stack <Node> stack1 = new java.util.Stack <>();
+    java.util.Stack <Node> stack2 = new java.util.Stack <>();
+    stack1.push(root);
     while(!stack1.isEmpty()) {
       Node node = stack1.pop();
       if (node != null) {
@@ -196,10 +199,11 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   // Returns as iterator to traverse the tree in level order  
   private java.util.Iterator <T> levelOrderTraversal () {
-    return new java.util.Iterator <T> () {
-      
-      Queue <Node> queue = new Queue <>(root);
 
+    java.util.Queue <Node> queue = new java.util.LinkedList<>();
+    queue.offer(root);
+
+    return new java.util.Iterator <T> () {
       @Override public boolean hasNext() {
         return root != null && !queue.isEmpty();
       }

@@ -2,6 +2,7 @@
 import static java.lang.Math.*;
 import static org.junit.Assert.*;
 import org.junit.*;
+
 import java.util.Random;
 import java.util.Set;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 
 // You can set the hash value of this object to be whatever you want
 // This makes it great for testing special cases.
@@ -145,7 +147,7 @@ public class MappingTest {
 
       assertEquals( map.size(), keys_set.size() );
 
-      Array <Integer> keys = map.keys();
+      List <Integer> keys = map.keys();
       for (Integer key : keys) map.remove(key);
       
       assertTrue( map.isEmpty() );
@@ -263,10 +265,11 @@ public class MappingTest {
         }
 
         int rand_val = (int)(Math.random() * MAX_SIZE);
+        
         if ( Math.random() < 0.5 ) {
 
-          l1.remove(rand_val);
-          l2.remove(rand_val);
+          l1. removeFirstOccurrence(rand_val);
+          l2. removeFirstOccurrence(rand_val);
 
         } else {
 

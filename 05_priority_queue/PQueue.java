@@ -12,31 +12,18 @@ but it probably worth it overall. This could be added for the fastjavadss
 
 */
 
-interface IPQueue <T> {
-  
-  public boolean contains(T elem);
-  public boolean remove(T elem);
-  public boolean isEmpty();
-  public void add(T elem);
-  public void clear();
-  public int size();
-  public T peek();
-  public T poll();
-
-}
-
-class PQueue <T extends Comparable<T>> implements IPQueue <T> {
+class PQueue <T extends Comparable<T>> {
 
   private int heap_size = 0;
   private int heap_capacity = 0;
-  private Array <T> heap = null;
+  private java.util.List <T> heap = null;
 
   public PQueue () {
     this(0);
   }
 
   public PQueue(int sz) {
-    heap = new Array<>(sz);
+    heap = new java.util.ArrayList<>(sz);
   }
 
   // Heapify 
@@ -47,7 +34,7 @@ class PQueue <T extends Comparable<T>> implements IPQueue <T> {
   }
 
   // Heapify
-  public PQueue (Array <T> elems) {
+  public PQueue (java.util.List <T> elems) {
     this(elems.size());
     for (int i = 0; i < elems.size(); i++ )
       add(elems.get(i));

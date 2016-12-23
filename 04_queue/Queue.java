@@ -1,7 +1,7 @@
 
-public class Queue <T> implements IQueue <T>, Iterable <T> {
+public class Queue <T> implements Iterable <T> {
 
-  private LinkedList <T> list = new LinkedList <T> ();
+  private java.util.LinkedList <T> list = new java.util.LinkedList <T> ();
 
   public Queue() { }
 

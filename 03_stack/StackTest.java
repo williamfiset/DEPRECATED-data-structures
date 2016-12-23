@@ -3,11 +3,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
-
 public class StackTest {
 
-  Stack<Integer> stack;
+  Stack <Integer> stack;
 
   @Before
   public void setup() {

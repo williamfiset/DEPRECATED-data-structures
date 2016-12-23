@@ -12,11 +12,11 @@ public class LinkedListTest {
   static final int NUM_NULLS = TEST_SZ / 5;
   static final int MAX_RAND_NUM = 250;
 
-  LinkedList<Integer> list;
+  DoublyLinkedList <Integer> list;
 
   @Before
   public void setup() {
-    list = new LinkedList<>();
+    list = new DoublyLinkedList<>();
   }
 
   @Test
@@ -132,7 +132,7 @@ public class LinkedListTest {
   @Test
   public void testRemoving() {
     
-    LinkedList <String> strs = new LinkedList<>();
+    DoublyLinkedList <String> strs = new DoublyLinkedList<>();
     strs.add("a");
     strs.add("b");
     strs.add("c");

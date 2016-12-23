@@ -1,7 +1,8 @@
 
-public class Stack <T> implements IStack <T>, Iterable <T> {
+
+public class Stack <T> implements Iterable <T> {
   
-  private LinkedList <T> list = new LinkedList <T>();
+  private java.util.LinkedList <T> list = new java.util.LinkedList <T>();
 
   public Stack () { }
 

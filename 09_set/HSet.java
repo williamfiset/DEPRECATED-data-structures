@@ -1,14 +1,11 @@
 
-// For debugging onlys
-class Obj { @Override public String toString() {return "DUMMY";} }
+public class HSet <T> implements Iterable <T> {
 
-public class HSet <T> implements ISet <T>, Iterable <T> {
-
-  private static final Object DUMMY = new Obj(); // new Object();
+  private static final Object DUMMY = new Object();
   private static final int DEFAULT_CAPACITY = 3;
-  private static final double DEFAULT_LOAD_FACTOR = 0.75;
+  private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
-  private Mapping <T, Object> map;
+  private java.util.Map <T, Object> map;
 
   public HSet () {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -18,8 +15,8 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
     this(capacity, DEFAULT_LOAD_FACTOR);
   }
 
-  public HSet(int capacity, double load_factor) {
-    map = new Mapping<>(capacity, load_factor);
+  public HSet(int capacity, float load_factor) {
+    map = new java.util.HashMap<>(capacity, load_factor);
   }
 
   public int size() {
@@ -35,7 +32,7 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
   }
 
   public boolean add(T elem) {
-    return map.add(elem, DUMMY) == DUMMY;
+    return map.put(elem, DUMMY) == DUMMY;
   }
 
   public boolean remove(T elem) {
@@ -43,17 +40,17 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
   }
 
   public boolean contains(T elem) {
-    return map.hasKey(elem);
+    return map.containsKey(elem);
   }
 
   public java.util.Iterator <T> iterator() {
-    return map.iterator();
+    return map.keySet().iterator();
   }
 
   @Override public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
-    for (T key : map) sb.append(key + ", ");
+    for (T key : map.keySet()) sb.append(key + ", ");
     sb.append("]");
     return sb.toString();
   }

@@ -1,11 +1,11 @@
 
 
 @SuppressWarnings("unchecked")
-class Array <T> implements IList <T>, Iterable <T> {
+class Array <T> implements Iterable <T> {
 
-  private int capacity = 0; // Actual array size
-  private int len = 0;      // length user thinks array is
   private T [] arr;  
+  private int len = 0;      // length user thinks array is
+  private int capacity = 0; // Actual array size
 
   public Array() { this(16); }
 

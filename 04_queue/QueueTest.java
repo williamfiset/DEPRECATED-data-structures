@@ -3,15 +3,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
-
 public class QueueTest {
 
-  Queue<Integer> queue;
+  Queue <Integer> queue;
 
   @Before
   public void setup() {
-    queue = new Queue<Integer>();
+    queue = new Queue <Integer>();
   }
 
   @Test

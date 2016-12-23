@@ -1,4 +1,8 @@
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 class Entry <K, V> {
 
   int hash;
@@ -25,15 +29,14 @@ class Entry <K, V> {
 }
 
 @SuppressWarnings("unchecked")
-public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
+public class Mapping <K,V> implements Iterable <K> {
 
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
   private double load_factor;
   private int capacity, threshold, size = 0;
-  // private LinkedList <Entry<K,V>> [] table;
-  LinkedList <Entry<K,V>> [] table;
+  private LinkedList <Entry<K,V>> [] table;
 
   public Mapping () {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -191,9 +194,9 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   }
 
-  public Array <K> keys() {
+  public List <K> keys() {
 
-    Array <K> keys = new Array<>(size);
+    List <K> keys = new ArrayList<>(size);
     for(LinkedList<Entry<K,V>> links : table)
       if (links != null)
         for (Entry <K,V> entry : links)
@@ -202,9 +205,9 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   }
 
-  public Array <V> values() {
+  public List <V> values() {
 
-    Array <V> values = new Array<>(size);
+    List <V> values = new ArrayList<>(size);
     for(LinkedList<Entry<K,V>> links : table)
       if (links != null)
         for (Entry <K,V> entry : links)

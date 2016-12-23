@@ -28,9 +28,9 @@ public class MappingTest {
 
   static Random r = new Random();
 
-  static final int LOOPS = 10000;
-  static final int MAX_SIZE = 1000;
-  static final int MAX_RAND_NUM = 25;
+  static final int LOOPS = 30000;
+  static final int MAX_SIZE = 100;
+  static final int MAX_RAND_NUM = 50;
 
   Mapping <Integer, Integer> map;
 
@@ -230,6 +230,60 @@ public class MappingTest {
 
       }
       
+    }
+
+  }
+
+  @Test
+  public void randomIteratorTests() {
+
+    Mapping <Integer, LinkedList<Integer>> m = new Mapping<>();
+    HashMap <Integer, LinkedList<Integer>> hm = new HashMap<>();
+
+    for (int loop = 0; loop < LOOPS; loop++ ) {
+      
+      m.clear();
+      hm.clear();
+
+      int sz = (int)(Math.random() * MAX_SIZE);
+      m  = new Mapping<>(sz);
+      hm = new HashMap<>(sz);
+
+      for (int i = 0; i < MAX_SIZE; i++) {
+        
+        int index = (int)(Math.random() * MAX_SIZE);
+        LinkedList <Integer> l1 = m.get(index);
+        LinkedList <Integer> l2 = hm.get(index);
+
+        if ( l2 == null ) {
+          l1 = new LinkedList<Integer>();
+          l2 = new LinkedList<Integer>();
+          m.put(index,  l1);
+          hm.put(index, l2);
+        }
+
+        int rand_val = (int)(Math.random() * MAX_SIZE);
+        if ( Math.random() < 0.5 ) {
+
+          l1.remove(rand_val);
+          l2.remove(rand_val);
+
+        } else {
+
+          l1.add(rand_val);
+          l2.add(rand_val);
+
+        }
+
+        // Compare Lists
+        for (Integer I : l1) assertTrue(l2.contains(I));
+        for (Integer I : l2) assertTrue(l1.contains(I));
+
+        assertEquals( m.size(), hm.size() );
+        assertEquals( l1.size(), l2.size() );
+
+      }
+
     }
 
 

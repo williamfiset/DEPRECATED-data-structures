@@ -124,21 +124,11 @@ public class HSetTest {
     HSet <ConstObj> s = new HSet<ConstObj>();
 
     s.add(ch1);
-    System.out.println("Before: " + s);
-    for (ConstObj c : s) System.out.println("C: " + c);
-    System.out.println("After: " + s);
-
     assertEquals(1, s.size());
     s.remove(ch1);
     assertEquals(0, s.size());
     s.add(ch2);
     assertEquals(1, s.size());
-  
-    // Not properly iterating over the items in the set..    
-    System.out.println("Before: " + s);
-    for (ConstObj c : s) System.out.println("C: " + c);
-    System.out.println("After: " + s);
-
     s.remove(ch2);
     assertEquals(0, s.size());
 

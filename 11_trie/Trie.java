@@ -11,7 +11,7 @@ public class Trie implements ITrie {
     char ch;
     int count = 0;
     boolean isWordEnding = false;
-    Map<Character, Node> children = new HashMap<>();
+    Map <Character, Node> children = new HashMap<>();
 
     public Node(char ch) { this.ch = ch; }
 
@@ -57,8 +57,7 @@ public class Trie implements ITrie {
     }
 
     // The root itself is not a word ending. It is simply a placeholder.
-    if (node != root)
-      node.isWordEnding = true;
+    if (node != root) node.isWordEnding = true;
 
     return is_prefix || !created_new_node;
 
@@ -136,10 +135,26 @@ public class Trie implements ITrie {
 
   }
 
+  // Recursively clear the trie freeing memory to help GC
+  private void clear(Node node) {
+
+    if (node == null) return;
+
+    for (Character ch : node.children.keySet()) {
+      Node nextNode = node.children.get(ch);
+      clear(nextNode);
+      nextNode = null;
+    }
+
+    node.children.clear();
+    node.children = null;
+
+  }
+
   // Clear the trie
   public void clear() {
 
-    root.children = null;
+    clear(root);
     root = new Node('\0');
 
   }

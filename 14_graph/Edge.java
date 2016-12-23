@@ -1,3 +1,5 @@
+
+
 public class Edge {
   
   int from, to, weight, hash;
@@ -18,9 +20,5 @@ public class Edge {
     Edge other = (Edge) obj;
     return (from==other.from) && (to==other.to) && (weight==other.weight);
   }
-
-  // @Override public String toString() {
-  //   return "("+to + ", " + from + ", "+ hash +")";
-  // }
 
 }

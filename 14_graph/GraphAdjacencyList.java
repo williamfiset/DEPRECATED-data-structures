@@ -7,24 +7,19 @@ import java.util.HashMap;
 public class GraphAdjacencyList {
 
   private int edgeCount = 0;
-  // IMap <Integer, Set<Edge>> adjacencyList;
-  // IMap <Integer, HSet<Edge>> adjacencyList;
-  Map <Integer, HSet<Edge>> adjacencyList;
+  IMap <Integer, HSet<Edge>> adjacencyList;
 
   public GraphAdjacencyList () {
-    // adjacencyList = new Mapping<>();
-    adjacencyList = new HashMap<>();
+    adjacencyList = new Mapping<>();
   }
 
   // Intializes adjacency matrix for nodes indexed
   // from [0, numNodes). Additional nodes can also be added later
   public GraphAdjacencyList(int numNodes) {
     if (numNodes <= 0) throw new IllegalArgumentException();
-    // adjacencyList = new Mapping<>( numNodes );
-    adjacencyList = new HashMap<>( numNodes );
+    adjacencyList = new Mapping<>( numNodes );
     for (int i = 0; i < numNodes; i++)
       adjacencyList.put(i, new HSet<Edge>());
-      // adjacencyList.add(i, new HashSet<Edge>());
   }
 
   // Returns the number of nodes in this graph
@@ -47,14 +42,11 @@ public class GraphAdjacencyList {
   public void addDirectedEdge(int from, int to, int weight) {
 
     Edge newEdge = new Edge(from, to, weight);
-    // Set <Edge> edges = adjacencyList.get(from);
     HSet <Edge> edges = adjacencyList.get(from);
 
     if (edges == null) {
-      // edges = new HashSet<>();
       edges = new HSet<>();
-      // adjacencyList.add( from, edges );
-      adjacencyList.put( from, edges );
+      adjacencyList.add( from, edges );
     }
 
     // If edge did not exist before

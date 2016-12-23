@@ -1,4 +1,5 @@
 
+// For debugging onlys
 class Obj { @Override public String toString() {return "DUMMY";} }
 
 public class HSet <T> implements ISet <T>, Iterable <T> {

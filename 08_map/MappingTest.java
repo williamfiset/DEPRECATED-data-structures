@@ -98,6 +98,10 @@ public class MappingTest {
         count++;
       }
 
+      for (Integer key : map2.keySet()) {
+        assertEquals(key, map.get(key));
+      }
+
       Set <Integer> set = new HashSet<>(rand_nums);
       assertEquals( set.size() , count);
       assertEquals( map2.size(), count );

@@ -87,39 +87,20 @@ public class GraphAdjacencyListTest {
 
     m.removeDirectedEdge(1, 4);
     m.removeDirectedEdge(2, 3);
-    System.out.println(m.adjacencyList);
     assertEquals( 0, m.numEdges() );
 
     m.addUndirectedEdge(0, 0, 16);
-    System.out.println(m.adjacencyList);
     assertEquals( 1, m.numEdges() );
 
     m.removeUndirectedEdge(0, 0);
-    System.out.println(m.adjacencyList);
     assertEquals( 0, m.numEdges() );
 
     m.addUndirectedEdge(5, 6, 7);
     m.addUndirectedEdge(5, 7, 7);
     m.addUndirectedEdge(5, 8, 7);
-    System.out.println(m.adjacencyList);
     assertEquals( 6, m.numEdges() );
 
   }
-
-  // @Test
-  // public void test() {
-
-  //   GraphAdjacencyList m = new GraphAdjacencyList(5);
-
-  //   m.addUndirectedEdge(0, 0, 16);
-  //   System.out.println(m.adjacencyList);
-  //   assertEquals( 1, m.numEdges() );
-
-  //   m.removeUndirectedEdge(0, 0);
-  //   System.out.println(m.adjacencyList);
-  //   assertEquals( 0, m.numEdges() );
-
-  // }
 
   @Test
   public void testNumNodesAdjList1() {

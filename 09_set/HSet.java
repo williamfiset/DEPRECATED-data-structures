@@ -1,7 +1,9 @@
 
+class Obj { @Override public String toString() {return "DUMMY";} }
+
 public class HSet <T> implements ISet <T>, Iterable <T> {
 
-  private static final Object DUMMY = new Object();
+  private static final Object DUMMY = new Obj(); // new Object();
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
@@ -49,7 +51,9 @@ public class HSet <T> implements ISet <T>, Iterable <T> {
 
   @Override public String toString() {
     StringBuilder sb = new StringBuilder();
-    for (T key : map) sb.append(key + " ");
+    sb.append("[");
+    for (T key : map) sb.append(key + ", ");
+    sb.append("]");
     return sb.toString();
   }
 

@@ -32,7 +32,8 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   private double load_factor;
   private int capacity, threshold, size = 0;
-  private LinkedList <Entry<K,V>> [] table;
+  // private LinkedList <Entry<K,V>> [] table;
+  LinkedList <Entry<K,V>> [] table;
 
   public Mapping () {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -44,7 +45,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   // Designated constructor
   public Mapping (int capacity, double load_factor) {
-    if (capacity <= 0)
+    if (capacity < 0)
       throw new IllegalArgumentException("Illegal capacity");
     if (load_factor <= 0 || Double.isNaN(load_factor) || Double.isInfinite(load_factor))
       throw new IllegalArgumentException("Illegal load_factor");
@@ -152,7 +153,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   }
 
-  // Finds and returns a particular entry in a given bucket if it exists returns null otherwise
+  // Finds and returns a particular entry in a given bucket if it exists, returns null otherwise
   private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {
 
     if (key == null) return null;
@@ -212,6 +213,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
 
   }
 
+  // Return an iterator to iterate over all the keys in this map
   @Override public java.util.Iterator <K> iterator() {
     int element_count = size();
     return new java.util.Iterator <K> () {
@@ -224,15 +226,26 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
         // An item was added or removed while iterating
         if (element_count != size) throw new java.util.ConcurrentModificationException();
         
+        // No iterator or the current iterator is empty
         if (bucket_iter == null || !bucket_iter.hasNext()) {
-          bucket_index++;
-          while(bucket_index < capacity)
+
+          // Search next buckets until a valid iterator is found
+          while(++bucket_index < capacity) {
             if (table[bucket_index] != null) {
-              bucket_iter = table[bucket_index].iterator();
-              break;
-            } else bucket_index++;
+              
+              // Make sure this iterator actually has elements -_-
+              java.util.Iterator <Entry<K,V>> nextIter = table[bucket_index].iterator();
+              if ( nextIter.hasNext() ) {
+                bucket_iter = nextIter;
+                break;
+              }
+
+            }
+          }
+        
         }
-        return bucket_index < capacity && bucket_iter.hasNext();
+
+        return bucket_index < capacity;
 
       }
       public K next() {
@@ -244,13 +257,13 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
   @Override public String toString() {
 
     StringBuilder sb = new StringBuilder();
-    sb.append("[ ");
+    sb.append("{");
     for (int i = 0; i < capacity; i++) {
       if (table[i] == null) continue;
       for (Entry <K,V> entry : table[i])
         sb.append( entry + ", ");
     }
-    sb.append(" ]");
+    sb.append("}");
     return sb.toString();
 
   }

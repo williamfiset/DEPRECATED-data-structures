@@ -6,9 +6,9 @@
 
 interface IDisjointSet {
 
+  public int size();
   public void unify(int p, int q);
   public boolean connected(int p, int q);
-  public int size();
   public int components();
   public int componentSize(int p);
 
@@ -36,6 +36,7 @@ public class UnionFind implements IDisjointSet {
 
   }
 
+  // Find which component/set 'p' belongs to, takes amortized constant time.
   public int find(int p) {
     
     // Find the root of the component/set
@@ -43,7 +44,9 @@ public class UnionFind implements IDisjointSet {
     while( root != id[root] ) 
       root = id[root];
 
-    // Path compression
+    // Compress the path leading back to the root. 
+    // Doing this operation is called "path compression" 
+    // and is what gives us amortized constant time complexity.
     while(p != root) {
       int next = id[p];
       id[p] = root;
@@ -84,7 +87,8 @@ public class UnionFind implements IDisjointSet {
     // These elements are already in the same group!
     if (root1 == root2) return;
 
-    // Merge two components/sets together
+    // Merge two components/sets together.
+    // Merge smaller component/set into the larger one.
     if (sz[root1] < sz[root2]) {
       sz[root2] += sz[root1];
       id[root1] = root2;

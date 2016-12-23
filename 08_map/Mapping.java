@@ -133,7 +133,7 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
   }
 
   // Inserts an entry in a given bucket only if the entry does not already
-  // exist in the given bucket. If it does then the entry value if updated
+  // exist in the given bucket, but if it does then update the entry value
   private V bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
     
     LinkedList <Entry<K,V>> links = table[bucket_index];
@@ -143,9 +143,13 @@ public class Mapping <K,V> implements IMap <K, V>, Iterable <K> {
     if (existantEntry == null) {
       links.add(entry);
       if (++size > threshold) resizeTable();
-    } else existantEntry.value = entry.value;
+      return null; // Use null to indicate that there was no previous entry
+    } else {
+      V oldVal = existantEntry.value;
+      existantEntry.value = entry.value;
+      return oldVal;
+    }
 
-    return entry.value;
   }
 
   // Finds and returns a particular entry in a given bucket if it exists returns null otherwise

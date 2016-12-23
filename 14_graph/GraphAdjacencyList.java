@@ -1,4 +1,7 @@
 
+import java.util.Set;
+import java.util.HashSet;
+
 class Edge {
   int from, to, weight;
   public Edge(int from, int to, int weight) {
@@ -19,7 +22,7 @@ class Edge {
 public class GraphAdjacencyList {
 
   private int edgeCount = 0;
-  IMap <Integer, HSet<Edge>> adjacencyList;
+  IMap <Integer, Set<Edge>> adjacencyList;
 
   public GraphAdjacencyList () {
     adjacencyList = new Mapping<>();
@@ -31,7 +34,8 @@ public class GraphAdjacencyList {
     if (numNodes <= 0) throw new IllegalArgumentException();
     adjacencyList = new Mapping<>( numNodes );
     for (int i = 0; i < numNodes; i++)
-      adjacencyList.add(i, new HSet<Edge>());
+      // adjacencyList.add(i, new HSet<Edge>());
+      adjacencyList.add(i, new HashSet<Edge>());
   }
 
   // Returns the number of nodes in this graph
@@ -45,18 +49,21 @@ public class GraphAdjacencyList {
   }
 
   // Get all the edges exiting node at nodeID
+  // public Set <Edge> getEdges(int nodeID) {
   public HSet <Edge> getEdges(int nodeID) {
     return adjacencyList.get(nodeID);
   }
 
   // Add an edge to this graph, O(1)
   public void addDirectedEdge(int from, int to, int weight) {
-    
-    System.out.println("FROM: " + from + " TO: " + to + " weight: " + weight);
+
+    // System.out.println("FROM: " + from + " TO: " + to + " weight: " + weight);
     Edge newEdge = new Edge(from, to, weight);
+    // Set <Edge> edges = adjacencyList.get(from);
     HSet <Edge> edges = adjacencyList.get(from);
 
     if (edges == null) {
+      // edges = new HashSet<>();
       edges = new HSet<>();
       adjacencyList.add( from, edges );
     }
@@ -76,6 +83,7 @@ public class GraphAdjacencyList {
 
   // Remove an edge from this Graph, O(E)
   public void removeDirectedEdge(int from, int to) {
+    // Set <Edge> edges = getEdges(from);
     HSet <Edge> edges = getEdges(from);
     if (edges != null) {
       

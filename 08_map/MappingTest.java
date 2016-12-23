@@ -86,10 +86,8 @@ public class MappingTest {
       assertTrue(map.isEmpty());
 
       List <Integer> rand_nums = genRandList(MAX_SIZE);
-      for (Integer key : rand_nums) {
-        map.add(key, key);
-        map2.put(key, key);
-      }
+      for (Integer key : rand_nums)
+        assertEquals(map.add(key, key), map2.put(key, key));
 
       int count = 0;
       for (Integer key : map) {
@@ -216,10 +214,7 @@ public class MappingTest {
         
         double r = Math.random();
 
-        if ( r < 0.5 ) {
-          map.put( nums.get(i), i );
-          map2.put( nums.get(i), i );
-        }
+        if ( r < 0.5 ) assertEquals( map.put( nums.get(i), i ), map2.put( nums.get(i), i ));
 
         assertEquals( map.containsKey(nums.get(i)), map2.containsKey(nums.get(i)) );
         assertEquals( map.size(), map2.size() );

@@ -1,14 +1,15 @@
 
 /*
-Remember that you can always turn a max heap into a min heap by inserting negated values and re-negating the values after they are removed from the heap.
+Remember that you can always turn a max heap into a min heap by inserting
+negated values and re-negating the values after they are removed from the heap.
 
-Some of this software was inspired by the works of Robert Sedgewick and Kevin Wayne
+Some of this software was inspired by the works of Robert Sedgewick and Kevin Wayne.
 
 Should we support adding null elements inside the heap? Currently no.
 
 In the future we can try making removing O(log(n)) using a Map to track
-element indexes. This makes the code a bit more messy and adds a bit more space
-but it probably worth it overall. This could be added for the fastjavadss
+element indexes. This makes the code a bit more messy and adds a bit more
+space but is probably worth it overall. This could be added for the fastjavadss.
 
 */
 
@@ -18,7 +19,7 @@ class PQueue <T extends Comparable<T>> {
   private int heap_capacity = 0;
   private java.util.List <T> heap = null;
 
-  public PQueue () {
+  public PQueue() {
     this(0);
   }
 
@@ -36,7 +37,7 @@ class PQueue <T extends Comparable<T>> {
   // Heapify
   public PQueue (java.util.List <T> elems) {
     this(elems.size());
-    for (int i = 0; i < elems.size(); i++ )
+    for (int i = 0; i < elems.size(); i++)
       add(elems.get(i));
   }
 

@@ -28,7 +28,6 @@ public class GraphAdjacencyList {
   }
 
   // Get all the edges exiting node at nodeID
-  // public Set <Edge> getEdges(int nodeID) {
   public java.util.HashSet <Edge> getEdges(int nodeID) {
     return adjacencyList.get(nodeID);
   }
@@ -59,7 +58,6 @@ public class GraphAdjacencyList {
   // Remove an edge from this Graph, O(E)
   public void removeDirectedEdge(int from, int to) {
     
-    // Set <Edge> edges = getEdges(from);
     java.util.HashSet <Edge> edges = getEdges(from);
 
     if (edges != null) {

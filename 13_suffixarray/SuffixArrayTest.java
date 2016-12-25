@@ -25,15 +25,14 @@ public class SuffixArrayTest {
     for (int i = 0; i < LOOPS; i++) {
       
       String r = randomString(randNum(1, TEST_SZ));
-      // System.out.println(r);
 
       SuffixArray sa = new SuffixArray(r);
       SuffixArrayNaive san = new SuffixArrayNaive(r);
 
-      int[] sa_arr = sa.getSuffixPositions();
+      int[] sa_arr = sa.sa; //getSuffixPositions();
       int[] san_arr = san.getSuffixPositions();
 
-      for (int k = 0; k < sa.len; k++ )
+      for (int k = 0; k < sa.N; k++ )
         assertEquals(san_arr[k], sa_arr[k]);
 
     }

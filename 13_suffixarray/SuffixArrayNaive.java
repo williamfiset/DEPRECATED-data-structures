@@ -180,5 +180,14 @@ public class SuffixArrayNaive {
 
   }
 
+  @Override public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for(int i = 0; i < len; i++) {
+      Suffix suf = suffixes[i];
+      sb.append(new String(text, suf.index, suf.len) + "\n");
+    }
+    return sb.toString();
+  }
+
 }
 

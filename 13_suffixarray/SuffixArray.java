@@ -16,50 +16,33 @@ Some things suffix trees are great for are:
 
 */
 
-class Suffix implements Comparable <Suffix> {
 
-  // Ranks used for sorting suffixes during SuffixArray creation
-  int rank1, rank2;
+class SuffixArray {
 
-  // Starting position of suffix in text
-  final int index, len;
-  final char [] text;
+  static class SuffixRank implements Comparable <SuffixRank> {
 
-  public Suffix(char [] text, int index) {
+    int firstHalf, secondHalf, originalIndex;
 
-    if (index >= text.length) throw new IllegalArgumentException();
-    this.len = text.length - index;
-    this.index = index;
-    this.text = text;
-    
-    rank1 = text[index];
-    rank2 = (index+1 < text.length) ? text[index+1] : -1;
+    // Sort Suffix ranks first on the first half then the second half
+    @Override public int compareTo(SuffixRank other) {
+      int cmp = Integer.compare(firstHalf, other.firstHalf);
+      if (cmp == 0) return Integer.compare(secondHalf, other.secondHalf);
+      return cmp;
+    }
 
   }
 
-  @Override public int compareTo(Suffix other) {
-    int cmp = Integer.compare(rank1, other.rank1);
-    if (cmp == 0) return Integer.compare(rank2, other.rank2);
-    return cmp;
-  }
+  // Size of the suffix array
+  int N; 
 
-  @Override public String toString() {
-    return new String(text, index, len);
-  }
+  // T is the text
+  char[] T;
 
-}
+  // Suffix array
+  int[] sa;
 
-public class SuffixArray {
-
-  int len;
-  char[] text;
-
-  // Contains all the suffixes of the SuffixArray
-  Suffix[] suffixes;
-
-  // Contains Longest Common Prefix (LCP) count between adjacent suffixes.
-  // LCP[i] = longestCommonPrefixLength( suffixes[i], suffixes[i+1] ). Also, LCP[len-1] = 0
-  int LCP [];
+  // Longest common prefix array
+  int [] lcp;
 
   public SuffixArray(String text) {
     this(text == null ? null : text.toCharArray());
@@ -67,69 +50,67 @@ public class SuffixArray {
 
   public SuffixArray(char[] text) {
     if (text == null) throw new IllegalArgumentException();
-    this.text = text; len = text.length;
-    suffixes = new Suffix[len];
-    for (int i = 0; i < len; i++)
-      suffixes[i] = new Suffix(text, i);
+    T = text; N = text.length;
     constructSuffixArray();
     kasai();
   }
 
-  // Inspired by implementation of:
-  // http://www.geeksforgeeks.org/suffix-array-set-2-a-nlognlogn-algorithm/
-  // Runs in O(nlog(n)log(n)). Although the theoretical complexity can be reduced 
-  // to O(nlog(n)) with Radix sort some say this made the algorithm slower in practice.
-  // 
-  // NOTE: This code can probably be simplified a lot..
-  //
-  private void constructSuffixArray() {
+  // Complements of
+  // https://www.hackerrank.com/challenges/string-similarity/topics/suffix-array
+  public void constructSuffixArray() {
 
-    // Tracks the position of the shuffled suffixes 
-    // in their partially sorted state.
-    int [] suffix_pos = new int[len];
+    sa = new int[N];
 
-    // Initially sort the suffixes by their first two characters
-    java.util.Arrays.sort(suffixes);
+    // Maintain suffix ranks in both a matrix with two rows containing the
+    // current and last rank information as well as some sortable rank objects
+    int [][] suffixRanks = new int[2][N];
+    SuffixRank[] ranks = new SuffixRank[N];
+
+    // Assign a numerical value to each character
+    for (int i = 0; i < N; i++) {
+      suffixRanks[0][i] = (T[i] - ' ');
+      ranks[i] = new SuffixRank();
+    }
 
     // O(logn)
-    for(int pos = 2; pos < len; pos *= 2) {
+    for(int pos = 1; pos < N; pos *= 2) {
 
-      Suffix firstSuffix = suffixes[0];
-      int prev_rank = firstSuffix.rank1;
-      int new_rank = suffix_pos[firstSuffix.index] = firstSuffix.rank1 = 0;
+      for(int i = 0; i < N; i++) {
+        SuffixRank suffixRank = ranks[i];
+        suffixRank.firstHalf  = suffixRanks[0][i];
+        suffixRank.secondHalf = i+pos < N ? suffixRanks[0][i+pos] : -1;
+        suffixRank.originalIndex = i;
+      }
+      
+      java.util.Arrays.sort(ranks);
 
-      // Update rank1
-      for (int i = 1; i < len; i++) {
+      suffixRanks[1][ranks[0].originalIndex] = 0;
+      for (int i = 1, newRank = 0; i < N; i++ ) {
+        
+        SuffixRank lastSuffixRank = ranks[i-1];
+        SuffixRank currSuffixRank = ranks[i];
 
-        Suffix suffix = suffixes[i];
-        Suffix prev_suffix = suffixes[i-1];
-        suffix_pos[ suffix.index ] = i;
+        if (currSuffixRank.firstHalf  != lastSuffixRank.firstHalf ||
+            currSuffixRank.secondHalf != lastSuffixRank.secondHalf)
+          newRank++;
 
-        if ( (suffix.rank1 == prev_rank) &&
-             (suffix.rank2 == prev_suffix.rank2) ) {
-          prev_rank = suffix.rank1;
-          suffix.rank1 = new_rank;
-        } else {
-          prev_rank = suffix.rank1;
-          suffix.rank1 = ++new_rank;
-        }
+        suffixRanks[1][currSuffixRank.originalIndex] = newRank;
 
       }
 
-      // Update rank2
-      for (int i = 0; i < len; i++) {
-        Suffix suffix = suffixes[i];
-        int nextIndex = suffix.index + pos;
-        if (nextIndex < len) {
-          Suffix nextSuffix = suffixes[suffix_pos[nextIndex]];
-          suffix.rank2 = nextSuffix.rank1;
-        } else suffix.rank2 = -1;
-      }
-
-      // O(nlogn)
-      java.util.Arrays.sort(suffixes);
+      // Place top row (current row) to be the last row
+      suffixRanks[0] = suffixRanks[1];
 
     }
+
+    for (int i = 0; i < N; i++) {
+      sa[i] = ranks[i].originalIndex;
+      ranks[i] = null;
+    }
+
+    suffixRanks[0] = suffixRanks[1] = null;
+    suffixRanks = null;
+    ranks = null;
 
   }
 
@@ -137,39 +118,32 @@ public class SuffixArray {
   // http://www.mi.fu-berlin.de/wiki/pub/ABI/RnaSeqP4/suffix-array.pdf
   private void kasai() {
 
-    LCP = new int[len];
+    lcp = new int[N];
     
     // Compute inverse index values
-    int [] inv = new int[len];
-    for (int i = 0; i < len; i++)
-      inv[suffixes[i].index] = i;
+    int [] inv = new int[N];
+    for (int i = 0; i < N; i++)
+      inv[sa[i]] = i;
     
-    int lcp_len = 0;
+    // Current lcp length
+    int len = 0;
 
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < N; i++) {
       if (inv[i] > 0) {
 
         // Get the index of where the suffix below is
-        int k = suffixes[inv[i] - 1].index;
+        int k = sa[inv[i]-1];
 
         // Compute lcp length. For most loops this is O(1)
-        while( (i + lcp_len < len) && (k + lcp_len < len) &&
-               text[i+lcp_len] == text[k+lcp_len] )
-          lcp_len++;
+        while( (i + len < N) && (k + len < N) && T[i+len] == T[k+len] )
+          len++;
 
-        LCP[inv[i]-1] = lcp_len;
-        if (lcp_len > 0) lcp_len--;
+        lcp[inv[i]-1] = len;
+        if (len > 0) len--;
 
       }
     }
 
-  }
-
-  public int[] getSuffixPositions() {
-    int [] ar = new int[len];
-    for (int i = 0; i < len; i++)
-      ar[i] = suffixes[i].index;
-    return ar;
   }
 
   // Runs on O(mlog(n)) where m is the length of the substring
@@ -181,24 +155,25 @@ public class SuffixArray {
     if (substr == null) return false;
 
     String suffix_str;
-    int lo = 0, hi = len - 1;
+    int lo = 0, hi = N - 1;
     int substr_len = substr.length();
 
     while( lo <= hi ) {
 
       int mid = (lo + hi) / 2;
-      Suffix suffix = suffixes[mid];
+      int suffix_index = sa[mid];
+      int suffix_len = N - suffix_index;
 
       // Extract part of the suffix we need to compare
-      if (suffix.len <= substr_len) suffix_str = suffix.toString();
-      else suffix_str = new String(text, suffix.index, substr_len);
+      if (suffix_len <= substr_len) suffix_str = new String(T, suffix_index, suffix_len);
+      else suffix_str = new String(T, suffix_index, substr_len);
        
       int cmp = suffix_str.compareTo(substr);
 
       // Found a match
       if ( cmp == 0 ) {
-        // To find the first occurrence linear scan down
-        // or keep doing binary search
+        // To find the first occurrence linear scan up/down
+        // from here or keep doing binary search
         return true;
       
       // Substring is found above
@@ -221,17 +196,17 @@ public class SuffixArray {
   // least twice, so this method returns null if this is the case.
   public String lrs() {
 
+    int index = 0;
     int max_len = 0;
-    Suffix suffix = null;
 
-    for (int i = 0; i < len; i++) {
-      if (LCP[i] > max_len) {
-        max_len = LCP[i];
-        suffix = suffixes[i];
+    for (int i = 0; i < N; i++) {
+      if (lcp[i] > max_len) {
+        max_len = lcp[i];
+        index = sa[i];
       }
     }
 
-    return suffix == null ? null : suffix.toString().substring(0, max_len);
+    return max_len <= 1 ? null : new String(T, index, max_len);
 
   }
 
@@ -241,35 +216,40 @@ public class SuffixArray {
     
     int longestLen = 0, index = -1;
     int L1 = s1.length(), L2 = s2.length();
-    SuffixArray sa = new SuffixArray(s1+separator+s2);
+    SuffixArray suffix_array = new SuffixArray(s1+separator+s2);
+    int n = L1 + L2 + 1;
 
-    for (int i = 1; i < sa.len; i++) {
+    for (int i = 1; i < n; i++) {
       
-      Suffix suffix1 = sa.suffixes[i-1];
-      Suffix suffix2 = sa.suffixes[i];
+      int suffix1_len = n - suffix_array.sa[i-1];
+      int suffix2_len = n - suffix_array.sa[i];
 
       // Make sure the two adjacent suffixes are from the two different strings s1 & s2
       // Update the location of the lcs if a better one is found
-      if ( (suffix1.len) >= L2 || (suffix2.len) >= L2 ||
-           (suffix1.len) <= L2 || (suffix2.len) <= L2 ) {
-        int lcp_length = sa.LCP[i-1];
+      if ( (suffix1_len) >= L2 || (suffix2_len) >= L2 ||
+           (suffix1_len) <= L2 || (suffix2_len) <= L2 ) {
+        int lcp_length = suffix_array.lcp[i-1];
         if (lcp_length > longestLen) {
           longestLen = lcp_length;
-          index = suffix1.index;
+          index = suffix_array.sa[i-1];
         }
       }
 
     }
 
     if (index == -1) return null;
-    return new String(sa.text, index, longestLen);
+    return new String(suffix_array.T, index, longestLen);
 
   }
 
   @Override public String toString() {
     StringBuilder sb = new StringBuilder();
-    for (Suffix suffix : suffixes)
-      sb.append( suffix.toString() + "\n");
+    sb.append( java.util.Arrays.toString(sa) + "\n" );
+    for(int i = 0; i < N; i++) {
+      int index  = sa[i];
+      int length = N - index;
+      sb.append(new String(T, index, length) + "\n");
+    }
     return sb.toString();
   }
 

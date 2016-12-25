@@ -19,6 +19,7 @@ public class SuffixArrayTest {
   @Before
   public void setup() { }
 
+  /*
   @Test
   public void testContruction() {
 
@@ -38,7 +39,30 @@ public class SuffixArrayTest {
     }
 
   }
+  */
 
+  @Test 
+  public void containsSubstring() {
+
+    String s = "abcdef";
+    SuffixArray sa = new SuffixArray(s);
+    
+    assertTrue( sa.contains("") );
+    for (int i = 0; i < s.length(); i++ ) {
+      for (int j = i+1; j <= s.length(); j++ ) {
+        String substr = s.substring(i, j);
+        assertTrue(sa.contains(substr));
+      }
+    }
+
+    assertFalse( sa.contains("abce") );
+    assertFalse( sa.contains("efg") );
+    assertFalse( sa.contains("aaa") );
+    assertFalse( sa.contains("y") );
+
+  }
+
+  /*
   @Test
   public void testRandomizedContains() {
 
@@ -51,14 +75,14 @@ public class SuffixArrayTest {
         int e = randNum(s, r.length()-1);
         if (s == e) continue;
         String substr = r.substring(s,e);
-        SuffixArrayNaive sa = new SuffixArrayNaive( r );
+        SuffixArray sa = new SuffixArray( r );
         assertTrue(sa.contains(substr));
 
       }
 
     }
 
-  }
+  }*/
 
   @Test
   public void testLCS() {

@@ -19,6 +19,7 @@ Some things suffix trees are great for are:
 
 class SuffixArray {
 
+  // Helper class which sorts suffix ranks
   static class SuffixRank implements Comparable <SuffixRank> {
 
     int firstHalf, secondHalf, originalIndex;
@@ -38,10 +39,12 @@ class SuffixArray {
   // T is the text
   char[] T;
 
-  // Suffix array
+  // Suffix array. Contains the indexes of sorted suffixes.
   int[] sa;
 
-  // Longest common prefix array
+  // Contains Longest Common Prefix (LCP) count between adjacent suffixes.
+  // lcp[i] = longestCommonPrefixLength( suffixes[i], suffixes[i+1] ).
+  // Also, LCP[len-1] = 0
   int [] lcp;
 
   public SuffixArray(String text) {
@@ -66,9 +69,9 @@ class SuffixArray {
     int [][] suffixRanks = new int[2][N];
     SuffixRank[] ranks = new SuffixRank[N];
 
-    // Assign a numerical value to each character
+    // Assign a numerical value to each character in the text
     for (int i = 0; i < N; i++) {
-      suffixRanks[0][i] = (T[i] - ' ');
+      suffixRanks[0][i] = T[i];
       ranks[i] = new SuffixRank();
     }
 
@@ -82,6 +85,7 @@ class SuffixArray {
         suffixRank.originalIndex = i;
       }
       
+      // O(nlogn)
       java.util.Arrays.sort(ranks);
 
       suffixRanks[1][ranks[0].originalIndex] = 0;
@@ -103,11 +107,13 @@ class SuffixArray {
 
     }
 
+    // Fill suffix array
     for (int i = 0; i < N; i++) {
       sa[i] = ranks[i].originalIndex;
       ranks[i] = null;
     }
 
+    // Cleanup
     suffixRanks[0] = suffixRanks[1] = null;
     suffixRanks = null;
     ranks = null;
@@ -153,6 +159,7 @@ class SuffixArray {
   public boolean contains(String substr) {
 
     if (substr == null) return false;
+    if (substr.equals("")) return true;
 
     String suffix_str;
     int lo = 0, hi = N - 1;

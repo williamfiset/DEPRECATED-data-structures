@@ -198,22 +198,29 @@ class SuffixArray {
 
   }
 
-  // Finds the LRS (Longest Repeated Substring) that occurs in a string.
-  // Traditionally we are only interested in sub strings that appear at
-  // least twice, so this method returns null if this is the case.
-  public String lrs() {
+  // Finds the LRS(s) (Longest Repeated Substring) that occurs in a string.
+  // Traditionally we are only interested in substrings that appear at
+  // least twice, so this method returns an empty set if this is the case.
+  public java.util.Set <String> lrs() {
 
-    int index = 0;
     int max_len = 0;
+    java.util.Set <String> lrss = new java.util.TreeSet<>();
 
     for (int i = 0; i < N; i++) {
-      if (lcp[i] > max_len) {
+      if (lcp[i] > 0 && lcp[i] >= max_len) {
+        
+        // We found a longer LRS
+        if ( lcp[i] > max_len )
+          lrss.clear();
+        
+        // Append substring to the list and update max
         max_len = lcp[i];
-        index = sa[i];
+        lrss.add( new String(T, sa[i], max_len) );
+
       }
     }
 
-    return max_len <= 1 ? null : new String(T, index, max_len);
+    return lrss;
 
   }
 

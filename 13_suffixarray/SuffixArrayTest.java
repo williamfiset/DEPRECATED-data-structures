@@ -5,6 +5,9 @@ import java.security.SecureRandom;
 import java.math.BigInteger;
 import java.util.Random;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class SuffixArrayTest {
 
@@ -59,6 +62,79 @@ public class SuffixArrayTest {
     assertFalse( sa.contains("efg") );
     assertFalse( sa.contains("aaa") );
     assertFalse( sa.contains("y") );
+
+  }
+
+  @Test
+  public void testLRS() {
+
+    List <String> list = new ArrayList<>();
+
+    String s = "aabaab";
+    SuffixArray sa = new SuffixArray(s);
+    Set <String> lrss = sa.lrs();
+    list.addAll(lrss);
+    assertEquals(1, lrss.size());
+    assertEquals("aab", list.get(0));
+    System.out.println( lrss );
+    list.clear();
+
+    s = "abcdefg";
+    sa = new SuffixArray(s);
+    lrss = sa.lrs();    
+    list.addAll(lrss);
+    assertEquals(0, list.size());
+    System.out.println( lrss );
+    list.clear();
+
+    s = "abca";
+    sa = new SuffixArray(s);
+    lrss = sa.lrs();
+    list.addAll(lrss);
+    assertEquals(1, lrss.size());
+    assertEquals("a", list.get(0));
+    System.out.println( lrss );
+    list.clear();
+
+    s = "abcba";
+    sa = new SuffixArray(s);
+    lrss = sa.lrs();
+    list.addAll(lrss);
+    assertEquals(2, lrss.size() );
+    assertEquals("a", list.get(0));
+    assertEquals("b", list.get(1));
+    System.out.println( lrss );
+    list.clear();
+
+
+    s = "aZZbZZcYYdYYe";
+    sa = new SuffixArray(s);
+    lrss = sa.lrs();
+    list.addAll(lrss);
+    assertEquals(2, lrss.size() );
+    assertEquals("YY", list.get(0));
+    assertEquals("ZZ", list.get(1));
+    System.out.println( lrss );
+    list.clear();
+
+    s = "AAAAAA";
+    sa = new SuffixArray(s);
+    lrss = sa.lrs();
+    list.addAll(lrss);
+    assertEquals(1, lrss.size() );
+    assertEquals("AAAAA", list.get(0));
+    System.out.println( lrss );
+    list.clear();
+
+    s = "aWXYZsdfABCDbvABCDsWXYZyWXYZjisdssd";
+    sa = new SuffixArray(s);
+    lrss = sa.lrs();
+    list.addAll(lrss);
+    assertEquals(2, lrss.size() );
+    assertEquals("ABCD", list.get(0));
+    assertEquals("WXYZ", list.get(1));
+    System.out.println( lrss );
+    list.clear();
 
   }
 

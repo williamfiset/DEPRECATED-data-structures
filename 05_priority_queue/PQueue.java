@@ -38,7 +38,7 @@ class PQueue <T extends Comparable<T>> {
 
     heap_size = elems.length;
     heap_capacity = heap_size+1;
-    heap = new java.util.ArrayList<>( (heap_capacity+600)*50);
+    heap = new java.util.ArrayList<>( heap_capacity);
     
     // Place all element in heap
     for(int i = 0; i < heap_size; i++)

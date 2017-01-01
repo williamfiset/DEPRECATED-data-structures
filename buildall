@@ -1,5 +1,5 @@
 #!/bin/sh
 
 java_files="$(find . -name '*.java')"
-javac -Xlint -cp .:junit-4.12.jar:bin -d bin $java_files
+javac -Xlint -cp .:junit-4.12.jar $java_files
 

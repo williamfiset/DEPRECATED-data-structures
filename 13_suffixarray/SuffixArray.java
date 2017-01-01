@@ -201,10 +201,11 @@ class SuffixArray {
   // Finds the LRS(s) (Longest Repeated Substring) that occurs in a string.
   // Traditionally we are only interested in substrings that appear at
   // least twice, so this method returns an empty set if this is the case.
-  public java.util.Set <String> lrs() {
+  // @return an ordered set of longest repeated substrings
+  public java.util.TreeSet <String> lrs() {
 
     int max_len = 0;
-    java.util.Set <String> lrss = new java.util.TreeSet<>();
+    java.util.TreeSet <String> lrss = new java.util.TreeSet<>();
 
     for (int i = 0; i < N; i++) {
       if (lcp[i] > 0 && lcp[i] >= max_len) {
@@ -224,8 +225,100 @@ class SuffixArray {
 
   }
 
+  // Complexity? Bounded by suffix array construction?
+  public static java.util.TreeSet <String> lcs(String [] strs, char separator) {
+
+    int L = 0;
+    int N = strs.length; // Not to be confused with suffix_array.N
+
+    // Compute the total length of the combined string including separator
+    for (int i = 0; i < N; i++ ) L += strs[i].length() + 1;
+
+    // Will be used to identify which string a suffix belongs to based on its length
+    int[] suffix_map = new int[L];
+
+    // Builder to construct the combined string
+    StringBuilder sb = new StringBuilder(L);
+
+    for(int i = 0, last_length = 0; i < N; i++) {
+
+      sb.append(strs[i]);
+      sb.append(separator);
+
+      int suffix_len = sb.length();
+
+      // Record that all suffixes of lengths between 'last_length' (inclusive) 
+      // and 'suffix_len' (noninclusive) belong to the string at index i
+      for (int j = last_length; j < suffix_len; j++ )
+        suffix_map[j] = i;
+
+      // update last length for the next suffix
+      last_length = suffix_len;
+
+    }
+
+    int max_len = 0;
+    SuffixArray suffix_array = new SuffixArray(sb.toString());
+    java.util.TreeSet <String> lcss = new java.util.TreeSet<>();
+    java.util.Set <Integer> unique_suffixes = new java.util.HashSet<>( 2*N );
+
+    System.out.println(suffix_array);
+    System.out.println( java.util.Arrays.toString(suffix_array.lcp) );
+
+    for (int i = 0; i < L; ) {
+      
+      // Search for the longest contiguous chunk in the lcp array
+      // containing at least N-1 pieces.
+      // Q: do contiguous chunks of N-1 pieces come from different
+      // suffixes necessarily ?
+      // A: No
+
+      unique_suffixes.clear();
+      unique_suffixes.add(suffix_map[suffix_array.sa[i]]);
+      int lcp_val = suffix_array.lcp[i];
+      System.out.println(lcp_val + " i=" + i );
+
+      int j = i+1;
+      for( ; j < L; j++) {
+        int lcp = suffix_array.lcp[ j ];
+        // System.out.println(lcp_val + " " + lcp);
+        if (lcp == lcp_val)
+          unique_suffixes.add(suffix_map[suffix_array.sa[j]]);
+        else break;
+      }
+
+      System.out.println( "unique_suffixes: " + unique_suffixes );
+
+      // Make sure unique_suffixes contains N-1 items
+      // This means all the suffixes came from all N strings
+      if ( lcp_val >= max_len && unique_suffixes.size() == N) {
+
+        System.out.println( i + " " + lcp_val + " " + max_len );
+
+        // Found a longer common substring
+        if ( lcp_val > max_len ) {
+          max_len = lcp_val;
+          lcss.clear();
+        }
+
+        // Append common substring to the set of longest common substrings
+        String common_substring = new String( suffix_array.T, i, lcp_val );
+        lcss.add(common_substring);
+
+      }
+      // Make sure sb.charAt[i] != separator
+
+      i = j;
+
+    }
+
+    return lcss;
+
+  }
+
   // Find the Longest Common Substring (LCS) between two strings (generalizes to more strings if needed)
   // NOTE: Make sure the separator is a unique character that is not found in s1 or s2
+  /*
   public static String lcs(String s1, String s2, char separator) {
     
     int longestLen = 0, index = -1;
@@ -255,16 +348,22 @@ class SuffixArray {
     return new String(suffix_array.T, index, longestLen);
 
   }
+  */
 
   @Override public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append( java.util.Arrays.toString(sa) + "\n" );
     for(int i = 0; i < N; i++) {
       int index  = sa[i];
       int length = N - index;
-      sb.append(new String(T, index, length) + "\n");
+      sb.append( index + " " + new String(T, index, length) + "\n");
     }
     return sb.toString();
+  }
+
+  public static void main(String[] args) {
+    String[] strs = {"aMMMb", "cMMMdMMM", "BeZfM"};
+    char sep = '#';
+    System.out.println( SuffixArray.lcs(strs, sep) );
   }
 
 }

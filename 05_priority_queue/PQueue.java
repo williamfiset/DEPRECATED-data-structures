@@ -27,18 +27,37 @@ class PQueue <T extends Comparable<T>> {
     heap = new java.util.ArrayList<>(sz);
   }
 
-  // Heapify 
+  // NOTE: You're doing Heapify wrong!
+  // Heapify is O(n) a great explanation can be found at:
+  // http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf
   public PQueue (T[] elems) {
-    this(elems.length);
-    for (int i = 0; i < elems.length; i++ )
-      add(elems[i]);
+    
+    // this(elems.length);
+    // for( T elem : elems) add(elem);
+
+    heap_size = elems.length;
+    heap_capacity = heap_size+1;
+    heap = new java.util.ArrayList<>( (heap_capacity+600)*50);
+    
+    // Place all element in heap
+    for(int i = 0; i < heap_size; i++)
+      heap.add(elems[i]);
+
+    System.out.println("HZ: " + heap_size);
+
+    // This is actually linear
+    for (int i = (heap_size/2)-1; i >= 0; i-- ) {
+      // System.out.println(i);
+      sink(i);
+    }
+    heap_size++;
+
   }
 
-  // Heapify
-  public PQueue (java.util.List <T> elems) {
+  // O(nlogn)
+  public PQueue (java.util.Collection <T> elems) {
     this(elems.size());
-    for (int i = 0; i < elems.size(); i++)
-      add(elems.get(i));
+    for( T elem : elems) add(elem);
   }
 
   public boolean isEmpty() {
@@ -119,6 +138,7 @@ class PQueue <T extends Comparable<T>> {
       heap.add(elem);
       heap_capacity++;
     }
+    // System.out.println( heap_size + " " + heap_capacity );
     swim(heap_size); 
     heap_size++;
   }
@@ -167,6 +187,7 @@ class PQueue <T extends Comparable<T>> {
 
   // Recursively checks if this heap is a min heap
   // This method is just for testing purposes 
+  // Called this method with k=0 to start at the root
   public boolean isMinHeap(int k) {
     if (k >= heap_size) return true;
     int left  = 2 * k + 1;

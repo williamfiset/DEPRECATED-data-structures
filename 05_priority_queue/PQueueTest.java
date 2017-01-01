@@ -5,7 +5,8 @@ import java.util.*;
 public class PQueueTest {
 
   static final int LOOPS = 500;
-  
+  static final int MAX_SZ = 250;
+
   @Before
   public void setup() { }
 
@@ -38,6 +39,23 @@ public class PQueueTest {
 
   }
 
+  @Test
+  public void testHeapify() {
+
+    for (int i = 1 ; i < LOOPS; i++) {
+      
+      Integer[] lst = genRandArray(i);
+      PQueue <Integer> pq = new PQueue<>(lst);
+      PriorityQueue <Integer> pq2 = new PriorityQueue<>(i);
+      for(int x : lst) pq2.add(x);
+      assertTrue( pq.isMinHeap(0) );
+      while(!pq2.isEmpty()) {
+        assertEquals( pq.poll(), pq2.poll() );
+      }
+
+    }
+
+  }
 
   @Test
   public void testClear() {
@@ -221,11 +239,18 @@ public class PQueueTest {
 
   }
 
+  static Integer[] genRandArray(int sz) {
+    Integer [] lst = new Integer[sz];
+    for (int i = 0; i < sz; i++)
+      lst[i] = (int) (Math.random()*MAX_SZ);
+    return lst;
+  }
+
   // Generate a list of random numbers
   static List <Integer> genRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++)
-      lst.add( (int) (Math.random()*250) );
+      lst.add( (int) (Math.random()*MAX_SZ) );
     return lst;
   }
 

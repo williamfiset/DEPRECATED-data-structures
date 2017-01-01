@@ -30,6 +30,7 @@ class PQueue <T extends Comparable<T>> {
   // NOTE: You're doing Heapify wrong!
   // Heapify is O(n) a great explanation can be found at:
   // http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf
+  // https://en.wikipedia.org/wiki/Binary_heap#Building_a_heap
   public PQueue (T[] elems) {
     
     // this(elems.length);

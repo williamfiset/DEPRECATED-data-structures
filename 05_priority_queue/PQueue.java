@@ -32,26 +32,19 @@ class PQueue <T extends Comparable<T>> {
   // http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf
   // https://en.wikipedia.org/wiki/Binary_heap#Building_a_heap
   public PQueue (T[] elems) {
-    
-    // this(elems.length);
-    // for( T elem : elems) add(elem);
 
-    heap_size = elems.length;
-    heap_capacity = heap_size+1;
-    heap = new java.util.ArrayList<>( (heap_capacity+600)*50);
+    heap_size = heap_capacity = elems.length;
+    heap = new java.util.ArrayList<T>( heap_capacity );
     
     // Place all element in heap
     for(int i = 0; i < heap_size; i++)
       heap.add(elems[i]);
 
-    System.out.println("HZ: " + heap_size);
+    // System.out.println(toString());
 
     // This is actually linear
-    for (int i = (heap_size/2)-1; i >= 0; i-- ) {
-      // System.out.println(i);
+    for (int i = Math.max(0, (heap_size/2)-1); i >= 0; i-- )
       sink(i);
-    }
-    heap_size++;
 
   }
 
@@ -66,7 +59,7 @@ class PQueue <T extends Comparable<T>> {
   }
 
   public void clear() {
-    for (int i = 0; i < heap_size; i++)
+    for (int i = 0; i < heap_capacity; i++)
       heap.set(i, null);
     heap_size = 0;
   }
@@ -121,8 +114,6 @@ class PQueue <T extends Comparable<T>> {
   } 
 
   // O(n) linear scan to test if element is in heap
-  // You can optionally use a Map<T, List<Integer>> if element is hashable
-  // to test if the element is in the heap
   public boolean contains(T elem) {
     if (elem == null) return false;
     for(int i = 0; i < heap_size; i++)
@@ -131,17 +122,22 @@ class PQueue <T extends Comparable<T>> {
     return false;
   }
 
+  // Adds an element to the priority queue, the element
+  // must not be null. Takes O(log(n)) time
   public void add(T elem) {
-    if (elem == null) throw new NullPointerException();
+    
+    if (elem == null) throw new IllegalArgumentException();
+
     if (heap_size < heap_capacity) {
       heap.set(heap_size, elem);
     } else {
       heap.add(elem);
       heap_capacity++;
     }
-    // System.out.println( heap_size + " " + heap_capacity );
+
     swim(heap_size); 
     heap_size++;
+
   }
 
   // Swap two nodes. Assumes i & j are valid
@@ -152,38 +148,59 @@ class PQueue <T extends Comparable<T>> {
     heap.set(j, i_elem);
   }
 
-  // Test if node i <= node j. Assumes i & j are valid
+  // Tests if node i <= node j. Assumes i & j are valid
   private boolean less(int i, int j) {
 
-    T child1 = heap.get(i);
-    T child2 = heap.get(j);
-
-    if (child1 == null || child2 == null) return false;
-    return child1.compareTo(child2) <= 0;
+    T node1 = heap.get(i);
+    T node2 = heap.get(j);
+    return node1.compareTo(node2) <= 0;
     
   }
 
-  // Bottom up re-heapify 
+  // Bottom up node swim
   private void swim(int k) {
+    
+    // Grab the index of the next parent node WRT to k
     int parent = (k-1) / 2;
+
+    // Keep swimming while we have not reached the
+    // root and while we're less than our parent.
     while(k > 0 && less(k, parent)) {
+
+      // Exchange k with the parent
       swap( parent, k);
       k = parent;
+
+      // Grab the index of the next parent node WRT to k
       parent = (k-1) / 2;
+
     }
   }
 
-  // Top down re-heapify
+  // Top down node sink
   private void sink(int k) {
-    while ( 2*k < heap_size ) {
-      int i = 2 * k + 1;
-      int j = 2 * k + 2;
-      // Find which is smaller i or j
-      if ( j < heap_size && less(j, i) ) i++;
-      if (!less(i, k)) break;
-      swap(i, k);
-      k = i;
+
+    while ( true ) {
+      
+      int left  = 2 * k + 1; // Left  node
+      int right = 2 * k + 2; // Right node
+      int smallest = left;   // Assume left is the smallest node of the two children
+
+      // Find which is smaller left or right
+      // If right is smaller set smallest to be right
+      if ( right < heap_size && less(right, left) )
+        smallest = right;
+
+      // Stop if we're outside the bounds of the tree
+      // or stop early if we cannot sink k anymore
+      if ( left >= heap_size || less(k, smallest)) break;
+      
+      // Move down the tree following the smallest node
+      swap(smallest, k);
+      k = smallest;
+
     }
+
   }
 
   // Recursively checks if this heap is a min heap

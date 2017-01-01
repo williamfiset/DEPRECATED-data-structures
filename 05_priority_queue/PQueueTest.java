@@ -4,8 +4,8 @@ import java.util.*;
 
 public class PQueueTest {
 
-  static final int LOOPS = 500;
-  static final int MAX_SZ = 250;
+  static final int LOOPS = 1000;
+  static final int MAX_SZ = 50;
 
   @Before
   public void setup() { }
@@ -46,8 +46,10 @@ public class PQueueTest {
       
       Integer[] lst = genRandArray(i);
       PQueue <Integer> pq = new PQueue<>(lst);
+
       PriorityQueue <Integer> pq2 = new PriorityQueue<>(i);
       for(int x : lst) pq2.add(x);
+
       assertTrue( pq.isMinHeap(0) );
       while(!pq2.isEmpty()) {
         assertEquals( pq.poll(), pq2.poll() );
@@ -56,7 +58,8 @@ public class PQueueTest {
     }
 
   }
-
+  
+  
   @Test
   public void testClear() {
 
@@ -76,14 +79,16 @@ public class PQueueTest {
     PQueue <Integer> pq = new PQueue<>(in);
     PriorityQueue <Integer> PQ = new PriorityQueue<>();
     for (int value : in) PQ.offer(value);
+    
+    assertTrue(pq.isMinHeap(0));
+    System.out.println();
 
     for (int i = 0; i < removeOrder.length; i++) {
       
       int elem = removeOrder[i];
 
       assertTrue(pq.peek() == PQ.peek());
-      pq.remove(elem);
-      PQ.remove(elem);
+      assertEquals( pq.remove(elem), PQ.remove(elem));
       assertTrue(pq.size() == PQ.size());
       assertTrue(pq.isMinHeap(0));
 

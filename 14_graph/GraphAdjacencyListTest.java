@@ -49,7 +49,7 @@ public class GraphAdjacencyListTest {
     Edge edge12 = new Edge(1,2,-8);
     Edge edge35 = new Edge(3,5,4);
 
-    HSet <Edge> set = new HSet<>();
+    java.util.Set <Edge> set = new java.util.HashSet<>();
     set.add(edge00);
     set.add(edge12);
     set.add(edge35);

@@ -5,7 +5,7 @@ import java.util.*;
 public class PQueueTest {
 
   static final int LOOPS = 1000;
-  static final int MAX_SZ = 50;
+  static final int MAX_SZ = 100;
 
   @Before
   public void setup() { }
@@ -72,6 +72,51 @@ public class PQueueTest {
 
   }
 
+  @Test
+  public void testContainment() {
+
+    String[] strs = {"aa", "bb", "cc", "dd", "ee"};    
+    PQueue <String> q = new PQueue<>(strs);
+    q.remove("aa");
+    assertFalse(q.contains("aa"));
+    q.remove("bb");
+    assertFalse(q.contains("bb"));
+    q.remove("cc");
+    assertFalse(q.contains("cc"));
+    q.remove("dd");
+    assertFalse(q.contains("dd"));
+    q.clear();
+    assertFalse(q.contains("ee"));
+
+
+  }
+
+  @Test
+  public void testContainmentRandomized() {
+
+    for (int i = 0; i < LOOPS; i++) {
+      
+      List <Integer> randNums = genRandList(100);
+      PriorityQueue <Integer> PQ = new PriorityQueue<>();
+      PQueue <Integer> pq = new PQueue<>();
+      for (int j = 0; j < randNums.size(); j++) {
+        pq.add(randNums.get(j));
+        PQ.add(randNums.get(j));
+      }
+
+      for (int j = 0; j < randNums.size(); j++) {
+        
+        int randVal = randNums.get(j);
+        assertEquals( pq.contains(randVal), PQ.contains(randVal) );
+        pq.remove(randVal); PQ.remove(randVal);
+        assertEquals( pq.contains(randVal), PQ.contains(randVal) );
+
+      }
+
+    }
+
+  }
+
   public void sequentialRemoving(Integer[] in, Integer[] removeOrder) {
 
     assertEquals(in.length, removeOrder.length);
@@ -81,7 +126,6 @@ public class PQueueTest {
     for (int value : in) PQ.offer(value);
     
     assertTrue(pq.isMinHeap(0));
-    System.out.println();
 
     for (int i = 0; i < removeOrder.length; i++) {
       
@@ -124,6 +168,26 @@ public class PQueueTest {
   }
 
   @Test
+  public void testRemovingDuplicates() {
+
+    Integer[] in = new Integer[] {2,7,2,11,7,13,2};
+    PQueue <Integer> pq = new PQueue<>(in);
+
+    assertTrue(pq.peek()==2);
+    pq.add(3);
+
+    assertTrue(pq.poll() == 2);
+    assertTrue(pq.poll() == 2);
+    assertTrue(pq.poll() == 2);
+    assertTrue(pq.poll() == 3);
+    assertTrue(pq.poll() == 7);
+    assertTrue(pq.poll() == 7);
+    assertTrue(pq.poll() == 11);
+    assertTrue(pq.poll() == 13);
+
+  }
+
+  @Test
   public void testRandomizedPolling() {
 
     for (int i = 0; i < LOOPS; i++) {
@@ -144,10 +208,12 @@ public class PQueueTest {
         assertTrue(pq2.isMinHeap(0));
         assertEquals( pq1.size(), pq2.size() );
         assertEquals( pq1.peek(), pq2.peek() );
+        assertEquals( pq1.contains(pq1.peek()), pq2.contains(pq2.peek()) );
         
-        pq1.poll();
-        pq2.poll();
+        Integer v1 = pq1.poll();
+        Integer v2 = pq2.poll();
         
+        assertEquals(v1, v2);
         assertEquals( pq1.peek(), pq2.peek() );
         assertEquals( pq1.size(), pq2.size() );
         assertTrue(pq2.isMinHeap(0));

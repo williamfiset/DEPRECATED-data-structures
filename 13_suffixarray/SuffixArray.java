@@ -361,9 +361,14 @@ class SuffixArray {
   }
 
   public static void main(String[] args) {
-    String[] strs = {"aMMMb", "cMMMdMMM", "BeZfM"};
-    char sep = '#';
-    System.out.println( SuffixArray.lcs(strs, sep) );
+    // String[] strs = {"aMMMb", "cMMMdMMM", "BeZfM"};
+    // char sep = '#';
+    // System.out.println( SuffixArray.lcs(strs, sep) );
+    
+    SuffixArray sa = new SuffixArray("mississippi");
+    System.out.println(sa);
+    System.out.println(java.util.Arrays.toString(sa.lcp));
+
   }
 
 }

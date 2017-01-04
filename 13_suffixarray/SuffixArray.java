@@ -140,7 +140,7 @@ class SuffixArray {
     int [] inv = new int[N];
     for (int i = 0; i < N; i++)
       inv[sa[i]] = i;
-    
+    System.out.println(java.util.Arrays.toString(inv));
     // Current lcp length
     int len = 0;
 
@@ -376,8 +376,9 @@ class SuffixArray {
     // char sep = '#';
     // System.out.println( SuffixArray.lcs(strs, sep) );
     
-    SuffixArray sa = new SuffixArray("abracadabra");
-    System.out.println(sa);
+    SuffixArray sa = new SuffixArray("abababaabb");
+    // System.out.println(sa);
+    System.out.println(java.util.Arrays.toString(sa.sa));
     System.out.println(java.util.Arrays.toString(sa.lcp));
 
   }

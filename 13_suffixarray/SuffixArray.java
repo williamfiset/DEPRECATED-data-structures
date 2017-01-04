@@ -92,14 +92,9 @@ class SuffixArray {
       // O(nlogn)
       java.util.Arrays.sort(ranks);
 
-      // for (SuffixRankTuple srt : ranks) System.out.print(srt + " ");
-      // System.out.println("\n" + java.util.Arrays.toString(suffixRanks[0]));
-      // for (SuffixRankTuple srt : ranks) System.out.println( new String(T, srt.originalIndex, N - srt.originalIndex) );
-      // System.out.println();
-
       int newRank = 0;
       suffixRanks[1][ranks[0].originalIndex] = 0;
-      
+
       for (int i = 1; i < N; i++ ) {
         
         SuffixRankTuple lastSuffixRank = ranks[i-1];
@@ -121,11 +116,6 @@ class SuffixArray {
       if (newRank == N-1) break;
 
     }
-
-    for (SuffixRankTuple srt : ranks) System.out.print(srt + " ");
-    System.out.println("\n" + java.util.Arrays.toString(suffixRanks[0]));
-    for (SuffixRankTuple srt : ranks) System.out.println( new String(T, srt.originalIndex, N - srt.originalIndex) );
-    System.out.println();
 
     // Fill suffix array
     for (int i = 0; i < N; i++) {
@@ -381,6 +371,7 @@ class SuffixArray {
   }
 
   public static void main(String[] args) {
+
     // String[] strs = {"aMMMb", "cMMMdMMM", "BeZfM"};
     // char sep = '#';
     // System.out.println( SuffixArray.lcs(strs, sep) );

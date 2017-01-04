@@ -20,15 +20,19 @@ Some things suffix trees are great for are:
 class SuffixArray {
 
   // Helper class which sorts suffix ranks
-  static class SuffixRank implements Comparable <SuffixRank> {
+  static class SuffixRankTuple implements Comparable <SuffixRankTuple> {
 
     int firstHalf, secondHalf, originalIndex;
 
     // Sort Suffix ranks first on the first half then the second half
-    @Override public int compareTo(SuffixRank other) {
+    @Override public int compareTo(SuffixRankTuple other) {
       int cmp = Integer.compare(firstHalf, other.firstHalf);
       if (cmp == 0) return Integer.compare(secondHalf, other.secondHalf);
       return cmp;
+    }
+
+    @Override public String toString() {
+      return originalIndex + " -> (" + firstHalf + ", " + secondHalf + ")";
     }
 
   }
@@ -67,33 +71,39 @@ class SuffixArray {
     // Maintain suffix ranks in both a matrix with two rows containing the
     // current and last rank information as well as some sortable rank objects
     int [][] suffixRanks = new int[2][N];
-    SuffixRank[] ranks = new SuffixRank[N];
+    SuffixRankTuple[] ranks = new SuffixRankTuple[N];
 
     // Assign a numerical value to each character in the text
     for (int i = 0; i < N; i++) {
-      suffixRanks[0][i] = T[i];
-      ranks[i] = new SuffixRank();
+      suffixRanks[0][i] = T[i] - 97;
+      ranks[i] = new SuffixRankTuple();
     }
 
     // O(logn)
     for(int pos = 1; pos < N; pos *= 2) {
 
       for(int i = 0; i < N; i++) {
-        SuffixRank suffixRank = ranks[i];
+        SuffixRankTuple suffixRank = ranks[i];
         suffixRank.firstHalf  = suffixRanks[0][i];
         suffixRank.secondHalf = i+pos < N ? suffixRanks[0][i+pos] : -1;
         suffixRank.originalIndex = i;
       }
-      
+
       // O(nlogn)
       java.util.Arrays.sort(ranks);
+
+      for (SuffixRankTuple srt : ranks) System.out.print(srt + " ");
+      System.out.println("\n" + java.util.Arrays.toString(suffixRanks[0]));
+      for (SuffixRankTuple srt : ranks) System.out.println( new String(T, srt.originalIndex, N - srt.originalIndex) );
+      System.out.println();
 
       suffixRanks[1][ranks[0].originalIndex] = 0;
       for (int i = 1, newRank = 0; i < N; i++ ) {
         
-        SuffixRank lastSuffixRank = ranks[i-1];
-        SuffixRank currSuffixRank = ranks[i];
+        SuffixRankTuple lastSuffixRank = ranks[i-1];
+        SuffixRankTuple currSuffixRank = ranks[i];
 
+        // If the first half differs from the second half
         if (currSuffixRank.firstHalf  != lastSuffixRank.firstHalf ||
             currSuffixRank.secondHalf != lastSuffixRank.secondHalf)
           newRank++;
@@ -106,6 +116,11 @@ class SuffixArray {
       suffixRanks[0] = suffixRanks[1];
 
     }
+
+    for (SuffixRankTuple srt : ranks) System.out.print(srt + " ");
+    System.out.println("\n" + java.util.Arrays.toString(suffixRanks[0]));
+    for (SuffixRankTuple srt : ranks) System.out.println( new String(T, srt.originalIndex, N - srt.originalIndex) );
+    System.out.println();
 
     // Fill suffix array
     for (int i = 0; i < N; i++) {
@@ -365,7 +380,7 @@ class SuffixArray {
     // char sep = '#';
     // System.out.println( SuffixArray.lcs(strs, sep) );
     
-    SuffixArray sa = new SuffixArray("mississippi");
+    SuffixArray sa = new SuffixArray("abracadabra");
     System.out.println(sa);
     System.out.println(java.util.Arrays.toString(sa.lcp));
 

@@ -149,10 +149,11 @@ class SuffixArray {
 
         // Get the index of where the suffix below is
         int k = sa[inv[i]-1];
-
+        System.out.println(i + " " + k);
         // Compute lcp length. For most loops this is O(1)
         while( (i + len < N) && (k + len < N) && T[i+len] == T[k+len] )
           len++;
+        System.out.println(i + " " + k + " " + len);
 
         lcp[inv[i]-1] = len;
         if (len > 0) len--;
@@ -377,7 +378,7 @@ class SuffixArray {
     // System.out.println( SuffixArray.lcs(strs, sep) );
     
     SuffixArray sa = new SuffixArray("abababaabb");
-    // System.out.println(sa);
+    System.out.println(sa);
     System.out.println(java.util.Arrays.toString(sa.sa));
     System.out.println(java.util.Arrays.toString(sa.lcp));
 

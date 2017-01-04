@@ -14,15 +14,14 @@ public class SuffixArrayTest {
   static final SecureRandom random = new SecureRandom();
   static final Random rand = new Random();
 
-  static final int LOOPS = 1000;
-  static final int TEST_SZ = 1051;
+  static final int LOOPS = 5000;
+  static final int TEST_SZ = 5057;
   static final int NUM_NULLS = TEST_SZ / 5;
   static final int MAX_RAND_NUM = 250;
 
   @Before
   public void setup() { }
 
-  /*
   @Test
   public void testContruction() {
 
@@ -42,7 +41,6 @@ public class SuffixArrayTest {
     }
 
   }
-  */
 
   @Test 
   public void containsSubstring() {

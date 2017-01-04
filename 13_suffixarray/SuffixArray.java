@@ -75,7 +75,7 @@ class SuffixArray {
 
     // Assign a numerical value to each character in the text
     for (int i = 0; i < N; i++) {
-      suffixRanks[0][i] = T[i] - 97;
+      suffixRanks[0][i] = T[i];
       ranks[i] = new SuffixRankTuple();
     }
 
@@ -92,13 +92,15 @@ class SuffixArray {
       // O(nlogn)
       java.util.Arrays.sort(ranks);
 
-      for (SuffixRankTuple srt : ranks) System.out.print(srt + " ");
-      System.out.println("\n" + java.util.Arrays.toString(suffixRanks[0]));
-      for (SuffixRankTuple srt : ranks) System.out.println( new String(T, srt.originalIndex, N - srt.originalIndex) );
-      System.out.println();
+      // for (SuffixRankTuple srt : ranks) System.out.print(srt + " ");
+      // System.out.println("\n" + java.util.Arrays.toString(suffixRanks[0]));
+      // for (SuffixRankTuple srt : ranks) System.out.println( new String(T, srt.originalIndex, N - srt.originalIndex) );
+      // System.out.println();
 
+      int newRank = 0;
       suffixRanks[1][ranks[0].originalIndex] = 0;
-      for (int i = 1, newRank = 0; i < N; i++ ) {
+      
+      for (int i = 1; i < N; i++ ) {
         
         SuffixRankTuple lastSuffixRank = ranks[i-1];
         SuffixRankTuple currSuffixRank = ranks[i];
@@ -114,6 +116,9 @@ class SuffixArray {
 
       // Place top row (current row) to be the last row
       suffixRanks[0] = suffixRanks[1];
+
+      // Optimization to stop early 
+      if (newRank == N-1) break;
 
     }
 

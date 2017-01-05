@@ -40,7 +40,7 @@ class PQueue <T extends Comparable<T>> {
       heap.add(elems[i]);
     }
 
-    // Heapify, takes O(n) time
+    // Heapify process - takes O(n) time
     for (int i = Math.max(0, (heap_size/2)-1); i >= 0; i-- )
       sink(i);
 

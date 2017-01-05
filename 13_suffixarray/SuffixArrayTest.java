@@ -14,7 +14,7 @@ public class SuffixArrayTest {
   static final SecureRandom random = new SecureRandom();
   static final Random rand = new Random();
 
-  static final int LOOPS = 5000;
+  static final int LOOPS = 1000;
   static final int TEST_SZ = 5057;
   static final int NUM_NULLS = TEST_SZ / 5;
   static final int MAX_RAND_NUM = 250;
@@ -74,7 +74,6 @@ public class SuffixArrayTest {
     list.addAll(lrss);
     assertEquals(1, lrss.size());
     assertEquals("aab", list.get(0));
-    System.out.println( lrss );
     list.clear();
 
     s = "abcdefg";
@@ -82,7 +81,6 @@ public class SuffixArrayTest {
     lrss = sa.lrs();    
     list.addAll(lrss);
     assertEquals(0, list.size());
-    System.out.println( lrss );
     list.clear();
 
     s = "abca";
@@ -91,7 +89,6 @@ public class SuffixArrayTest {
     list.addAll(lrss);
     assertEquals(1, lrss.size());
     assertEquals("a", list.get(0));
-    System.out.println( lrss );
     list.clear();
 
     s = "abcba";
@@ -101,7 +98,6 @@ public class SuffixArrayTest {
     assertEquals(2, lrss.size() );
     assertEquals("a", list.get(0));
     assertEquals("b", list.get(1));
-    System.out.println( lrss );
     list.clear();
 
 
@@ -112,7 +108,6 @@ public class SuffixArrayTest {
     assertEquals(2, lrss.size() );
     assertEquals("YY", list.get(0));
     assertEquals("ZZ", list.get(1));
-    System.out.println( lrss );
     list.clear();
 
     s = "AAAAAA";
@@ -121,7 +116,6 @@ public class SuffixArrayTest {
     list.addAll(lrss);
     assertEquals(1, lrss.size() );
     assertEquals("AAAAA", list.get(0));
-    System.out.println( lrss );
     list.clear();
 
     s = "aWXYZsdfABCDbvABCDsWXYZyWXYZjisdssd";
@@ -131,12 +125,10 @@ public class SuffixArrayTest {
     assertEquals(2, lrss.size() );
     assertEquals("ABCD", list.get(0));
     assertEquals("WXYZ", list.get(1));
-    System.out.println( lrss );
     list.clear();
 
   }
 
-  /*
   @Test
   public void testRandomizedContains() {
 
@@ -152,11 +144,14 @@ public class SuffixArrayTest {
         SuffixArray sa = new SuffixArray( r );
         assertTrue(sa.contains(substr));
 
+        String r2 = randomString(3);
+        assertEquals( sa.contains(r2),  r.contains(r2));
+
       }
 
     }
 
-  }*/
+  }
 
   @Test
   public void testLCS() {

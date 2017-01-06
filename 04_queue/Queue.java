@@ -1,16 +1,7 @@
-import java.util.Iterator;
 
-interface IQueue <T> {
-  public int getSize();
-  public boolean isEmpty();
-  public T peek();
-  public T poll();
-  public void offer(T elem);
-}
+public class Queue <T> implements Iterable <T> {
 
-public class Queue <T> implements IQueue <T>, Iterable <T> {
-
-  private LinkedList <T> list = new LinkedList <T> ();
+  private java.util.LinkedList <T> list = new java.util.LinkedList <T> ();
 
   public Queue() { }
 
@@ -18,12 +9,12 @@ public class Queue <T> implements IQueue <T>, Iterable <T> {
     offer(firstElem);
   }
 
-  public int getSize() {
-    return list.getSize();
+  public int size() {
+    return list.size();
   }
 
   public boolean isEmpty() {
-    return getSize() == 0;
+    return size() == 0;
   }
 
   public T peek() {
@@ -42,8 +33,8 @@ public class Queue <T> implements IQueue <T>, Iterable <T> {
     list.addLast(elem);
   }
 
-  @Override public Iterator <T> iterator () {
-    return new Iterator <T> () {
+  @Override public java.util.Iterator <T> iterator () {
+    return new java.util.Iterator <T> () {
       @Override public boolean hasNext() {
         return !isEmpty();
       }

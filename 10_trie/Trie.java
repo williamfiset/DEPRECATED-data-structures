@@ -4,14 +4,17 @@ import java.util.HashMap;
 
 public class Trie implements ITrie {
 
-  private Node root = new Node('\0');
+  // The root character is an arbitrarily picked
+  // character chosen for the root node.
+  private final char rootCharacter = '\0';
+  private Node root = new Node(rootCharacter);
 
   private static class Node {
 
     char ch;
     int count = 0;
     boolean isWordEnding = false;
-    Map<Character, Node> children = new HashMap<>();
+    Map <Character, Node> children = new HashMap<>();
 
     public Node(char ch) { this.ch = ch; }
 
@@ -140,7 +143,7 @@ public class Trie implements ITrie {
   public void clear() {
 
     root.children = null;
-    root = new Node('\0');
+    root = new Node(rootCharacter);
 
   }
 

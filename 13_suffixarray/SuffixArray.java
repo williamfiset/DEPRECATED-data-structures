@@ -16,6 +16,7 @@ Some things suffix trees are great for are:
 
 */
 
+import java.util.*;
 
 class SuffixArray {
 
@@ -211,10 +212,10 @@ class SuffixArray {
   // Traditionally we are only interested in substrings that appear at
   // least twice, so this method returns an empty set if this is the case.
   // @return an ordered set of longest repeated substrings
-  public java.util.TreeSet <String> lrs() {
+  public TreeSet <String> lrs() {
 
     int max_len = 0;
-    java.util.TreeSet <String> lrss = new java.util.TreeSet<>();
+    TreeSet <String> lrss = new TreeSet<>();
 
     for (int i = 0; i < N; i++) {
       if (lcp[i] > 0 && lcp[i] >= max_len) {
@@ -235,7 +236,7 @@ class SuffixArray {
   }
 
   // Complexity? Bounded by suffix array construction?
-  public static java.util.TreeSet <String> lcs(String [] strs, char separator) {
+  public static TreeSet <String> lcs(String [] strs, char separator) {
 
     int L = 0;
     int N = strs.length; // Not to be confused with suffix_array.N
@@ -268,11 +269,11 @@ class SuffixArray {
 
     int max_len = 0;
     SuffixArray suffix_array = new SuffixArray(sb.toString());
-    java.util.TreeSet <String> lcss = new java.util.TreeSet<>();
-    java.util.Set <Integer> unique_suffixes = new java.util.HashSet<>( 2*N );
+    TreeSet <String> lcss = new TreeSet<>();
+    Set <Integer> unique_suffixes = new HashSet<>( 2*N );
 
     System.out.println(suffix_array);
-    System.out.println( java.util.Arrays.toString(suffix_array.lcp) );
+    System.out.println(Arrays.toString(suffix_array.lcp) );
 
     for (int i = 0; i < L; ) {
       
@@ -366,17 +367,14 @@ class SuffixArray {
       int length = N - index;
       sb.append( index + " " + new String(T, index, length) + "\n");
     }
-    return sb.toString();
+    String lcp_str = "LCP: " + Arrays.toString(lcp) + "\n";
+    return lcp_str + sb.toString();
   }
 
   public static void main(String[] args) {
-
-    // String[] strs = {"aMMMb", "cMMMdMMM", "BeZfM"};
-    // char sep = '#';
-    // System.out.println( SuffixArray.lcs(strs, sep) );
     
-    SuffixArray sa = new SuffixArray("abracadabra");
-    System.out.println(sa);
+    // SuffixArray sa = new SuffixArray("abracadabra");
+    // System.out.println(sa);
     // System.out.println(java.util.Arrays.toString(sa.sa));
     // System.out.println(java.util.Arrays.toString(sa.lcp));
 

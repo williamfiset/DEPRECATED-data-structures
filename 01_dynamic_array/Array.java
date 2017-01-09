@@ -1,7 +1,7 @@
 
 
 @SuppressWarnings("unchecked")
-class Array <T> implements Iterable <T> {
+public class Array <T> implements Iterable <T> {
 
   private T [] arr;  
   private int len = 0;      // length user thinks array is
@@ -28,6 +28,8 @@ class Array <T> implements Iterable <T> {
   }
 
   public void add(T elem) {
+
+    // Time to resize!
     if (len+1 >= capacity) {
       if (capacity == 0) capacity = 1;
       else capacity *= 2; // double the size
@@ -36,7 +38,9 @@ class Array <T> implements Iterable <T> {
         new_arr[i] = arr[i];
       arr = new_arr; // arr has extra nulls padded
     }
+
     arr[len++] = elem;
+    
   }
 
   // Removes the element at the specified index in this list. 

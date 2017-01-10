@@ -6,6 +6,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
   private Node <T> head = null;
   private Node <T> tail = null;
 
+  // Internal node class to represent data
   private class Node <T> {
     T data;
     Node <T> prev, next;
@@ -19,6 +20,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     }
   }
 
+  // Empty this linked list, O(n)
   public void clear() {
     Node <T> trav = head;
     while(trav != null) {
@@ -31,30 +33,41 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     size = 0;
   }
 
+  // Return the size of this linked list
   public int size() {
     return size;
   }
 
+  // Is this linked list empty?
   public boolean isEmpty() {
     return size() == 0; 
   }
 
+  // Add an element to the tail of the linked list, O(1)
   public void add(T elem) {
     addLast(elem);
   }
 
+  // Add an element to the beginning of this linked list, O(1)
   public void addFirst(T elem) {
-    if (head == null) {
+
+    // The linked list is empty
+    if (isEmpty()) {
       head = tail = new Node <T> ( elem, null, null );
     } else {
       head.prev = new Node <T> ( elem, null, head );
       head = head.prev;
     }
+
     size++;
+
   }
 
+  // Add a node to the tail of the linked list, O(1)
   public void addLast(T elem) {
-    if (tail == null) {
+
+    // The linked list is empty
+    if (isEmpty()) {
       head = tail = new Node <T> ( elem, null, null );
     } else {
       tail.next = new Node <T> ( elem, tail, null );
@@ -63,77 +76,105 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     size++;
   }
 
-
+  // Check the value of the first node if it exists, O(1)
   public T peekFirst() {
     if (isEmpty()) throw new RuntimeException("Empty list");
     return head.data;
   }
 
+  // Check the value of the last node if it exists, O(1)
   public T peekLast() {
     if (isEmpty()) throw new RuntimeException("Empty list");
     return tail.data;
   }
 
+  // Remove the first value at the head of the linked list, O(1)
   public T removeFirst() {
 
+    // Can't remove data from an empty list -_-
     if (isEmpty()) throw new RuntimeException("Empty list");
     
+    // Extract the data at the head and move 
+    // the head pointer forwards one node
     T data = head.data;
     head = head.next;
     --size;
 
-    if (head != null) head.prev = null;
-    else tail = null;
+    // If the list is empty set the tail to null as well
+    if (isEmpty()) tail = null;
 
+    // Do a memory clean of the previous node
+    else head.prev = null;
+
+    // Return the data that was at the first node we just removed
     return data;
 
   }
 
+  // Remove the last value at the tail of the linked list, O(1)
   public T removeLast() {
 
+    // Can't remove data from an empty list -_-
     if (isEmpty()) throw new RuntimeException("Empty list");
     
+    // Extract the data at the tail and move 
+    // the tail pointer backwards one node    
     T data = tail.data;
     tail = tail.prev;
     --size;
 
-    if (tail != null) tail.next = null;
-    else head = null;
+    // If the list is now empty set the head to null as well
+    if (isEmpty()) head = null;
 
+    // Do a memory clean of the node that was just removed
+    else tail.next = null;
+
+    // Return the data that was at the first node we just removed
     return data;
 
   }
 
+  // Removed an arbitrary node from the linked list, O(1)
   private T remove(Node <T> node) {
 
+    // If the node to remove is somewhere either at the
+    // head or the tail handle those independently
     if (node.prev == null) return removeFirst();
     if (node.next == null) return removeLast();
 
+    // Make the pointers of adjacent nodes skip over 'node'
     node.next.prev = node.prev;
     node.prev.next = node.next;
 
+    // Temporary store the data we want to return
     T data = node.data;
+    
+    // Memory cleanup
     node.data = null;
     node = node.prev = node.next = null;
+
     --size;
 
+    // Return the data at the node we just removed
     return data;
 
   }
 
+  // Remove a node at a particular index, O(n)
   public T removeAt(int index) {
 
+    // Make sure the index provided is valid -_-
     if (index < 0 || index >= size) throw new IllegalArgumentException();
 
     int i;
     Node <T> trav;
 
-    // Search bottom up for element
+    // Search from the front of the list
     if (index < size/2) {
       for(i = 0, trav = head; i != index; i++ )
         trav = trav.next;
 
-    // Search top down for element
+    // Search from the back of the list
     } else
       for(i = size-1, trav = tail; i != index; i--)
         trav = trav.prev;
@@ -142,6 +183,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
 
   }
 
+  // Remove a particular value in the linked list, O(n)
   public boolean remove(Object obj) {
     
     Node <T> trav = head;
@@ -165,6 +207,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     return false;
   }
 
+  // Find the index of a particular value in the linked list, O(n)
   public int indexOf(Object obj) {
     
     int index = 0;
@@ -185,6 +228,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     return -1;
   }
 
+  // Check is a value is contained within the linked list
   public boolean contains(Object obj) {
     return indexOf(obj) != -1;
   }
@@ -202,7 +246,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
       }
     };
   }
-
+  
   @Override public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[ ");

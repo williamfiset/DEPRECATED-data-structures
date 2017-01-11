@@ -1,9 +1,10 @@
 
 public class BinarySearchTree <T extends Comparable<T>> {
   
-  private Node root = null;
   private int nodeCount = 0;
+  private Node root = null;
 
+  // Internal node
   private class Node {
     T data;
     Node left, right;
@@ -14,26 +15,40 @@ public class BinarySearchTree <T extends Comparable<T>> {
     }
   }
 
+  // Check if this binary tree is empty
   public boolean isEmpty() {
-    return getSize() == 0;
+    return size() == 0;
   }
 
-  public int getSize() {
+  // Get the number of nodes in this binary tree
+  public int size() {
     return nodeCount;
   }
 
+  // Add an element to this binary tree
   public boolean add(T elem) {
-    if (find(elem)) {
+
+    // Check if the value already exists in this
+    // binary tree, if it does ignore adding it
+    if (contains(elem)) {
       return false;
+
+    // Otherwise add this element to the binary tree
     } else {
       nodeCount++;
       root = add(root, elem);
       return true;
     }
+
   }
+
+  // Private method to recursively add a value in the binary tree
   private Node add(Node node, T elem) {
+
+    // Base case: found a leaf node
     if (node == null) {
       node = new Node (null, null, elem);
+
     } else {
       // Place lower elem values on left
       if (elem.compareTo(node.data) < 0) {
@@ -42,11 +57,13 @@ public class BinarySearchTree <T extends Comparable<T>> {
         node.right = add(node.right, elem);
       }
     }
+
     return node;
+
   }
 
   public boolean remove(T elem) {
-    if (find(elem)) {
+    if (contains(elem)) {
       nodeCount--;
       root = remove(root, elem);
       return true;
@@ -58,57 +75,70 @@ public class BinarySearchTree <T extends Comparable<T>> {
     
     if (node == null) return null;
     
-    // Dig into left subtree
-    if (elem.compareTo(node.data) < 0) {
+    int cmp = elem.compareTo(node.data);
+
+    // Dig into left subtree, the value we're looking
+    // for is smaller than the current value
+    if (cmp < 0) {
       node.left = remove(node.left, elem);
     
-    // Dig into right subtree
-    } else if (elem.compareTo(node.data) > 0) {
+    // Dig into right subtree, the value we're looking
+    // for is greater than the current value
+    } else if (cmp > 0) {
       node.right = remove(node.right, elem);
 
+    // Found the node we wish to remove
     } else {
 
       // Node with only one child or no child
-      if (node.left == null) {
-        return node.right;
-      } else if (node.right == null) {
-        return node.left;
-      }
+      if (node.left == null) return node.right;
+      else if (node.right == null) return node.left;
 
       // Do node swap.
-      // When removing a node from a binary tree with two links the succussor of the node being
-      // removed is the smallest node in the leftmost node in the right subtree.
-      Node tmp = findMinValueNode(node.right);
+      // When removing a node from a binary tree with two links 
+      // the successor of the node being removed is the 
+      // smallest node in the leftmost node in the right subtree.
+      Node tmp = digLeft(node.right);
       node.data = tmp.data;
       node.right = remove(node.right, tmp.data);
 
     }
+
     return node;
 
   }
 
-  // Helper method for remove
-  private Node findMinValueNode(Node node) {
+  // Helper method for remove.
+  private Node digLeft(Node node) {
     Node cur = node;
     while(cur.left != null) 
       cur = cur.left;
     return cur;
   }
 
-  public boolean find(T elem) {
-    return find(root, elem);
+  // returns true is the element exists in the tree
+  public boolean contains(T elem) {
+    return contains(root, elem);
   }
   
-  private boolean find(Node node, T elem) {
+  // private recursive method to find an element in the tree
+  private boolean contains(Node node, T elem) {
     
-    // Reached bottom, value not found
+    // Base case: reached bottom, value not found
     if (node == null) return false;
 
     int cmp = elem.compareTo(node.data);
     
+    // We found the value we were looking for
     if (cmp == 0) return true;
-    else if (cmp == -1) return find(node.left, elem);
-    else return find(node.right, elem);
+
+    // Dig into the left subtree because the value we're
+    // looking for is smaller than the current value
+    else if (cmp < 0) return contains(node.left, elem);
+
+    // Dig into the right subtree because the value we're
+    // looking for is greater than the current value
+    else return contains(node.right, elem);
 
   }
 
@@ -117,10 +147,22 @@ public class BinarySearchTree <T extends Comparable<T>> {
     return height(root);
   }
 
-  // Recursive helper method of compute the height of the trees
+  // Recursive helper method of compute the height of the tree
   private int height(Node node) {
     if (node == null) return 0;
     return Math.max( height(node.left), height(node.right) ) + 1;
+  }
+
+  // This method returns an iterator for a given TreeTraversalOrder
+  // TODO: Check for concurrent modification
+  public java.util.Iterator <T> traverse(TreeTraversalOrder order) {
+    switch (order) {
+      case PRE_ORDER: return preOrderTraversal();
+      case IN_ORDER: return inOrderTraversal();
+      case POST_ORDER: return postOrderTraversal();
+      case LEVEL_ORDER: return levelOrderTraversal();
+      default: return null;
+    }
   }
 
   // Returns as iterator to traverse the tree in pre order
@@ -214,18 +256,6 @@ public class BinarySearchTree <T extends Comparable<T>> {
         return node.data;
       }
     };
-  }
-
-  // This method returns an iterator for a given TreeTraversalOrder
-  // TODO: Check for concurrent modification
-  public java.util.Iterator <T> traverse(TreeTraversalOrder order) {
-    switch (order) {
-      case PRE_ORDER: return preOrderTraversal();
-      case IN_ORDER: return inOrderTraversal();
-      case POST_ORDER: return postOrderTraversal();
-      case LEVEL_ORDER: return levelOrderTraversal();
-      default: return null;
-    }
   }
 
 }

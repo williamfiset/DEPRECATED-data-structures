@@ -98,10 +98,10 @@ public class BinarySearchTreeTest {
 
   @Test public void testSize() {
     BinarySearchTree <String> tree = new BinarySearchTree<>();
-    assertEquals( tree.getSize(), 0 );
+    assertEquals( tree.size(), 0 );
     
     tree.add("Hello World!");
-    assertEquals( tree.getSize(), 1 );
+    assertEquals( tree.size(), 1 );
   }
 
   @Test public void testHeight() {
@@ -159,20 +159,20 @@ public class BinarySearchTreeTest {
     // Try removing an element which doesn't exist
     BinarySearchTree<Character> tree = new BinarySearchTree<>();
     tree.add('A');
-    assertEquals(tree.getSize(), 1);
+    assertEquals(tree.size(), 1);
     assertFalse(tree.remove('B'));
-    assertEquals(tree.getSize(), 1);
+    assertEquals(tree.size(), 1);
     
     // Try removing an element which does exist
     tree.add('B');
-    assertEquals(tree.getSize(), 2);
+    assertEquals(tree.size(), 2);
     assertTrue(tree.remove('B'));
-    assertEquals(tree.getSize(), 1);
+    assertEquals(tree.size(), 1);
     assertEquals(tree.height(), 1);
 
     // Try removing the root
     assertTrue(tree.remove('A'));
-    assertEquals(tree.getSize(), 0);
+    assertEquals(tree.size(), 0);
     assertEquals(tree.height(), 0);
 
   }
@@ -187,16 +187,16 @@ public class BinarySearchTreeTest {
     tree.add('C');
 
     // Try looking for an element which doesn't exist
-    assertFalse(tree.find('D'));
+    assertFalse(tree.contains('D'));
 
     // Try looking for an element which exists in the root
-    assertTrue(tree.find('B'));
+    assertTrue(tree.contains('B'));
 
     // Try looking for an element which exists as the left child of the root
-    assertTrue(tree.find('A'));
+    assertTrue(tree.contains('A'));
     
     // Try looking for an element which exists as the right child of the root
-    assertTrue(tree.find('C'));
+    assertTrue(tree.contains('C'));
 
   }
 
@@ -216,8 +216,8 @@ public class BinarySearchTreeTest {
         Integer value = lst.get(j);
 
         assertTrue(tree.remove(value));
-        assertFalse(tree.find(value));
-        assertEquals(tree.getSize(), size - j - 1);
+        assertFalse(tree.contains(value));
+        assertEquals(tree.size(), size - j - 1);
 
       }
 

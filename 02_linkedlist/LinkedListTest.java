@@ -210,6 +210,10 @@ public class LinkedListTest {
         java.util.Iterator <Integer> iter2 = list.iterator();
         while(iter1.hasNext()) assertEquals(iter1.next(), iter2.next());
 
+        iter1 = LIST.iterator();
+        iter2 = list.iterator();
+        while(iter1.hasNext()) assertEquals(iter1.next(), iter2.next());
+
       }
 
       list.clear(); LIST.clear();

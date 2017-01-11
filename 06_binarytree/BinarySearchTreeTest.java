@@ -177,7 +177,7 @@ public class BinarySearchTreeTest {
 
   }
 
-  @Test public void testFind() {
+  @Test public void testContains() {
     
     // Setup tree
     BinarySearchTree<Character> tree = new BinarySearchTree<>();
@@ -197,6 +197,151 @@ public class BinarySearchTreeTest {
     
     // Try looking for an element which exists as the right child of the root
     assertTrue(tree.contains('C'));
+
+  }
+
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorPreOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.PRE_ORDER);
+
+    while(iter.hasNext()) {
+      bst.add(0);
+      iter.next();
+    }
+
+  }
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorInOrderOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.IN_ORDER);
+
+    while(iter.hasNext()) {
+      bst.add(0);
+      iter.next();
+    }
+
+  }
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorPostOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.POST_ORDER);
+
+    while(iter.hasNext()) {
+      bst.add(0);
+      iter.next();
+    }
+
+  }
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorLevelOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.LEVEL_ORDER);
+
+    while(iter.hasNext()) {
+      bst.add(0);
+      iter.next();
+    }
+
+  }
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorRemovingPreOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.PRE_ORDER);
+
+    while(iter.hasNext()) {
+      bst.remove(2);
+      iter.next();
+    }
+
+  }
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorRemovingInOrderOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.IN_ORDER);
+
+    while(iter.hasNext()) {
+      bst.remove(2);
+      iter.next();
+    }
+
+  }
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorRemovingPostOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.POST_ORDER);
+
+    while(iter.hasNext()) {
+      bst.remove(2);
+      iter.next();
+    }
+
+  }
+
+  @Test(expected=ConcurrentModificationException.class)
+  public void concurrentModificationErrorRemovingLevelOrder() {
+
+    BinarySearchTree <Integer> bst = new BinarySearchTree<>();
+    
+    bst.add(1);
+    bst.add(2);
+    bst.add(3);
+
+    Iterator <Integer> iter = bst.traverse(TreeTraversalOrder.LEVEL_ORDER);
+
+    while(iter.hasNext()) {
+      bst.remove(2);
+      iter.next();
+    }
 
   }
 

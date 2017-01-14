@@ -1,12 +1,10 @@
 
 public class FenwickTree {
 
-  private int sz;
   private long[] tree;
 
   // Create an empty Fenwick Tree
   public FenwickTree(int sz) {
-    this.sz = sz;
     tree = new long[sz + 1];
   }
 
@@ -17,12 +15,11 @@ public class FenwickTree {
     if (values == null)
       throw new NullPointerException("Values array cannot be null!");
 
-    this.sz = values.length;
     this.tree = values.clone();
 
-    for (int i = 1; i < sz; i++) {
+    for (int i = 1; i < tree.length; i++) {
       int j = i + lsb(i);
-      if (j < sz) tree[j] += tree[i];
+      if (j < tree.length) tree[j] += tree[i];
     }
 
   }
@@ -59,7 +56,7 @@ public class FenwickTree {
     }
   }
 
-  // Add 'k' to index 'i', one based
+  // Set index 'i' to be equal to 'k', one based
   public void set(int i, long k) {
     long value = interval_sum(i, i+1);
     add( i, k - value );

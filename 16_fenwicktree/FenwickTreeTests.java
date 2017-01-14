@@ -125,7 +125,7 @@ public class FenwickTreeTests {
       for (int j = 0; j < LOOPS / 10; j++ ) {
         
         int index = 1 + ((int) Math.random() * i);
-        int rand_val =  ((int) Math.random() * MAX_RAND_NUM);
+        long rand_val = randValue();
         
         randList[index] += rand_val;
         ft.add(index, rand_val);
@@ -148,15 +148,18 @@ public class FenwickTreeTests {
     for ( int loop = 0; loop < LOOPS ; loop++ ) {
       
       for(int i = 1; i <= SIZE; i++) {
-        long val = (long)(Math.random() * MAX_RAND_NUM);
+        long val = randValue();
         ft.set(i, val);
         arr[i] = val;
       }
-
       doRandomRangeQuery( arr, ft );
 
     }
 
+  }
+
+  public static long randValue() {
+    return (long)(Math.random() * MAX_RAND_NUM*2) + MIN_RAND_NUM;    
   }
 
   @Test(expected=NullPointerException.class)
@@ -168,8 +171,7 @@ public class FenwickTreeTests {
   static long[] genRandList(int sz) {
     long[] lst = new long[sz];
     for (int i = 0; i < sz; i++) {
-      long randVal = (long)(Math.random()*MAX_RAND_NUM*2 );
-      lst[i] = randVal + MIN_RAND_NUM;
+      lst[i] = randValue();
     }
     return lst;
   }

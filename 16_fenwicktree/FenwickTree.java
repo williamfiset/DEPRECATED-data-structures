@@ -15,6 +15,8 @@ public class FenwickTree {
     if (values == null)
       throw new NullPointerException("Values array cannot be null!");
 
+    // Make a clone of the values array since we manipulate 
+    // the array in place destroying all its original content
     this.tree = values.clone();
 
     for (int i = 1; i < tree.length; i++) {
@@ -34,7 +36,7 @@ public class FenwickTree {
     // Isolates the lowest one bit value
     return i & -i;
 
-    // An alternative method is to use the java built in method
+    // An alternative method is to use the Java's built in method
     // return Integer.lowestOneBit(i);
 
   }
@@ -45,14 +47,13 @@ public class FenwickTree {
     while (i > 0) {
       sum += tree[i];
       i -= lsb(i);
-      System.out.println(i);
     }
     return sum;
   }
 
-  // Returns the sum of the interval [i, j), one based
+  // Returns the sum of the interval [i, j], one based
   public long interval_sum(int i, int j) {
-    return prefixSum(j - 1) - prefixSum(i - 1);
+    return prefixSum(j) - prefixSum(i - 1);
   }
 
   // Add 'k' to index 'i', one based
@@ -63,13 +64,9 @@ public class FenwickTree {
     }
   }
 
-  // public void add(int i, int j, long v) {
-
-  // }
-
-  // Set index 'i' to be equal to 'k', one based
+  // Set index i to be equal to k, one based
   public void set(int i, long k) {
-    long value = interval_sum(i, i+1);
+    long value = interval_sum(i, i);
     add( i, k - value );
   }
 

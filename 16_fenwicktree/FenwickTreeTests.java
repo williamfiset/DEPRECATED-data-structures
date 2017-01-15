@@ -26,7 +26,6 @@ public class FenwickTreeTests {
 
   }
 
-  /*
   @Test
   public void testIntervalSumPositiveValues() {
     
@@ -34,17 +33,17 @@ public class FenwickTreeTests {
     long[] ar = {0,1,2,3,4,5,6};
     FenwickTree ft = new FenwickTree(ar);
     
-    assertEquals( 21, ft.interval_sum(1, 7) );
-    assertEquals( 15, ft.interval_sum(1, 6) );
-    assertEquals( 10, ft.interval_sum(1, 5) );
-    assertEquals(  6, ft.interval_sum(1, 4) );
-    assertEquals(  3, ft.interval_sum(1, 3) );
-    assertEquals(  1, ft.interval_sum(1, 2) );
-    assertEquals(  0, ft.interval_sum(1, 1) );
+    assertEquals( 21, ft.interval_sum(1, 6) );
+    assertEquals( 15, ft.interval_sum(1, 5) );
+    assertEquals( 10, ft.interval_sum(1, 4) );
+    assertEquals(  6, ft.interval_sum(1, 3) );
+    assertEquals(  3, ft.interval_sum(1, 2) );
+    assertEquals(  1, ft.interval_sum(1, 1) );
+    assertEquals(  0, ft.interval_sum(1, 0) );
 
-    assertEquals(  7, ft.interval_sum(3, 5) );
-    assertEquals( 20, ft.interval_sum(2, 7) );
-    assertEquals(  9, ft.interval_sum(4, 6) );
+    assertEquals(  7, ft.interval_sum(3, 4) );
+    assertEquals( 20, ft.interval_sum(2, 6) );
+    assertEquals(  9, ft.interval_sum(4, 5) );
 
   }
   
@@ -55,13 +54,13 @@ public class FenwickTreeTests {
     long[] ar = {0,-1,-2,-3,-4,-5,-6};
     FenwickTree ft = new FenwickTree(ar);
     
-    assertEquals( -21, ft.interval_sum(1, 7) );
-    assertEquals( -15, ft.interval_sum(1, 6) );
-    assertEquals( -10, ft.interval_sum(1, 5) );
-    assertEquals(  -6, ft.interval_sum(1, 4) );
-    assertEquals(  -3, ft.interval_sum(1, 3) );
-    assertEquals(  -1, ft.interval_sum(1, 2) );
-    assertEquals(   0, ft.interval_sum(1, 1) );
+    assertEquals( -21, ft.interval_sum(1, 6) );
+    assertEquals( -15, ft.interval_sum(1, 5) );
+    assertEquals( -10, ft.interval_sum(1, 4) );
+    assertEquals(  -6, ft.interval_sum(1, 3) );
+    assertEquals(  -3, ft.interval_sum(1, 2) );
+    assertEquals(  -1, ft.interval_sum(1, 1) );
+    assertEquals(   0, ft.interval_sum(1, 0) );
 
   }
 
@@ -74,14 +73,14 @@ public class FenwickTreeTests {
     FenwickTree ft = new FenwickTree(ar);
     
     for(int i = 0; i < LOOPS;i++) {
-      assertEquals( -76871, ft.interval_sum(1, 2) );
-      assertEquals( -76871, ft.interval_sum(1, 2) );
-      assertEquals( -241661, ft.interval_sum(1, 3) );
-      assertEquals( -241661, ft.interval_sum(1, 3) );
-      assertEquals( -241661, ft.interval_sum(1, 3) );
-      assertEquals( -164790, ft.interval_sum(2, 3) );
-      assertEquals( -164790, ft.interval_sum(2, 3) );
-      assertEquals( -164790, ft.interval_sum(2, 3) );
+      assertEquals( -76871,  ft.interval_sum(1, 1) );
+      assertEquals( -76871,  ft.interval_sum(1, 1) );
+      assertEquals( -241661, ft.interval_sum(1, 2) );
+      assertEquals( -241661, ft.interval_sum(1, 2) );
+      assertEquals( -241661, ft.interval_sum(1, 2) );
+      assertEquals( -164790, ft.interval_sum(2, 2) );
+      assertEquals( -164790, ft.interval_sum(2, 2) );
+      assertEquals( -164790, ft.interval_sum(2, 2) );
     }
 
   }
@@ -96,13 +95,7 @@ public class FenwickTreeTests {
       FenwickTree ft = new FenwickTree(randList);
 
       for (int j = 0; j < LOOPS / 10; j++ ) {
-        
-        int lo = 1 + ((int) Math.random() * i);
-        int hi = Math.min(i, lo + (int)(Math.random() * i) );
-        long sum = 0L;
-        for(int k = lo; k < hi; k++) sum += randList[k];
-        assertEquals(sum, ft.interval_sum(lo, hi));
-
+        doRandomRangeQuery(randList, ft);
       }
 
     }
@@ -114,10 +107,10 @@ public class FenwickTreeTests {
     int N = arr.length;
     long sum = 0L;
 
-    int lo = 1 + ((int) Math.random() * N);
-    int hi = Math.min(N, lo + (int)(Math.random() * N) );
+    int lo = lowBound(N);
+    int hi = highBound(lo, N);
 
-    for(int k = lo; k < hi; k++) sum += arr[k];
+    for(int k = lo; k <= hi; k++) sum += arr[k];
 
     assertEquals(sum, ft.interval_sum(lo, hi));
 
@@ -168,6 +161,14 @@ public class FenwickTreeTests {
 
   }
 
+  public static int lowBound(int N) {
+    return 1 + ((int) Math.random() * N);
+  }
+
+  public static int highBound(int low, int N) {
+    return Math.min(N-1, low + (int)(Math.random() * N) );    
+  }
+
   public static long randValue() {
     return (long)(Math.random() * MAX_RAND_NUM*2) + MIN_RAND_NUM;    
   }
@@ -185,6 +186,6 @@ public class FenwickTreeTests {
     }
     return lst;
   }
-  */
+
 }
 

@@ -19,10 +19,11 @@ public class FenwickTreeTests {
 
   @Test
   public void test() {
-    long[] ar = { 0,4,1,-3,7,2,4,11,0,-5,-6,9,-8,2,-3,6,7 };
+    long[] ar = { 0,3,4,-2,7,3,11,5,-8,-9,2,4,-8 };
     FenwickTree ft = new FenwickTree(ar);
+    System.out.println(ft);
     // ft.add(9, 5);
-    ft.prefixSum(7);
+    // ft.prefixSum(7);
 
   }
 

@@ -30,7 +30,13 @@ public class FenwickTree {
   // lsb(96)  = lsb(0b1100000) =  0b100000 = 32
   // lsb(64)  = lsb(0b1000000) = 0b1000000 = 64
   private int lsb(int i) {
+
+    // Isolates the lowest one bit value
     return i & -i;
+
+    // An alternative method is to use the java built in method
+    // return Integer.lowestOneBit(i);
+
   }
 
   // Computes the prefix sum from [1, i], one based
@@ -38,8 +44,8 @@ public class FenwickTree {
     long sum = 0;
     while (i > 0) {
       sum += tree[i];
-      System.out.println(i + " " + tree[i]);
       i -= lsb(i);
+      System.out.println(i);
     }
     return sum;
   }

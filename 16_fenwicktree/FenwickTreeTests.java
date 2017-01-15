@@ -21,13 +21,11 @@ public class FenwickTreeTests {
   public void test() {
     long[] ar = { 0,4,1,-3,7,2,4,11,0,-5,-6,9,-8,2,-3,6,7 };
     FenwickTree ft = new FenwickTree(ar);
-    System.out.println(ft);
-    System.out.println("[1,15] " + ft.interval_sum(1, 16));
-    System.out.println();
-    System.out.println("[1,11] " + ft.interval_sum(1, 12));
-    System.out.println();
-    System.out.println("ANS: " + ft.interval_sum(11, 16));
+    // ft.add(9, 5);
+    ft.prefixSum(7);
+
   }
+
   /*
   @Test
   public void testIntervalSumPositiveValues() {

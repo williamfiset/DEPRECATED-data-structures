@@ -33,11 +33,12 @@ public class FenwickTree {
     return i & -i;
   }
 
-  // Computes the prefix sum up to index i, one based
+  // Computes the prefix sum from [1, i], one based
   public long prefixSum(int i) {
     long sum = 0;
     while (i > 0) {
       sum += tree[i];
+      System.out.println(i + " " + tree[i]);
       i -= lsb(i);
     }
     return sum;
@@ -55,6 +56,10 @@ public class FenwickTree {
       i += lsb(i);
     }
   }
+
+  // public void add(int i, int j, long v) {
+
+  // }
 
   // Set index 'i' to be equal to 'k', one based
   public void set(int i, long k) {

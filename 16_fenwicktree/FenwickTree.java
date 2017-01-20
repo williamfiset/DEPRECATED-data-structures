@@ -46,7 +46,7 @@ public class FenwickTree {
     long sum = 0;
     while (i > 0) {
       sum += tree[i];
-      i -= lsb(i);
+      i &= ~lsb(i);
     }
     return sum;
   }

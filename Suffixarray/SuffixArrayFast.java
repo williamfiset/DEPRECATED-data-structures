@@ -6,7 +6,7 @@ import java.io.*;
 public class SuffixArrayFast {
 
   final char [] T;
-  final int N, MAX_N;
+  final int N, MAX_N, CONST = 300;
   int [] RA, SA, tmpRA, tmpSA, C, LCP; 
 
   public SuffixArrayFast(String s) {
@@ -15,18 +15,17 @@ public class SuffixArrayFast {
 
   public SuffixArrayFast(char[] text) {
     N = text.length;
-    MAX_N = Math.max(300, N + 300);
+    MAX_N = Math.max(CONST, N + CONST);
     C = new int[MAX_N];
     RA = new int[MAX_N];
     SA = new int[MAX_N];
     tmpRA = new int[MAX_N];
     tmpSA = new int[MAX_N];
     T = new char[MAX_N];
-    for(int i = 0; i < N; i++) {
+    for(int i = 0; i < N; SA[i] = i, i++)
       RA[i] = T[i] = text[i];
-      SA[i] = i;
-    }
     construct();
+    kasai();
   }
 
   private void construct() {
@@ -45,7 +44,7 @@ public class SuffixArrayFast {
   }
 
   private void countingSort(int k) {
-    int i, sum, maxi = Math.max(300, N);
+    int i, sum, maxi = Math.max(CONST, N);
     for(i = 0; i < maxi; i++) C[i] = 0;
     for(i = 0; i < N; i++) C[i + k < N ? RA[i+k] : 0]++;
     for(i = sum = 0; i < maxi; i++) {

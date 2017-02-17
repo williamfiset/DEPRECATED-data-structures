@@ -31,12 +31,16 @@ public class SuffixArrayTest {
 
       SuffixArray sa = new SuffixArray(r);
       SuffixArrayNaive san = new SuffixArrayNaive(r);
+      SuffixArrayFast saf = new SuffixArrayFast(r);
 
       int[] sa_arr = sa.sa; //getSuffixPositions();
       int[] san_arr = san.getSuffixPositions();
+      int[] saf_arr = saf.SA;
 
-      for (int k = 0; k < sa.N; k++ )
+      for (int k = 0; k < sa.N; k++ ) {
         assertEquals(san_arr[k], sa_arr[k]);
+        assertEquals(saf_arr[k], sa_arr[k]);
+      }
 
     }
 
@@ -47,12 +51,14 @@ public class SuffixArrayTest {
 
     String s = "abcdef";
     SuffixArray sa = new SuffixArray(s);
+    SuffixArrayFast saf = new SuffixArrayFast(s);
     
     assertTrue( sa.contains("") );
     for (int i = 0; i < s.length(); i++ ) {
       for (int j = i+1; j <= s.length(); j++ ) {
         String substr = s.substring(i, j);
         assertTrue(sa.contains(substr));
+        assertTrue(saf.contains(substr));
       }
     }
 
@@ -142,10 +148,13 @@ public class SuffixArrayTest {
         if (s == e) continue;
         String substr = r.substring(s,e);
         SuffixArray sa = new SuffixArray( r );
+        SuffixArrayFast saf = new SuffixArrayFast( r );
         assertTrue(sa.contains(substr));
+        assertTrue(saf.contains(substr));
 
         String r2 = randomString(3);
         assertEquals( sa.contains(r2),  r.contains(r2));
+        assertEquals( saf.contains(r2),  r.contains(r2));
 
       }
 

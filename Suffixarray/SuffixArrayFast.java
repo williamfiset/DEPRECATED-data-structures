@@ -15,7 +15,7 @@ public class SuffixArrayFast {
 
   public SuffixArrayFast(char[] text) {
     N = text.length;
-    MAX_N = Math.max(CONST, N + CONST);
+    MAX_N = N + CONST;
     C = new int[MAX_N];
     RA = new int[MAX_N];
     SA = new int[MAX_N];

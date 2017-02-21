@@ -11,6 +11,12 @@ Each data structure is found in its own folder with associated tests. The data s
 We try and test our data structures when possible to ensure the reliability of the code we design. The test framework we use is JUnit, and the jar dependencies can be found at the root directory of the project. Each data structure should contain a **test** shell script which compiles the source files and runs the tests for that data structure. Here is an example:
 
 ``` bash
-cd LinkedList
+cd Linkedlist
 sh test
+```
+
+Alternatively, if you wish to run all the tests are each data structure you may with the testall shell script:
+
+``` bash
+sh testall
 ```

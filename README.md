@@ -1,6 +1,6 @@
 ## The Data Structures
 
-All the data structures provided in this repository (spare a few) have been designed for educational proposes. This is why you will find extensive comments explaining code snippets throughout. These data structures are associated with a video series on data structures which explains how each data structure works, please check out the associated [youtube video series](https://www.youtube.com/playlist?list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu)
+All the data structures provided in this repository (spare a few) have been designed for educational proposes. This is why you will find extensive comments explaining code snippets throughout. Futhermore, these data structures have for the most part been designed for a [data structures video series](https://www.youtube.com/playlist?list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu), which is why you will find a presentations/ folder containing slides for the associated data structure which we highly recommend you check out.
 
 ## Using the Data Structures
 

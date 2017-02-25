@@ -1,7 +1,6 @@
 
 /**
  * A min priority queue implementation using a binary heap.
- * Please contact me if you find a bug in this software.
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
@@ -299,18 +298,4 @@ class PQueue <T extends Comparable<T>> {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

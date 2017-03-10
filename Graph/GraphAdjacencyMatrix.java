@@ -7,7 +7,7 @@ class GraphAdjacencyMatrix {
 
   private int edgeCount = 0;
 
-  // Creates an Graph with an adjacency matrix, O(V)
+  // Creates an Graph with an adjacency matrix
   public GraphAdjacencyMatrix(int N) {
     if (N <= 0) throw new IllegalArgumentException();
     matrix = new Integer[N][N];

@@ -14,7 +14,7 @@ class PQueue <T extends Comparable<T>> {
 
   // This map keeps track of the possible indices a particular 
   // node value is found in the heap. Having this mapping lets
-  // us have O(log(n)) removals and O(1) a element containment check
+  // us have O(log(n)) removals and O(1) element containment check
   // at the cost of some additional space and minor overhead
   private Map <T, TreeSet<Integer>> map = new HashMap<>();
 

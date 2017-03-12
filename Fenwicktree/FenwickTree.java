@@ -1,3 +1,7 @@
+/**
+ * A Fenwick tree implementation.
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class FenwickTree {
 

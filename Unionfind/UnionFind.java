@@ -21,7 +21,7 @@ public class UnionFind {
     id = new int[size];
     for(int i = 0; i < size; i++) {
       id[i] = i; // Link to itself (self root)
-      sz[i] = 1; // Each component is of size one originally
+      sz[i] = 1; // Each component is originally of size one
     }
 
   }

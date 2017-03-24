@@ -8,8 +8,7 @@ public class GraphAdjacencyList {
     adjacencyList = new java.util.HashMap<>();
   }
 
-  // Intializes adjacency matrix for nodes indexed
-  // from [0, numNodes). Additional nodes can also be added later
+  // Initializes adjacency matrix for nodes indexed from [0, numNodes).
   public GraphAdjacencyList(int numNodes) {
     if (numNodes <= 0) throw new IllegalArgumentException();
     adjacencyList = new java.util.HashMap<>( numNodes );
@@ -66,7 +65,8 @@ public class GraphAdjacencyList {
 
       for (Edge edge : edges) {
         if ( edge.to == to ) {
-          edgeToRemove = edge; break;
+          edgeToRemove = edge;
+          break;
         }
       }
 

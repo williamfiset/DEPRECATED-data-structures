@@ -1,3 +1,8 @@
+/**
+ * A Fenwick Tree implementation which supports 
+ * point updates and sum range queries
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class FenwickTree {
 
@@ -13,7 +18,7 @@ public class FenwickTree {
   public FenwickTree(long[] values) {
 
     if (values == null)
-      throw new NullPointerException("Values array cannot be null!");
+      throw new IllegalArgumentException("Values array cannot be null!");
 
     // Make a clone of the values array since we manipulate 
     // the array in place destroying all its original content
@@ -24,6 +29,10 @@ public class FenwickTree {
       if (j < tree.length) tree[j] += tree[i];
     }
 
+  }
+
+  private long function(long a, long b) {
+    
   }
 
   // Returns the value of the least significant bit (LSB)

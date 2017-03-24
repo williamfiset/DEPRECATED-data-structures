@@ -21,7 +21,7 @@ public class FenwickTreeTests {
   public void test() {
     long[] ar = { 0,3,4,-2,7,3,11,5,-8,-9,2,4,-8 };
     FenwickTree ft = new FenwickTree(ar);
-    System.out.println(ft);
+    // System.out.println(ft);
     // ft.add(9, 5);
     // ft.prefixSum(7);
 
@@ -30,7 +30,7 @@ public class FenwickTreeTests {
   @Test
   public void testIntervalSumPositiveValues() {
     
-    System.out.println("testIntervalSumPositiveValues");
+    // System.out.println("testIntervalSumPositiveValues");
     long[] ar = {0,1,2,3,4,5,6};
     FenwickTree ft = new FenwickTree(ar);
     
@@ -51,7 +51,7 @@ public class FenwickTreeTests {
   @Test
   public void testIntervalSumNegativeValues() {
 
-    System.out.println("testIntervalSumNegativeValues");
+    // System.out.println("testIntervalSumNegativeValues");
     long[] ar = {0,-1,-2,-3,-4,-5,-6};
     FenwickTree ft = new FenwickTree(ar);
     
@@ -69,7 +69,7 @@ public class FenwickTreeTests {
   @Test
   public void testIntervalSumNegativeValues2() {
 
-    System.out.println("testIntervalSumNegativeValues2");
+    // System.out.println("testIntervalSumNegativeValues2");
     long[] ar = {0, -76871, -164790};
     FenwickTree ft = new FenwickTree(ar);
     
@@ -89,7 +89,7 @@ public class FenwickTreeTests {
   @Test
   public void testRandomizedStaticSumQueries() {
 
-    System.out.println("testRandomizedStaticSumQueries");
+    // System.out.println("testRandomizedStaticSumQueries");
     for (int i = 1; i <= LOOPS; i++) {
       
       long [] randList = genRandList( i );
@@ -120,7 +120,7 @@ public class FenwickTreeTests {
   @Test
   public void testRandomizedSetSumQueries() {
 
-    System.out.println("testRandomizedSetSumQueries");
+    // System.out.println("testRandomizedSetSumQueries");
     for (int i = 2; i <= LOOPS; i++) {
       
       long [] randList = genRandList( i );
@@ -174,7 +174,7 @@ public class FenwickTreeTests {
     return (long)(Math.random() * MAX_RAND_NUM*2) + MIN_RAND_NUM;    
   }
 
-  @Test(expected=NullPointerException.class)
+  @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation() {
     new FenwickTree(null);
   }

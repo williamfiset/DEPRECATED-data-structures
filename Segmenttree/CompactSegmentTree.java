@@ -1,6 +1,7 @@
 
 /**
- * A compact array based segment tree implementation
+ * A compact array based segment tree implementation.
+ * This segment tree supports point updates and range queries.
  * @author Al.Cash & William Fiset, william.alexandre.fiset@gmail.com
  **/
 

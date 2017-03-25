@@ -31,10 +31,6 @@ public class FenwickTree {
 
   }
 
-  private long function(long a, long b) {
-    
-  }
-
   // Returns the value of the least significant bit (LSB)
   // lsb(108) = lsb(0b1101100) =     0b100 = 4
   // lsb(104) = lsb(0b1101000) =    0b1000 = 8
@@ -52,7 +48,7 @@ public class FenwickTree {
 
   // Computes the prefix sum from [1, i], one based
   public long prefixSum(int i) {
-    long sum = 0;
+    long sum = 0L;
     while (i > 0) {
       sum += tree[i];
       i &= ~lsb(i);

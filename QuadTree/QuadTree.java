@@ -1,19 +1,19 @@
 
 /**
- * A QuadTree implementation
+ * A QuadTree implementation with integer coordinates.
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-// import java.awt.Rectangle;
+import java.awt.*;
 
 class Rect {
 
   long x1, y1, x2, y2;
 
-  // Define a rectangle as a pair of points (x1, y1) in the top left corner
-  // and (x2, y2) in the bottom right corner of the rectangle.
+  // Define a rectangle as a pair of points (x1, y1) in the bottom left corner
+  // and (x2, y2) in the top right corner of the rectangle.
   public Rect(long x1, long y1, long x2, long y2) {
-    if (x2 > x1 || y2 > y1) throw new IllegalArgumentException("Illegal rectangle coordinates");
+    if (x1 > x2 || y1 > y2) throw new IllegalArgumentException("Illegal rectangle coordinates");
     this.x1 = x1; this.y1 = y1;
     this.x2 = x2; this.y2 = y2;
   }
@@ -21,13 +21,13 @@ class Rect {
   // It is easier to check if two rectangles do not
   // intersect and negate the logic afterwards
   public boolean intersects(Rect r) {
-    return r != null && !(r.x1 < x2 || r.x2 > x1 || r.y2 > y1 || r.y1 < y1);
+    return r != null && !(r.x2 < x1 || r.x1 > x2 || r.y1 > y2 || r.y2 < y1);
   }
 
   // Check if a point (x, y) is within this rectangle, this
   // includes the boundary of the rectangle
   public boolean contains(long x, long y) {
-    return x1 <= x && x <= x2 && y1 <= y && y <= y2;
+    return (x1 <= x && x <= x2) && (y1 <= y && y <= y2);
   }
 
   // Check if another rect is strictly contained within this rectangle
@@ -35,18 +35,14 @@ class Rect {
     return r != null && contains(r.x1, r.y1) && contains(r.x2, r.y2);
   }
 
-  @Override public String toString() {
-    return "("+x1+","+y1+"), ("+x2+","+y2+")";
-  }
-
 }
 
 class QTNode {
 
-  // This is the maximum number of points each 
-  // quad tree node can sustain before it has to
-  // subdivide into four more regions.
-  private static final int NUM_POINTS = 8;
+  // This is the maximum number of points each quad tree node can
+  // sustain before it has to subdivide into four more regions.
+  // This variables can have a significant impact on performance.
+  private static final int NUM_POINTS = 16;
 
   // Keeps track of how many points are currently
   // contained within this quad tree node.
@@ -67,6 +63,8 @@ class QTNode {
   public QTNode(Rect region) {
     if (region == null) throw new IllegalArgumentException("Illegal region");
     this.region = region;
+    X = new long[NUM_POINTS];
+    Y = new long[NUM_POINTS];
   }
 
   // Try adding a point to the current region and if the
@@ -97,41 +95,42 @@ class QTNode {
       // Lazily subdivide each of the regions into four parts
       // one by one as needed to save memory.
 
-      if (nw == null) nw = new QTNode( new Rect(region.x1, region.y1, cx, cy) );
-      if (nw.add(x, y)) return true;
-
-      // Q: Do we need to cx+1 and cy-1?? I'm not entirely certain.
-
-      if (ne == null) ne = new QTNode( new Rect(cx+0, region.y1, region.x2, cy) );
-      if (ne.add(x, y)) return true;
-
-      if (sw == null) sw = new QTNode( new Rect(region.x1, cy-0, cx, region.y2) );
+      if (sw == null) sw = new QTNode( new Rect(region.x1, region.y1, cx, cy) );
       if (sw.add(x, y)) return true;
 
-      if (se == null) se = new QTNode( new Rect(cx+0, cy-0, region.x2, region.y2) );
+      if (nw == null) nw = new QTNode( new Rect(region.x1, cy, cx, region.y2) );
+      if (nw.add(x, y)) return true;
+
+      if (ne == null) ne = new QTNode( new Rect(cx, cy, region.x2, region.y2) );
+      if (ne.add(x, y)) return true;
+
+      if (se == null) se = new QTNode( new Rect(cx, region.y1, region.x2, cy) );
       return se.add(x, y);
 
     }
 
   }
 
-  // Compute how many points are found within a certain region
+  // Count how many points are found within a certain rectangular region
   public int count(Rect area) {
 
     if (area == null || !region.intersects(area)) return 0;
 
-    // The area we're considering fully contains 
-    // the region of this node, so simply return the
-    // number of points within this region
-    if ( area.contains(region) ) return ptCount;
-
     int count = 0;
+
+    // The area we're considering fully contains 
+    // the region of this node, so simply add the
+    // number of points within this region to the count
+    if ( area.contains(region) ) {
+      count = ptCount;
 
     // Our regions overlap, so some points in this
     // region may intersect with the area we're considering
-    for (int i = 0; i < ptCount; i++)
-      if ( area.contains(X[i], Y[i]) )
-        count++;
+    } else {
+      for (int i = 0; i < ptCount; i++)
+        if ( area.contains(X[i], Y[i]) )
+          count++;
+    }
 
     // Dig into each of the quadrants and count all points
     // which overlap with the area and sum their count
@@ -145,4 +144,3 @@ class QTNode {
   }
 
 }
-

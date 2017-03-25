@@ -4,39 +4,6 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-import java.awt.*;
-
-class Rect {
-
-  long x1, y1, x2, y2;
-
-  // Define a rectangle as a pair of points (x1, y1) in the bottom left corner
-  // and (x2, y2) in the top right corner of the rectangle.
-  public Rect(long x1, long y1, long x2, long y2) {
-    if (x1 > x2 || y1 > y2) throw new IllegalArgumentException("Illegal rectangle coordinates");
-    this.x1 = x1; this.y1 = y1;
-    this.x2 = x2; this.y2 = y2;
-  }
-
-  // It is easier to check if two rectangles do not
-  // intersect and negate the logic afterwards
-  public boolean intersects(Rect r) {
-    return r != null && !(r.x2 < x1 || r.x1 > x2 || r.y1 > y2 || r.y2 < y1);
-  }
-
-  // Check if a point (x, y) is within this rectangle, this
-  // includes the boundary of the rectangle
-  public boolean contains(long x, long y) {
-    return (x1 <= x && x <= x2) && (y1 <= y && y <= y2);
-  }
-
-  // Check if another rect is strictly contained within this rectangle
-  public boolean contains(Rect r) {
-    return r != null && contains(r.x1, r.y1) && contains(r.x2, r.y2);
-  }
-
-}
-
 class QTNode {
 
   // This is the maximum number of points each quad tree node can
@@ -144,3 +111,36 @@ class QTNode {
   }
 
 }
+
+class Rect {
+
+  long x1, y1, x2, y2;
+
+  // Define a rectangle as a pair of points (x1, y1) in the bottom left corner
+  // and (x2, y2) in the top right corner of the rectangle.
+  public Rect(long x1, long y1, long x2, long y2) {
+    if (x1 > x2 || y1 > y2) throw new IllegalArgumentException("Illegal rectangle coordinates");
+    this.x1 = x1; this.y1 = y1;
+    this.x2 = x2; this.y2 = y2;
+  }
+
+  // It is easier to check if two rectangles do not
+  // intersect and negate the logic afterwards
+  public boolean intersects(Rect r) {
+    return r != null && !(r.x2 < x1 || r.x1 > x2 || r.y1 > y2 || r.y2 < y1);
+  }
+
+  // Check if a point (x, y) is within this rectangle, this
+  // includes the boundary of the rectangle
+  public boolean contains(long x, long y) {
+    return (x1 <= x && x <= x2) && (y1 <= y && y <= y2);
+  }
+
+  // Check if another rect is strictly contained within this rectangle
+  public boolean contains(Rect r) {
+    return r != null && contains(r.x1, r.y1) && contains(r.x2, r.y2);
+  }
+
+}
+
+

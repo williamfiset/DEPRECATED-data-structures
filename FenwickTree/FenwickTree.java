@@ -57,7 +57,8 @@ public class FenwickTree {
   }
 
   // Returns the sum of the interval [i, j], one based
-  public long interval_sum(int i, int j) {
+  public long sum(int i, int j) {
+    if (j < i) throw new IllegalArgumentException("Make sure j >= i");
     return prefixSum(j) - prefixSum(i - 1);
   }
 
@@ -71,7 +72,7 @@ public class FenwickTree {
 
   // Set index i to be equal to k, one based
   public void set(int i, long k) {
-    long value = interval_sum(i, i);
+    long value = sum(i, i);
     add( i, k - value );
   }
 

@@ -34,17 +34,17 @@ public class FenwickTreeTests {
     long[] ar = {0,1,2,3,4,5,6};
     FenwickTree ft = new FenwickTree(ar);
     
-    assertEquals( 21, ft.interval_sum(1, 6) );
-    assertEquals( 15, ft.interval_sum(1, 5) );
-    assertEquals( 10, ft.interval_sum(1, 4) );
-    assertEquals(  6, ft.interval_sum(1, 3) );
-    assertEquals(  3, ft.interval_sum(1, 2) );
-    assertEquals(  1, ft.interval_sum(1, 1) );
-    assertEquals(  0, ft.interval_sum(1, 0) );
+    assertEquals( 21, ft.sum(1, 6) );
+    assertEquals( 15, ft.sum(1, 5) );
+    assertEquals( 10, ft.sum(1, 4) );
+    assertEquals(  6, ft.sum(1, 3) );
+    assertEquals(  3, ft.sum(1, 2) );
+    assertEquals(  1, ft.sum(1, 1) );
+    assertEquals(  0, ft.sum(1, 0) );
 
-    assertEquals(  7, ft.interval_sum(3, 4) );
-    assertEquals( 20, ft.interval_sum(2, 6) );
-    assertEquals(  9, ft.interval_sum(4, 5) );
+    assertEquals(  7, ft.sum(3, 4) );
+    assertEquals( 20, ft.sum(2, 6) );
+    assertEquals(  9, ft.sum(4, 5) );
 
   }
   
@@ -55,13 +55,13 @@ public class FenwickTreeTests {
     long[] ar = {0,-1,-2,-3,-4,-5,-6};
     FenwickTree ft = new FenwickTree(ar);
     
-    assertEquals( -21, ft.interval_sum(1, 6) );
-    assertEquals( -15, ft.interval_sum(1, 5) );
-    assertEquals( -10, ft.interval_sum(1, 4) );
-    assertEquals(  -6, ft.interval_sum(1, 3) );
-    assertEquals(  -3, ft.interval_sum(1, 2) );
-    assertEquals(  -1, ft.interval_sum(1, 1) );
-    assertEquals(   0, ft.interval_sum(1, 0) );
+    assertEquals( -21, ft.sum(1, 6) );
+    assertEquals( -15, ft.sum(1, 5) );
+    assertEquals( -10, ft.sum(1, 4) );
+    assertEquals(  -6, ft.sum(1, 3) );
+    assertEquals(  -3, ft.sum(1, 2) );
+    assertEquals(  -1, ft.sum(1, 1) );
+    assertEquals(   0, ft.sum(1, 0) );
 
   }
 
@@ -74,14 +74,14 @@ public class FenwickTreeTests {
     FenwickTree ft = new FenwickTree(ar);
     
     for(int i = 0; i < LOOPS;i++) {
-      assertEquals( -76871,  ft.interval_sum(1, 1) );
-      assertEquals( -76871,  ft.interval_sum(1, 1) );
-      assertEquals( -241661, ft.interval_sum(1, 2) );
-      assertEquals( -241661, ft.interval_sum(1, 2) );
-      assertEquals( -241661, ft.interval_sum(1, 2) );
-      assertEquals( -164790, ft.interval_sum(2, 2) );
-      assertEquals( -164790, ft.interval_sum(2, 2) );
-      assertEquals( -164790, ft.interval_sum(2, 2) );
+      assertEquals( -76871,  ft.sum(1, 1) );
+      assertEquals( -76871,  ft.sum(1, 1) );
+      assertEquals( -241661, ft.sum(1, 2) );
+      assertEquals( -241661, ft.sum(1, 2) );
+      assertEquals( -241661, ft.sum(1, 2) );
+      assertEquals( -164790, ft.sum(2, 2) );
+      assertEquals( -164790, ft.sum(2, 2) );
+      assertEquals( -164790, ft.sum(2, 2) );
     }
 
   }
@@ -113,7 +113,7 @@ public class FenwickTreeTests {
 
     for(int k = lo; k <= hi; k++) sum += arr[k];
 
-    assertEquals(sum, ft.interval_sum(lo, hi));
+    assertEquals(sum, ft.sum(lo, hi));
 
   }
 

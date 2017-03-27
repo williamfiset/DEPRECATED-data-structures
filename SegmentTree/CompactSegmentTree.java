@@ -36,9 +36,9 @@ public class CompactSegmentTree {
     if (a == UNIQUE) return b;
     else if (b == UNIQUE) return a;
 
-    return a + b; // sum over a range
+    // return a + b; // sum over a range
     // return (a > b) ? a : b; // maximum value over a range
-    // return (a < b) ? a : b; // minimum value over a range
+    return (a < b) ? a : b; // minimum value over a range
     // return a * b; // product over a range (watch out for overflow!)
 
   }

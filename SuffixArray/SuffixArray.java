@@ -239,7 +239,12 @@ class SuffixArray {
 
   }
 
-  // Q: what is the time complexity?
+  /**
+   * Finds the Longest Common Substring (LCS) between a group of strings.
+   * The current implementation takes O(nlog(n)) bounded by the suffix array construction.
+   * @param strs - The strings you wish to find the longest common substring between
+   * @param K - The minimum number of strings to find the LCS between. K must be at least 2.
+   **/
   public static TreeSet <String> lcs(String [] strs, final int K) {
 
     if (K <= 1) throw new IllegalArgumentException("K must be greater than or equal to 2!");
@@ -247,16 +252,18 @@ class SuffixArray {
     TreeSet <String> lcss = new TreeSet<>();
     if (strs == null || strs.length <= 1) return lcss;
 
-    // L is the concatenation length
+    // L is the concatenated length of all the strings and the sentinels
     int L = 0;
+
     final int NUM_SENTINELS = strs.length, N = strs.length;
     for(int i = 0; i < N; i++) L += strs[i].length() + 1;
 
-    int[] suffixMap = new int[L];
+    int[] indexMap = new int[L];
     int LOWEST_ASCII = Integer.MAX_VALUE;
 
-    // Compute the total length of the concatenated strings 
-    // including the sentinel values we're going to insert.
+    // Find the lowest ASCII value within the strings.
+    // Also construct the index map to know which original 
+    // string a given suffix belongs to.
     for (int i = 0, k = 0; i < strs.length; i++) {
       
       String str = strs[i];
@@ -264,11 +271,11 @@ class SuffixArray {
       for (int j = 0; j < str.length(); j++) {
         int asciiVal = str.charAt(j);
         if (asciiVal < LOWEST_ASCII) LOWEST_ASCII = asciiVal;
-        suffixMap[k++] = i;
+        indexMap[k++] = i;
       }
 
       // Record that the sentinel belongs to string i
-      suffixMap[k++] = i;
+      indexMap[k++] = i;
 
     }
 
@@ -285,13 +292,8 @@ class SuffixArray {
       T[k++] = sentinel++;
     }
 
-    // System.out.println(Arrays.toString(strs));
-    // System.out.println(Arrays.toString(suffixMap));
-    // System.out.println(Arrays.toString(T));
-
-    SuffixArray sa = new SuffixArray(T);
-    CompactSegmentTree segTree = new CompactSegmentTree(sa.lcp);
-    // System.out.println(toString(sa, SHIFT));
+    SuffixArrayFast sa = new SuffixArrayFast(T);
+    Deque <Integer> deque = new ArrayDeque<>();
 
     // Assign each string a color and maintain the color count within the window
     Map <Integer, Integer> windowColorCount = new HashMap<>();
@@ -302,49 +304,49 @@ class SuffixArray {
     int lo = NUM_SENTINELS, hi = NUM_SENTINELS, bestLCSLength = 0;
 
     // Add the first color
-    int firstColor = suffixMap[sa.sa[hi]];
+    int firstColor = indexMap[sa.SA[hi]];
     windowColors.add(firstColor);
     windowColorCount.put(firstColor, 1);
 
     // Maintain a sliding window between lo and hi
     while(hi < L) {
 
-      // System.out.printf("%d %d\n", lo, hi);
-
       int uniqueColors = windowColors.size();
 
       // Attempt to update the LCS
       if (uniqueColors >= K) {
 
-        // Find the window LCP using a segment tree
-        // in the range of [lo, hi), O(log(n))
-        int windowLCP = (int) segTree.query(lo, hi);
+        int windowLCP = sa.LCP[deque.peekFirst()];
 
-        if (bestLCSLength < windowLCP) {
+        if (windowLCP > 0 && bestLCSLength < windowLCP) {
           bestLCSLength = windowLCP;
           lcss.clear();
         }
 
-        if (bestLCSLength == windowLCP) {
+        if (windowLCP > 0 && bestLCSLength == windowLCP) {
 
           // Construct the current LCS within the window interval
-          int pos = sa.sa[lo];
+          int pos = sa.SA[lo];
           char[] lcs = new char[windowLCP];
           for (int i = 0; i < windowLCP; i++) lcs[i] = (char)(T[pos+i] - SHIFT);
 
           lcss.add(new String(lcs));
 
-          // The original strings to which this longest common
-          // substring belongs to can be found in the windowColors set
-          // Just use those indexes on the 'strs' array
+          // If you wish to find the original strings to which this longest 
+          // common substring belongs to the indexes of those strings can be
+          // found in the windowColors set, so just use those indexes on the 'strs' array
 
         }
 
         // Update the colors in our window
-        int lastColor = suffixMap[sa.sa[lo]];
+        int lastColor = indexMap[sa.SA[lo]];
         Integer colorCount = windowColorCount.get(lastColor);
         if (colorCount == 1) windowColors.remove(lastColor);
         windowColorCount.put(lastColor, colorCount - 1);
+
+        // Remove the head if it's outside the new range: [lo+1, hi)
+        while (!deque.isEmpty() && deque.peekFirst() <= lo)
+          deque.removeFirst();
 
         // Decrease the window size
         lo++;
@@ -352,7 +354,7 @@ class SuffixArray {
       // Increase the window size because we don't have enough colors
       } else if(++hi < L) {
 
-        int nextColor = suffixMap[sa.sa[hi]];
+        int nextColor = indexMap[sa.SA[hi]];
 
         // Update the colors in our window
         windowColors.add(nextColor);
@@ -360,30 +362,17 @@ class SuffixArray {
         if (colorCount == null) colorCount = 0;
         windowColorCount.put(nextColor, colorCount + 1);
           
+        // Remove all the worse values in the back of the deque
+        while(!deque.isEmpty() && sa.LCP[deque.peekLast()] > sa.LCP[hi-1])
+          deque.removeLast();
+        deque.addLast(hi-1);
+
       }
 
     }
 
     return lcss;
 
-  }
-
-  private static String toString(SuffixArray sa, int shift) {
-    final String SEP = "$";
-    StringBuilder sb = new StringBuilder();
-    for(int i = 0; i < sa.N; i++) {
-      int index  = sa.sa[i];
-      int length = sa.N - index;
-      String suffix = index + " ";
-      for (int j = 0; j < length; j++) {
-        if (sa.T[index+j]-shift < 32) suffix += SEP;
-        else suffix += ((char)(sa.T[index+j]-shift)) + "";
-      }
-      sb.append(suffix + "\n");
-      // sb.append( index + " " + new String(T, index, length) + "\n");
-    }
-    String lcp_str = "LCP: " + Arrays.toString(sa.lcp) + "\n";
-    return lcp_str + sb.toString();
   }
 
   @Override public String toString() {
@@ -402,81 +391,17 @@ class SuffixArray {
     // String[] strs = { "AAGAAGC", "AGAAGT", "CGAAGC" };
     // String[] strs = { "abca", "bcad", "daca" };
     // String[] strs = { "abca", "bcad", "daca" };
-    String[] strs = { "AABC", "BCDC", "BCDE", "CDED" };
-    TreeSet <String> lcss = SuffixArray.lcs(strs, 2);
-    System.out.println(lcss);
+    // String[] strs = { "AABC", "BCDC", "BCDE", "CDED" };
+    // String[] strs = { "abcdefg", "bcdefgh", "cdefghi" };
+    // String[] strs = { "xxx", "yyy", "zzz" };
+    // TreeSet <String> lcss = SuffixArray.lcs(strs, 2);
+    // System.out.println(lcss);
 
     // SuffixArray sa = new SuffixArray("abracadabra");
     // System.out.println(sa);
     // System.out.println(java.util.Arrays.toString(sa.sa));
     // System.out.println(java.util.Arrays.toString(sa.lcp));
 
-  }
-
-}
-
-
-// Used in LCS 
-class CompactSegmentTree {
-
-  private int N;
-
-  // Let UNIQUE be a value which does NOT 
-  // and will not appear in the segment tree
-  private long UNIQUE = 8123572096793136074L;
-
-  // Segment tree values
-  private long[] tree;
-
-  public CompactSegmentTree(int size) {
-    tree = new long[2*(N = size)];
-    java.util.Arrays.fill(tree, UNIQUE);
-  }
-
-  public CompactSegmentTree(int[] values) {
-    this(values.length);
-    for(int i = 0; i < N; i++) modify(i, values[i]);
-  }
-
-  public CompactSegmentTree(long[] values) {
-    this(values.length);
-    for(int i = 0; i < N; i++) modify(i, values[i]);
-  }
-
-  // This is the segment tree function we are using for queries.
-  // The function must be an associative function, meaning
-  // the following property must hold: f(f(a,b),c) = f(a,f(b,c)).
-  // Common associative functions used with segment trees
-  // include: min, max, sum, product, GCD, and etc...
-  private long function(long a, long b) {
-
-    if (a == UNIQUE) return b;
-    else if (b == UNIQUE) return a;
-
-    // return a + b; // sum over a range
-    // return (a > b) ? a : b; // maximum value over a range
-    return (a < b) ? a : b; // minimum value over a range
-    // return a * b; // product over a range (watch out for overflow!)
-
-  }
-
-  // Adjust point i by a value, O(log(n))
-  public void modify(int i, long value) {
-    tree[i + N] = function( tree[i+N],  value);
-    for (i += N; i > 1; i >>= 1) {
-      tree[i>>1] = function(tree[i], tree[i^1]);
-    }
-  }
-  
-  // Query interval [l, r), O(log(n))
-  public long query(int l, int r) {
-    if (l >= r) return 0L;
-    long res = UNIQUE;
-    for (l += N, r += N; l < r; l >>= 1, r >>= 1) {
-      if ((l&1) != 0) res = function(res, tree[l++]);
-      if ((r&1) != 0) res = function(res, tree[--r]);
-    }
-    return res;
   }
 
 }

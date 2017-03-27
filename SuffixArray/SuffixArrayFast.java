@@ -5,15 +5,11 @@ import java.io.*;
 
 public class SuffixArrayFast {
 
-  final char [] T;
-  final int N, MAX_N, CONST = 300;
+  final int [] T;
+  final int N, MAX_N, CONST = 3000;
   int [] RA, SA, tmpRA, tmpSA, C, LCP; 
 
-  public SuffixArrayFast(String s) {
-    this(s.toCharArray());
-  }
-
-  public SuffixArrayFast(char[] text) {
+  public SuffixArrayFast(int[] text) {
     N = text.length;
     MAX_N = N + CONST;
     C = new int[MAX_N];
@@ -21,7 +17,7 @@ public class SuffixArrayFast {
     SA = new int[MAX_N];
     tmpRA = new int[MAX_N];
     tmpSA = new int[MAX_N];
-    T = new char[MAX_N];
+    T = new int[MAX_N];
     for(int i = 0; i < N; SA[i] = i, i++)
       RA[i] = T[i] = text[i];
     construct();
@@ -110,17 +106,142 @@ public class SuffixArrayFast {
     return false;
   }
 
+  /**
+   * Finds the Longest Common Substring (LCS) between a group of strings.
+   * The current implementation takes O(nlog(n)) bounded by the suffix array construction.
+   * @param strs - The strings you wish to find the longest common substring between
+   * @param K - The minimum number of strings to find the LCS between. K must be at least 2.
+   **/
+  public static TreeSet <String> lcs(String [] strs, final int K) {
+
+    if (K <= 1) throw new IllegalArgumentException("K must be greater than or equal to 2!");
+
+    TreeSet <String> lcss = new TreeSet<>();
+    if (strs == null || strs.length <= 1) return lcss;
+
+    // L is the concatenated length of all the strings and the sentinels
+    int L = 0;
+
+    final int NUM_SENTINELS = strs.length, N = strs.length;
+    for(int i = 0; i < N; i++) L += strs[i].length() + 1;
+
+    int[] indexMap = new int[L];
+    int LOWEST_ASCII = Integer.MAX_VALUE;
+
+    // Find the lowest ASCII value within the strings.
+    // Also construct the index map to know which original 
+    // string a given suffix belongs to.
+    for (int i = 0, k = 0; i < strs.length; i++) {
+      
+      String str = strs[i];
+      
+      for (int j = 0; j < str.length(); j++) {
+        int asciiVal = str.charAt(j);
+        if (asciiVal < LOWEST_ASCII) LOWEST_ASCII = asciiVal;
+        indexMap[k++] = i;
+      }
+
+      // Record that the sentinel belongs to string i
+      indexMap[k++] = i;
+
+    }
+
+    final int SHIFT = LOWEST_ASCII + NUM_SENTINELS + 1;
+
+    int sentinel = 0;
+    int[] T = new int[L];
+
+    // Construct the new text with the shifted values and the sentinels
+    for(int i = 0, k = 0; i < N; i++) {
+      String str = strs[i];
+      for (int j = 0; j < str.length(); j++)
+        T[k++] = ((int)str.charAt(j)) + SHIFT;
+      T[k++] = sentinel++;
+    }
+
+    SuffixArrayFast sa = new SuffixArrayFast(T);
+    Deque <Integer> deque = new ArrayDeque<>();
+
+    // Assign each string a color and maintain the color count within the window
+    Map <Integer, Integer> windowColorCount = new HashMap<>();
+    Set <Integer> windowColors = new HashSet<>();
+
+    // Start the sliding window at the number of sentinels because those
+    // all get sorted first and we want to ignore them
+    int lo = NUM_SENTINELS, hi = NUM_SENTINELS, bestLCSLength = 0;
+
+    // Add the first color
+    int firstColor = indexMap[sa.SA[hi]];
+    windowColors.add(firstColor);
+    windowColorCount.put(firstColor, 1);
+
+    // Maintain a sliding window between lo and hi
+    while(hi < L) {
+
+      int uniqueColors = windowColors.size();
+
+      // Attempt to update the LCS
+      if (uniqueColors >= K) {
+
+        int windowLCP = sa.LCP[deque.peekFirst()];
+
+        if (windowLCP > 0 && bestLCSLength < windowLCP) {
+          bestLCSLength = windowLCP;
+          lcss.clear();
+        }
+
+        if (windowLCP > 0 && bestLCSLength == windowLCP) {
+
+          // Construct the current LCS within the window interval
+          int pos = sa.SA[lo];
+          char[] lcs = new char[windowLCP];
+          for (int i = 0; i < windowLCP; i++) lcs[i] = (char)(T[pos+i] - SHIFT);
+
+          lcss.add(new String(lcs));
+
+          // If you wish to find the original strings to which this longest 
+          // common substring belongs to the indexes of those strings can be
+          // found in the windowColors set, so just use those indexes on the 'strs' array
+
+        }
+
+        // Update the colors in our window
+        int lastColor = indexMap[sa.SA[lo]];
+        Integer colorCount = windowColorCount.get(lastColor);
+        if (colorCount == 1) windowColors.remove(lastColor);
+        windowColorCount.put(lastColor, colorCount - 1);
+
+        // Remove the head if it's outside the new range: [lo+1, hi)
+        while (!deque.isEmpty() && deque.peekFirst() <= lo)
+          deque.removeFirst();
+
+        // Decrease the window size
+        lo++;
+
+      // Increase the window size because we don't have enough colors
+      } else if(++hi < L) {
+
+        int nextColor = indexMap[sa.SA[hi]];
+
+        // Update the colors in our window
+        windowColors.add(nextColor);
+        Integer colorCount = windowColorCount.get(nextColor);
+        if (colorCount == null) colorCount = 0;
+        windowColorCount.put(nextColor, colorCount + 1);
+          
+        // Remove all the worse values in the back of the deque
+        while(!deque.isEmpty() && sa.LCP[deque.peekLast()] > sa.LCP[hi-1])
+          deque.removeLast();
+        deque.addLast(hi-1);
+
+      }
+
+    }
+
+    return lcss;
+
+  }
+
 }
-
-
-
-
-
-
-
-
-
-
-
 
 

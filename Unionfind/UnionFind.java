@@ -1,14 +1,23 @@
-
-// UnionFind/Disjoint Set Data-structure.
-// 
-// This code is an inspired modification of the union find implementation found in 
-// 'Algorithms Fourth Edition' by Robert Sedgewick and Kevin Wayne.
+/**
+ * UnionFind/Disjoint Set data structure implementation 
+ * This code is an inspired modification of the union find implementation found in 
+ * 'Algorithms Fourth Edition' by Robert Sedgewick and Kevin Wayne.
+ *
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class UnionFind {
 
+  // The number of elements in this union find
   private int size;
+  
+  // Used to track the sizes of each of the components
   private int[] sz;
+
+  // id[i] points to the parent of i, if id[i] = i then i is a root node
   private int[] id;
+
+  // Tracks the number of components in the union find
   private int numComponents;
 
   public UnionFind(int size) {
@@ -19,6 +28,7 @@ public class UnionFind {
     this.size = numComponents = size;
     sz = new int[size];
     id = new int[size];
+
     for(int i = 0; i < size; i++) {
       id[i] = i; // Link to itself (self root)
       sz[i] = 1; // Each component is originally of size one
@@ -94,3 +104,12 @@ public class UnionFind {
   }
 
 }
+
+
+
+
+
+
+
+
+

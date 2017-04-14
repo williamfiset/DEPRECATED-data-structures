@@ -57,6 +57,12 @@ public class UnionFind {
 
   }
 
+  // This is the recursive formulation for the find method
+  // public int find(int p) {
+  //   if (p == id[p]) return p;
+  //   return id[p] = find(id[p]);
+  // }
+
   // Return whether or not the elements 'p' and
   // 'q' are in the same components/set.
   public boolean connected(int p, int q) {
@@ -87,7 +93,6 @@ public class UnionFind {
     // These elements are already in the same group!
     if (root1 == root2) return;
 
-    // Merge two components/sets together.
     // Merge smaller component/set into the larger one.
     if (sz[root1] < sz[root2]) {
       sz[root2] += sz[root1];

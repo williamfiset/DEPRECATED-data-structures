@@ -1,8 +1,23 @@
+/**
+ * This file contains an implementation of a Binary Search Tree (BST)
+ * Any comparable data is allowed within this tree (numbers, strings,
+ * comparable Objects, etc...). Supported operations include adding,
+ * removing, height, and containment checks. Furthermore, multiple
+ * tree traversal Iterators are provided including:
+ * 1) Preorder traversal
+ * 2) Inorder traversal
+ * 3) Postorder traversal
+ * 4) Levelorder traversal
+ *
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class BinarySearchTree <T extends Comparable<T>> {
   
-  private int modCount = 0;
+  // Tracks the number of nodes in this BST
   private int nodeCount = 0;
+
+  // This BST is a rooted tree so we maintain a handle on the root node
   private Node root = null;
 
   // Internal node containing node references
@@ -52,7 +67,7 @@ public class BinarySearchTree <T extends Comparable<T>> {
       node = new Node (null, null, elem);
 
     } else {
-      // Place lower elem values on left
+      // Place lower elements values in left subtree
       if (elem.compareTo(node.data) < 0) {
         node.left = add(node.left, elem);
       } else {
@@ -122,8 +137,9 @@ public class BinarySearchTree <T extends Comparable<T>> {
         return leftChild;
 
       // When removing a node from a binary tree with two links 
-      // the successor of the node being removed is the 
-      // smallest node in the leftmost node in the right subtree.
+      // the successor of the node being removed is the smallest
+      // node in the right subtree which can be found by
+      // traversing as far left as possible in the right subtree.
       } else {
         
         // Find the node in the leftmost subtree
@@ -132,10 +148,10 @@ public class BinarySearchTree <T extends Comparable<T>> {
         // Swap the data into the node we wish to remove
         node.data = tmp.data;
 
-        // Go into the right subtree and remove the tmp
-        // node we just swapped with the node we wished to remove.
-        // This prevents us from having two nodes
-        // in our tree with the same value as the tmp node.
+        // Go into the right subtree and remove the tmp node we
+        // just swapped with the node we wished to remove.
+        // This prevents us from having two nodes in our
+        // tree with the same value as the tmp node.
         node.right = remove(node.right, tmp.data);
 
       }

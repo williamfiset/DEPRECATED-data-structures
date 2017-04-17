@@ -136,23 +136,31 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
         return leftChild;
 
-      // When removing a node from a binary tree with two links 
-      // the successor of the node being removed is the smallest
-      // node in the right subtree which can be found by
+      // When removing a node from a binary tree with two links the
+      // successor of the node being removed can either be the largest
+      // value in the left subtree or the smallest value in the right 
+      // subtree. In this implementation I have decided to find the 
+      // smallest value in the right subtree which can be found by 
       // traversing as far left as possible in the right subtree.
       } else {
         
-        // Find the node in the leftmost subtree
+        // Find the leftmost node in the right subtree
         Node tmp = digLeft(node.right);
 
-        // Swap the data into the node we wish to remove
+        // Swap the data
         node.data = tmp.data;
 
-        // Go into the right subtree and remove the tmp node we
-        // just swapped with the node we wished to remove.
-        // This prevents us from having two nodes in our
-        // tree with the same value as the tmp node.
+        // Go into the right subtree and remove the leftmost node we
+        // found and swapped data with. This prevents us from having
+        // two nodes in our tree with the same value.
         node.right = remove(node.right, tmp.data);
+        
+        // If instead we wanted to find the largest node in the left
+        // subtree as opposed to smallest node in the right subtree 
+        // here is what we would do:
+        // Node tmp = digRight(node.left);
+        // node.data = tmp.data;
+        // node.left = remove(node.left, tmp.data);
 
       }
 
@@ -162,11 +170,19 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   }
 
-  // Helper method for remove.
+  // Helper method to find the leftmost node
   private Node digLeft(Node node) {
     Node cur = node;
     while(cur.left != null) 
       cur = cur.left;
+    return cur;
+  }
+
+  // Helper method to find the rightmost node
+  private Node digRight(Node node) {
+    Node cur = node;
+    while(cur.right != null) 
+      cur = cur.right;
     return cur;
   }
 

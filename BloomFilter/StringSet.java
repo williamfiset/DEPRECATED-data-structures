@@ -1,7 +1,7 @@
 /**
  * The StringSet is a probabilistic string set data structure implemented using a bloom filter
- * and positional rolling hashing techniques. This data structure is very fast (it can
- * outperform Java's HashSet DS by many orders of magnitude on large data sets).
+ * and positional rolling hashing techniques. This data structure is very fast (it can outperform 
+ * Java's HashSet DS by many orders of magnitude on large data sets if you cache the hashes).
  * Despite being probabilistic, this DS is very safe to use because the probability of 
  * a false positive can be set to as low as you wish it to be.
  *
@@ -68,12 +68,9 @@ public class StringSet {
 
   }
 
-  // This method adds a string to the bloom filter set. If you're adding a lot
-  // of similar strings of the same length use the overloaded version
-  // of this method to take advantage of rolling hashes, or if you're
-  // simply adding all substrings call 'addAllSubstrings' to also take
-  // advantage of rolling hashing technique.
-  public void add(String str) {
+  // Returns a shallow copy of the current rolling hash value.
+  // Make sure you clone the array if you want to cache it.
+  public long[] computeHash(String str) {
 
     java.util.Arrays.fill(rollingHashes, 0L);
 
@@ -84,6 +81,18 @@ public class StringSet {
       }
     }
 
+    return rollingHashes; // rollingHashes.clone();
+
+  }
+
+  // This method adds a string to the bloom filter set. If you're adding a lot
+  // of similar strings of the same length use the overloaded version
+  // of this method to take advantage of rolling hashes, or if you're
+  // simply adding all substrings call 'addAllSubstrings' to also take
+  // advantage of rolling hashing technique.
+  public void add(String str) {
+
+    computeHash(str);
     bloomFilter.add(rollingHashes);
 
   }
@@ -178,13 +187,7 @@ public class StringSet {
   public boolean contains(String str) {
 
     // Dynamically compute this string's hash value
-    java.util.Arrays.fill(rollingHashes, 0L);
-    for (int i = 0; i < str.length(); i++) {
-      for (int k = 0; k < NUM_HASHES; k++) {
-        int rightChar = ALPHABET[str.charAt(i)-' '];
-        rollingHashes[k] = addRight(rollingHashes[k], rightChar, k);
-      }
-    }
+    computeHash(str);
 
     return bloomFilter.contains(rollingHashes);
 

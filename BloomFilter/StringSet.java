@@ -27,7 +27,7 @@ public class StringSet {
 
   // More primes: 10^4+9, 10^4+13, 10^4+19, 10^5+7, 10^5+9, 10^5+37, 10^6+3, 10^6+19, 10^6+43, 
   // 10^7+3, 10^7+33, 10^7+37, 10^8+19, 10^8+79, 10^8+103, 10^9+7, 10^9+9, 10^9+23
-  private int[] DEFAULT_PRIMES = { 10_000_003, 10_000_033, 10_000_037 };
+  private static int[] DEFAULT_PRIMES = { 10_000_003, 10_000_033, 10_000_037 };
 
   // Assign a mapping from the printable ASCII characters to the natural numbers
   static {
@@ -80,7 +80,7 @@ public class StringSet {
 
     for (int i = 0; i < str.length(); i++) {
       for (int k = 0; k < NUM_HASHES; k++) {
-        int rightChar = ALPHABET[str.charAt(k)-' '];
+        int rightChar = ALPHABET[str.charAt(i)-' '];
         rollingHashes[k] = addRight(rollingHashes[k], rightChar, k);
       }
     }
@@ -172,7 +172,7 @@ public class StringSet {
 
   // Given the hash of a string this method returns whether or not
   // that string is found within the bloom filter.
-  public boolean contains(int[] hashes) {
+  public boolean contains(long[] hashes) {
     return bloomFilter.contains(hashes);
   }
 
@@ -182,7 +182,7 @@ public class StringSet {
     java.util.Arrays.fill(rollingHashes, 0L);
     for (int i = 0; i < str.length(); i++) {
       for (int k = 0; k < NUM_HASHES; k++) {
-        int rightChar = ALPHABET[str.charAt(k)-' '];
+        int rightChar = ALPHABET[str.charAt(i)-' '];
         rollingHashes[k] = addRight(rollingHashes[k], rightChar, k);
       }
     }

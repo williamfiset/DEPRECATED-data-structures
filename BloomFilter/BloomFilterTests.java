@@ -1,10 +1,14 @@
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.*;
+import java.security.SecureRandom;
+import java.math.BigInteger;
 
 public class BloomFilterTests {
+
+  static final SecureRandom random = new SecureRandom();
+  static final Random rand = new Random();
 
   static final int MIN_RAND_NUM = -1000;
   static final int MAX_RAND_NUM = +1000;
@@ -64,7 +68,55 @@ public class BloomFilterTests {
     // because we're using small prime numbers
     assertTrue(collisionHappened);
 
-  }  
+  }
+
+  @Test
+  public void containsTests() {
+    
+    for(int sz = 1; sz <= 10; sz ++) {
+
+      for(int loops = 5; loops <= 50; loops += 5 ) {
+  
+        StringSet set = new StringSet(sz);
+        HashSet <String> javaset = new HashSet<>();
+
+        for (int l = 0; l < loops; l++) {
+          String randStr = randomString( sz );
+          javaset.add(randStr);
+          set.add(randStr);
+        }
+
+        for (String s : javaset) assertTrue(set.contains(s));
+
+        // Check that strings that aren't in the string set actually aren't 
+        // in the set, the probablity should be low enough that a false positive
+        // should not happen.
+        for (int l = 0; l < 100; l++) {
+          String randStr = randomString( sz );
+          if (!randStr.contains(randStr)) {
+            assertFalse(set.contains(randStr));
+          }
+        }
+
+      }
+
+    }
+
+  }
+
+  static int randNum(int min, int max) {
+    int range = max - min + 1;
+    return rand.nextInt(range) + min;
+  }
+
+  static final String AB = " )(*&^%$#@!0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  
+  static String randomString( int len ){
+    StringBuilder sb = new StringBuilder( len );
+    for( int i = 0; i < len; i++ ) 
+       sb.append( AB.charAt( rand.nextInt(AB.length()) ) );
+    return sb.toString();
+  }
 
 }
 

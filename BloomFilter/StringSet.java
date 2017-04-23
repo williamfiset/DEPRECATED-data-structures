@@ -1,4 +1,3 @@
-
 /**
  * The StringSet is a probabilistic string set data structure implemented using a bloom filter
  * and positional rolling hashing techniques. This data structure is very fast (it can

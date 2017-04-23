@@ -1,11 +1,13 @@
 
 /**
- * This file contains the implementation of a Set via a Bloom Filter
- * 
+ * The StringSet is a probabilistic string set data structure implemented using a bloom filter
+ * and positional rolling hashing techniques. This data structure is very fast (it can
+ * outperform Java's HashSet DS by many orders of magnitude on large data sets).
+ * Despite being probabilistic, this DS is very safe to use because the probability of 
+ * a false positive can be set to as low as you wish it to be.
+ *
  * @author William Alexandre Fiset, william.alexandre.fiset@gmail.com
  **/
-
-import java.util.*;
 
 public class StringSet {
 
@@ -14,21 +16,29 @@ public class StringSet {
   // size because we're going to redefine the first ASCII character (the space character)
   // to be 1 instead of 0 to avoid collisions where the string ' ' hashes to the 
   // same value as '   ' since 0*95^0 = 0*95^0 + 0*95^1 + 0*95^2
-  private static int ALPHABET_SZ = 95 + 1;
-  
+  private static int ALPHABET_SZ = 95 + 1;  
   private static int[] ALPHABET = new int[127];
-
-  static {
-    for (int i = 32, k = 1; i < ALPHABET.length; i++, k++) {
-      ALPHABET[i] = k;
-    }
-  }
 
   private int NUM_HASHES;
   private long POWERS[][];
   private int[] MODS, MOD_INVERSES;
   private long [] rollingHashes;
   private BloomFilter bloomFilter;
+
+  // More primes: 10^4+9, 10^4+13, 10^4+19, 10^5+7, 10^5+9, 10^5+37, 10^6+3, 10^6+19, 10^6+43, 
+  // 10^7+3, 10^7+33, 10^7+37, 10^8+19, 10^8+79, 10^8+103, 10^9+7, 10^9+9, 10^9+23
+  private int[] DEFAULT_PRIMES = { 10_000_003, 10_000_033, 10_000_037 };
+
+  // Assign a mapping from the printable ASCII characters to the natural numbers
+  static {
+    for (int i = 32, n = 1; i < ALPHABET.length; i++, n++) {
+      ALPHABET[i] = n;
+    }
+  }
+
+  public StringSet(int maxLen) {
+    this(DEFAULT_PRIMES, maxLen);
+  }
 
   // mods - The mod values to use for the bloom filter, they should probably be prime numbers
   // maxLen - The maximum length string we will need to deal with
@@ -59,6 +69,11 @@ public class StringSet {
 
   }
 
+  // This method adds a string to the bloom filter set. If you're adding a lot
+  // of similar strings of the same length use the overloaded version
+  // of this method to take advantage of rolling hashes, or if you're
+  // simply adding all substrings call 'addAllSubstrings' to also take
+  // advantage of rolling hashing technique.
   public void add(String str) {
 
     java.util.Arrays.fill(rollingHashes, 0L);
@@ -153,6 +168,27 @@ public class StringSet {
   public long removeRight(long rollingHash, int lastValue, int modIndex) {
     rollingHash = ((rollingHash-lastValue)+MODS[modIndex]) % MODS[modIndex];
     return (rollingHash * MOD_INVERSES[modIndex]) % MODS[modIndex];
+  }
+
+  // Given the hash of a string this method returns whether or not
+  // that string is found within the bloom filter.
+  public boolean contains(int[] hashes) {
+    return bloomFilter.contains(hashes);
+  }
+
+  public boolean contains(String str) {
+
+    // Dynamically compute this string's hash value
+    java.util.Arrays.fill(rollingHashes, 0L);
+    for (int i = 0; i < str.length(); i++) {
+      for (int k = 0; k < NUM_HASHES; k++) {
+        int rightChar = ALPHABET[str.charAt(k)-' '];
+        rollingHashes[k] = addRight(rollingHashes[k], rightChar, k);
+      }
+    }
+
+    return bloomFilter.contains(rollingHashes);
+
   }
 
   @Override public String toString() {

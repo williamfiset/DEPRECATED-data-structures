@@ -44,7 +44,6 @@ public class BloomFilter {
 
   public boolean contains(long [] hashes) {
     for(int i = 0; i < hashes.length; i++) {
-      hashes[i] = hashes[i] % SET_SIZES[i];
       int block = (int)(hashes[i] / 64);
       long MASK = 1L << (hashes[i] & MOD64);
       if ( (bitsets[i][block] & MASK) != MASK )

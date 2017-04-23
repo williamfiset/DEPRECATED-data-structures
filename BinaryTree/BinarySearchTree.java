@@ -42,7 +42,8 @@ public class BinarySearchTree <T extends Comparable<T>> {
     return nodeCount;
   }
 
-  // Add an element to this binary tree
+  // Add an element to this binary tree. Returns true
+  // if we successfully perform an insertion
   public boolean add(T elem) {
 
     // Check if the value already exists in this
@@ -79,7 +80,7 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   }
 
-  // Remove a value from this binary tree if it exists
+  // Remove a value from this binary tree, if it exists
   public boolean remove(T elem) {
 
     // Make sure the node we want to remove 
@@ -343,3 +344,13 @@ public class BinarySearchTree <T extends Comparable<T>> {
   }
 
 }
+
+
+
+
+
+
+
+
+
+

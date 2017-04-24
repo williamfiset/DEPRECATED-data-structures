@@ -26,7 +26,7 @@ class ConstHashObj {
   }
 }
 
-public class MappingTest {
+public class HashTableTests {
 
   static Random r = new Random();
 
@@ -34,11 +34,11 @@ public class MappingTest {
   static final int MAX_SIZE = 100;
   static final int MAX_RAND_NUM = 50;
 
-  Mapping <Integer, Integer> map;
+  HashTable <Integer, Integer> map;
 
   @Before
   public void setup() {
-    map = new Mapping<>();
+    map = new HashTable<>();
   }
 
   @Test(expected=IllegalArgumentException.class)
@@ -48,22 +48,22 @@ public class MappingTest {
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation1() {
-    new Mapping<>(-3, 0.5);
+    new HashTable<>(-3, 0.5);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation2() {
-    new Mapping<>(5, Double.POSITIVE_INFINITY);
+    new HashTable<>(5, Double.POSITIVE_INFINITY);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation3() {
-    new Mapping<>(6, -0.5);
+    new HashTable<>(6, -0.5);
   }
 
   @Test
   public void testLegalCreation() {
-    new Mapping<>(6, 0.9);
+    new HashTable<>(6, 0.9);
   }
 
   @Test
@@ -131,7 +131,7 @@ public class MappingTest {
   @Test
   public void randomRemove() {
 
-    Mapping <Integer, Integer> map = new Mapping<>();
+    HashTable <Integer, Integer> map = new HashTable<>();
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
@@ -159,7 +159,7 @@ public class MappingTest {
   @Test
   public void removeTest() {
 
-    Mapping <Integer, Integer> map = new Mapping<>( 7 );
+    HashTable <Integer, Integer> map = new HashTable<>( 7 );
     
     // Add three elements
     map.put(11, 0); map.put(12, 0); map.put(13, 0);
@@ -182,7 +182,7 @@ public class MappingTest {
   @Test
   public void removeTestComplex1() {
 
-    Mapping <ConstHashObj, Integer> map = new Mapping<>();
+    HashTable <ConstHashObj, Integer> map = new HashTable<>();
 
     ConstHashObj o1 = new ConstHashObj(88, 1);
     ConstHashObj o2 = new ConstHashObj(88, 2);
@@ -239,7 +239,7 @@ public class MappingTest {
   @Test
   public void randomIteratorTests() {
 
-    Mapping <Integer, LinkedList<Integer>> m = new Mapping<>();
+    HashTable <Integer, LinkedList<Integer>> m = new HashTable<>();
     HashMap <Integer, LinkedList<Integer>> hm = new HashMap<>();
 
     for (int loop = 0; loop < LOOPS; loop++ ) {
@@ -248,7 +248,7 @@ public class MappingTest {
       hm.clear();
 
       int sz = (int)(Math.random() * MAX_SIZE);
-      m  = new Mapping<>(sz);
+      m  = new HashTable<>(sz);
       hm = new HashMap<>(sz);
 
       for (int i = 0; i < MAX_SIZE; i++) {

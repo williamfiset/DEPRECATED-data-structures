@@ -29,7 +29,7 @@ class Entry <K, V> {
 }
 
 @SuppressWarnings("unchecked")
-public class Mapping <K,V> implements Iterable <K> {
+public class HashTable <K,V> implements Iterable <K> {
 
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
@@ -38,16 +38,16 @@ public class Mapping <K,V> implements Iterable <K> {
   private int capacity, threshold, size = 0;
   private LinkedList <Entry<K,V>> [] table;
 
-  public Mapping () {
+  public HashTable () {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
   }
 
-  public Mapping (int capacity) {
+  public HashTable (int capacity) {
     this(capacity, DEFAULT_LOAD_FACTOR);
   }
 
   // Designated constructor
-  public Mapping (int capacity, double load_factor) {
+  public HashTable (int capacity, double load_factor) {
     if (capacity < 0)
       throw new IllegalArgumentException("Illegal capacity");
     if (load_factor <= 0 || Double.isNaN(load_factor) || Double.isInfinite(load_factor))

@@ -15,19 +15,19 @@ public class StringSet {
   // size because we're going to redefine the first ASCII character (the space character)
   // to be 1 instead of 0 to avoid collisions where the string ' ' hashes to the 
   // same value as '   ' since 0*95^0 = 0*95^0 + 0*95^1 + 0*95^2
-  private static int ALPHABET_SZ = 95 + 1;  
-  private static int[] ALPHABET = new int[127];
+  private static final int ALPHABET_SZ = 95 + 1;  
+  private static final int[] ALPHABET = new int[127];
 
-  private int NUM_HASHES;
-  private long POWERS[][];
-  private int[] MODS, MOD_INVERSES;
-  private long [] rollingHashes;
-  private BloomFilter bloomFilter;
+  private final int N_HASHES;
+  private final long POWERS[][];
+  private final int[] MODS, MOD_INVERSES;
+  private final long [] rollingHashes;
+  private final BloomFilter bloomFilter;
 
-  // More primes: 10^4+9, 10^4+13, 10^4+19, 10^5+7, 10^5+9, 10^5+37, 10^6+3, 10^6+19, 10^6+43, 
-  // 10^7+3, 10^7+33, 10^7+37, 10^8+19, 10^8+79, 10^8+103, 10^9+7, 10^9+9, 10^9+23
-  private static int[] DEFAULT_PRIMES = { 10_000_003, 10_000_033, 10_000_037 };
-
+  // More primes: 1009, 1013, 1019, 10007, 10009, 10037, 100003, 100019, 100043, 1000003, 1000033, 1000037,
+  // 10000019, 10000079, 10000103, 100000007, 100000009, 100000023, 1000000007, 1000000009, 1000000021, 1000000033
+  private static final int[] DEFAULT_MODS = { 10_000_019, 10_000_079, 10_000_103 };
+  
   // Assign a mapping from the printable ASCII characters to the natural numbers
   static {
     for (int i = 32, n = 1; i < ALPHABET.length; i++, n++) {
@@ -36,7 +36,7 @@ public class StringSet {
   }
 
   public StringSet(int maxLen) {
-    this(DEFAULT_PRIMES, maxLen);
+    this(DEFAULT_MODS, maxLen);
   }
 
   // mods - The mod values to use for the bloom filter, they should probably be prime numbers
@@ -44,22 +44,22 @@ public class StringSet {
   public StringSet(int[] mods, int maxLen) {
     
     MODS = mods.clone();
-    NUM_HASHES = mods.length;
-    MOD_INVERSES = new int[NUM_HASHES];
-    POWERS = new long[NUM_HASHES][maxLen];
-    rollingHashes = new long[NUM_HASHES];
+    N_HASHES = mods.length;
+    MOD_INVERSES = new int[N_HASHES];
+    POWERS = new long[N_HASHES][maxLen];
+    rollingHashes = new long[N_HASHES];
     bloomFilter = new BloomFilter(mods);
 
     java.math.BigInteger bigAlpha = new java.math.BigInteger(String.valueOf(ALPHABET_SZ));
 
     // Assuming all mods are primes each mod value will have a modular inverse
-    for (int i = 0; i < NUM_HASHES; i++) {
+    for (int i = 0; i < N_HASHES; i++) {
       java.math.BigInteger mod = new java.math.BigInteger(String.valueOf(MODS[i]));
       MOD_INVERSES[i] = bigAlpha.modInverse(mod).intValue();
     }
 
     // Precompute powers of the alphabet size mod all the mod values
-    for(int i = 0; i < NUM_HASHES; i++) {
+    for(int i = 0; i < N_HASHES; i++) {
       POWERS[i][0] = 1L;
       for(int j = 1; j < maxLen; j++) {
         POWERS[i][j] = (POWERS[i][j-1]*ALPHABET_SZ) % mods[i];
@@ -75,8 +75,8 @@ public class StringSet {
     java.util.Arrays.fill(rollingHashes, 0L);
 
     for (int i = 0; i < str.length(); i++) {
-      for (int k = 0; k < NUM_HASHES; k++) {
-        int rightChar = ALPHABET[str.charAt(i)-' '];
+      for (int k = 0; k < N_HASHES; k++) {
+        int rightChar = ALPHABET[str.charAt(i)];
         rollingHashes[k] = addRight(rollingHashes[k], rightChar, k);
       }
     }
@@ -91,10 +91,7 @@ public class StringSet {
   // simply adding all substrings call 'addAllSubstrings' to also take
   // advantage of rolling hashing technique.
   public void add(String str) {
-
-    computeHash(str);
-    bloomFilter.add(rollingHashes);
-
+    bloomFilter.add(computeHash(str));
   }
 
   // Add all sequences of length 'sz' to the bloom filter
@@ -103,10 +100,10 @@ public class StringSet {
     add(str);
 
     for (int i = sz; i < str.length() - sz; i++) {
-      for (int k = 0; k < NUM_HASHES; k++) {
+      for (int k = 0; k < N_HASHES; k++) {
 
-        int rightChar = ALPHABET[str.charAt(i)-' '];
-        int leftChar  = ALPHABET[str.charAt(i-sz)-' '];
+        int rightChar = ALPHABET[str.charAt(i)];
+        int leftChar  = ALPHABET[str.charAt(i-sz)];
 
         // Add the right character
         rollingHashes[k] = addRight(rollingHashes[k], rightChar, k);
@@ -128,7 +125,7 @@ public class StringSet {
     int[] values = new int[N];
 
     for(int i = 0; i < N; i++)
-      values[i] = ALPHABET[str.charAt(i)-' '];
+      values[i] = ALPHABET[str.charAt(i)];
 
     for (int i = 0; i < N; i++) {
 
@@ -139,7 +136,7 @@ public class StringSet {
 
         // Compute the next rolling hash value for each hash 
         // function with a different modulus value
-        for (int k = 0; k < NUM_HASHES; k++) {
+        for (int k = 0; k < N_HASHES; k++) {
           rollingHashes[k] = addRight(rollingHashes[k], values[j], k);
         }
         
@@ -184,13 +181,9 @@ public class StringSet {
     return bloomFilter.contains(hashes);
   }
 
+  // Dynamically compute this string's hash value and check containment
   public boolean contains(String str) {
-
-    // Dynamically compute this string's hash value
-    computeHash(str);
-
-    return bloomFilter.contains(rollingHashes);
-
+    return bloomFilter.contains(computeHash(str));
   }
 
   @Override public String toString() {

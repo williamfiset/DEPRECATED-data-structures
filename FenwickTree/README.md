@@ -7,6 +7,17 @@ The Fenwick Tree (FT), also called the Binary Indexed Tree (BIT) is and efficien
 
 ```java
 
-Fenwick
+  long[] values = {0,1,2,3,4,5,6};
+  //               ^ first element does not get used
+
+  FenwickTree ft = new FenwickTree(values);
+  
+  // Examples queries
+  ft.sum(1, 6); // 21
+  ft.sum(1, 5); // 15
+  ft.sum(1, 4); // 10
+  ft.sum(1, 3); // 6
+  ft.sum(1, 2); // 3
+  ft.sum(1, 1); // 1
 
 ```

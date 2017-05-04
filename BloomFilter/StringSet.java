@@ -150,14 +150,20 @@ public class StringSet {
 
   // This function adds a character to the end of the rolling hash
   public long addRight(long rollingHash, int lastValue, int modIndex) {
-    rollingHash = rollingHash * ALPHABET_SZ + lastValue;
-    return rollingHash % MODS[modIndex];
+    rollingHash = (rollingHash * ALPHABET_SZ + lastValue) % MODS[modIndex];
+    return (rollingHash + MODS[modIndex]) % MODS[modIndex];
+  }
+  public long addRight(long rollingHash, char lastValue, int modIndex) {
+    return addRight(rollingHash, ALPHABET[lastValue], modIndex);
   }
   
   // This function adds a character to the beginning of the rolling hash
   public long addLeft(long rollingHash, int firstValue, int modIndex, int len) {
-    rollingHash = rollingHash * POWERS[modIndex][len-1] + firstValue;
-    return rollingHash % MODS[modIndex];
+    rollingHash = (firstValue * POWERS[modIndex][len] + rollingHash) % MODS[modIndex];
+    return (rollingHash + MODS[modIndex]) % MODS[modIndex];
+  }
+  public long addLeft(long rollingHash, char firstValue, int modIndex, int len) {
+    return addLeft(rollingHash, ALPHABET[firstValue], modIndex, len);
   }
 
   // Given a rolling hash x_n*A^n + x_n-1*A^(n-1) + ... + x_2*A^2 + x_1*A^1 + x_0*A^0
@@ -166,13 +172,19 @@ public class StringSet {
   //
   // firstValue - This is x_n, the first character of this string
   public long removeLeft(long rollingHash, int firstValue, int modIndex, int len) {
-    rollingHash = rollingHash - firstValue * POWERS[modIndex][len-1];
+    rollingHash = (rollingHash - firstValue * POWERS[modIndex][len-1]) % MODS[modIndex];
     return (rollingHash + MODS[modIndex]) % MODS[modIndex];
+  }
+  public long removeLeft(long rollingHash, char firstValue, int modIndex, int len) {
+    return removeLeft(rollingHash, ALPHABET[firstValue], modIndex, len);
   }
 
   public long removeRight(long rollingHash, int lastValue, int modIndex) {
-    rollingHash = ((rollingHash-lastValue)+MODS[modIndex]) % MODS[modIndex];
+    rollingHash = (((rollingHash-lastValue)%MODS[modIndex])+MODS[modIndex]) % MODS[modIndex];
     return (rollingHash * MOD_INVERSES[modIndex]) % MODS[modIndex];
+  }
+  public long removeRight(long rollingHash, char lastValue, int modIndex) {
+    return removeRight(rollingHash, ALPHABET[lastValue], modIndex);
   }
 
   // Given the hash of a string this method returns whether or not
@@ -191,7 +203,6 @@ public class StringSet {
   }
 
 }
-
 
 
 

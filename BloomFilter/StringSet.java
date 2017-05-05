@@ -1,7 +1,8 @@
 /**
  * The StringSet is a probabilistic string set data structure implemented using a bloom filter
- * and positional rolling hashing techniques. This data structure is very fast (it can outperform 
- * Java's HashSet DS by many orders of magnitude on large data sets if you cache the hashes).
+ * and positional rolling hashing techniques. This data structure can be very fast, that is it 
+ * can outperform Java's HashSet DS by many orders of magnitude on large data sets if you're doing
+ * queries involving all substrings of a particular string for instance).
  * Despite being probabilistic, this DS is very safe to use because the probability of 
  * a false positive can be set to as low as you wish it to be.
  *
@@ -26,7 +27,7 @@ public class StringSet {
 
   // More primes: 1009, 1013, 1019, 10007, 10009, 10037, 100003, 100019, 100043, 1000003, 1000033, 1000037,
   // 10000019, 10000079, 10000103, 100000007, 100000009, 100000023, 1000000007, 1000000009, 1000000021, 1000000033
-  private static final int[] DEFAULT_MODS = { 10_000_019, 10_000_079, 10_000_103 };
+  private static final int[] DEFAULT_MODS = { 10009, 100003, 1000003 };
   
   // Assign a mapping from the printable ASCII characters to the natural numbers
   static {

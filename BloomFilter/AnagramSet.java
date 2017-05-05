@@ -1,15 +1,11 @@
 /**
  * 
- * This class provides a probabilistic multi-set implementation using a bloom filter.
- * A multi-set is an especially powerful data structure if you're dealing with 
- * a set which can have elements with various multiplicities. Equivalently, multi-sets
- * can be used to perform operations on anagrammatic strings (strings with the same
- * frequency of characters like: "AABBA" and "BAABA").
+ * NOTE: The code in this file is incomplete and still under development.
  *
- * @author William Alexandre Fiset, william.alexandre.fiset@gmail.com
+ * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-public class Multiset {
+public class AnagramSet {
 
   private final int N_HASHES;
   private final int[] MODS;
@@ -34,11 +30,11 @@ public class Multiset {
     }
   }
 
-  public Multiset() {
+  public AnagramSet() {
     this(DEFAULT_MODS);
   }
 
-  public Multiset(int[] mods) {
+  public AnagramSet(int[] mods) {
 
     MODS = mods.clone();
     N_HASHES = mods.length;

@@ -1,3 +1,7 @@
+/**
+ * A generic dynamic array implementation
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 
 @SuppressWarnings("unchecked")

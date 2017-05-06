@@ -76,20 +76,21 @@ public class IntQueue {
   private static void benchMarkTest() {
 
     int n = 10000000;
-    IntQueue iq = new IntQueue(n);
+    IntQueue intQ = new IntQueue(n);
 
     // IntQueue times at around 0.0324 seconds
     long start = System.nanoTime();
-    for (int i = 0; i < n; i++ ) iq.enqueue(i);
-    for (int i = 0; i < n; i++ ) iq.dequeue();
+    for (int i = 0; i < n; i++ ) intQ.enqueue(i);
+    for (int i = 0; i < n; i++ ) intQ.dequeue();
     long end = System.nanoTime();
     System.out.println( "IntQueue Time: " +  (end-start)/1e9 );
 
     // ArrayDeque times at around 1.438 seconds
-    java.util.ArrayDeque <Integer> adq = new java.util.ArrayDeque<>();
+    java.util.ArrayDeque <Integer> arrayDeque = new java.util.ArrayDeque<>();
+    // java.util.ArrayDeque <Integer> arrayDeque = new java.util.ArrayDeque<>(n); // strangely the ArrayQueue is slower when you give it an initial capacity.
     start = System.nanoTime();
-    for (int i = 0; i < n; i++ ) adq.offer(i);
-    for (int i = 0; i < n; i++ ) adq.poll();
+    for (int i = 0; i < n; i++ ) arrayDeque.offer(i);
+    for (int i = 0; i < n; i++ ) arrayDeque.poll();
     end = System.nanoTime();
     System.out.println( "ArrayDeque Time: " + (end-start)/1e9 );
 

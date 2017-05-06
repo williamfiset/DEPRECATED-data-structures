@@ -25,6 +25,10 @@ public class IntQueue {
     return front == end;
   }
 
+  public int peek() {
+    return ar[front];
+  }
+
   // Add an element to the queue
   public void enqueue(int value) {
     ar[end] = value;

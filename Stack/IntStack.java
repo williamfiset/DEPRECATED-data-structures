@@ -1,7 +1,7 @@
 /** 
  * This file contains an implementation of an integer only stack which is
  * extremely quick and lightweight. In terms of performance it can outperform 
- * java.util.ArrayDeque (Java's fastest stack implementation) by a factor of 40+! 
+ * java.util.ArrayDeque (Java's fastest stack implementation) by a factor of 50! 
  * See the benchmark test below for proof. However, the downside is you need to
  * know an upper bound on the number of elements that will be inside the stack at
  * any given time for it to work correctly.
@@ -21,7 +21,7 @@ public class IntStack {
   public boolean isEmpty() { return pos == 0; }
 
   // Returns the element at the top of the stack
-  public int peek() { return ar[pos]; }
+  public int peek() { return ar[pos-1]; }
 
   // Add an element to the top of the stack
   public void push(int value) { ar[pos++] = value; }

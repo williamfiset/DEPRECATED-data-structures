@@ -1,7 +1,7 @@
 /**
  * A generic bloom filter implementation that supports any hash function(s)
  * 
- * @author William Alexandre Fiset, william.alexandre.fiset@gmail.com
+ * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
 public class BloomFilter {

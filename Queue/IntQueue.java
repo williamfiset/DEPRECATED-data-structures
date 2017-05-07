@@ -1,9 +1,10 @@
 /** 
- * This files contains an implementation of an integer only queue which is very
+ * This file contains an implementation of an integer only queue which is
  * extremely quick and lightweight. In terms of performance it can outperform 
  * java.util.ArrayDeque (Java's fastest queue implementation) by a factor of 40+! 
  * See the benchmark test below for proof. However, the downside is you need to
- * know an upper bound on the number of elements to put inside this queue for it to work.
+ * know an upper bound on the number of elements that will be inside the queue at
+ * any given time for this queue to work.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/

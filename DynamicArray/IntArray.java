@@ -10,7 +10,7 @@
 
 public class IntArray implements Iterable <Integer> {
 
-  private static final DEFAULT_CAP = 1 << 3;
+  private static final int DEFAULT_CAP = 1 << 3;
 
   public  int [] arr;
   public  int len = 0;

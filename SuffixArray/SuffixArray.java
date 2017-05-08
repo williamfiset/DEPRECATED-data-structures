@@ -4,9 +4,9 @@
  * efficiently on one piece of data rather than to do one operation 
  * then move on to another piece of text.
  *
- * Good read: 
- * http://www.cs.yale.edu/homes/aspnes/pinewiki/SuffixArrays.html
+ * Good suffix array read: http://www.cs.yale.edu/homes/aspnes/pinewiki/SuffixArrays.html
  *
+ * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
 import java.util.*;
@@ -46,30 +46,25 @@ class SuffixArray {
   int [] lcp;
 
   public SuffixArray(String text) {
-    if (text == null) throw new IllegalArgumentException();
-    T = charArToIntAr(text.toCharArray());
-    N = text.length();    
-    constructSuffixArray();
-    kasai();    
+    this(toIntArray(text));
   }
 
-  private int[] charArToIntAr(char[] chrs) {
-    int[] intAr = new int[chrs.length];
-    for(int i = 0; i < chrs.length; i++)
-      intAr[i] = chrs[i];
-    return intAr;
+  private static int[] toIntArray(String s) {
+    int[] text = new int[s.length()];
+    for(int i=0;i<s.length();i++)text[i] = s.charAt(i);
+    return text;
   }
 
   public SuffixArray(int[] text) {
     if (text == null) throw new IllegalArgumentException();
-    T = text; N = text.length;
-    constructSuffixArray();
+    T = text.clone();
+    N = text.length;
+    construct();
     kasai();
   }
 
-  // Complements of
-  // https://www.hackerrank.com/challenges/string-similarity/topics/suffix-array
-  public void constructSuffixArray() {
+  // Construct a suffix array in O(nlog^2(n))
+  public void construct() {
 
     sa = new int[N];
 
@@ -292,7 +287,7 @@ class SuffixArray {
       T[k++] = sentinel++;
     }
 
-    SuffixArrayFast sa = new SuffixArrayFast(T);
+    SuffixArray sa = new SuffixArray(T);
     Deque <Integer> deque = new ArrayDeque<>();
 
     // Assign each string a color and maintain the color count within the window
@@ -304,7 +299,7 @@ class SuffixArray {
     int lo = NUM_SENTINELS, hi = NUM_SENTINELS, bestLCSLength = 0;
 
     // Add the first color
-    int firstColor = indexMap[sa.SA[hi]];
+    int firstColor = indexMap[sa.sa[hi]];
     windowColors.add(firstColor);
     windowColorCount.put(firstColor, 1);
 
@@ -316,7 +311,7 @@ class SuffixArray {
       // Attempt to update the LCS
       if (uniqueColors >= K) {
 
-        int windowLCP = sa.LCP[deque.peekFirst()];
+        int windowLCP = sa.lcp[deque.peekFirst()];
 
         if (windowLCP > 0 && bestLCSLength < windowLCP) {
           bestLCSLength = windowLCP;
@@ -326,7 +321,7 @@ class SuffixArray {
         if (windowLCP > 0 && bestLCSLength == windowLCP) {
 
           // Construct the current LCS within the window interval
-          int pos = sa.SA[lo];
+          int pos = sa.sa[lo];
           char[] lcs = new char[windowLCP];
           for (int i = 0; i < windowLCP; i++) lcs[i] = (char)(T[pos+i] - SHIFT);
 
@@ -339,7 +334,7 @@ class SuffixArray {
         }
 
         // Update the colors in our window
-        int lastColor = indexMap[sa.SA[lo]];
+        int lastColor = indexMap[sa.sa[lo]];
         Integer colorCount = windowColorCount.get(lastColor);
         if (colorCount == 1) windowColors.remove(lastColor);
         windowColorCount.put(lastColor, colorCount - 1);
@@ -354,7 +349,7 @@ class SuffixArray {
       // Increase the window size because we don't have enough colors
       } else if(++hi < L) {
 
-        int nextColor = indexMap[sa.SA[hi]];
+        int nextColor = indexMap[sa.sa[hi]];
 
         // Update the colors in our window
         windowColors.add(nextColor);
@@ -363,7 +358,7 @@ class SuffixArray {
         windowColorCount.put(nextColor, colorCount + 1);
           
         // Remove all the worse values in the back of the deque
-        while(!deque.isEmpty() && sa.LCP[deque.peekLast()] > sa.LCP[hi-1])
+        while(!deque.isEmpty() && sa.lcp[deque.peekLast()] > sa.lcp[hi-1])
           deque.removeLast();
         deque.addLast(hi-1);
 
@@ -375,15 +370,13 @@ class SuffixArray {
 
   }
 
-  @Override public String toString() {
-    StringBuilder sb = new StringBuilder();
+  public void display() {
+    System.out.printf("i-----SA-----LCP---Suffix\n");
     for(int i = 0; i < N; i++) {
-      int index  = sa[i];
-      int length = N - index;
-      sb.append( index + " " + new String(T, index, length) + "\n");
+      int suffixLen = N - sa[i];
+      String suffix = new String(T, sa[i], suffixLen);
+      System.out.printf("%d % 7d % 7d %s\n", i, sa[i],lcp[i], suffix );
     }
-    String lcp_str = "LCP: " + Arrays.toString(lcp) + "\n";
-    return lcp_str + sb.toString();
   }
 
   public static void main(String[] args) {
@@ -401,6 +394,11 @@ class SuffixArray {
     // System.out.println(sa);
     // System.out.println(java.util.Arrays.toString(sa.sa));
     // System.out.println(java.util.Arrays.toString(sa.lcp));
+
+    SuffixArray sa = new SuffixArray("ababcabaa");
+    sa.display();
+    
+  
 
   }
 

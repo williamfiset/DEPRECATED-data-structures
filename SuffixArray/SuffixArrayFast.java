@@ -1,73 +1,104 @@
 
-import static java.lang.Math.*;
 import java.util.*;
-import java.io.*;
 
 public class SuffixArrayFast {
 
-  final int [] T;
-  final int N, MAX_N, CONST = 3000;
-  int [] RA, SA, tmpRA, tmpSA, C, LCP; 
+  int MAXLEN, MSIZE = 128, N;
+  int [] T, sa, cnt, lcp, x, y, tmp;
 
+  public SuffixArrayFast(String str) {
+    this(toIntArray(str));
+  }
+
+  private static int[] toIntArray(String s) {
+    int[] text = new int[s.length()];
+    for(int i=0;i<s.length();i++)text[i] = s.charAt(i);
+    return text;
+  }
+
+  // Designated constructor
   public SuffixArrayFast(int[] text) {
+
     N = text.length;
-    MAX_N = N + CONST;
-    C = new int[MAX_N];
-    RA = new int[MAX_N];
-    SA = new int[MAX_N];
-    tmpRA = new int[MAX_N];
-    tmpSA = new int[MAX_N];
-    T = new int[MAX_N];
-    for(int i = 0; i < N; SA[i] = i, i++)
-      RA[i] = T[i] = text[i];
+    T = text.clone();
+    
+    MAXLEN = Math.max(MSIZE, N);
+    cnt = new int[MAXLEN];
+    sa  = new int[MAXLEN];
+    x   = new int[MAXLEN];
+    y   = new int[MAXLEN];
     construct();
     kasai();
+
   }
 
+  private boolean cmp(int[] r, int a, int b, int l) {
+    if (r[a] != r[b]) return false;
+    if (a+l >= MAXLEN || b+l >= MAXLEN) return false;
+    return r[a + l] == r[b + l];
+  }
+
+  // Construct suffix array, O(nlogn)
   private void construct() {
-    int i = 0, r = 0;
-    for(int k = 1; k < N; k <<= 1) {
-      countingSort(k);
-      countingSort(0);
-      tmpRA[SA[0]] = r = 0;
-      for(i = 1; i < N; i++) {
-        tmpRA[SA[i]] = (RA[SA[i]] == RA[SA[i-1]] &&
-                      RA[SA[i]+k] == RA[SA[i-1]+k] ) ? r : ++r;
-      }
-      for(i = 0; i < N; i++) RA[i] = tmpRA[i];
-      if (RA[SA[N-1]] == N-1) break;
+    int p, i, j, k;
+    Arrays.fill(cnt, 0);
+    for (i = 0; i < N; i++) cnt[x[i] = T[i]]++;
+    for (i = 1; i < MSIZE; i++) cnt[i] += cnt[i - 1];
+    for (i = N - 1; i >= 0; i--) sa[--cnt[x[i]]] = i;
+    for (j = p = 1; p < N; j <<= 1, MSIZE = p) {
+      for (p = 0, i = N - j; i < N; i++) y[p++] = i;
+      for (i = 0; i < N; i++) if (sa[i] >= j) y[p++] = sa[i] - j;
+      Arrays.fill(cnt, 0);
+      for (i = 0; i < N; i++) cnt[x[y[i]]]++;
+      for (i = 1; i < MSIZE; i++) cnt[i] += cnt[i - 1];
+      for (i = N - 1; i >= 0; i--) sa[--cnt[x[y[i]]]] = y[i];
+      tmp = x; x = y; y = tmp;
+      x[sa[0]] = 0;
+      for (i = p = 1; i < N; i++)
+        x[sa[i]] = cmp(y, sa[i - 1], sa[i], j) ? p - 1 : p++;
     }
+
   }
 
-  private void countingSort(int k) {
-    int i, sum, maxi = Math.max(CONST, N);
-    for(i = 0; i < maxi; i++) C[i] = 0;
-    for(i = 0; i < N; i++) C[i + k < N ? RA[i+k] : 0]++;
-    for(i = sum = 0; i < maxi; i++) {
-      int tmp = C[i]; C[i] = sum; sum += tmp;
-    }
-    for(i = 0; i < N; i++) tmpSA[C[SA[i]+k < N ? RA[SA[i]+k] : 0]++] = SA[i];
-    for(i = 0; i < N; i++) SA[i] = tmpSA[i];
-  }
-
-  // Constructs the LCP (longest common prefix) array in linear time - O(n)
+  // Use Kasai algorithm to build LCP array
   private void kasai() {
-
-    LCP = new int[N];
-    
-    // Compute inverse index values
+    lcp = new int[N];
     int [] inv = new int[N];
-    for (int i = 0; i < N; i++) inv[SA[i]] = i;
-    
-    int len = 0;
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) inv[sa[i]] = i;
+    for (int i = 0, len = 0; i < N; i++) {
       if (inv[i] > 0) {
-        int k = SA[inv[i]-1];
+        int k = sa[inv[i]-1];
         while( (i + len < N) && (k + len < N) && T[i+len] == T[k+len] ) len++;
-        LCP[inv[i]-1] = len;
+        lcp[inv[i]-1] = len;
         if (len > 0) len--;
       }
     }
+  }
+
+  // Finds the LRS(s) (Longest Repeated Substring) that occurs in a string.
+  // Traditionally we are only interested in substrings that appear at
+  // least twice, so this method returns an empty set if this is the case.
+  // @return an ordered set of longest repeated substrings
+  public TreeSet <String> lrs() {
+
+    int max_len = 0;
+    TreeSet <String> lrss = new TreeSet<>();
+
+    for (int i = 0; i < N; i++) {
+      if (lcp[i] > 0 && lcp[i] >= max_len) {
+        
+        // We found a longer LRS
+        if ( lcp[i] > max_len )
+          lrss.clear();
+        
+        // Append substring to the list and update max
+        max_len = lcp[i];
+        lrss.add( new String(T, sa[i], max_len) );
+
+      }
+    }
+
+    return lrss;
 
   }
 
@@ -87,7 +118,7 @@ public class SuffixArrayFast {
     while( lo <= hi ) {
 
       int mid = (lo + hi) / 2;
-      int suffix_index = SA[mid];
+      int suffix_index = sa[mid];
       int suffix_len = N - suffix_index;
 
       // Extract part of the suffix we need to compare
@@ -171,7 +202,7 @@ public class SuffixArrayFast {
     int lo = NUM_SENTINELS, hi = NUM_SENTINELS, bestLCSLength = 0;
 
     // Add the first color
-    int firstColor = indexMap[sa.SA[hi]];
+    int firstColor = indexMap[sa.sa[hi]];
     windowColors.add(firstColor);
     windowColorCount.put(firstColor, 1);
 
@@ -183,7 +214,7 @@ public class SuffixArrayFast {
       // Attempt to update the LCS
       if (uniqueColors >= K) {
 
-        int windowLCP = sa.LCP[deque.peekFirst()];
+        int windowLCP = sa.lcp[deque.peekFirst()];
 
         if (windowLCP > 0 && bestLCSLength < windowLCP) {
           bestLCSLength = windowLCP;
@@ -193,7 +224,7 @@ public class SuffixArrayFast {
         if (windowLCP > 0 && bestLCSLength == windowLCP) {
 
           // Construct the current LCS within the window interval
-          int pos = sa.SA[lo];
+          int pos = sa.sa[lo];
           char[] lcs = new char[windowLCP];
           for (int i = 0; i < windowLCP; i++) lcs[i] = (char)(T[pos+i] - SHIFT);
 
@@ -206,7 +237,7 @@ public class SuffixArrayFast {
         }
 
         // Update the colors in our window
-        int lastColor = indexMap[sa.SA[lo]];
+        int lastColor = indexMap[sa.sa[lo]];
         Integer colorCount = windowColorCount.get(lastColor);
         if (colorCount == 1) windowColors.remove(lastColor);
         windowColorCount.put(lastColor, colorCount - 1);
@@ -221,7 +252,7 @@ public class SuffixArrayFast {
       // Increase the window size because we don't have enough colors
       } else if(++hi < L) {
 
-        int nextColor = indexMap[sa.SA[hi]];
+        int nextColor = indexMap[sa.sa[hi]];
 
         // Update the colors in our window
         windowColors.add(nextColor);
@@ -230,7 +261,7 @@ public class SuffixArrayFast {
         windowColorCount.put(nextColor, colorCount + 1);
           
         // Remove all the worse values in the back of the deque
-        while(!deque.isEmpty() && sa.LCP[deque.peekLast()] > sa.LCP[hi-1])
+        while(!deque.isEmpty() && sa.lcp[deque.peekLast()] > sa.lcp[hi-1])
           deque.removeLast();
         deque.addLast(hi-1);
 
@@ -242,6 +273,31 @@ public class SuffixArrayFast {
 
   }
 
+  public void display() {
+    System.out.printf("i-----SA-----LCP---Suffix\n");
+    for(int i = 0; i < N; i++) {
+      int suffixLen = N - sa[i];
+      String suffix = new String(T, sa[i], suffixLen);
+      System.out.printf("%d % 7d % 7d %s\n", i, sa[i],lcp[i], suffix );
+    }
+  }
+
+  // Example usage
+  public static void main(String[] args) {
+
+    SuffixArrayFast sa = new SuffixArrayFast("ababcabaa");
+    sa.display();
+    
+  }
+
 }
+
+
+
+
+
+
+
+
 
 

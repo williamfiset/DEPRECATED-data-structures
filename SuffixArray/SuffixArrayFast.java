@@ -276,11 +276,11 @@ public class SuffixArrayFast {
   }
 
   public void display() {
-    System.out.printf("i-----SA-----LCP---Suffix\n");
+    System.out.printf("-----i-----SA-----LCP---Suffix\n");
     for(int i = 0; i < N; i++) {
       int suffixLen = N - sa[i];
       String suffix = new String(T, sa[i], suffixLen);
-      System.out.printf("%d % 7d % 7d %s\n", i, sa[i],lcp[i], suffix );
+      System.out.printf("% 7d % 7d % 7d %s\n", i, sa[i],lcp[i], suffix );
     }
   }
 

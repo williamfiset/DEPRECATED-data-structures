@@ -3,7 +3,9 @@ import java.util.*;
 
 public class SuffixArrayFast {
 
-  int MAXLEN, MSIZE = 128, N;
+  // MSIZE is the default alphabet size, this may need
+  // to be much larger if you're using the LCS method!
+  int MAXLEN, MSIZE = 256, N;
   int [] T, sa, cnt, lcp, x, y, tmp;
 
   public SuffixArrayFast(String str) {
@@ -287,7 +289,11 @@ public class SuffixArrayFast {
 
     SuffixArrayFast sa = new SuffixArrayFast("ababcabaa");
     sa.display();
-    
+
+    String[] strs = { "abcde", "habcab", "ghabcdf" };
+    TreeSet <String> set = SuffixArrayFast.lcs(strs, 2);
+    System.out.println(set);
+
   }
 
 }

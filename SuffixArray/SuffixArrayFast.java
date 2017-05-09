@@ -3,63 +3,43 @@ import java.util.*;
 
 public class SuffixArrayFast {
 
-  // MSIZE is the default alphabet size, this may need
-  // to be much larger if you're using the LCS method!
-  int MAXLEN, MSIZE = 256, N;
-  int [] T, sa, cnt, lcp, x, y, tmp;
-
-  public SuffixArrayFast(String str) {
-    this(toIntArray(str));
-  }
-
-  private static int[] toIntArray(String s) {
-    int[] text = new int[s.length()];
-    for(int i=0;i<s.length();i++)text[i] = s.charAt(i);
-    return text;
-  }
+  // ALPHABET_SZ is the default alphabet size, this may need to be much
+  // larger if you're using the LCS method with multiple sentinels
+  int ALPHABET_SZ = 256, N;
+  int[] T, lcp, sa, sa2, rank, tmp, c;
 
   // Designated constructor
-  public SuffixArrayFast(int[] text) {
-
+  public SuffixArray(int[] text) {
+    T = text;
     N = text.length;
-    T = text.clone();
-    
-    MAXLEN = Math.max(MSIZE, N);
-    cnt = new int[MAXLEN];
-    sa  = new int[MAXLEN];
-    x   = new int[MAXLEN];
-    y   = new int[MAXLEN];
+    sa = new int[N];
+    sa2 = new int[N];
+    rank = new int[N];
+    c = new int[Math.max(ALPHABET_SZ, N)];
     construct();
     kasai();
-
   }
 
-  private boolean cmp(int[] r, int a, int b, int l) {
-    if (r[a] != r[b]) return false;
-    if (a+l >= MAXLEN || b+l >= MAXLEN) return false;
-    return r[a + l] == r[b + l];
-  }
-
-  // Construct suffix array, O(nlogn)
   private void construct() {
-    int p, i, j, k;
-    Arrays.fill(cnt, 0);
-    for (i = 0; i < N; i++) cnt[x[i] = T[i]]++;
-    for (i = 1; i < MSIZE; i++) cnt[i] += cnt[i - 1];
-    for (i = N - 1; i >= 0; i--) sa[--cnt[x[i]]] = i;
-    for (j = p = 1; p < N; j <<= 1, MSIZE = p) {
-      for (p = 0, i = N - j; i < N; i++) y[p++] = i;
-      for (i = 0; i < N; i++) if (sa[i] >= j) y[p++] = sa[i] - j;
-      Arrays.fill(cnt, 0);
-      for (i = 0; i < N; i++) cnt[x[y[i]]]++;
-      for (i = 1; i < MSIZE; i++) cnt[i] += cnt[i - 1];
-      for (i = N - 1; i >= 0; i--) sa[--cnt[x[y[i]]]] = y[i];
-      tmp = x; x = y; y = tmp;
-      x[sa[0]] = 0;
-      for (i = p = 1; i < N; i++)
-        x[sa[i]] = cmp(y, sa[i - 1], sa[i], j) ? p - 1 : p++;
+    int i, p, r;
+    for (i=0; i<N; ++i) c[rank[i] = T[i]]++;
+    for (i=1; i<ALPHABET_SZ; ++i) c[i] += c[i-1];
+    for (i=N-1; i>=0; --i) sa[--c[T[i]]] = i;
+    for (p=1; p<N; p <<= 1) {
+      for (r=0, i=N-p; i<N; ++i) sa2[r++] = i;
+      for (i=0; i<N; ++i) if (sa[i] >= p) sa2[r++] = sa[i] - p;
+      Arrays.fill(c, 0, ALPHABET_SZ, 0);
+      for (i=0; i<N; ++i) c[rank[i]]++;
+      for (i=1; i<ALPHABET_SZ; ++i) c[i] += c[i-1];
+      for (i=N-1; i>=0; --i) sa[--c[rank[sa2[i]]]] = sa2[i];
+      for (sa2[sa[0]] = r = 0, i=1; i<N; ++i) {
+          if (!(rank[sa[i-1]] == rank[sa[i]] &&
+              sa[i-1]+p < N && sa[i]+p < N &&
+              rank[sa[i-1]+p] == rank[sa[i]+p])) r++;
+          sa2[sa[i]] = r;
+      } tmp = rank; rank = sa2; sa2 = tmp;
+      if (r == N-1) break; ALPHABET_SZ = r + 1;
     }
-
   }
 
   // Use Kasai algorithm to build LCP array

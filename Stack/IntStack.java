@@ -12,12 +12,16 @@
 public class IntStack {
 
   private int [] ar;
-  private int pos = 0, sz;
+  private int pos = 0;
 
   // max_sz is the maximum number of items
   // that can be in the queue at any given time
-  public IntStack(int max_sz) { ar = new int[(sz = max_sz)]; }
-
+  public IntStack(int max_sz) { ar = new int[max_sz]; }
+  
+  // Returns the number of elements insize the stack
+  public int size() { return pos; }
+  
+  // Returns true/false on whether the stack is empty
   public boolean isEmpty() { return pos == 0; }
 
   // Returns the element at the top of the stack

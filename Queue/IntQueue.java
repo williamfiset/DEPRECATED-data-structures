@@ -22,8 +22,16 @@ public class IntQueue {
     ar = new int[sz];
   }
 
+  // Return true/false on whether the queue is empty
   public boolean isEmpty() {
     return front == end;
+  }
+
+  // Return the number of elements inside the queue
+  public int size() {
+    if (front > end) 
+      return (end + sz - front);
+    return end - front;
   }
 
   public int peek() {
@@ -105,6 +113,8 @@ public class IntQueue {
 }
 
 
+ 
+        
 
 
 

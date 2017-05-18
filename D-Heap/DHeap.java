@@ -1,8 +1,8 @@
 /**
  * A generic implementation of a D-ary heap inspired by the work of David Brink.
  *
- * @author William Fiset, william.alexandre.fiset@gmail.com
  * @author David Brink
+ * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
 @SuppressWarnings("unchecked")
@@ -13,9 +13,11 @@ public class DHeap <T extends Comparable> {
   int[] child, parent;
 
   // Initializes a D-ary heap with a maximum capacity of n
-  public DHeap(int n, int d) {
-    this.n = n;
-    this.d = d;
+  public DHeap(int degree, int maxNodes) {
+    
+    d = Math.max(2, degree);
+    n = Math.max(d+1, maxNodes);
+    
     heap = (T[]) new Comparable[n];
     child = new int[n];
     parent = new int[n];
@@ -23,15 +25,35 @@ public class DHeap <T extends Comparable> {
       parent[i] = (i-1)/d;
       child[i] = i*d+1;
     }
+
   }
 
+  // Returns the number of elements currently present inside the PQ
+  public int size() {
+    return sz;
+  }
+
+  // Returns true/false depending on whether the PQ is empty
   public boolean isEmpty() {
     return sz == 0;
+  }
+
+  // Clears all the elements inside the PQ
+  public void clear() {
+    for (int i = 0; i < sz; i++) heap[i] = null;
+    sz = 0;    
+  }
+
+  // Returns the element at the top of the PQ or null if the PQ is empty
+  public T peek() {
+    if (isEmpty()) return null;
+    return heap[0];
   }
 
   // Polls an element from the priority queue.
   // Make sure the queue is not empty before calling.
   public T poll() {
+    if (isEmpty()) return null;
     T root = heap[0];
     heap[0] = heap[--sz];
     heap[sz] = null;
@@ -87,15 +109,4 @@ public class DHeap <T extends Comparable> {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
 

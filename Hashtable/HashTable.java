@@ -1,4 +1,7 @@
-
+/**
+ * An implementation of a hashtable using separate chaining with a linked list.
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,7 +20,7 @@ class Entry <K, V> {
   // No casting is required with this method.
   // We are not overriding the Object equals method
   public boolean equals(Entry <K,V> other) {
-    // if (other == null) return false; // Entries should not be null
+    // if (other == null) return false; // Obsolete as entries should not be null
     if ( hash != other.hash ) return false;
     return key.equals( other.key );
   }
@@ -82,8 +85,8 @@ public class HashTable <K,V> implements Iterable <K> {
   }
 
   public boolean hasKey(K key) {
-    int bucket_index = normalizeIndex(key.hashCode());
-    return bucketSeekEntry(bucket_index, key) != null;
+    int bucketIndex = normalizeIndex(key.hashCode());
+    return bucketSeekEntry(bucketIndex, key) != null;
   }
 
   public V put(K key, V value) {
@@ -93,9 +96,9 @@ public class HashTable <K,V> implements Iterable <K> {
   public V add(K key, V value) {
 
     if (key == null) throw new IllegalArgumentException("Null key");
-    Entry <K, V> new_entry = new Entry<>(key, value);
-    int bucket_index = normalizeIndex(new_entry.hash);
-    return bucketInsertEntry(bucket_index, new_entry);
+    Entry <K, V> newEntry = new Entry<>(key, value);
+    int bucketIndex = normalizeIndex(newEntry.hash);
+    return bucketInsertEntry(bucketIndex, newEntry);
 
   }
 
@@ -105,8 +108,8 @@ public class HashTable <K,V> implements Iterable <K> {
   public V get(K key) {
 
     if (key == null) return null;
-    int bucket_index = normalizeIndex(key.hashCode());
-    Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
+    int bucketIndex = normalizeIndex(key.hashCode());
+    Entry <K, V> entry = bucketSeekEntry(bucketIndex, key);
     if (entry != null) return entry.value;
     return null;
 
@@ -118,17 +121,17 @@ public class HashTable <K,V> implements Iterable <K> {
   public V remove(K key) {
 
     if (key == null) return null;
-    int bucket_index = normalizeIndex(key.hashCode());
-    return bucketRemoveEntry(bucket_index, key);
+    int bucketIndex = normalizeIndex(key.hashCode());
+    return bucketRemoveEntry(bucketIndex, key);
 
   }
 
   // Removes an entry from a given bucket if it exists
-  private V bucketRemoveEntry(int bucket_index, K key) {
+  private V bucketRemoveEntry(int bucketIndex, K key) {
 
-    Entry <K, V> entry = bucketSeekEntry(bucket_index, key);
+    Entry <K, V> entry = bucketSeekEntry(bucketIndex, key);
     if (entry != null) {
-      LinkedList <Entry<K,V>> links = table[bucket_index];
+      LinkedList <Entry<K,V>> links = table[bucketIndex];
       links.remove(entry);
       --size;
       return entry.value;
@@ -138,14 +141,14 @@ public class HashTable <K,V> implements Iterable <K> {
 
   // Inserts an entry in a given bucket only if the entry does not already
   // exist in the given bucket, but if it does then update the entry value
-  private V bucketInsertEntry(int bucket_index, Entry <K,V> entry) {
+  private V bucketInsertEntry(int bucketIndex, Entry <K,V> entry) {
     
-    LinkedList <Entry<K,V>> links = table[bucket_index];
-    if (links == null) table[bucket_index] = links = new LinkedList<>();
+    LinkedList <Entry<K,V>> bucket = table[bucketIndex];
+    if (bucket == null) table[bucketIndex] = bucket = new LinkedList<>();
     
-    Entry <K, V> existantEntry = bucketSeekEntry(bucket_index, entry.key);
+    Entry <K, V> existantEntry = bucketSeekEntry(bucketIndex, entry.key);
     if (existantEntry == null) {
-      links.add(entry);
+      bucket.add(entry);
       if (++size > threshold) resizeTable();
       return null; // Use null to indicate that there was no previous entry
     } else {
@@ -157,12 +160,12 @@ public class HashTable <K,V> implements Iterable <K> {
   }
 
   // Finds and returns a particular entry in a given bucket if it exists, returns null otherwise
-  private Entry <K, V> bucketSeekEntry(int bucket_index, K key) {
+  private Entry <K, V> bucketSeekEntry(int bucketIndex, K key) {
 
     if (key == null) return null;
-    LinkedList <Entry<K,V>> links = table[bucket_index];
-    if (links == null) return null;
-    for (Entry <K,V> entry : links)
+    LinkedList <Entry<K,V>> bucket = table[bucketIndex];
+    if (bucket == null) return null;
+    for (Entry <K,V> entry : bucket)
       if (entry.key.equals(key))
         return entry;
     return null;
@@ -174,32 +177,32 @@ public class HashTable <K,V> implements Iterable <K> {
 
     capacity *= 2;
     threshold = (int) (capacity * load_factor);
-    LinkedList <Entry<K,V>> new_table [] = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
+    LinkedList <Entry<K,V>> newTable [] = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
     
     for (int i = 0; i < table.length; i++ ) {
       if (table[i] != null) {
         for (Entry <K,V> entry : table[i]) {
 
-          int bucket_index = normalizeIndex(entry.hash);
-          LinkedList<Entry<K,V>> links = new_table[bucket_index];
-          if (links == null) new_table[bucket_index] = links = new LinkedList<>();
-          links.add(entry);
+          int bucketIndex = normalizeIndex(entry.hash);
+          LinkedList<Entry<K,V>> bucket = newTable[bucketIndex];
+          if (bucket == null) newTable[bucketIndex] = bucket = new LinkedList<>();
+          bucket.add(entry);
 
         }
         table[i] = null; // Avoid memory leak. Help the GC
       }
     }
 
-    table = new_table;
+    table = newTable;
 
   }
 
   public List <K> keys() {
 
     List <K> keys = new ArrayList<>(size);
-    for(LinkedList<Entry<K,V>> links : table)
-      if (links != null)
-        for (Entry <K,V> entry : links)
+    for(LinkedList<Entry<K,V>> bucket : table)
+      if (bucket != null)
+        for (Entry <K,V> entry : bucket)
           keys.add(entry.key);
     return keys;
 
@@ -208,9 +211,9 @@ public class HashTable <K,V> implements Iterable <K> {
   public List <V> values() {
 
     List <V> values = new ArrayList<>(size);
-    for(LinkedList<Entry<K,V>> links : table)
-      if (links != null)
-        for (Entry <K,V> entry : links)
+    for(LinkedList<Entry<K,V>> bucket : table)
+      if (bucket != null)
+        for (Entry <K,V> entry : bucket)
           values.add(entry.value);
     return values;
 
@@ -218,28 +221,28 @@ public class HashTable <K,V> implements Iterable <K> {
 
   // Return an iterator to iterate over all the keys in this map
   @Override public java.util.Iterator <K> iterator() {
-    int element_count = size();
+    int elementCount = size();
     return new java.util.Iterator <K> () {
       
-      int bucket_index = 0;
-      java.util.Iterator <Entry<K,V>> bucket_iter = (table[0] == null) ? null : table[0].iterator();
+      int bucketIndex = 0;
+      java.util.Iterator <Entry<K,V>> bucketIter = (table[0] == null) ? null : table[0].iterator();
 
       public boolean hasNext() {
         
         // An item was added or removed while iterating
-        if (element_count != size) throw new java.util.ConcurrentModificationException();
+        if (elementCount != size) throw new java.util.ConcurrentModificationException();
         
         // No iterator or the current iterator is empty
-        if (bucket_iter == null || !bucket_iter.hasNext()) {
+        if (bucketIter == null || !bucketIter.hasNext()) {
 
           // Search next buckets until a valid iterator is found
-          while(++bucket_index < capacity) {
-            if (table[bucket_index] != null) {
+          while(++bucketIndex < capacity) {
+            if (table[bucketIndex] != null) {
               
               // Make sure this iterator actually has elements -_-
-              java.util.Iterator <Entry<K,V>> nextIter = table[bucket_index].iterator();
+              java.util.Iterator <Entry<K,V>> nextIter = table[bucketIndex].iterator();
               if ( nextIter.hasNext() ) {
-                bucket_iter = nextIter;
+                bucketIter = nextIter;
                 break;
               }
 
@@ -248,11 +251,11 @@ public class HashTable <K,V> implements Iterable <K> {
         
         }
 
-        return bucket_index < capacity;
+        return bucketIndex < capacity;
 
       }
       public K next() {
-        return bucket_iter.next().key;
+        return bucketIter.next().key;
       }
     };
   }

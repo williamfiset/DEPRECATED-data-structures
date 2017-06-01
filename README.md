@@ -13,34 +13,34 @@ Each data structure is found in its own folder with associated tests. The data s
 
 ### Introduction to data structures
 
-[![Introduction to data structures video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/intro.png)](https://www.youtube.com/watch?v=aGC3UAByBPk&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Introduction to data structures")
+[![Introduction to data structures video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/intro.jpg)](https://www.youtube.com/watch?v=aGC3UAByBPk&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Introduction to data structures")
 
 ### Arrays
 
-[![Arrays video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/array.png)](https://www.youtube.com/watch?v=PEnFFiQe1pM&index=3&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Static and dynamic arrays")
+[![Arrays video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/array.jpg)](https://www.youtube.com/watch?v=PEnFFiQe1pM&index=3&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Static and dynamic arrays")
 
 ### Singly and doubly linked lists
 
-[![Singly and doubly linked lists video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/linkedlist.png)](https://www.youtube.com/watch?v=-Yn5DU0_-lw&index=5&list= "Singly and doubly linked lists")
+[![Singly and doubly linked lists video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/linkedlist.jpg)](https://www.youtube.com/watch?v=-Yn5DU0_-lw&index=5&list= "Singly and doubly linked lists")
 
 ### Stacks
 
-[![stack video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/stack.png)](https://www.youtube.com/watch?v=L3ud3rXpIxA&index=7&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The stack")
+[![stack video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/stack.jpg)](https://www.youtube.com/watch?v=L3ud3rXpIxA&index=7&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The stack")
 
 ### Queues
 
-[![Queue video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/queue.png)](https://www.youtube.com/watch?v=KxzhEQ-zpDc&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The queue")
+[![Queue video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/queue.jpg)](https://www.youtube.com/watch?v=KxzhEQ-zpDc&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The queue")
 
 ### Priority Queues
 
-[![Priority queue video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/PQ.png)](https://www.youtube.com/watch?v=wptevk0bshY&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The priority queue")
+[![Priority queue video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/PQ.jpg)](https://www.youtube.com/watch?v=wptevk0bshY&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The priority queue")
 
 ### Union Find
 
-[![Union find video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/UF.png)](https://www.youtube.com/watch?v=ibjEGG7ylHk&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The union find")
+[![Union find video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/UF.jpg)](https://www.youtube.com/watch?v=ibjEGG7ylHk&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "The union find")
 
 ### Binary trees and binary search trees
 
-[![Binary trees and binary search trees video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/BST.png)](https://www.youtube.com/watch?v=JfSdGQdAzq8&index=23&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Binary trees and binary search trees")
+[![Binary trees and binary search trees video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/BST.jpg)](https://www.youtube.com/watch?v=JfSdGQdAzq8&index=23&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Binary trees and binary search trees")
 
 

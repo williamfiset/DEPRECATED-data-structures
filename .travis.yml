@@ -1,0 +1,12 @@
+# Travis Continuous Integration script for travis-ci.org
+
+language: java
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+
+script:
+  sh testall
+
+

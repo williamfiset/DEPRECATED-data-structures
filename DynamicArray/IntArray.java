@@ -99,6 +99,7 @@ public class IntArray implements Iterable <Integer> {
       int index = 0;
       public boolean hasNext() { return index < len; }
       public Integer next() { return arr[index++]; }
+      public void remove() { throw new UnsupportedOperationException(); }
     };
   }
 

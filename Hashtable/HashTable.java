@@ -221,13 +221,13 @@ public class HashTable <K,V> implements Iterable <K> {
 
   // Return an iterator to iterate over all the keys in this map
   @Override public java.util.Iterator <K> iterator() {
-    int elementCount = size();
+    final int elementCount = size();
     return new java.util.Iterator <K> () {
       
       int bucketIndex = 0;
       java.util.Iterator <Entry<K,V>> bucketIter = (table[0] == null) ? null : table[0].iterator();
 
-      public boolean hasNext() {
+      @Override public boolean hasNext() {
         
         // An item was added or removed while iterating
         if (elementCount != size) throw new java.util.ConcurrentModificationException();
@@ -254,9 +254,12 @@ public class HashTable <K,V> implements Iterable <K> {
         return bucketIndex < capacity;
 
       }
-      public K next() {
+      @Override public K next() {
         return bucketIter.next().key;
       }
+      @Override public void remove() {
+        throw new UnsupportedOperationException();
+      }      
     };
   }
 

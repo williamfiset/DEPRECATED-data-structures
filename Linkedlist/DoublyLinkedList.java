@@ -245,6 +245,9 @@ public class DoublyLinkedList <T> implements Iterable <T> {
         trav = trav.next;
         return data;
       }
+      @Override public void remove() {
+        throw new UnsupportedOperationException();
+      }
     };
   }
   

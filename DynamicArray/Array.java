@@ -3,7 +3,6 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-
 @SuppressWarnings("unchecked")
 public class Array <T> implements Iterable <T> {
 
@@ -82,8 +81,9 @@ public class Array <T> implements Iterable <T> {
   @Override public java.util.Iterator <T> iterator () {
     return new java.util.Iterator <T> () {
       int index = 0;
-      public boolean hasNext() { return index < len; }
-      public T next() { return arr[index++]; }
+      @Override public boolean hasNext() { return index < len; }
+      @Override public T next() { return arr[index++]; }
+      @Override public void remove() { throw new UnsupportedOperationException(); }
     };
   }
 

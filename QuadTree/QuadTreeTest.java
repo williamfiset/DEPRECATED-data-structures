@@ -3,7 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.*;
 
-public class QuadTreeTests {
+public class QuadTreeTest {
 
   static final int LOOPS = 50;
   static final int TEST_SZ = 1000;

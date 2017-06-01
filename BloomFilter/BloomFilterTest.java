@@ -5,7 +5,7 @@ import java.util.*;
 import java.security.SecureRandom;
 import java.math.BigInteger;
 
-public class BloomFilterTests {
+public class BloomFilterTest {
 
   static final SecureRandom random = new SecureRandom();
   static final Random rand = new Random();

@@ -1,19 +1,42 @@
-#!/bin/sh
+#!/bin/bash
 
 for DIR in */
 do
 
   cd $DIR
-  if [ -e "test" ]; then
+
+  echo "In directory: " $DIR
+
+  foundFiles="$(find ./* -name '*Test.java')"
+  test_files=($foundFiles)
+  numTestFiles=${#test_files[@]}
+
+  # Found some java files :)
+  if [ $numTestFiles -ne 0 ]; then
     
-    echo "TESTING $DIR"
-    if ! ./test; then
-      echo "DFOJOGSDKNFGSDKNGSDKNGSDGNSDKLGNSDJNGSLDKNGSDKBGSDLNGSDNKg"
+    # Oops not able to compile java scripts
+    if ! javac -cp .:../junit-4.12.jar *.java; then
       exit 1
     fi
+    
+    for (( i=0; i<${numTestFiles}; i++ ));
+    do
 
-    echo ""
+      class_test_file=${test_files[$i]}
+      echo "Executing: " $class_test_file
+
+      # Trim .java to remove leading "./" and ending ".java" characters
+      test_file=${class_test_file::${#class_test_file}-5}
+      test_file=${test_file:2}
+
+      if ! java -cp .:../junit-4.12.jar:../hamcrest-core-1.3.jar org.junit.runner.JUnitCore $test_file; then
+        exit 1
+      fi
+
+    done
+
   fi
+
   cd ..
 
 done

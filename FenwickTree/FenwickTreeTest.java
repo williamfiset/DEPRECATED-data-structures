@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.*;
 
-public class FenwickTreeTests {
+public class FenwickTreeTest {
 
   static final int MIN_RAND_NUM = -1000;
   static final int MAX_RAND_NUM = +1000;
@@ -40,11 +40,18 @@ public class FenwickTreeTests {
     assertEquals(  6, ft.sum(1, 3) );
     assertEquals(  3, ft.sum(1, 2) );
     assertEquals(  1, ft.sum(1, 1) );
-    assertEquals(  0, ft.sum(1, 0) );
+    // assertEquals(  0, ft.sum(1, 0) );
 
     assertEquals(  7, ft.sum(3, 4) );
     assertEquals( 20, ft.sum(2, 6) );
     assertEquals(  9, ft.sum(4, 5) );
+
+    assertEquals(  6, ft.sum(6, 6) );
+    assertEquals(  5, ft.sum(5, 5) );
+    assertEquals(  4, ft.sum(4, 4) );
+    assertEquals(  3, ft.sum(3, 3) );
+    assertEquals(  2, ft.sum(2, 2) );
+    assertEquals(  1, ft.sum(1, 1) );
 
   }
   
@@ -61,7 +68,13 @@ public class FenwickTreeTests {
     assertEquals(  -6, ft.sum(1, 3) );
     assertEquals(  -3, ft.sum(1, 2) );
     assertEquals(  -1, ft.sum(1, 1) );
-    assertEquals(   0, ft.sum(1, 0) );
+
+    assertEquals(  -6, ft.sum(6, 6) );
+    assertEquals(  -5, ft.sum(5, 5) );
+    assertEquals(  -4, ft.sum(4, 4) );
+    assertEquals(  -3, ft.sum(3, 3) );
+    assertEquals(  -2, ft.sum(2, 2) );
+    assertEquals(  -1, ft.sum(1, 1) );
 
   }
 
@@ -105,13 +118,16 @@ public class FenwickTreeTests {
 
   public void doRandomRangeQuery( long[] arr, FenwickTree ft ) {
 
-    int N = arr.length;
     long sum = 0L;
+    int N = arr.length - 1;
 
     int lo = lowBound(N);
     int hi = highBound(lo, N);
 
-    for(int k = lo; k <= hi; k++) sum += arr[k];
+    // System.out.println("LO: " + lo + " HI: " + hi + " N: " + N);
+
+    for(int k = lo; k <= hi; k++)
+      sum += arr[k];
 
     assertEquals(sum, ft.sum(lo, hi));
 
@@ -121,14 +137,14 @@ public class FenwickTreeTests {
   public void testRandomizedSetSumQueries() {
 
     // System.out.println("testRandomizedSetSumQueries");
-    for (int i = 2; i <= LOOPS; i++) {
+    for (int n = 2; n <= LOOPS; n++) {
       
-      long [] randList = genRandList( i );
+      long [] randList = genRandList( n );
       FenwickTree ft = new FenwickTree(randList);
 
       for (int j = 0; j < LOOPS / 10; j++ ) {
         
-        int index = 1 + ((int) Math.random() * i);
+        int index = 1 + ((int) Math.random() * n);
         long rand_val = randValue();
         
         randList[index] += rand_val;
@@ -167,7 +183,7 @@ public class FenwickTreeTests {
   }
 
   public static int highBound(int low, int N) {
-    return Math.min(N-1, low + (int)(Math.random() * N) );    
+    return Math.min(N, low + (int)(Math.random() * N) );    
   }
 
   public static long randValue() {
@@ -179,10 +195,10 @@ public class FenwickTreeTests {
     new FenwickTree(null);
   }
 
-  // Generate a list of random numbers
+  // Generate a list of random numbers, one based
   static long[] genRandList(int sz) {
-    long[] lst = new long[sz];
-    for (int i = 0; i < sz; i++) {
+    long[] lst = new long[sz+1];
+    for (int i = 1; i <= sz; i++) {
       lst[i] = randValue();
     }
     return lst;

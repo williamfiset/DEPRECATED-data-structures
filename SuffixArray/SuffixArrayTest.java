@@ -35,7 +35,7 @@ public class SuffixArrayTest {
 
       int[] sa_arr = sa.sa; //getSuffixPositions();
       int[] san_arr = san.getSuffixPositions();
-      int[] saf_arr = saf.SA;
+      int[] saf_arr = saf.sa;
 
       for (int k = 0; k < sa.N; k++ ) {
         assertEquals(san_arr[k], sa_arr[k]);

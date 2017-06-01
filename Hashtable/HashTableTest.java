@@ -26,7 +26,7 @@ class ConstHashObj {
   }
 }
 
-public class HashTableTests {
+public class HashTableTest {
 
   static Random r = new Random();
 

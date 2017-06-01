@@ -2,4 +2,4 @@
 
 java_files="$(find . -name '*.java')"
 javac -Xlint -cp .:junit-4.12.jar $java_files
-
+echo $java_files

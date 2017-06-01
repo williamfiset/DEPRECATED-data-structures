@@ -13,4 +13,3 @@ before_script:
 script:
   - bash testall
 
-

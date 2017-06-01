@@ -7,6 +7,6 @@ jdk:
   - oraclejdk7
 
 script:
-  sh testall
+  sh travisTest
 
 

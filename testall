@@ -5,8 +5,13 @@ do
 
   cd $DIR
   if [ -e "test" ]; then
+    
     echo "TESTING $DIR"
-    ./test
+    if ! ./test; then
+      echo "DFOJOGSDKNFGSDKNGSDKNGSDGNSDKLGNSDJNGSLDKNGSDKBGSDLNGSDNKg"
+      exit 1
+    fi
+
     echo ""
   fi
   cd ..

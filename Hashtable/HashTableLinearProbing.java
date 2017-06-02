@@ -1,6 +1,8 @@
 /**
  * An implementation of a hash-table using open addressing with linear probing 
- * as a collision resolution method.
+ * as a collision resolution method. 
+ *
+ * NOTE: This file is still in development.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
@@ -10,9 +12,6 @@ import java.util.BitSet;
 
 @SuppressWarnings("unchecked")
 public class HashTableLinearProbing <K, V> {
-  
-  // private Class <K> keyClassType;
-  // private Class <V> valueClassType;
 
   private double loadFactor;
   private int capacity, threshold, size = 0;
@@ -23,27 +22,18 @@ public class HashTableLinearProbing <K, V> {
   private V [] valueTable;
   private BitSet deleted;
 
-  // Delete token marker. Set at runtime in constructor.
-  // private K DELETE_TOKEN = null;
-
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.7;
-
-  // public HashTableLinearProbing(Class <K> keyClassType, Class <V> valueClassType) {
-  //   this(keyClassType, valueClassType, DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
-  // }
-  // public HashTableLinearProbing (Class <K> keyClassType, Class <V> valueClassType, int capacity) {
-  //   this(keyClassType, valueClassType, capacity, DEFAULT_LOAD_FACTOR);
-  // }
 
   public HashTableLinearProbing() {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
   }
+
   public HashTableLinearProbing(int capacity) {
     this(capacity, DEFAULT_LOAD_FACTOR);
   }
+
   // Designated constructor
-  // public HashTableLinearProbing (Class <K> keyClassType, Class <V> valueClassType, int capacity, double loadFactor) {
   public HashTableLinearProbing(int capacity, double loadFactor) {
     
     if (capacity < 0)
@@ -55,14 +45,6 @@ public class HashTableLinearProbing <K, V> {
     this.loadFactor = loadFactor;
     this.capacity = Math.max(DEFAULT_CAPACITY, capacity);
     threshold = (int) (this.capacity * loadFactor);
-
-    // this.keyClassType = keyClassType;
-    // this.valueClassType = valueClassType;
-
-    // keyTable   = (K[]) java.lang.reflect.Array.newInstance(keyClassType, this.capacity);
-    // valueTable = (V[]) java.lang.reflect.Array.newInstance(valueClassType, this.capacity);
-    
-    // DELETE_TOKEN = keyClassType.newInstance();
 
     keyTable   = (K[]) new Object[this.capacity];
     valueTable = (V[]) new Object[this.capacity];
@@ -103,6 +85,7 @@ public class HashTableLinearProbing <K, V> {
   public V insert(K key, V val) {
   
     if (key == null) throw new IllegalArgumentException("Null key");
+    if (size >= threshold) resizeTable();
     int i = normalizeIndex(key.hashCode());
     
     for (;;) {
@@ -202,12 +185,13 @@ public class HashTableLinearProbing <K, V> {
   public V remove(K key) {
     
     if (key == null) throw new IllegalArgumentException("Null key");
+
     int bucketIndex = normalizeIndex(key.hashCode());
     int i = bucketIndex;
 
     // Starting at the bucketIndex linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist
-    for (;;) {
+    for (;; i = (i == capacity-1) ? 0 : i + 1) {
 
       // Ignore deleted cells
       if (deleted.get(i)) continue;
@@ -225,9 +209,36 @@ public class HashTableLinearProbing <K, V> {
         return oldValue;
       }
 
-      i = (i == capacity-1) ? 0 : i + 1;
-
     }
+
+  }
+
+  private void resizeTable() {
+
+    capacity *= 2;
+    threshold = (int) (capacity * loadFactor);
+
+    K[] oldKeyTable   = (K[]) new Object[capacity];
+    V[] oldValueTable = (V[]) new Object[capacity];
+
+    // Perform key table pointer swap
+    K[] keyTableTmp = keyTable;
+    keyTable = oldKeyTable;
+    oldKeyTable = keyTableTmp;
+
+    // Perform value table pointer swap
+    V[] valueTableTmp = valueTable;
+    valueTable = oldValueTable;
+    oldValueTable = valueTableTmp;
+
+    for (int i = 0; i < oldKeyTable.length; i++) {
+      if (!deleted.get(i) && oldKeyTable[i] != null)
+        insert(oldKeyTable[i], oldValueTable[i]);
+      oldValueTable[i] = null;
+      oldKeyTable[i] = null;
+    }
+
+    deleted = new BitSet(capacity);
 
   }
 
@@ -235,22 +246,47 @@ public class HashTableLinearProbing <K, V> {
 
     StringBuilder sb = new StringBuilder();
     sb.append("{");
-    for (int i = 0; i < capacity; i++) {
-      if (!deleted.get(i) && keyTable[i] != null) {
+    for (int i = 0; i < capacity; i++)
+      if (!deleted.get(i) && keyTable[i] != null)
         sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
-      }
-    }
     sb.append("}");
     return sb.toString();
 
   }
 
   public static void main(String[] args) {
-    HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>(5);
-    for (int i = 0; i < 6; i++) {
-      map.insert(i, i*i);
-    }
-    System.out.println(map);
+
+    // HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>(30);
+    // for (int i = 0; i < 50; i++) {
+    //   int v = (int)(Math.random() * 15);
+    //   map.insert(v, i*i);
+    // }
+
+    // for (int i = 0; i < 10; i++) {
+    //   int v = (int)(Math.random() * 40);
+    //   System.out.println(map.get(v));
+    //   map.remove(v);
+    //   System.out.println(map.get(v));
+    // }
+
+    // for (int i = 0; i < 50; i++) {
+    //   int v = (int)(Math.random() * 15);
+    //   map.insert(v, i*i);
+    // }
+
+    // for (int i = 0; i < 10; i++) {
+    //   int v = (int)(Math.random() * 40);
+    //   System.out.println(map.get(v));
+    //   map.remove(v);
+    //   System.out.println(map.get(v));
+    // }
+
+
+    // // map.remove(55);
+    // // map.remove(65);
+    // // map.remove(70);
+    // System.out.println(map);
+    
   }
 
 }

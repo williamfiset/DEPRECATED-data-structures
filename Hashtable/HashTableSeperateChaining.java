@@ -182,19 +182,23 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
 
     capacity *= 2;
     threshold = (int) (capacity * load_factor);
+
     LinkedList <Entry<K,V>> newTable [] = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
     
     for (int i = 0; i < table.length; i++ ) {
       if (table[i] != null) {
+        
         for (Entry <K,V> entry : table[i]) {
-
           int bucketIndex = normalizeIndex(entry.hash);
           LinkedList<Entry<K,V>> bucket = newTable[bucketIndex];
           if (bucket == null) newTable[bucketIndex] = bucket = new LinkedList<>();
           bucket.add(entry);
-
         }
-        table[i] = null; // Avoid memory leak. Help the GC
+
+        // Avoid memory leak. Help the GC
+        table[i].clear();
+        table[i] = null;
+
       }
     }
 

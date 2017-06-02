@@ -96,13 +96,6 @@ public class HashTableLinearProbingTest {
         assertEquals(key, map.get(key));
         assertEquals(map.get(key), map2.get(key));
         assertTrue(map.hasKey(key));
-
-        // boolean found = false;
-        // for(int i = 0; i < rand_nums.length; i++) {
-        //   if (rand_nums[i] == key) {
-        //     found = true; break;
-        //   }
-        // }
         assertTrue(rand_nums.contains(key));
         count++;
       }
@@ -223,23 +216,42 @@ public class HashTableLinearProbingTest {
       map.clear();
       map2.clear();
 
-      assertTrue(map.size() == map2.size());
+      assertTrue(map2.size() == map.size());
+
+      // StringBuilder sb = new StringBuilder();
 
       for (int i = 0; i < MAX_SIZE; i++ ) {
         
         double r = Math.random();
 
-        if ( r < 0.5 ) assertEquals( map.put( nums.get(i), i ), map2.put( nums.get(i), i ));
+        int key = nums.get(i);
+        int val = i;
 
-        assertEquals( map.containsKey(nums.get(i)), map2.containsKey(nums.get(i)) );
-        assertEquals( map.size(), map2.size() );
+        if ( r < 0.5 ) {
+          // sb.append("INSERT: " + key + " : " + val + "\n");
+          assertEquals( map2.put( key, val ), map.put( key, val ));
+        }
 
-        if ( r > 0.5 ) assertEquals( map.remove( nums.get(i) ), map2.remove( nums.get(i) ) );
+        // System.out.println(sb);
 
-        assertEquals( map.containsKey(nums.get(i)), map2.containsKey(nums.get(i)) );
-        assertEquals( map.size(), map2.size() );
+        // assertEquals( map2.get(key), map.get(key));
+        // assertEquals( map2.containsKey(key), map.containsKey(key) );
+        assertEquals( map2.size(), map.size() );
+
+        if ( r > 0.5 ) {
+          // sb.append("REMOVE: " + key + "\n");
+          assertEquals( map.remove( key ), map2.remove( key ) );
+        }
+
+        // System.out.println(sb);
+
+        // assertEquals( map2.get(key), map.get(key));
+        // assertEquals( map2.containsKey(key), map.containsKey(key) );
+        assertEquals( map2.size(), map.size() );
 
       }
+
+      // System.out.println();
       
     }
 

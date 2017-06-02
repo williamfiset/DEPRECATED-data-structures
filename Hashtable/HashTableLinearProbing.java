@@ -2,9 +2,6 @@
  * An implementation of a hash-table using open addressing with linear probing 
  * as a collision resolution method. 
  *
- * NOTE: This file is still in development.
- * TODO: Update DELETED_KEY_TOKEN to be "final K DELETED_KEY_TOKEN = (K) (new Object());""
- *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
@@ -15,12 +12,19 @@ import java.util.BitSet;
 public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
   private double loadFactor;
-  private int capacity, threshold, size = 0;
+  private int capacity, threshold;
+
+  // usedSlots counts the total number of used slots inside the 
+  // hash-table (including deleted cells) while keyCount only counts
+  // the number of unique keys currently inside the hash-table.
+  private int usedSlots = 0, keyCount = 0;
 
   // Store the key-value pairs in separate arrays 
   // instead of bundling them in a wrapper class
   private K [] keyTable;
   private V [] valueTable;
+
+  // Special marker token used to indicate the deletion of a key-value pair
   private final K DELETED_KEY_TOKEN = (K) (new Object());
 
   private static final int DEFAULT_CAPACITY = 3;
@@ -58,17 +62,17 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       keyTable[i] = null;
       valueTable[i] = null;
     }
-    size = 0;
+    keyCount = usedSlots = 0;
   }
 
-  // Returns the number of elements currently inside the hash-table
+  // Returns the number of keys currently inside the hash-table
   public int size() {
-    return size;
+    return keyCount;
   }
   
   // Returns true/false depending on whether the hash-table is empty
   public boolean isEmpty() {
-    return size == 0;
+    return keyCount == 0;
   }
 
   // Converts a hash value to an index. Essentially, this strips the
@@ -86,7 +90,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   public V insert(K key, V val) {
   
     if (key == null) throw new IllegalArgumentException("Null key");
-    if (size >= threshold) resizeTable();
+    if (usedSlots >= threshold) resizeTable();
     int i = normalizeIndex(key.hashCode());
     
     for (;;) {
@@ -94,7 +98,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       // The current slot was previously deleted
       if (keyTable[i] == DELETED_KEY_TOKEN) {
 
-        size++;
+        keyCount++;
         keyTable[i] = key;
         valueTable[i] = val;
         return null;
@@ -113,7 +117,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       // Current cell is null so insert new key here
       } else {
 
-        size++;
+        usedSlots++; keyCount++;
         keyTable[i] = key;
         valueTable[i] = val;
         return null;
@@ -255,7 +259,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
       // The key we want to remove is in the hash-table!
       if (keyTable[i].equals(key)) {
-        size--;
+        keyCount--;
         V oldValue = valueTable[i];
         keyTable[i] = DELETED_KEY_TOKEN;
         valueTable[i] = null;
@@ -268,7 +272,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
   public K[] keys() {
     int index = 0;
-    K[] keys = (K[]) new Object[size];
+    K[] keys = (K[]) new Object[size()];
     for (int i = 0; i < capacity; i++)
       if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
         keys[index++] = keyTable[i];
@@ -277,7 +281,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
   public V[] values() {
     int index = 0;
-    V[] values = (V[]) new Object[size];
+    V[] values = (V[]) new Object[size()];
     for (int i = 0; i < capacity; i++)
       if (valueTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
         values[index++] = valueTable[i];
@@ -317,7 +321,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     // Before the iteration begins record the number of keys in 
     // the hash-table. This value should not change as we iterate
     // otherwise a concurrent modification has occurred.
-    final int KEY_COUNT = size;
+    final int KEY_COUNT = keyCount;
 
     return new java.util.Iterator <K> () {
 
@@ -326,14 +330,14 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       @Override public boolean hasNext() {
 
         // An item was added or removed while iterating
-        if (KEY_COUNT != size) throw new java.util.ConcurrentModificationException();
+        if (KEY_COUNT != keyCount) throw new java.util.ConcurrentModificationException();
         return keysLeft != 0;
 
       }
 
       // Find the next element and return it
       @Override public K next() {
-        while( keyTable[index] == null || keyTable[index] == DELETED_KEY_TOKEN)index++;
+        while( keyTable[index] == null || keyTable[index] == DELETED_KEY_TOKEN) index++;
         keysLeft--;
         return keyTable[index++];
       }

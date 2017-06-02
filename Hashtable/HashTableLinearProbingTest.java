@@ -208,7 +208,7 @@ public class HashTableLinearProbingTest {
     map.remove(o1);
     map.remove(o4);
 
-    assertEquals(0, map.size());    
+    assertEquals(0, map.size());
 
   }
 

@@ -86,13 +86,13 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   // Place a key-value pair into the hash-table. If the value already
   // exists inside the hash-table then the value is updated
   public V insert(K key, V val) {
-  
+    
     if (key == null) throw new IllegalArgumentException("Null key");
     if (usedBuckets >= threshold) resizeTable();
     int i = normalizeIndex(key.hashCode());
     
     for (;;) {
-
+      
       // The current slot was previously deleted
       if (keyTable[i] == DELETED_KEY_TOKEN) {
 
@@ -310,6 +310,10 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     valueTable = oldValueTable;
     oldValueTable = valueTableTmp;
 
+    // Reset the key count since we are about to 
+    // re-insert all the keys into the hash-table.
+    keyCount = 0;
+
     for (int i = 0; i < oldKeyTable.length; i++) {
       if (oldKeyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
         insert(oldKeyTable[i], oldValueTable[i]);
@@ -402,16 +406,19 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     //   System.out.println(key);
     // }
 
-    // HashTableLinearProbing <String, Integer> map = new HashTableLinearProbing<>(3);
-    // map.insert("123", 123);
-    // map.insert("13", 13);
-    // map.insert("12", 12);
-    // map.insert("1", 1);
-    // map.insert("2", 2);
-    // map.insert("3", 3);
+    HashTableLinearProbing <String, Integer> map = new HashTableLinearProbing<>(3);
+    map.insert("123", 123);
+    map.insert("13", 13);
+    map.insert("12", 12);
+    map.insert("1", 1);
+    map.insert("2", 2);
+    map.insert("3", 3);
+    System.out.println(map.size());
 
-    // map.remove("13");
-    // map.remove("2");
+    map.remove("13");
+    map.remove("2");
+
+    System.out.println(map.size());
 
     // System.out.println(map.get("123"));
     // System.out.println(map.get("13"));

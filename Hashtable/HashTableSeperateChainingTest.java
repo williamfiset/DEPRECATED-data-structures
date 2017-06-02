@@ -30,9 +30,9 @@ public class HashTableSeperateChainingTest {
 
   static Random r = new Random();
 
-  static final int LOOPS = 30000;
+  static final int LOOPS = 50000;
   static final int MAX_SIZE = 100;
-  static final int MAX_RAND_NUM = 50;
+  static final int MAX_RAND_NUM = 20;
 
   HashTableSeperateChaining <Integer, Integer> map;
 
@@ -87,7 +87,7 @@ public class HashTableSeperateChainingTest {
       map2.clear();
       assertTrue(map.isEmpty());
 
-      Integer [] rand_nums = genRandList(MAX_SIZE);
+      List <Integer> rand_nums = genRandList(MAX_SIZE);
       for (Integer key : rand_nums)
         assertEquals(map.add(key, key), map2.put(key, key));
 
@@ -96,14 +96,7 @@ public class HashTableSeperateChainingTest {
         assertEquals(key, map.get(key));
         assertEquals(map.get(key), map2.get(key));
         assertTrue(map.hasKey(key));
-
-        boolean found = false;
-        for(int i = 0; i < rand_nums.length; i++) {
-          if (rand_nums[i] == key) {
-            found = true; break;
-          }
-        }
-        assertTrue(found);
+        assertTrue(rand_nums.contains(key));
         count++;
       }
 
@@ -140,10 +133,11 @@ public class HashTableSeperateChainingTest {
   @Test
   public void randomRemove() {
 
-    HashTableSeperateChaining <Integer, Integer> map = new HashTableSeperateChaining<>();
+    HashTableSeperateChaining <Integer, Integer> map;
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
+      map = new HashTableSeperateChaining<>();
       map.clear();
 
       // Add some random values
@@ -156,7 +150,7 @@ public class HashTableSeperateChainingTest {
 
       assertEquals( map.size(), keys_set.size() );
 
-      Integer[] keys = map.keys();
+      List <Integer> keys = map.keys();
       for (Integer key : keys) map.remove(key);
       
       assertTrue( map.isEmpty() );
@@ -208,38 +202,58 @@ public class HashTableSeperateChainingTest {
     map.remove(o1);
     map.remove(o4);
 
-    assertEquals(0, map.size());    
+    assertEquals(0, map.size());
 
   }
 
   @Test
   public void testRandomMapOperations() {
 
-    HashMap <Integer, Integer> map2 = new HashMap<>();
+    HashMap <Integer, Integer> jmap = new HashMap<>();
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
-      Integer [] nums = genRandList(MAX_SIZE);
+      List <Integer> nums = genRandList(MAX_SIZE);
       map.clear();
-      map2.clear();
+      jmap.clear();
+      assertTrue(jmap.size() == map.size());
 
-      assertTrue(map.size() == map2.size());
+      map = new HashTableSeperateChaining<>();
+
+      // StringBuilder sb = new StringBuilder();
 
       for (int i = 0; i < MAX_SIZE; i++ ) {
         
         double r = Math.random();
 
-        if ( r < 0.5 ) assertEquals( map.put( nums[i], i ), map2.put( nums[i], i ));
+        int key = nums.get(i);
+        int val = i;
 
-        assertEquals( map.containsKey(nums[i]), map2.containsKey(nums[i]) );
-        assertEquals( map.size(), map2.size() );
+        if ( r < 0.5 ) {
+          // sb.append("INSERT: " + key + " : " + val + "\n");
+          assertEquals( jmap.put( key, val ), map.put( key, val ));
+        }
 
-        if ( r > 0.5 ) assertEquals( map.remove( nums[i] ), map2.remove( nums[i] ) );
+        // System.out.println(sb);
 
-        assertEquals( map.containsKey(nums[i]), map2.containsKey(nums[i]) );
-        assertEquals( map.size(), map2.size() );
+        // assertEquals( jmap.get(key), map.get(key));
+        // assertEquals( jmap.containsKey(key), map.containsKey(key) );
+        assertEquals( jmap.size(), map.size() );
+
+        if ( r > 0.5 ) {
+          // sb.append("REMOVE: " + key + "\n");
+          assertEquals( map.remove( key ), jmap.remove( key ) );
+        }
+
+        // System.out.println(sb);
+
+        // assertEquals( jmap.get(key), map.get(key));
+        // assertEquals( jmap.containsKey(key), map.containsKey(key) );
+        assertEquals( jmap.size(), map.size() );
 
       }
+
+      // System.out.println();
       
     }
 
@@ -302,25 +316,27 @@ public class HashTableSeperateChainingTest {
   }
 
   // Generate a list of random numbers
-  static Integer [] genRandList(int sz) {
+  static List <Integer> genRandList(int sz) {
     
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++) lst.add( (int) (Math.random()*MAX_RAND_NUM ));
     Collections.shuffle( lst );
-    Integer[] retAr = new Integer[sz];
-    lst.toArray(retAr);
-    return retAr;
+    return lst;
+    // Integer[] retAr = new Integer[sz];
+    // lst.toArray(retAr);
+    // return retAr;
 
   }
 
   // Generate a list of unique random numbers
-  static Integer [] genUniqueRandList(int sz) {
+  static List <Integer> genUniqueRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++) lst.add( i );
     Collections.shuffle( lst );
-    Integer[] retAr = new Integer[sz];
-    lst.toArray(retAr);
-    return retAr;
+    return lst;
+    // Integer[] retAr = new Integer[sz];
+    // lst.toArray(retAr);
+    // return retAr;
   }  
 
 }

@@ -2,8 +2,6 @@
  * An implementation of a hash-table using open addressing with linear probing 
  * as a collision resolution method. 
  *
- * NOTE: This file is still in development
- *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
@@ -91,17 +89,16 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     
     if (key == null) throw new IllegalArgumentException("Null key");
     if (usedBuckets >= threshold) resizeTable();
-    int i = normalizeIndex(key.hashCode());
+    
+    int bucketIndex = normalizeIndex(key.hashCode());
+    int i = bucketIndex, j = -1;
 
-    for (;;) {
+    do {
       
       // The current slot was previously deleted
       if (keyTable[i] == DELETED_KEY_TOKEN) {
 
-        keyCount++;
-        keyTable[i] = key;
-        valueTable[i] = val;
-        return null;
+        if (j == -1) j = i;
       
       // The current cell already contains a key
       } else if (keyTable[i] != null) {
@@ -109,24 +106,48 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
         // The key we're trying to insert already exists in the hash-table,
         // so update its value with the most recent value
         if (keyTable[i].equals(key)) {
+
           V oldValue = valueTable[i];
-          valueTable[i] = val;
+          if (j == -1) {
+            valueTable[i] = val;
+          } else {
+            keyTable[i] = DELETED_KEY_TOKEN;
+            valueTable[i] = null;
+            keyTable[j] = key;
+            valueTable[j] = val;
+          }
           return oldValue;
+
         }
 
-      // Current cell is null so insert new key here
+      // Current cell is null so insert an insertion/update can occur
       } else {
 
-        usedBuckets++; keyCount++;
-        keyTable[i] = key;
-        valueTable[i] = val;
+        // No previously encountered deleted buckets
+        if (j == -1) {
+          usedBuckets++; keyCount++;
+          keyTable[i] = key;
+          valueTable[i] = val;
+
+        // Previously seen deleted bucket. Instead of inserting
+        // the new element at i where the null element is insert
+        // it where the deleted token was found.
+        } else {
+          keyCount++;
+          keyTable[j] = key;
+          valueTable[j] = val;
+        }
+
         return null;
 
       }
 
       i = (i == capacity-1) ? 0 : i + 1;
 
-    }
+    // A cycle has occurred and we have returned to the original position
+    } while(i != bucketIndex);
+
+    return null;
 
   }
 
@@ -139,19 +160,19 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   public boolean hasKey(K key) {
 
     if (key == null) throw new IllegalArgumentException("Null key");
+    
     int bucketIndex = normalizeIndex(key.hashCode());
     int i = bucketIndex, j = -1;
 
     // Starting at the original bucketIndex linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
-    for (;;) {
+    do {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
       if (keyTable[i] == DELETED_KEY_TOKEN) {
         
-        // Uncommented for testing
-        // if (j == -1) j = i;
+        if (j == -1) j = i;
 
       // We hit a non-null key, perhaps it's the one we're looking for.
       } else if (keyTable[i] != null) {
@@ -184,7 +205,9 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
       i = (i == capacity-1) ? 0 : i + 1;
 
-    }
+    } while(i != bucketIndex);
+
+    return false;
 
   }
 
@@ -199,14 +222,13 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
     // Starting at the original bucketIndex linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
-    for (;;) {
+    do {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
       if (keyTable[i] == DELETED_KEY_TOKEN) {
         
-        // Uncommented for testing
-        // if (j == -1) j = i;
+        if (j == -1) j = i;
 
       // We hit a non-null key, perhaps it's the one we're looking for.
       } else if (keyTable[i] != null) {
@@ -235,12 +257,15 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
         }
       
-      // Element was not found in the hash-table :/
+        // Element was not found in the hash-table :/
       } else return null;
 
       i = (i == capacity-1) ? 0 : i + 1;
 
-    }
+    // A cycle has occurred and we have returned to the original position
+    } while( i != bucketIndex );
+
+    return null;
 
   }
 
@@ -363,52 +388,29 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
     StringBuilder sb = new StringBuilder();
 
-    // sb.append("[");
-    // for(int i = 0; i < capacity; i++) {
-    //   if (keyTable[i] == null) {
-    //     sb.append("null ");
-    //   } else if (keyTable[i] == DELETED_KEY_TOKEN) {
-    //     sb.append("DEL ");
-    //   } else {
-    //     sb.append( keyTable[i] + " ");
-    //   }
-    // }
-    // sb.append("]\n");
+    sb.append("[");
+    for(int i = 0; i < capacity; i++) {
+      if (keyTable[i] == null) {
+        sb.append("null ");
+      } else if (keyTable[i] == DELETED_KEY_TOKEN) {
+        sb.append("DEL ");
+      } else {
+        sb.append( keyTable[i] + " ");
+      }
+    }
+    sb.append("]\n");
 
-    sb.append("{");
-    for (int i = 0; i < capacity; i++)
-      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN) // && !deleted.get(i))
-        sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
-    sb.append("}");
+    // sb.append("{");
+    // for (int i = 0; i < capacity; i++)
+    //   if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN) // && !deleted.get(i))
+    //     sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
+    // sb.append("}");
 
     return sb.toString();
 
   }
 
   public static void main(String[] args) {
-
-
-    // INSERT: 0 : 0
-    // INSERT: 0 : 1
-    // INSERT: 6 : 2
-    // INSERT: 5 : 3
-    // REMOVE: 0
-    // REMOVE: 1
-    // INSERT: 6 : 6
-    
-    HashMap <Integer, Integer> jmap = new HashMap<>();
-    HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>();
-    map.put(0,0); jmap.put(0,0);
-    map.put(0,1); jmap.put(0,1);
-    map.put(6,2); jmap.put(6,2);
-    map.put(5,3); jmap.put(5,3);
-    map.remove(0); jmap.remove(0);
-    map.remove(1); jmap.remove(1);
-    map.put(6,6); jmap.put(6,6);
-
-    // System.out.println(map.put(6,6) + " " + jmap.put(6,6));
-
-    System.out.println(map.size() + " " + jmap.size());
 
     /*
     HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>();

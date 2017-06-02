@@ -30,9 +30,9 @@ public class HashTableLinearProbingTest {
 
   static Random r = new Random();
 
-  static final int LOOPS = 30000;
+  static final int LOOPS = 50000;
   static final int MAX_SIZE = 100;
-  static final int MAX_RAND_NUM = 50;
+  static final int MAX_RAND_NUM = 20;
 
   HashTableLinearProbing <Integer, Integer> map;
 

@@ -122,7 +122,7 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
 
   // Removes a key from the map and returns the value.
   // NOTE: returns null if the value is null AND also returns
-  // null if the key does not exists, so watch out..
+  // null if the key does not exists.
   public V remove(K key) {
 
     if (key == null) return null;

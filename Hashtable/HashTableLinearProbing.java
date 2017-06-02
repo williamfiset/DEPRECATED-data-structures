@@ -3,6 +3,7 @@
  * as a collision resolution method. 
  *
  * NOTE: This file is still in development.
+ * TODO: Update DELETED_KEY_TOKEN to be "final K DELETED_KEY_TOKEN = (K) (new Object());""
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
@@ -11,7 +12,7 @@ import java.lang.reflect.*;
 import java.util.BitSet;
 
 @SuppressWarnings("unchecked")
-public class HashTableLinearProbing <K, V> {
+public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
   private double loadFactor;
   private int capacity, threshold, size = 0;
@@ -20,7 +21,7 @@ public class HashTableLinearProbing <K, V> {
   // instead of bundling them in a wrapper class
   private K [] keyTable;
   private V [] valueTable;
-  private BitSet deleted;
+  private final K DELETED_KEY_TOKEN = (K) (new Object());
 
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.7;
@@ -48,7 +49,6 @@ public class HashTableLinearProbing <K, V> {
 
     keyTable   = (K[]) new Object[this.capacity];
     valueTable = (V[]) new Object[this.capacity];
-    deleted = new BitSet(capacity);
 
   }
 
@@ -58,7 +58,6 @@ public class HashTableLinearProbing <K, V> {
       keyTable[i] = null;
       valueTable[i] = null;
     }
-    deleted.clear();
     size = 0;
   }
 
@@ -82,6 +81,8 @@ public class HashTableLinearProbing <K, V> {
   public V put(K key, V value) { return insert(key, value); }
   public V add(K key, V value) { return insert(key, value); }
 
+  // Place a key-value pair into the hash-table. If the value already
+  // exists inside the hash-table then the value is updated
   public V insert(K key, V val) {
   
     if (key == null) throw new IllegalArgumentException("Null key");
@@ -91,12 +92,11 @@ public class HashTableLinearProbing <K, V> {
     for (;;) {
 
       // The current slot was previously deleted
-      if (deleted.get(i)) {
+      if (keyTable[i] == DELETED_KEY_TOKEN) {
 
         size++;
         keyTable[i] = key;
         valueTable[i] = val;
-        deleted.set(i, false);
         return null;
       
       // The current cell already contains a key
@@ -126,8 +126,9 @@ public class HashTableLinearProbing <K, V> {
 
   }
 
-  public V get(K key) {
-    
+  // Returns true/false on whether a given key exists within the hash-table
+  public boolean hasKey(K key) {
+
     if (key == null) throw new IllegalArgumentException("Null key");
     int bucketIndex = normalizeIndex(key.hashCode());
     int i = bucketIndex, j = -1;
@@ -138,7 +139,7 @@ public class HashTableLinearProbing <K, V> {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
-      if (deleted.get(i)) {
+      if (keyTable[i] == DELETED_KEY_TOKEN) {
         
         if (j == -1) j = i;
 
@@ -158,13 +159,63 @@ public class HashTableLinearProbing <K, V> {
             keyTable[j] = keyTable[i];
             valueTable[j] = valueTable[i];
 
-            // Clear the contents in the current bucket
-            keyTable[i] = null;
+            // Clear the contents in bucket i and mark it as deleted
+            keyTable[i] = DELETED_KEY_TOKEN;
             valueTable[i] = null;
 
-            // Mark i to now be the deleted cell
-            deleted.set(i, true);
-            deleted.set(j, false);
+          }
+
+          return true;
+
+        }
+      
+      // Key was not found in the hash-table :/
+      } else return false;
+
+      i = (i == capacity-1) ? 0 : i + 1;
+
+    }
+
+  }
+
+  // Get the value associated with the input key.
+  // NOTE: returns null if the value is null AND also returns
+  // null if the key does not exists.
+  public V get(K key) {
+    
+    if (key == null) throw new IllegalArgumentException("Null key");
+    int bucketIndex = normalizeIndex(key.hashCode());
+    int i = bucketIndex, j = -1;
+
+    // Starting at the original bucketIndex linearly probe until we find a spot where
+    // our key is or we hit a null element in which case our element does not exist.
+    for (;;) {
+
+      // Ignore deleted cells, but record where the first index
+      // of a deleted cell is found to perform lazy relocation later.
+      if (keyTable[i] == DELETED_KEY_TOKEN) {
+        
+        if (j == -1) j = i;
+
+      // We hit a non-null key, perhaps it's the one we're looking for.
+      } else if (keyTable[i] != null) {
+
+        // The key we want is in the hash-table!
+        if (keyTable[i].equals(key)) {
+
+          // If j != -1 this means we previously encountered a deleted cell.
+          // We can perform an optimization by swapping the entries in cells
+          // i and j so that the next time we search for this key it will be
+          // found faster. This is called lazy deletion/relocation.
+          if (j != -1) {
+
+            // Copy values to where deleted bucket is
+            keyTable[j] = keyTable[i];
+            valueTable[j] = valueTable[i];
+
+            // Clear the contents in bucket i and mark it as deleted
+            keyTable[i] = DELETED_KEY_TOKEN;
+            valueTable[i] = null;
 
             return valueTable[j];
           } else {
@@ -182,6 +233,9 @@ public class HashTableLinearProbing <K, V> {
 
   }
 
+  // Removes a key from the map and returns the value.
+  // NOTE: returns null if the value is null AND also returns
+  // null if the key does not exists.
   public V remove(K key) {
     
     if (key == null) throw new IllegalArgumentException("Null key");
@@ -194,7 +248,7 @@ public class HashTableLinearProbing <K, V> {
     for (;; i = (i == capacity-1) ? 0 : i + 1) {
 
       // Ignore deleted cells
-      if (deleted.get(i)) continue;
+      if (keyTable[i] == DELETED_KEY_TOKEN) continue;
 
       // Key was not found in hash-table.
       if (keyTable[i] == null) return null;
@@ -203,9 +257,8 @@ public class HashTableLinearProbing <K, V> {
       if (keyTable[i].equals(key)) {
         size--;
         V oldValue = valueTable[i];
-        keyTable[i] = null;
+        keyTable[i] = DELETED_KEY_TOKEN;
         valueTable[i] = null;
-        deleted.set(i);
         return oldValue;
       }
 
@@ -213,6 +266,25 @@ public class HashTableLinearProbing <K, V> {
 
   }
 
+  public K[] keys() {
+    int index = 0;
+    K[] keys = (K[]) new Object[size];
+    for (int i = 0; i < capacity; i++)
+      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+        keys[index++] = keyTable[i];
+    return keys;
+  }
+
+  public V[] values() {
+    int index = 0;
+    V[] values = (V[]) new Object[size];
+    for (int i = 0; i < capacity; i++)
+      if (valueTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+        values[index++] = valueTable[i];
+    return values;
+  }
+
+  // Double the size of the hash-table
   private void resizeTable() {
 
     capacity *= 2;
@@ -232,22 +304,54 @@ public class HashTableLinearProbing <K, V> {
     oldValueTable = valueTableTmp;
 
     for (int i = 0; i < oldKeyTable.length; i++) {
-      if (!deleted.get(i) && oldKeyTable[i] != null)
+      if (oldKeyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
         insert(oldKeyTable[i], oldValueTable[i]);
       oldValueTable[i] = null;
       oldKeyTable[i] = null;
     }
 
-    deleted = new BitSet(capacity);
+  }
+
+  @Override public java.util.Iterator <K> iterator() {
+
+    // Before the iteration begins record the number of keys in 
+    // the hash-table. This value should not change as we iterate
+    // otherwise a concurrent modification has occurred.
+    final int KEY_COUNT = size;
+
+    return new java.util.Iterator <K> () {
+
+      int keysLeft = KEY_COUNT, index = 0;
+
+      @Override public boolean hasNext() {
+
+        // An item was added or removed while iterating
+        if (KEY_COUNT != size) throw new java.util.ConcurrentModificationException();
+        return keysLeft != 0;
+
+      }
+
+      // Find the next element and return it
+      @Override public K next() {
+        while( keyTable[index] == null || keyTable[index] == DELETED_KEY_TOKEN)index++;
+        keysLeft--;
+        return keyTable[index++];
+      }
+      @Override public void remove() {
+        throw new UnsupportedOperationException();
+      }
+
+    };
 
   }
 
+  // Return a String version of this hash-table
   @Override public String toString() {
 
     StringBuilder sb = new StringBuilder();
     sb.append("{");
     for (int i = 0; i < capacity; i++)
-      if (!deleted.get(i) && keyTable[i] != null)
+      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN) // && !deleted.get(i))
         sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
     sb.append("}");
     return sb.toString();
@@ -286,7 +390,38 @@ public class HashTableLinearProbing <K, V> {
     // // map.remove(65);
     // // map.remove(70);
     // System.out.println(map);
-    
+
+    // for (Integer key : map) {
+    //   System.out.println(key);
+    // }
+
+    HashTableLinearProbing <String, Integer> map = new HashTableLinearProbing<>(3);
+    map.insert("123", 123);
+    map.insert("13", 13);
+    map.insert("12", 12);
+    map.insert("1", 1);
+    map.insert("2", 2);
+    map.insert("3", 3);
+
+    map.remove("13");
+    map.remove("2");
+
+    System.out.println(map.get("123"));
+    System.out.println(map.get("13"));
+    System.out.println(map.get("12"));
+    System.out.println(map.get("1"));
+    System.out.println(map.get("2"));
+    System.out.println(map.get("3"));
+
+    System.out.println();
+
+    System.out.println(map.get("123"));
+    System.out.println(map.get("13"));
+    System.out.println(map.get("12"));
+    System.out.println(map.get("1"));
+    System.out.println(map.get("2"));
+    System.out.println(map.get("3"));
+
   }
 
 }

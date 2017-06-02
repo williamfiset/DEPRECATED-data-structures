@@ -133,10 +133,11 @@ public class HashTableLinearProbingTest {
   @Test
   public void randomRemove() {
 
-    HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>();
+    HashTableLinearProbing <Integer, Integer> map;
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
+      map = new HashTableLinearProbing<>();
       map.clear();
 
       // Add some random values
@@ -208,15 +209,16 @@ public class HashTableLinearProbingTest {
   @Test
   public void testRandomMapOperations() {
 
-    HashMap <Integer, Integer> map2 = new HashMap<>();
+    HashMap <Integer, Integer> jmap = new HashMap<>();
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
       List <Integer> nums = genRandList(MAX_SIZE);
       map.clear();
-      map2.clear();
+      jmap.clear();
+      assertTrue(jmap.size() == map.size());
 
-      assertTrue(map2.size() == map.size());
+      map = new HashTableLinearProbing<>();
 
       // StringBuilder sb = new StringBuilder();
 
@@ -229,25 +231,25 @@ public class HashTableLinearProbingTest {
 
         if ( r < 0.5 ) {
           // sb.append("INSERT: " + key + " : " + val + "\n");
-          assertEquals( map2.put( key, val ), map.put( key, val ));
+          assertEquals( jmap.put( key, val ), map.put( key, val ));
         }
 
         // System.out.println(sb);
 
-        // assertEquals( map2.get(key), map.get(key));
-        // assertEquals( map2.containsKey(key), map.containsKey(key) );
-        assertEquals( map2.size(), map.size() );
+        // assertEquals( jmap.get(key), map.get(key));
+        // assertEquals( jmap.containsKey(key), map.containsKey(key) );
+        assertEquals( jmap.size(), map.size() );
 
         if ( r > 0.5 ) {
           // sb.append("REMOVE: " + key + "\n");
-          assertEquals( map.remove( key ), map2.remove( key ) );
+          assertEquals( map.remove( key ), jmap.remove( key ) );
         }
 
         // System.out.println(sb);
 
-        // assertEquals( map2.get(key), map.get(key));
-        // assertEquals( map2.containsKey(key), map.containsKey(key) );
-        assertEquals( map2.size(), map.size() );
+        // assertEquals( jmap.get(key), map.get(key));
+        // assertEquals( jmap.containsKey(key), map.containsKey(key) );
+        assertEquals( jmap.size(), map.size() );
 
       }
 

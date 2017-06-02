@@ -206,24 +206,26 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
 
   }
 
-  public List <K> keys() {
+  public K [] keys() {
 
-    List <K> keys = new ArrayList<>(size);
+    int index = 0;
+    K [] keys = (K[]) new Object[size()];
     for(LinkedList<Entry<K,V>> bucket : table)
       if (bucket != null)
         for (Entry <K,V> entry : bucket)
-          keys.add(entry.key);
+          keys[index++] = entry.key;
     return keys;
 
   }
 
-  public List <V> values() {
+  public V [] values() {
 
-    List <V> values = new ArrayList<>(size);
+    int index = 0;
+    V [] values = (V[]) new Object[size()];
     for(LinkedList<Entry<K,V>> bucket : table)
       if (bucket != null)
         for (Entry <K,V> entry : bucket)
-          values.add(entry.value);
+          values[index++] = entry.value;
     return values;
 
   }

@@ -2,11 +2,10 @@
  * An implementation of a hash-table using open addressing with linear probing 
  * as a collision resolution method. 
  *
+ * NOTE: This file is still in development
+ *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
-
-import java.lang.reflect.*;
-import java.util.BitSet;
 
 @SuppressWarnings("unchecked")
 public class HashTableLinearProbing <K, V> implements Iterable <K> {
@@ -14,13 +13,12 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   private double loadFactor;
   private int capacity, threshold;
 
-  // usedSlots counts the total number of used slots inside the 
-  // hash-table (including deleted cells) while keyCount only counts
-  // the number of unique keys currently inside the hash-table.
-  private int usedSlots = 0, keyCount = 0;
+  // 'usedBuckets' counts the total number of used buckets inside the 
+  // hash-table (includes cells marked as deleted). While 'keyCount; 
+  // tracks the number of unique keys currently inside the hash-table.
+  private int usedBuckets = 0, keyCount = 0;
 
-  // Store the key-value pairs in separate arrays 
-  // instead of bundling them in a wrapper class
+  // These arrays store the key-value pairs. 
   private K [] keyTable;
   private V [] valueTable;
 
@@ -28,7 +26,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   private final K DELETED_KEY_TOKEN = (K) (new Object());
 
   private static final int DEFAULT_CAPACITY = 3;
-  private static final double DEFAULT_LOAD_FACTOR = 0.7;
+  private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
   public HashTableLinearProbing() {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -62,7 +60,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       keyTable[i] = null;
       valueTable[i] = null;
     }
-    keyCount = usedSlots = 0;
+    keyCount = usedBuckets = 0;
   }
 
   // Returns the number of keys currently inside the hash-table
@@ -90,7 +88,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   public V insert(K key, V val) {
   
     if (key == null) throw new IllegalArgumentException("Null key");
-    if (usedSlots >= threshold) resizeTable();
+    if (usedBuckets >= threshold) resizeTable();
     int i = normalizeIndex(key.hashCode());
     
     for (;;) {
@@ -117,7 +115,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       // Current cell is null so insert new key here
       } else {
 
-        usedSlots++; keyCount++;
+        usedBuckets++; keyCount++;
         keyTable[i] = key;
         valueTable[i] = val;
         return null;
@@ -128,6 +126,11 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
     }
 
+  }
+
+  // Returns true/false on whether a given key exists within the hash-table
+  public boolean containsKey(K key) {
+    return hasKey(key);
   }
 
   // Returns true/false on whether a given key exists within the hash-table
@@ -399,32 +402,32 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     //   System.out.println(key);
     // }
 
-    HashTableLinearProbing <String, Integer> map = new HashTableLinearProbing<>(3);
-    map.insert("123", 123);
-    map.insert("13", 13);
-    map.insert("12", 12);
-    map.insert("1", 1);
-    map.insert("2", 2);
-    map.insert("3", 3);
+    // HashTableLinearProbing <String, Integer> map = new HashTableLinearProbing<>(3);
+    // map.insert("123", 123);
+    // map.insert("13", 13);
+    // map.insert("12", 12);
+    // map.insert("1", 1);
+    // map.insert("2", 2);
+    // map.insert("3", 3);
 
-    map.remove("13");
-    map.remove("2");
+    // map.remove("13");
+    // map.remove("2");
 
-    System.out.println(map.get("123"));
-    System.out.println(map.get("13"));
-    System.out.println(map.get("12"));
-    System.out.println(map.get("1"));
-    System.out.println(map.get("2"));
-    System.out.println(map.get("3"));
+    // System.out.println(map.get("123"));
+    // System.out.println(map.get("13"));
+    // System.out.println(map.get("12"));
+    // System.out.println(map.get("1"));
+    // System.out.println(map.get("2"));
+    // System.out.println(map.get("3"));
 
-    System.out.println();
+    // System.out.println();
 
-    System.out.println(map.get("123"));
-    System.out.println(map.get("13"));
-    System.out.println(map.get("12"));
-    System.out.println(map.get("1"));
-    System.out.println(map.get("2"));
-    System.out.println(map.get("3"));
+    // System.out.println(map.get("123"));
+    // System.out.println(map.get("13"));
+    // System.out.println(map.get("12"));
+    // System.out.println(map.get("1"));
+    // System.out.println(map.get("2"));
+    // System.out.println(map.get("3"));
 
   }
 

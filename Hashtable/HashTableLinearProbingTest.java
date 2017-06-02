@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class HashTableSeperateChainingTest {
+public class HashTableLinearProbingTest {
 
   // You can set the hash value of this object to be whatever you want
   // This makes it great for testing special cases.
@@ -34,11 +34,11 @@ public class HashTableSeperateChainingTest {
   static final int MAX_SIZE = 100;
   static final int MAX_RAND_NUM = 50;
 
-  HashTableSeperateChaining <Integer, Integer> map;
+  HashTableLinearProbing <Integer, Integer> map;
 
   @Before
   public void setup() {
-    map = new HashTableSeperateChaining<>();
+    map = new HashTableLinearProbing<>();
   }
 
   @Test(expected=IllegalArgumentException.class)
@@ -48,22 +48,22 @@ public class HashTableSeperateChainingTest {
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation1() {
-    new HashTableSeperateChaining<>(-3, 0.5);
+    new HashTableLinearProbing<>(-3, 0.5);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation2() {
-    new HashTableSeperateChaining<>(5, Double.POSITIVE_INFINITY);
+    new HashTableLinearProbing<>(5, Double.POSITIVE_INFINITY);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation3() {
-    new HashTableSeperateChaining<>(6, -0.5);
+    new HashTableLinearProbing<>(6, -0.5);
   }
 
   @Test
   public void testLegalCreation() {
-    new HashTableSeperateChaining<>(6, 0.9);
+    new HashTableLinearProbing<>(6, 0.9);
   }
 
   @Test
@@ -140,7 +140,7 @@ public class HashTableSeperateChainingTest {
   @Test
   public void randomRemove() {
 
-    HashTableSeperateChaining <Integer, Integer> map = new HashTableSeperateChaining<>();
+    HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>();
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
@@ -168,7 +168,7 @@ public class HashTableSeperateChainingTest {
   @Test
   public void removeTest() {
 
-    HashTableSeperateChaining <Integer, Integer> map = new HashTableSeperateChaining<>( 7 );
+    HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>( 7 );
     
     // Add three elements
     map.put(11, 0); map.put(12, 0); map.put(13, 0);
@@ -191,7 +191,7 @@ public class HashTableSeperateChainingTest {
   @Test
   public void removeTestComplex1() {
 
-    HashTableSeperateChaining <ConstHashObj, Integer> map = new HashTableSeperateChaining<>();
+    HashTableLinearProbing <ConstHashObj, Integer> map = new HashTableLinearProbing<>();
 
     ConstHashObj o1 = new ConstHashObj(88, 1);
     ConstHashObj o2 = new ConstHashObj(88, 2);
@@ -248,7 +248,7 @@ public class HashTableSeperateChainingTest {
   @Test
   public void randomIteratorTests() {
 
-    HashTableSeperateChaining <Integer, LinkedList<Integer>> m = new HashTableSeperateChaining<>();
+    HashTableLinearProbing <Integer, LinkedList<Integer>> m = new HashTableLinearProbing<>();
     HashMap <Integer, LinkedList<Integer>> hm = new HashMap<>();
 
     for (int loop = 0; loop < LOOPS; loop++ ) {
@@ -257,7 +257,7 @@ public class HashTableSeperateChainingTest {
       hm.clear();
 
       int sz = (int)(Math.random() * MAX_SIZE);
-      m  = new HashTableSeperateChaining<>(sz);
+      m  = new HashTableLinearProbing<>(sz);
       hm = new HashMap<>(sz);
 
       for (int i = 0; i < MAX_SIZE; i++) {

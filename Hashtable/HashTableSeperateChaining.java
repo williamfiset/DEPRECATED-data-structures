@@ -1,7 +1,8 @@
 /**
- * An implementation of a hashtable using separate chaining with a linked list.
+ * An implementation of a hash-table using separate chaining with a linked list.
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ class Entry <K, V> {
   // No casting is required with this method.
   // We are not overriding the Object equals method
   public boolean equals(Entry <K,V> other) {
-    // if (other == null) return false; // Obsolete as entries should not be null
+    // if (other == null) return false; // Obsolete check as entries should not be null
     if ( hash != other.hash ) return false;
     return key.equals( other.key );
   }
@@ -32,7 +33,7 @@ class Entry <K, V> {
 }
 
 @SuppressWarnings("unchecked")
-public class HashTable <K,V> implements Iterable <K> {
+public class HashTableSeperateChaining <K,V> implements Iterable <K> {
 
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
@@ -41,16 +42,16 @@ public class HashTable <K,V> implements Iterable <K> {
   private int capacity, threshold, size = 0;
   private LinkedList <Entry<K,V>> [] table;
 
-  public HashTable () {
+  public HashTableSeperateChaining () {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
   }
 
-  public HashTable (int capacity) {
+  public HashTableSeperateChaining (int capacity) {
     this(capacity, DEFAULT_LOAD_FACTOR);
   }
 
   // Designated constructor
-  public HashTable (int capacity, double load_factor) {
+  public HashTableSeperateChaining (int capacity, double load_factor) {
     if (capacity < 0)
       throw new IllegalArgumentException("Illegal capacity");
     if (load_factor <= 0 || Double.isNaN(load_factor) || Double.isInfinite(load_factor))
@@ -69,7 +70,8 @@ public class HashTable <K,V> implements Iterable <K> {
     return size == 0;
   }
 
-  // Converts a hash value to an index.
+  // Converts a hash value to an index. Essentially, this strips the
+  // negative sign and places the hash value in the domain [0, 2^31)
   private int normalizeIndex(int keyHash ) {
     return (keyHash & 0x7fffffff) % capacity;
   }
@@ -89,11 +91,11 @@ public class HashTable <K,V> implements Iterable <K> {
     return bucketSeekEntry(bucketIndex, key) != null;
   }
 
-  public V put(K key, V value) {
-    return add(key, value);
-  }
+  // Insert, put and add all place a value in the hash-table
+  public V put(K key, V value) { return insert(key, value); }
+  public V add(K key, V value) { return insert(key, value); }
 
-  public V add(K key, V value) {
+  public V insert(K key, V value) {
 
     if (key == null) throw new IllegalArgumentException("Null key");
     Entry <K, V> newEntry = new Entry<>(key, value);

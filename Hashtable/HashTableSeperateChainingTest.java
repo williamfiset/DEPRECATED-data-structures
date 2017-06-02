@@ -26,7 +26,7 @@ class ConstHashObj {
   }
 }
 
-public class HashTableTest {
+public class HashTableSeperateChainingTest {
 
   static Random r = new Random();
 
@@ -34,11 +34,11 @@ public class HashTableTest {
   static final int MAX_SIZE = 100;
   static final int MAX_RAND_NUM = 50;
 
-  HashTable <Integer, Integer> map;
+  HashTableSeperateChaining <Integer, Integer> map;
 
   @Before
   public void setup() {
-    map = new HashTable<>();
+    map = new HashTableSeperateChaining<>();
   }
 
   @Test(expected=IllegalArgumentException.class)
@@ -48,22 +48,22 @@ public class HashTableTest {
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation1() {
-    new HashTable<>(-3, 0.5);
+    new HashTableSeperateChaining<>(-3, 0.5);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation2() {
-    new HashTable<>(5, Double.POSITIVE_INFINITY);
+    new HashTableSeperateChaining<>(5, Double.POSITIVE_INFINITY);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation3() {
-    new HashTable<>(6, -0.5);
+    new HashTableSeperateChaining<>(6, -0.5);
   }
 
   @Test
   public void testLegalCreation() {
-    new HashTable<>(6, 0.9);
+    new HashTableSeperateChaining<>(6, 0.9);
   }
 
   @Test
@@ -131,7 +131,7 @@ public class HashTableTest {
   @Test
   public void randomRemove() {
 
-    HashTable <Integer, Integer> map = new HashTable<>();
+    HashTableSeperateChaining <Integer, Integer> map = new HashTableSeperateChaining<>();
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
@@ -159,7 +159,7 @@ public class HashTableTest {
   @Test
   public void removeTest() {
 
-    HashTable <Integer, Integer> map = new HashTable<>( 7 );
+    HashTableSeperateChaining <Integer, Integer> map = new HashTableSeperateChaining<>( 7 );
     
     // Add three elements
     map.put(11, 0); map.put(12, 0); map.put(13, 0);
@@ -182,7 +182,7 @@ public class HashTableTest {
   @Test
   public void removeTestComplex1() {
 
-    HashTable <ConstHashObj, Integer> map = new HashTable<>();
+    HashTableSeperateChaining <ConstHashObj, Integer> map = new HashTableSeperateChaining<>();
 
     ConstHashObj o1 = new ConstHashObj(88, 1);
     ConstHashObj o2 = new ConstHashObj(88, 2);
@@ -239,7 +239,7 @@ public class HashTableTest {
   @Test
   public void randomIteratorTests() {
 
-    HashTable <Integer, LinkedList<Integer>> m = new HashTable<>();
+    HashTableSeperateChaining <Integer, LinkedList<Integer>> m = new HashTableSeperateChaining<>();
     HashMap <Integer, LinkedList<Integer>> hm = new HashMap<>();
 
     for (int loop = 0; loop < LOOPS; loop++ ) {
@@ -248,7 +248,7 @@ public class HashTableTest {
       hm.clear();
 
       int sz = (int)(Math.random() * MAX_SIZE);
-      m  = new HashTable<>(sz);
+      m  = new HashTableSeperateChaining<>(sz);
       hm = new HashMap<>(sz);
 
       for (int i = 0; i < MAX_SIZE; i++) {

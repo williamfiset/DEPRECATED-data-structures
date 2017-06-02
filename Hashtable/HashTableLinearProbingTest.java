@@ -87,7 +87,7 @@ public class HashTableLinearProbingTest {
       map2.clear();
       assertTrue(map.isEmpty());
 
-      Integer [] rand_nums = genRandList(MAX_SIZE);
+      List <Integer> rand_nums = genRandList(MAX_SIZE);
       for (Integer key : rand_nums)
         assertEquals(map.add(key, key), map2.put(key, key));
 
@@ -97,13 +97,13 @@ public class HashTableLinearProbingTest {
         assertEquals(map.get(key), map2.get(key));
         assertTrue(map.hasKey(key));
 
-        boolean found = false;
-        for(int i = 0; i < rand_nums.length; i++) {
-          if (rand_nums[i] == key) {
-            found = true; break;
-          }
-        }
-        assertTrue(found);
+        // boolean found = false;
+        // for(int i = 0; i < rand_nums.length; i++) {
+        //   if (rand_nums[i] == key) {
+        //     found = true; break;
+        //   }
+        // }
+        assertTrue(rand_nums.contains(key));
         count++;
       }
 
@@ -156,7 +156,7 @@ public class HashTableLinearProbingTest {
 
       assertEquals( map.size(), keys_set.size() );
 
-      Integer[] keys = map.keys();
+      List <Integer> keys = map.keys();
       for (Integer key : keys) map.remove(key);
       
       assertTrue( map.isEmpty() );
@@ -219,7 +219,7 @@ public class HashTableLinearProbingTest {
 
     for (int loop = 0; loop < LOOPS; loop++) {
       
-      Integer [] nums = genRandList(MAX_SIZE);
+      List <Integer> nums = genRandList(MAX_SIZE);
       map.clear();
       map2.clear();
 
@@ -229,14 +229,14 @@ public class HashTableLinearProbingTest {
         
         double r = Math.random();
 
-        if ( r < 0.5 ) assertEquals( map.put( nums[i], i ), map2.put( nums[i], i ));
+        if ( r < 0.5 ) assertEquals( map.put( nums.get(i), i ), map2.put( nums.get(i), i ));
 
-        assertEquals( map.containsKey(nums[i]), map2.containsKey(nums[i]) );
+        assertEquals( map.containsKey(nums.get(i)), map2.containsKey(nums.get(i)) );
         assertEquals( map.size(), map2.size() );
 
-        if ( r > 0.5 ) assertEquals( map.remove( nums[i] ), map2.remove( nums[i] ) );
+        if ( r > 0.5 ) assertEquals( map.remove( nums.get(i) ), map2.remove( nums.get(i) ) );
 
-        assertEquals( map.containsKey(nums[i]), map2.containsKey(nums[i]) );
+        assertEquals( map.containsKey(nums.get(i)), map2.containsKey(nums.get(i)) );
         assertEquals( map.size(), map2.size() );
 
       }
@@ -302,25 +302,27 @@ public class HashTableLinearProbingTest {
   }
 
   // Generate a list of random numbers
-  static Integer [] genRandList(int sz) {
+  static List <Integer> genRandList(int sz) {
     
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++) lst.add( (int) (Math.random()*MAX_RAND_NUM ));
     Collections.shuffle( lst );
-    Integer[] retAr = new Integer[sz];
-    lst.toArray(retAr);
-    return retAr;
+    return lst;
+    // Integer[] retAr = new Integer[sz];
+    // lst.toArray(retAr);
+    // return retAr;
 
   }
 
   // Generate a list of unique random numbers
-  static Integer [] genUniqueRandList(int sz) {
+  static List <Integer> genUniqueRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++) lst.add( i );
     Collections.shuffle( lst );
-    Integer[] retAr = new Integer[sz];
-    lst.toArray(retAr);
-    return retAr;
+    return lst;
+    // Integer[] retAr = new Integer[sz];
+    // lst.toArray(retAr);
+    // return retAr;
   }  
 
 }

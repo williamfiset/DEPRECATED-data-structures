@@ -7,6 +7,8 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
+import java.util.*;
+
 @SuppressWarnings("unchecked")
 public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
@@ -273,22 +275,32 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
   }
 
-  public K[] keys() {
-    int index = 0;
-    K[] keys = (K[]) new Object[size()];
+  public List <K> keys() {
+    // int index = 0;
+    // K[] keys = (K[]) new Object[size()];
+    // for (int i = 0; i < capacity; i++)
+    //   if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+    //     keys[index++] = keyTable[i];
+    // return keys;
+    List <K> keys = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
       if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
-        keys[index++] = keyTable[i];
-    return keys;
+        keys.add(keyTable[i]);
+    return keys;     
   }
 
-  public V[] values() {
-    int index = 0;
-    V[] values = (V[]) new Object[size()];
+  public List <V> values() {
+    // int index = 0;
+    // V[] values = (V[]) new Object[size()];
+    // for (int i = 0; i < capacity; i++)
+    //   if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+    //     values[index++] = valueTable[i];
+    // return values;
+    List <V> values = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
-      if (valueTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
-        values[index++] = valueTable[i];
-    return values;
+      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+        values.add(valueTable[i]);
+    return values;    
   }
 
   // Double the size of the hash-table
@@ -406,19 +418,19 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     //   System.out.println(key);
     // }
 
-    HashTableLinearProbing <String, Integer> map = new HashTableLinearProbing<>(3);
-    map.insert("123", 123);
-    map.insert("13", 13);
-    map.insert("12", 12);
-    map.insert("1", 1);
-    map.insert("2", 2);
-    map.insert("3", 3);
-    System.out.println(map.size());
+    // HashTableLinearProbing <String, Integer> map = new HashTableLinearProbing<>(3);
+    // map.insert("123", 123);
+    // map.insert("13", 13);
+    // map.insert("12", 12);
+    // map.insert("1", 1);
+    // map.insert("2", 2);
+    // map.insert("3", 3);
+    // System.out.println(map.size());
 
-    map.remove("13");
-    map.remove("2");
+    // map.remove("13");
+    // map.remove("2");
 
-    System.out.println(map.size());
+    // System.out.println(map.size());
 
     // System.out.println(map.get("123"));
     // System.out.println(map.get("13"));
@@ -435,6 +447,35 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     // System.out.println(map.get("1"));
     // System.out.println(map.get("2"));
     // System.out.println(map.get("3"));
+
+    HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>();
+
+    for (int loop = 0; loop < 100; loop++) {
+      
+      map.clear();
+
+      // Add some random values
+      java.util.Set <Integer> keys_set = new java.util.HashSet<>();
+      for(int i = 0; i < 50; i++) {
+        int randomVal = ((int)Math.random()*300);
+        keys_set.add(randomVal);
+        map.put(randomVal, 5);
+      }
+
+      if( map.size() != keys_set.size() ) {
+        System.out.println("ERROR");
+        System.exit(0);
+      }
+
+      List <Integer> keys = map.keys();
+      for (Integer key : keys) map.remove(key);
+      
+      if( !map.isEmpty() ) {
+        System.out.println("NOT EMPTY");
+        System.exit(0);
+      }
+
+    }
 
   }
 

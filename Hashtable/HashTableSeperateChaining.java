@@ -62,10 +62,12 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     table = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
   }
 
+  // Returns the number of elements currently inside the hash-table
   public int size() {
     return size;
   }
-  
+
+  // Returns true/false depending on whether the hash-table is empty
   public boolean isEmpty() {
     return size == 0;
   }
@@ -76,6 +78,7 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     return (keyHash & 0x7fffffff) % capacity;
   }
 
+  // Clears all the contents of the hash-table
   public void clear() {
     for (int i = 0; i < capacity; i++)
       table[i] = null;

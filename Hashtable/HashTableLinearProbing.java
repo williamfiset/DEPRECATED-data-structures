@@ -1,6 +1,6 @@
 /**
- * An implementation of a hash-table using open addressing with linear probing 
- * as a collision resolution method. 
+ * An implementation of a hash-table using open addressing with 
+ * linear probing as a collision resolution method.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
@@ -26,7 +26,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   private final K DELETED_KEY_TOKEN = (K) (new Object());
 
   private static final int DEFAULT_CAPACITY = 3;
-  private static final double DEFAULT_LOAD_FACTOR = 0.75;
+  private static final double DEFAULT_LOAD_FACTOR = 0.5;
 
   public HashTableLinearProbing() {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
@@ -388,92 +388,16 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
     StringBuilder sb = new StringBuilder();
 
-    sb.append("[");
-    for(int i = 0; i < capacity; i++) {
-      if (keyTable[i] == null) {
-        sb.append("null ");
-      } else if (keyTable[i] == DELETED_KEY_TOKEN) {
-        sb.append("DEL ");
-      } else {
-        sb.append( keyTable[i] + " ");
-      }
-    }
-    sb.append("]\n");
-
-    // sb.append("{");
-    // for (int i = 0; i < capacity; i++)
-    //   if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN) // && !deleted.get(i))
-    //     sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
-    // sb.append("}");
+    sb.append("{");
+    for (int i = 0; i < capacity; i++)
+      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+        sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
+    sb.append("}");
 
     return sb.toString();
 
   }
 
-  public static void main(String[] args) {
-
-    /*
-    HashTableLinearProbing <Integer, Integer> map = new HashTableLinearProbing<>();
-    HashMap <Integer, Integer> jmap = new HashMap<>();
-
-    for (int loop = 0; loop < 1000; loop++) {
-      map = new HashTableLinearProbing<>();
-      List <Integer> nums = genRandList(50);
-      map.clear();
-      jmap.clear();
-
-      // assertTrue(jmap.size() == map.size());
-
-      StringBuilder sb = new StringBuilder();
-
-      for (int i = 0; i < 50; i++ ) {
-        
-        double r = Math.random();
-
-        int key = nums.get(i);
-        int val = i;
-
-        if ( r < 0.5 ) {
-          sb.append("INSERT: " + key + " : " + val + "\n");
-          if ( jmap.put( key, val ) != map.put( key, val )) { System.out.println(sb); System.exit(0); }
-        }
-
-        // assertEquals( jmap.get(key), map.get(key));
-        // assertEquals( jmap.containsKey(key), map.containsKey(key) );
-        if ( jmap.size() != map.size() ) { System.out.println(sb); System.exit(0); }
-
-        if ( r > 0.5 ) {
-          sb.append("REMOVE: " + key + "\n");
-          if ( map.remove( key ) != jmap.remove( key ) ) System.exit(0);
-        }
-       
-
-        // assertEquals( jmap.get(key), map.get(key));
-        // assertEquals( jmap.containsKey(key), map.containsKey(key) );
-        if ( jmap.size() != map.size() ) { System.out.println(sb); System.exit(0); }
-
-      }
-
-      // System.out.println();
-      
-    }
-    */
-
-  }
-
-  static int MAX_RAND_NUM = 7;
-  // Generate a list of random numbers
-  static List <Integer> genRandList(int sz) {
-    
-    List <Integer> lst = new ArrayList<>(sz);
-    for (int i = 0; i < sz; i++) lst.add( (int) (Math.random()*MAX_RAND_NUM ));
-    Collections.shuffle( lst );
-    return lst;
-    // Integer[] retAr = new Integer[sz];
-    // lst.toArray(retAr);
-    // return retAr;
-
-  }  
 
 }
 

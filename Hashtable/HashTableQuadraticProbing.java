@@ -6,9 +6,9 @@
  *               H(k, x) = h(k) + f(x) mod 2^n 
  *
  * Where h(k) is the hash for the given key, f(x) = (x + x^2) / 2 and n
- * is a natural number. We using this probing function because it 
- * is guanteed to find an empty cell (i.e it generates all the numbers
- * in the range [0, 2^n) without repitition for the first 2^n numbers).
+ * is a natural number. We are using this probing function because it 
+ * is guaranteed to find an empty cell (i.e it generates all the numbers
+ * in the range [0, 2^n) without repetition for the first 2^n numbers).
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
@@ -74,7 +74,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
   }
   
   // Converts a hash value to an index. Essentially, this strips the
-  // negative sign and places the hash value in the domain [0, 2^31)
+  // negative sign and places the hash value in the domain [0, capacity)
   private int normalizeIndex(int keyHash ) {
     return (keyHash & 0x7fffffff) % capacity;
   }
@@ -109,8 +109,8 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
     if (key == null) throw new IllegalArgumentException("Null key");
     if (usedBuckets >= threshold) resizeTable();
     
-    int bucketIndex = normalizeIndex(key.hashCode());
-    int i = bucketIndex, j = -1, x = 1;
+    int keyHash = normalizeIndex(key.hashCode());
+    int i = keyHash, j = -1, x = 1;
 
     do {
       
@@ -139,7 +139,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
         }
 
-      // Current cell is null so insert an insertion/update can occur
+      // Current cell is null so an insertion/update can occur
       } else {
 
         // No previously encountered deleted buckets
@@ -161,7 +161,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
       }
 
-      i = normalizeIndex(bucketIndex + f(x++));
+      i = normalizeIndex(keyHash + f(x++));
 
     } while(true);
 
@@ -177,10 +177,10 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
     if (key == null) throw new IllegalArgumentException("Null key");
     
-    int bucketIndex = normalizeIndex(key.hashCode());
-    int i = bucketIndex, j = -1, x = 1;
+    int keyHash = normalizeIndex(key.hashCode());
+    int i = keyHash, j = -1, x = 1;
 
-    // Starting at the original bucketIndex linearly probe until we find a spot where
+    // Starting at the original keyHash index quadratically probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
     do {
 
@@ -219,7 +219,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
       // Key was not found in the hash-table :/
       } else return false;
 
-      i = normalizeIndex(bucketIndex + f(x++));
+      i = normalizeIndex(keyHash + f(x++));
 
     } while(true);
 
@@ -234,7 +234,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
     int keyHash = normalizeIndex(key.hashCode());
     int i = keyHash, j = -1, x = 1;
 
-    // Starting at the original keyHash index linearly probe until we find a spot where
+    // Starting at the original keyHash index quadratically probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
     do {
 

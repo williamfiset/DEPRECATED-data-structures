@@ -73,7 +73,7 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
   }
 
   // Converts a hash value to an index. Essentially, this strips the
-  // negative sign and places the hash value in the domain [0, 2^31)
+  // negative sign and places the hash value in the domain [0, capacity)
   private int normalizeIndex(int keyHash ) {
     return (keyHash & 0x7fffffff) % capacity;
   }

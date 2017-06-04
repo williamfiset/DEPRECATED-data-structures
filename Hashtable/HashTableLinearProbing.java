@@ -74,7 +74,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   }
 
   // Converts a hash value to an index. Essentially, this strips the
-  // negative sign and places the hash value in the domain [0, 2^31)
+  // negative sign and places the hash value in the domain [0, capacity)
   private int normalizeIndex(int keyHash ) {
     return (keyHash & 0x7fffffff) % capacity;
   }
@@ -120,7 +120,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
         }
 
-      // Current cell is null so insert an insertion/update can occur
+      // Current cell is null so an insertion/update can occur
       } else {
 
         // No previously encountered deleted buckets

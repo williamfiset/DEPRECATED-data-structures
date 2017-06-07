@@ -162,7 +162,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
       }
 
       i = normalizeIndex(keyHash + f(x++));
-
+     
     } while(true);
 
   }

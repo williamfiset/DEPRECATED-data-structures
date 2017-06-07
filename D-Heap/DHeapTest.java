@@ -54,7 +54,7 @@ public class DHeapTest {
   public void testClear() {
 
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
-    DHeap <String> q = new DHeap(2, strs.length);
+    DHeap <String> q = new DHeap<>(2, strs.length);
     for(String s : strs) q.add(s);
     q.clear();
     assertEquals(q.size(), 0);

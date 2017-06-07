@@ -6,10 +6,10 @@
  **/
 
 @SuppressWarnings("unchecked")
-public class DHeap <T extends Comparable> {
+public class DHeap <T extends Comparable<T>> {
 
+  T [] heap;
   int d, n, sz;
-  T[] heap;
   int[] child, parent;
 
   // Initializes a D-ary heap with a maximum capacity of n
@@ -29,18 +29,14 @@ public class DHeap <T extends Comparable> {
   }
 
   // Returns the number of elements currently present inside the PQ
-  public int size() {
-    return sz;
-  }
+  public int size() { return sz; }
 
   // Returns true/false depending on whether the PQ is empty
-  public boolean isEmpty() {
-    return sz == 0;
-  }
+  public boolean isEmpty() { return sz == 0; }
 
   // Clears all the elements inside the PQ
   public void clear() {
-    for (int i = 0; i < sz; i++) heap[i] = null;
+    java.util.Arrays.fill(heap, null);
     sz = 0;    
   }
 

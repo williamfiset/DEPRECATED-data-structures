@@ -14,9 +14,9 @@ public class IntStack {
   private int [] ar;
   private int pos = 0;
 
-  // max_sz is the maximum number of items
+  // maxSize is the maximum number of items
   // that can be in the queue at any given time
-  public IntStack(int max_sz) { ar = new int[max_sz]; }
+  public IntStack(int maxSize) { ar = new int[maxSize]; }
   
   // Returns the number of elements insize the stack
   public int size() { return pos; }

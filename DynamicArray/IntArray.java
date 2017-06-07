@@ -27,10 +27,10 @@ public class IntArray implements Iterable <Integer> {
   }
 
   // Given an array make it a dynamic array!
-  public IntArray(int[] start_arr) {
-    if (start_arr == null) throw new IllegalArgumentException("Array cannot be null");
-    arr = java.util.Arrays.copyOf(start_arr, start_arr.length);
-    capacity = len = start_arr.length;        
+  public IntArray(int[] array) {
+    if (array == null) throw new IllegalArgumentException("Array cannot be null");
+    arr = java.util.Arrays.copyOf(array, array.length);
+    capacity = len = array.length;        
   }
 
   // Returns the size of the array

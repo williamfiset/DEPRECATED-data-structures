@@ -1,4 +1,7 @@
-
+/**
+ * A linked list implementation of a stack
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class Stack <T> implements Iterable <T> {
 

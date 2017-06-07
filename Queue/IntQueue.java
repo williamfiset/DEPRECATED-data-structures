@@ -14,11 +14,11 @@ public class IntQueue {
   private int [] ar;
   private int front, end, sz;
 
-  // max_sz is the maximum number of items
+  // maxSize is the maximum number of items
   // that can be in the queue at any given time
-  public IntQueue(int max_sz) {
+  public IntQueue(int maxSize) {
     front = end = 0;
-    this.sz = max_sz+1;
+    sz = maxSize+1;
     ar = new int[sz];
   }
 

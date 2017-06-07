@@ -1,3 +1,7 @@
+/**
+ * A simple queue implementation with a queue
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class Queue <T> implements Iterable <T> {
 

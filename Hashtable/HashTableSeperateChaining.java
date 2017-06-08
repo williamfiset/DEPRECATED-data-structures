@@ -5,6 +5,7 @@
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 class Entry <K, V> {
@@ -74,14 +75,13 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
 
   // Converts a hash value to an index. Essentially, this strips the
   // negative sign and places the hash value in the domain [0, capacity)
-  private int normalizeIndex(int keyHash ) {
+  private int normalizeIndex(int keyHash) {
     return (keyHash & 0x7fffffff) % capacity;
   }
 
   // Clears all the contents of the hash-table
   public void clear() {
-    for (int i = 0; i < capacity; i++)
-      table[i] = null;
+    Arrays.fill(table, null);
     size = 0;
   }
 
@@ -151,14 +151,14 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     LinkedList <Entry<K,V>> bucket = table[bucketIndex];
     if (bucket == null) table[bucketIndex] = bucket = new LinkedList<>();
     
-    Entry <K, V> existantEntry = bucketSeekEntry(bucketIndex, entry.key);
-    if (existantEntry == null) {
+    Entry <K, V> existentEntry = bucketSeekEntry(bucketIndex, entry.key);
+    if (existentEntry == null) {
       bucket.add(entry);
       if (++size > threshold) resizeTable();
       return null; // Use null to indicate that there was no previous entry
     } else {
-      V oldVal = existantEntry.value;
-      existantEntry.value = entry.value;
+      V oldVal = existentEntry.value;
+      existentEntry.value = entry.value;
       return oldVal;
     }
 

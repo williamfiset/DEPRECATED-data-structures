@@ -23,7 +23,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   private V [] valueTable;
 
   // Special marker token used to indicate the deletion of a key-value pair
-  private final K DELETED_KEY_TOKEN = (K) (new Object());
+  private final K TOMBSTONE = (K) (new Object());
 
   // This is the linear constant using in the linear probing, it can be 
   // any positive number. The table capacity will be adjusted so that
@@ -90,14 +90,10 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   }
 
   // Returns the number of keys currently inside the hash-table
-  public int size() {
-    return keyCount;
-  }
+  public int size() { return keyCount; }
   
   // Returns true/false depending on whether the hash-table is empty
-  public boolean isEmpty() {
-    return keyCount == 0;
-  }
+  public boolean isEmpty() { return keyCount == 0; }
 
   // Insert, put and add all place a value in the hash-table
   public V put(K key, V value) { return insert(key, value); }
@@ -116,7 +112,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     do {
       
       // The current slot was previously deleted
-      if (keyTable[i] == DELETED_KEY_TOKEN) {
+      if (keyTable[i] == TOMBSTONE) {
 
         if (j == -1) j = i;
       
@@ -131,7 +127,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
           if (j == -1) {
             valueTable[i] = val;
           } else {
-            keyTable[i] = DELETED_KEY_TOKEN;
+            keyTable[i] = TOMBSTONE;
             valueTable[i] = null;
             keyTable[j] = key;
             valueTable[j] = val;
@@ -190,7 +186,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
-      if (keyTable[i] == DELETED_KEY_TOKEN) {
+      if (keyTable[i] == TOMBSTONE) {
         
         if (j == -1) j = i;
 
@@ -211,7 +207,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
             valueTable[j] = valueTable[i];
 
             // Clear the contents in bucket i and mark it as deleted
-            keyTable[i] = DELETED_KEY_TOKEN;
+            keyTable[i] = TOMBSTONE;
             valueTable[i] = null;
 
           }
@@ -246,7 +242,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
-      if (keyTable[i] == DELETED_KEY_TOKEN) {
+      if (keyTable[i] == TOMBSTONE) {
         
         if (j == -1) j = i;
 
@@ -267,7 +263,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
             valueTable[j] = valueTable[i];
 
             // Clear the contents in bucket i and mark it as deleted
-            keyTable[i] = DELETED_KEY_TOKEN;
+            keyTable[i] = TOMBSTONE;
             valueTable[i] = null;
 
             return valueTable[j];
@@ -304,7 +300,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     for (;; i = normalizeIndex(bucketIndex + (x++)*LINEAR_CONSTANT) ) {
 
       // Ignore deleted cells
-      if (keyTable[i] == DELETED_KEY_TOKEN) continue;
+      if (keyTable[i] == TOMBSTONE) continue;
 
       // Key was not found in hash-table.
       if (keyTable[i] == null) return null;
@@ -313,7 +309,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       if (keyTable[i].equals(key)) {
         keyCount--;
         V oldValue = valueTable[i];
-        keyTable[i] = DELETED_KEY_TOKEN;
+        keyTable[i] = TOMBSTONE;
         valueTable[i] = null;
         return oldValue;
       }
@@ -325,7 +321,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   public List <K> keys() {
     List <K> keys = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
-      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+      if (keyTable[i] != null && keyTable[i] != TOMBSTONE)
         keys.add(keyTable[i]);
     return keys;     
   }
@@ -333,7 +329,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   public List <V> values() {
     List <V> values = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
-      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+      if (keyTable[i] != null && keyTable[i] != TOMBSTONE)
         values.add(valueTable[i]);
     return values;    
   }
@@ -363,7 +359,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     keyCount = usedBuckets = 0;
 
     for (int i = 0; i < oldKeyTable.length; i++) {
-      if (oldKeyTable[i] != null && oldKeyTable[i] != DELETED_KEY_TOKEN)
+      if (oldKeyTable[i] != null && oldKeyTable[i] != TOMBSTONE)
         insert(oldKeyTable[i], oldValueTable[i]);
       oldValueTable[i] = null;
       oldKeyTable[i] = null;
@@ -392,7 +388,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
       // Find the next element and return it
       @Override public K next() {
-        while( keyTable[index] == null || keyTable[index] == DELETED_KEY_TOKEN) index++;
+        while( keyTable[index] == null || keyTable[index] == TOMBSTONE) index++;
         keysLeft--;
         return keyTable[index++];
       }
@@ -411,7 +407,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
     sb.append("{");
     for (int i = 0; i < capacity; i++)
-      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+      if (keyTable[i] != null && keyTable[i] != TOMBSTONE)
         sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
     sb.append("}");
 

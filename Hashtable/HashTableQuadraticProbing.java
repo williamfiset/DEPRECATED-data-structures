@@ -31,7 +31,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
   private V [] valueTable;
 
   // Special marker token used to indicate the deletion of a key-value pair
-  private final K DELETED_KEY_TOKEN = (K) (new Object());
+  private final K TOMBSTONE = (K) (new Object());
 
   private static final int DEFAULT_CAPACITY = 8;
   private static final double DEFAULT_LOAD_FACTOR = 0.45;
@@ -89,14 +89,10 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
   }
 
   // Returns the number of keys currently inside the hash-table
-  public int size() {
-    return keyCount;
-  }
+  public int size() { return keyCount; }
   
   // Returns true/false depending on whether the hash-table is empty
-  public boolean isEmpty() {
-    return keyCount == 0;
-  }
+  public boolean isEmpty() { return keyCount == 0; }
 
   // Insert, put and add all place a value in the hash-table
   public V put(K key, V value) { return insert(key, value); }
@@ -115,7 +111,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
     do {
       
       // The current slot was previously deleted
-      if (keyTable[i] == DELETED_KEY_TOKEN) {
+      if (keyTable[i] == TOMBSTONE) {
 
         if (j == -1) j = i;
       
@@ -130,7 +126,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
           if (j == -1) {
             valueTable[i] = val;
           } else {
-            keyTable[i] = DELETED_KEY_TOKEN;
+            keyTable[i] = TOMBSTONE;
             valueTable[i] = null;
             keyTable[j] = key;
             valueTable[j] = val;
@@ -186,7 +182,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
-      if (keyTable[i] == DELETED_KEY_TOKEN) {
+      if (keyTable[i] == TOMBSTONE) {
         
         if (j == -1) j = i;
 
@@ -207,7 +203,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
             valueTable[j] = valueTable[i];
 
             // Clear the contents in bucket i and mark it as deleted
-            keyTable[i] = DELETED_KEY_TOKEN;
+            keyTable[i] = TOMBSTONE;
             valueTable[i] = null;
 
           }
@@ -240,7 +236,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
-      if (keyTable[i] == DELETED_KEY_TOKEN) {
+      if (keyTable[i] == TOMBSTONE) {
         
         if (j == -1) j = i;
 
@@ -261,7 +257,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
             valueTable[j] = valueTable[i];
 
             // Clear the contents in bucket i and mark it as deleted
-            keyTable[i] = DELETED_KEY_TOKEN;
+            keyTable[i] = TOMBSTONE;
             valueTable[i] = null;
 
             return valueTable[j];
@@ -295,7 +291,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
     for (;; i = normalizeIndex(keyHash + f(x++)) ) {
 
       // Ignore deleted cells
-      if (keyTable[i] == DELETED_KEY_TOKEN) continue;
+      if (keyTable[i] == TOMBSTONE) continue;
 
       // Key was not found in hash-table.
       if (keyTable[i] == null) return null;
@@ -304,7 +300,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
       if (keyTable[i].equals(key)) {
         keyCount--;
         V oldValue = valueTable[i];
-        keyTable[i] = DELETED_KEY_TOKEN;
+        keyTable[i] = TOMBSTONE;
         valueTable[i] = null;
         return oldValue;
       }
@@ -316,7 +312,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
   public List <K> keys() {
     List <K> keys = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
-      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+      if (keyTable[i] != null && keyTable[i] != TOMBSTONE)
         keys.add(keyTable[i]);
     return keys;     
   }
@@ -324,7 +320,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
   public List <V> values() {
     List <V> values = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
-      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+      if (keyTable[i] != null && keyTable[i] != TOMBSTONE)
         values.add(valueTable[i]);
     return values;    
   }
@@ -353,7 +349,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
     keyCount = usedBuckets = 0;
 
     for (int i = 0; i < oldKeyTable.length; i++) {
-      if (oldKeyTable[i] != null && oldKeyTable[i] != DELETED_KEY_TOKEN)
+      if (oldKeyTable[i] != null && oldKeyTable[i] != TOMBSTONE)
         insert(oldKeyTable[i], oldValueTable[i]);
       oldValueTable[i] = null;
       oldKeyTable[i] = null;
@@ -382,7 +378,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
       // Find the next element and return it
       @Override public K next() {
-        while( keyTable[index] == null || keyTable[index] == DELETED_KEY_TOKEN) index++;
+        while( keyTable[index] == null || keyTable[index] == TOMBSTONE) index++;
         keysLeft--;
         return keyTable[index++];
       }
@@ -401,7 +397,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
     sb.append("{");
     for (int i = 0; i < capacity; i++)
-      if (keyTable[i] != null && keyTable[i] != DELETED_KEY_TOKEN)
+      if (keyTable[i] != null && keyTable[i] != TOMBSTONE)
         sb.append( keyTable[i] + " => " + valueTable[i] + ", ");
     sb.append("}");
 

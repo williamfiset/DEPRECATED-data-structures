@@ -259,10 +259,9 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
           }
         
         }
-
         return bucketIndex < capacity;
-
       }
+      
       @Override public K next() {
         return bucketIter.next().key;
       }

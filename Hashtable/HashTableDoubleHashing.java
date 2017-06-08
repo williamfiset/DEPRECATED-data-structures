@@ -1,6 +1,6 @@
 /**
- * An implementation of a hash-table using open addressing with 
- * linear probing as a collision resolution method.
+ * An implementation of a hashtable using double hashing
+ * as a collision resolution technique. 
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
@@ -8,7 +8,7 @@
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class HashTableLinearProbing <K, V> implements Iterable <K> {
+public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iterable <K> {
 
   private double loadFactor;
   private int capacity, threshold, modificationCount = 0;
@@ -25,24 +25,19 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
   // Special marker token used to indicate the deletion of a key-value pair
   private final K TOMBSTONE = (K) (new Object());
 
-  // This is the linear constant using in the linear probing, it can be 
-  // any positive number. The table capacity will be adjusted so that
-  // the GCD(capacity, LINEAR_CONSTANT) = 1 so that we can probe all buckets
-  private static final int LINEAR_CONSTANT = 17;
-
-  private static final int DEFAULT_CAPACITY = 3;
+  private static final int DEFAULT_CAPACITY = 7;
   private static final double DEFAULT_LOAD_FACTOR = 0.5;
 
-  public HashTableLinearProbing() {
+  public HashTableDoubleHashing() {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
   }
 
-  public HashTableLinearProbing(int capacity) {
+  public HashTableDoubleHashing(int capacity) {
     this(capacity, DEFAULT_LOAD_FACTOR);
   }
 
   // Designated constructor
-  public HashTableLinearProbing(int capacity, double loadFactor) {
+  public HashTableDoubleHashing(int capacity, double loadFactor) {
     
     if (capacity < 0)
       throw new IllegalArgumentException("Illegal capacity: " + capacity);
@@ -62,22 +57,23 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
   // Converts a hash value to an index. Essentially, this strips the
   // negative sign and places the hash value in the domain [0, capacity)
-  private int normalizeIndex(int keyHash ) {
+  private int normalizeIndex(int keyHash) {
     return (keyHash & 0x7FFFFFFF) % capacity;
   }
-
-  // Adjust the capacity so that the linear constant and
-  // the table capacity are relatively prime.
-  private void adjustCapacity() {
-    while( gcd(LINEAR_CONSTANT, capacity) != 1 ) {
-      capacity++;
-    }
-  }
-
-  // Finds the greatest common denominator of a and b
-  private int gcd(int a, int b) {
+  
+  // Finds the Greatest Common Divisor (GCD) of a and b
+  private static int gcd(int a, int b) {
     if (b == 0) return a;
     return gcd(b, a % b);
+  }
+  
+  // Increase the capacity until it is a prime number. The reason for
+  // doing this is to help ensure that the GCD(H2, capacity) = 1 when 
+  // probing so that all the cells can be reached
+  private void adjustCapacity() {
+    while( !(new java.math.BigInteger(String.valueOf(capacity)).isProbablePrime(20)) ) {
+      capacity++;
+    }
   }
 
   // Clears all the contents of the hash-table
@@ -107,8 +103,13 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     if (key == null) throw new IllegalArgumentException("Null key");
     if (usedBuckets >= threshold) resizeTable();
     
-    final int hash = normalizeIndex(key.hashCode());
-    int i = hash, j = -1, x = 1;
+    final int H1 = normalizeIndex(key.hashCode());
+    int H2 = key.hashCode2();
+    
+    // Fail-safe to avoid infinite cycle
+    if (gcd(H2, capacity) != 1) H2++;
+    
+    int i = H1, j = -1, x = 1;
 
     do {
       
@@ -162,8 +163,8 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
       }
 
-      i = normalizeIndex(hash + (x++)*LINEAR_CONSTANT);
-
+      i = normalizeIndex(H1 + (x++)*H2);
+    
     } while(true);
 
   }
@@ -178,10 +179,17 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
     if (key == null) throw new IllegalArgumentException("Null key");
     
-    final int hash = normalizeIndex(key.hashCode());
-    int i = hash, j = -1, x = 1;
+    final int H1 = normalizeIndex(key.hashCode());
+    int H2 = key.hashCode2();
+    
+    // Fail-safe to avoid infinite cycle
+    
+    // Fail-safe to avoid infinite cycle
+    if (gcd(H2, capacity) != 1) H2++;
+    
+    int i = H1, j = -1, x = 1;
 
-    // Starting at the original hash linearly probe until we find a spot where
+    // Starting at the original H1 linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
     do {
 
@@ -220,7 +228,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
       // Key was not found in the hash-table :/
       } else return false;
 
-      i = normalizeIndex(hash + (x++)*LINEAR_CONSTANT);
+      i = normalizeIndex(H1 + (x++)*H2);
 
     } while(true);
 
@@ -233,10 +241,15 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     
     if (key == null) throw new IllegalArgumentException("Null key");
     
-    final int hash = normalizeIndex(key.hashCode());
-    int i = hash, j = -1, x = 1;
+    final int H1 = normalizeIndex(key.hashCode());
+    int H2 = key.hashCode2();
+    
+    // Fail-safe to avoid infinite cycle
+    if (gcd(H2, capacity) != 1) H2++;
+    
+    int i = H1, j = -1, x = 1;
 
-    // Starting at the original hash linearly probe until we find a spot where
+    // Starting at the original H1 linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
     do {
 
@@ -276,7 +289,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
         // Element was not found in the hash-table :/
       } else return null;
 
-      i = normalizeIndex(hash + (x++)*LINEAR_CONSTANT);
+      i = normalizeIndex(H1 + (x++)*H2);
 
     } while( true );
 
@@ -289,16 +302,17 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
     
     if (key == null) throw new IllegalArgumentException("Null key");
 
-    final int hash = normalizeIndex(key.hashCode());
-    int i = hash, x = 1;
+    final int H1 = normalizeIndex(key.hashCode());
+    final int H2 = key.hashCode2();
+    int i = H1, x = 1;
 
-    // Starting at the hash linearly probe until we find a spot where
+    // Starting at the H1 linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist
-    for (;; i = normalizeIndex(hash + (x++)*LINEAR_CONSTANT) ) {
+    for (;; i = normalizeIndex(H1 + (x++)*H2) ) {
 
       // Ignore deleted cells
       if (keyTable[i] == TOMBSTONE) continue;
-
+      
       // Key was not found in hash-table.
       if (keyTable[i] == null) return null;
 
@@ -324,7 +338,7 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
         keys.add(keyTable[i]);
     return keys;     
   }
-
+  
   // Returns a list of non-unique values found in the hash table
   public List <V> values() {
     List <V> values = new ArrayList<>(size());
@@ -417,12 +431,6 @@ public class HashTableLinearProbing <K, V> implements Iterable <K> {
 
 
 }
-
-
-
-
-
-
 
 
 

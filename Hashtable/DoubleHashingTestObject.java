@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class DoubleHashingTestObject implements SecondaryHash {
   
-  private int hash;
+  private int hash, hash2;
   Integer intData = null;
   int[] vectorData = null;
   String stringData = null;
@@ -29,28 +29,28 @@ public class DoubleHashingTestObject implements SecondaryHash {
   
   public DoubleHashingTestObject(int data) {
     intData = data;
-    intHash();
+    intHash(); computeHash();
   }
   
   public DoubleHashingTestObject(int[] data) {
     if (data == null) throw new IllegalArgumentException("Cannot be null");
     vectorData = data;
-    vectorHash();
+    vectorHash(); computeHash();
   }
   
   public DoubleHashingTestObject(String data) {
     if (data == null) throw new IllegalArgumentException("Cannot be null");
     stringData = data;
-    stringHash();
+    stringHash(); computeHash();
   }
   
   private void intHash() {
-    hash = intData;
+    hash2 = intData;
   }
   
   private void vectorHash() {
     for (int i = 0; i < vectorData.length; i++)
-      hash += randomVector[i] * vectorData[i];
+      hash2 += randomVector[i] * vectorData[i];
   }
   
   private void stringHash() {
@@ -62,19 +62,21 @@ public class DoubleHashingTestObject implements SecondaryHash {
     hash = INITIAL_VALUE;
     for (int i = 0; i < stringData.length(); i++) {
       int ch = stringData.charAt(i);
-      hash += power * ch;
+      hash2 += power * ch;
       power *= prime;
     }
     
   }
-  
-  @Override public int hashCode2() { return hash; }
-  
-  @Override public int hashCode() {
-    if (intData != null) return intData.hashCode();
-    if (stringData != null) return stringData.hashCode();
-    return java.util.Arrays.hashCode(vectorData);
+
+  private void computeHash() {
+    if (intData != null) hash = intData.hashCode();
+    else if (stringData != null) hash = stringData.hashCode();
+    else hash = java.util.Arrays.hashCode(vectorData);
   }
+  
+  @Override public int hashCode() { return hash; }
+  
+  @Override public int hashCode2() { return hash2; }
   
   @Override public boolean equals(Object o) {
     DoubleHashingTestObject obj = (DoubleHashingTestObject)o;

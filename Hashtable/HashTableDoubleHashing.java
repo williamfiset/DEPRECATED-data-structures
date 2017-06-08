@@ -1,6 +1,6 @@
 /**
  * An implementation of a hashtable using double hashing
- * as a collision resolution technique. 
+ * as a collision resolution technique.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
@@ -21,10 +21,9 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
   // These arrays store the key-value pairs. 
   private SecondaryHash [] keyTable;
   private V [] valueTable;
-    
+  
   // Special marker token used to indicate the deletion of a key-value pair
-  // private final K TOMBSTONE = (K) (new Object());
-  private final SecondaryHash TOMBSTONE = new SecondaryHash() { public int hashCode2() { return 0; } };
+  private final SecondaryHash TOMBSTONE = new SecondaryHash() { @Override public int hashCode2() { return 0; } };
 
   private static final int DEFAULT_CAPACITY = 7;
   private static final double DEFAULT_LOAD_FACTOR = 0.5;
@@ -51,7 +50,7 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     adjustCapacity();
     threshold = (int) (this.capacity * loadFactor);
 
-    keyTable   = new SecondaryHash[this.capacity];
+    keyTable = new SecondaryHash[this.capacity];
     valueTable = (V[]) new Object[this.capacity];
 
   }
@@ -60,12 +59,6 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
   // negative sign and places the hash value in the domain [0, capacity)
   private int normalizeIndex(int keyHash) {
     return (keyHash & 0x7FFFFFFF) % capacity;
-  }
-  
-  // Finds the Greatest Common Divisor (GCD) of a and b
-  private static int gcd(int a, int b) {
-    if (b == 0) return a;
-    return gcd(b, a % b);
   }
   
   // Increase the capacity until it is a prime number. The reason for
@@ -105,17 +98,15 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     if (usedBuckets >= threshold) resizeTable();
     
     final int H1 = normalizeIndex(key.hashCode());
-    int H2 = key.hashCode2();
+    int H2 = normalizeIndex(key.hashCode2());
     
     // Fail-safe to avoid infinite cycle
-    while (gcd(H2, capacity) != 1) H2++;
-    
-    // System.out.println("ISR: " + H1 + " " + H2);
+    if (H2 == 0) H2++;
     
     int i = H1, j = -1, x = 1;
 
     do {
-      
+
       // The current slot was previously deleted
       if (keyTable[i] == TOMBSTONE) {
 
@@ -183,14 +174,14 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     if (key == null) throw new IllegalArgumentException("Null key");
     
     final int H1 = normalizeIndex(key.hashCode());
-    int H2 = key.hashCode2();
+    int H2 = normalizeIndex(key.hashCode2());
     
     // Fail-safe to avoid infinite cycle
-    while (gcd(H2, capacity) != 1) H2++;
+    if (H2 == 0) H2++;
     
     int i = H1, j = -1, x = 1;
 
-    // Starting at the original H1 linearly probe until we find a spot where
+    // Starting at the original H1 and probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
     do {
 
@@ -243,14 +234,14 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     if (key == null) throw new IllegalArgumentException("Null key");
     
     final int H1 = normalizeIndex(key.hashCode());
-    int H2 = key.hashCode2();
+    int H2 = normalizeIndex(key.hashCode2());
     
     // Fail-safe to avoid infinite cycle
-    while (gcd(H2, capacity) != 1) H2++;
-    // System.out.println("GET: " + H1 + " " + H2);
+    if (H2 == 0) H2++;
+    
     int i = H1, j = -1, x = 1;
 
-    // Starting at the original H1 linearly probe until we find a spot where
+    // Starting at the original index H1 and probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
     do {
 
@@ -304,14 +295,15 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     if (key == null) throw new IllegalArgumentException("Null key");
 
     final int H1 = normalizeIndex(key.hashCode());
-    int H2 = key.hashCode2();
+    int H2 = normalizeIndex(key.hashCode2());
     
     // Fail-safe to avoid infinite cycle
-    while (gcd(H2, capacity) != 1) H2++;
+    if (H2 == 0) H2++;
 
     int i = H1, x = 1;
-    // Starting at the H1 linearly probe until we find a spot where
-    // our key is or we hit a null element in which case our element does not exist
+    
+    // Starting at the index H1 and probe until we find a spot where our key is
+    // or we hit a null element in which case our element does not exist
     for (;; i = normalizeIndex(H1 + (x++)*H2) ) {
 
       // Ignore deleted cells
@@ -359,7 +351,7 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     adjustCapacity();
     threshold = (int) (capacity * loadFactor);
 
-    SecondaryHash[] oldKeyTable   = new SecondaryHash[capacity]; // (SecondaryHash[]) new Object[capacity];
+    SecondaryHash[] oldKeyTable   = new SecondaryHash[capacity];
     V[] oldValueTable = (V[]) new Object[capacity];
 
     // Perform key table pointer swap

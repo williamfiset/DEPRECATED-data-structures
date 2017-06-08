@@ -19,11 +19,12 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
   private int usedBuckets = 0, keyCount = 0;
 
   // These arrays store the key-value pairs. 
-  private K [] keyTable;
+  private SecondaryHash [] keyTable;
   private V [] valueTable;
-
+    
   // Special marker token used to indicate the deletion of a key-value pair
-  private final K TOMBSTONE = (K) (new Object());
+  // private final K TOMBSTONE = (K) (new Object());
+  private final SecondaryHash TOMBSTONE = new SecondaryHash() { public int hashCode2() { return 0; } };
 
   private static final int DEFAULT_CAPACITY = 7;
   private static final double DEFAULT_LOAD_FACTOR = 0.5;
@@ -50,7 +51,7 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     adjustCapacity();
     threshold = (int) (this.capacity * loadFactor);
 
-    keyTable   = (K[]) new Object[this.capacity];
+    keyTable   = new SecondaryHash[this.capacity];
     valueTable = (V[]) new Object[this.capacity];
 
   }
@@ -107,7 +108,9 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     int H2 = key.hashCode2();
     
     // Fail-safe to avoid infinite cycle
-    if (gcd(H2, capacity) != 1) H2++;
+    while (gcd(H2, capacity) != 1) H2++;
+    
+    // System.out.println("ISR: " + H1 + " " + H2);
     
     int i = H1, j = -1, x = 1;
 
@@ -183,9 +186,7 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     int H2 = key.hashCode2();
     
     // Fail-safe to avoid infinite cycle
-    
-    // Fail-safe to avoid infinite cycle
-    if (gcd(H2, capacity) != 1) H2++;
+    while (gcd(H2, capacity) != 1) H2++;
     
     int i = H1, j = -1, x = 1;
 
@@ -245,8 +246,8 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     int H2 = key.hashCode2();
     
     // Fail-safe to avoid infinite cycle
-    if (gcd(H2, capacity) != 1) H2++;
-    
+    while (gcd(H2, capacity) != 1) H2++;
+    // System.out.println("GET: " + H1 + " " + H2);
     int i = H1, j = -1, x = 1;
 
     // Starting at the original H1 linearly probe until we find a spot where
@@ -303,9 +304,12 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     if (key == null) throw new IllegalArgumentException("Null key");
 
     final int H1 = normalizeIndex(key.hashCode());
-    final int H2 = key.hashCode2();
-    int i = H1, x = 1;
+    int H2 = key.hashCode2();
+    
+    // Fail-safe to avoid infinite cycle
+    while (gcd(H2, capacity) != 1) H2++;
 
+    int i = H1, x = 1;
     // Starting at the H1 linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist
     for (;; i = normalizeIndex(H1 + (x++)*H2) ) {
@@ -335,7 +339,7 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     List <K> keys = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
       if (keyTable[i] != null && keyTable[i] != TOMBSTONE)
-        keys.add(keyTable[i]);
+        keys.add((K)keyTable[i]);
     return keys;     
   }
   
@@ -355,11 +359,11 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     adjustCapacity();
     threshold = (int) (capacity * loadFactor);
 
-    K[] oldKeyTable   = (K[]) new Object[capacity];
+    SecondaryHash[] oldKeyTable   = new SecondaryHash[capacity]; // (SecondaryHash[]) new Object[capacity];
     V[] oldValueTable = (V[]) new Object[capacity];
 
     // Perform key table pointer swap
-    K[] keyTableTmp = keyTable;
+    SecondaryHash[] keyTableTmp = keyTable;
     keyTable = oldKeyTable;
     oldKeyTable = keyTableTmp;
 
@@ -374,7 +378,7 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
 
     for (int i = 0; i < oldKeyTable.length; i++) {
       if (oldKeyTable[i] != null && oldKeyTable[i] != TOMBSTONE)
-        insert(oldKeyTable[i], oldValueTable[i]);
+        insert((K)oldKeyTable[i], oldValueTable[i]);
       oldValueTable[i] = null;
       oldKeyTable[i] = null;
     }
@@ -382,36 +386,36 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
   }
 
   @Override public java.util.Iterator <K> iterator() {
-
+  
     // Before the iteration begins record the number of modifications 
     // done to the hash-table. This value should not change as we iterate
     // otherwise a concurrent modification has occurred.
     final int MODIFICATION_COUNT = modificationCount;
-
+  
     return new java.util.Iterator <K> () {
-
+  
       int keysLeft = keyCount, index = 0;
-
+  
       @Override public boolean hasNext() {
-
+  
         // The contents of the table have been altered
         if (MODIFICATION_COUNT != modificationCount) throw new java.util.ConcurrentModificationException();
         return keysLeft != 0;
-
+  
       }
-
+  
       // Find the next element and return it
       @Override public K next() {
         while( keyTable[index] == null || keyTable[index] == TOMBSTONE) index++;
         keysLeft--;
-        return keyTable[index++];
+        return (K) keyTable[index++];
       }
       @Override public void remove() {
         throw new UnsupportedOperationException();
       }
-
+  
     };
-
+  
   }
 
   // Return a String version of this hash-table
@@ -428,7 +432,6 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> implements Iter
     return sb.toString();
 
   }
-
 
 }
 

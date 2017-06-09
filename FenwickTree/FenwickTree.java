@@ -49,9 +49,9 @@ public class FenwickTree {
   // Computes the prefix sum from [1, i], one based
   public long prefixSum(int i) {
     long sum = 0L;
-    while (i > 0) {
+    while (i != 0) {
       sum += tree[i];
-      i &= ~lsb(i);
+      i &= ~lsb(i); // Equivalently, i -= lsb(i);
     }
     return sum;
   }

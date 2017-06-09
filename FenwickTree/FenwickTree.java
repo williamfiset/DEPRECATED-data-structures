@@ -6,6 +6,7 @@
 
 public class FenwickTree {
 
+  // This array contains the Fenwick tree ranges
   private long[] tree;
 
   // Create an empty Fenwick Tree
@@ -13,8 +14,8 @@ public class FenwickTree {
     tree = new long[sz + 1];
   }
 
-  // Make sure the numbers in 'values' are one based
-  // meaning values[0] does not get used
+  // Make sure the 'values' array is one based meaning 
+  // values[0] does not get used, O(n) construction
   public FenwickTree(long[] values) {
 
     if (values == null)

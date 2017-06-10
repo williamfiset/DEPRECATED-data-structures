@@ -2,11 +2,8 @@
  * An implementation of a hash-table using separate chaining with a linked list.
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+ 
+ import java.util.*;
 
 class Entry <K, V> {
 
@@ -19,10 +16,9 @@ class Entry <K, V> {
     this.hash = key.hashCode();
   }
 
-  // No casting is required with this method.
   // We are not overriding the Object equals method
+  // No casting is required with this method.
   public boolean equals(Entry <K,V> other) {
-    // if (other == null) return false; // Obsolete check as entries should not be null
     if ( hash != other.hash ) return false;
     return key.equals( other.key );
   }
@@ -60,23 +56,19 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     this.load_factor = load_factor;
     this.capacity = Math.max(DEFAULT_CAPACITY, capacity);
     threshold = (int) (this.capacity * load_factor);
-    table = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
+    table = new LinkedList[this.capacity];
   }
 
   // Returns the number of elements currently inside the hash-table
-  public int size() {
-    return size;
-  }
+  public int size() { return size; }
 
   // Returns true/false depending on whether the hash-table is empty
-  public boolean isEmpty() {
-    return size == 0;
-  }
+  public boolean isEmpty() { return size == 0; }
 
   // Converts a hash value to an index. Essentially, this strips the
   // negative sign and places the hash value in the domain [0, capacity)
   private int normalizeIndex(int keyHash) {
-    return (keyHash & 0x7fffffff) % capacity;
+    return (keyHash & 0x7FFFFFFF) % capacity;
   }
 
   // Clears all the contents of the hash-table
@@ -85,10 +77,9 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     size = 0;
   }
 
-  public boolean containsKey(K key) {
-    return hasKey(key);
-  }
-
+  public boolean containsKey(K key) { return hasKey(key); }
+  
+  // Returns true/false depending on whether a key is in the hash table
   public boolean hasKey(K key) {
     int bucketIndex = normalizeIndex(key.hashCode());
     return bucketSeekEntry(bucketIndex, key) != null;
@@ -183,7 +174,7 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     capacity *= 2;
     threshold = (int) (capacity * load_factor);
 
-    LinkedList <Entry<K,V>> newTable [] = (LinkedList<Entry<K,V>>[]) java.lang.reflect.Array.newInstance(LinkedList.class, this.capacity);
+    LinkedList <Entry<K,V>> [] newTable = new LinkedList[capacity];
     
     for (int i = 0; i < table.length; i++ ) {
       if (table[i] != null) {
@@ -205,7 +196,8 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     table = newTable;
 
   }
-
+  
+  // Returns the list of keys found within the hash table
   public List <K> keys() {
 
     List <K> keys = new ArrayList<>(size());
@@ -216,7 +208,8 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
     return keys;
 
   }
-
+  
+  // Returns the list of values found within the hash table
   public List <V> values() {
 
     List <V> values = new ArrayList<>(size());
@@ -270,7 +263,8 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
       }      
     };
   }
-
+  
+  // Returns a string representation of this hash table
   @Override public String toString() {
 
     StringBuilder sb = new StringBuilder();

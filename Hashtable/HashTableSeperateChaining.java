@@ -35,7 +35,7 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
   private static final int DEFAULT_CAPACITY = 3;
   private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
-  private double load_factor;
+  private double maxLoadFactor;
   private int capacity, threshold, size = 0;
   private LinkedList <Entry<K,V>> [] table;
 
@@ -48,14 +48,14 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
   }
 
   // Designated constructor
-  public HashTableSeperateChaining (int capacity, double load_factor) {
+  public HashTableSeperateChaining (int capacity, double maxLoadFactor) {
     if (capacity < 0)
       throw new IllegalArgumentException("Illegal capacity");
-    if (load_factor <= 0 || Double.isNaN(load_factor) || Double.isInfinite(load_factor))
-      throw new IllegalArgumentException("Illegal load_factor");
-    this.load_factor = load_factor;
+    if (maxLoadFactor <= 0 || Double.isNaN(maxLoadFactor) || Double.isInfinite(maxLoadFactor))
+      throw new IllegalArgumentException("Illegal maxLoadFactor");
+    this.maxLoadFactor = maxLoadFactor;
     this.capacity = Math.max(DEFAULT_CAPACITY, capacity);
-    threshold = (int) (this.capacity * load_factor);
+    threshold = (int) (this.capacity * maxLoadFactor);
     table = new LinkedList[this.capacity];
   }
 
@@ -172,7 +172,7 @@ public class HashTableSeperateChaining <K,V> implements Iterable <K> {
   private void resizeTable() {
 
     capacity *= 2;
-    threshold = (int) (capacity * load_factor);
+    threshold = (int) (capacity * maxLoadFactor);
 
     LinkedList <Entry<K,V>> [] newTable = new LinkedList[capacity];
     

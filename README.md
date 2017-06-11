@@ -44,4 +44,13 @@ The slides used in the creation of the videos can be found in the **presentation
 
 [![Binary trees and binary search trees video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/BST.jpg)](https://www.youtube.com/watch?v=JfSdGQdAzq8&index=23&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Binary trees and binary search trees")
 
+### Hash table
+
+[![Hash table video](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/HT.jpg)](https://www.youtube.com/watch?v=2E54GqF0H4s&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Hash table")
+
+### Fenwick Tree
+
+[![Fenwick tree](https://raw.githubusercontent.com/williamfiset/data-structures/master/images/FT.jpg)](https://www.youtube.com/watch?v=RgITNht_f4Q&list=PLDV1Zeh2NRsB6SWUrDFW2RmDotAfPbeHu "Hash table")
+
+
 

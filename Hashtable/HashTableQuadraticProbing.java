@@ -30,6 +30,9 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
   private K [] keyTable;
   private V [] valueTable;
 
+  // flag used to indicate whether an item was found in the hash table 
+  private boolean containsFlag = false;
+
   // Special marker token used to indicate the deletion of a key-value pair
   private final K TOMBSTONE = (K) (new Object());
 
@@ -68,9 +71,9 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
     return Integer.highestOneBit(n) << 1;
   }
   
-  // Quadratic probing function
+  // Quadratic probing function (x^2+x)/2
   private static int P(int x) {
-    return (x + x*x) >> 1;
+    return (x*x + x) >> 1;
   }
   
   // Converts a hash value to an index. Essentially, this strips the
@@ -174,54 +177,11 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
   // Returns true/false on whether a given key exists within the hash-table
   public boolean hasKey(K key) {
-
-    if (key == null) throw new IllegalArgumentException("Null key");
     
-    final int hash = normalizeIndex(key.hashCode());
-    int i = hash, j = -1, x = 1;
+    // sets the 'containsFlag'
+    get(key);
 
-    // Starting at the original hash index quadratically probe until we find a spot where
-    // our key is or we hit a null element in which case our element does not exist.
-    do {
-
-      // Ignore deleted cells, but record where the first index
-      // of a deleted cell is found to perform lazy relocation later.
-      if (keyTable[i] == TOMBSTONE) {
-        
-        if (j == -1) j = i;
-
-      // We hit a non-null key, perhaps it's the one we're looking for.
-      } else if (keyTable[i] != null) {
-
-        // The key we want is in the hash-table!
-        if (keyTable[i].equals(key)) {
-
-          // If j != -1 this means we previously encountered a deleted cell.
-          // We can perform an optimization by swapping the entries in cells
-          // i and j so that the next time we search for this key it will be
-          // found faster. This is called lazy deletion/relocation.
-          if (j != -1) {
-
-            // Copy values to where deleted bucket is
-            keyTable[j] = keyTable[i];
-            valueTable[j] = valueTable[i];
-
-            // Clear the contents in bucket i and mark it as deleted
-            keyTable[i] = TOMBSTONE;
-            valueTable[i] = null;
-
-          }
-
-          return true;
-
-        }
-      
-      // Key was not found in the hash-table :/
-      } else return false;
-
-      i = normalizeIndex(hash + P(x++));
-
-    } while(true);
+    return containsFlag;
 
   }
 
@@ -250,6 +210,8 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
         // The key we want is in the hash-table!
         if (keyTable[i].equals(key)) {
 
+          containsFlag = true;
+
           // If j != -1 this means we previously encountered a deleted cell.
           // We can perform an optimization by swapping the entries in cells
           // i and j so that the next time we search for this key it will be
@@ -272,7 +234,10 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
         }
       
       // Element was not found in the hash-table :/
-      } else return null;
+      } else {
+        containsFlag = false;
+        return null;
+      }
 
       i = normalizeIndex(hash + P(x++));
 
@@ -282,7 +247,7 @@ public class HashTableQuadraticProbing <K, V> implements Iterable <K> {
 
   // Removes a key from the map and returns the value.
   // NOTE: returns null if the value is null AND also returns
-  // null if the key does not exists.
+  // null if the key does not exist.
   public V remove(K key) {
     
     if (key == null) throw new IllegalArgumentException("Null key");

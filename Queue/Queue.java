@@ -1,5 +1,5 @@
 /**
- * A simple queue implementation with a queue
+ * A simple queue implementation with a linkedlist
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Node class to represent data contained 
-# within a doubly linked list
+# within a singly linked list
 class Node():
   
   data, prev = None, None
@@ -17,6 +17,7 @@ class Stack():
   
   head, trav, size = None, None, 0
   
+  # Checks if the stack is empty
   def is_empty(self):
     return self.size == 0
   
@@ -66,4 +67,5 @@ class Stack():
         s = str(trav.data) + ", " + s 
       trav = trav.prev
     return s
+
 

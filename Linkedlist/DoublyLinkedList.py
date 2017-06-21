@@ -98,7 +98,6 @@ class DoublyLinkedList():
   
   # Remove an arbitrary node from the linked list, O(1)
   def _remove(self, node):
-
     # If the node to remove is somewhere either at the
     # head or the tail handle those independently
     if node.prev  == None: return self.remove_first()
@@ -110,10 +109,11 @@ class DoublyLinkedList():
     
     # Temporarily store the data we want to return
     data = node.data
+    print(node, data)
     
     # Memory cleanup
     node.data = None
-    node = node.prev = node.next_ = None
+    node.prev = node.next_ = node = None
     
     self.size -= 1
     
@@ -156,6 +156,7 @@ class DoublyLinkedList():
     
     return False
   
+  # Find the index of a particular value in the linked list, O(n)
   def index_of(self, obj):
     
     trav, i = self.head, 0
@@ -185,7 +186,10 @@ class DoublyLinkedList():
     s = "["
     trav = self.head
     while trav != None:
-      s += trav.data + ", "
+      if trav.next_ != None:
+        s += trav.data + ", "
+      else:
+        s += trav.data
       trav = trav.next_
     s += "]"
     return s

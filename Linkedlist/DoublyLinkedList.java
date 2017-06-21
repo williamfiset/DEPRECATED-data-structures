@@ -219,13 +219,13 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     
     // Support searching for null
     if (obj == null) {
-      for(trav = head; trav != null; trav = trav.next, index++)
+      for(; trav != null; trav = trav.next, index++)
         if (trav.data == null)
           return index;
 
     // Search for non null object
     } else
-      for(trav = head; trav != null; trav = trav.next, index++)
+      for(; trav != null; trav = trav.next, index++)
         if (obj.equals(trav.data))
           return index;
     

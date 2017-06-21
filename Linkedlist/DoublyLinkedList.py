@@ -151,23 +151,44 @@ class DoublyLinkedList():
         if elem.__eq__(trav.data):
           self._remove(trav)
           return True
-          
+      
       trav = trav.next_
     
     return False
   
+  def index_of(self, obj):
+    
+    trav, i = self.head, 0
+    
+    if obj == None:
+      while trav != None:
+        if trav.data == None:
+          return i
+        trav = trav.next_
+        i += 1
+    else:
+      while trav != None:
+        if obj.__eq__(trav.data):
+          return i
+        trav = trav.next_
+        i += 1
+    
+    return -1
+  
+  def __contains__(self, elem):
+    return self.index_of(elem) != -1
+  
   def __len__(self):
     return self.size
   
-
-
-
-
-
-
-
-
-
+  def __str__(self):
+    s = "["
+    trav = self.head
+    while trav != None:
+      s += trav.data + ", "
+      trav = trav.next_
+    s += "]"
+    return s
 
 
 

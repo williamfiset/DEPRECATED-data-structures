@@ -25,7 +25,7 @@ public class Array <T> implements Iterable <T> {
   public void set(int index, T elem) { arr[index] = elem; }
 
   public void clear() {
-    for(int i = 0; i < capacity; i++)
+    for(int i = 0; i < len; i++)
       arr[i] = null;
     len = 0;
   }
@@ -46,7 +46,7 @@ public class Array <T> implements Iterable <T> {
     
   }
 
-  // Removes the element at the specified index in this list. 
+  // Removes an element at the specified index in this array. 
   public T removeAt(int rm_index) {
     if (rm_index >= len && rm_index < 0) throw new IndexOutOfBoundsException();
     T data = arr[rm_index];

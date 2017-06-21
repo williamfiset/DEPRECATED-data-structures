@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class DynamicArray():
+class Array():
   
   arr = []     # Pretend this is actually a static array
   size = 0     # length user thinks array is
@@ -82,7 +82,7 @@ class DynamicArray():
   def __len__(self):
     return self.size
   
-  # Returns an iterator for this array. Allows for-each loop.
+  # Returns an iterator for this array. Allows for-in loop.
   def __iter__(self):
     self.iter_index = 0
     return self
@@ -100,9 +100,4 @@ class DynamicArray():
   def __str__(self):
     return "[" + ', '.join(map(str, self.arr[:self.size])) + "]"
 
-if __name__ == '__main__':
-  ar = DynamicArray()
-  for x in ar:
-    print(x)
 
-  

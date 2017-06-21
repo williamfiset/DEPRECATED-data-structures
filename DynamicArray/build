@@ -1,3 +1,0 @@
-#!/bin/sh
-rm *.class 2> /dev/null
-javac -cp .:../junit-4.12.jar *.java

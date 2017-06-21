@@ -1,2 +1,3 @@
 *.class
 .DS_STORE
+*.pyc

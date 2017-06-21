@@ -2,19 +2,22 @@
 
 class Array():
   
-  arr = []     # Pretend this is actually a static array
+  ar = []      # Pretend this is actually a static array
   size = 0     # length user thinks array is
   capacity = 0 # Actual array size
   
   def __init__(self, capacity = 16):
     if capacity <= 0: raise ValueError("Illegal size.")
-    self.arr = [None for _ in range(capacity)]
+    self.ar = [None for _ in range(capacity)]
     self.capacity = capacity
     self.iter_index = 0
   
+  def is_empty(self):
+    return self.size == 0
+  
   def clear(self):
     for i in range(self.size):
-      self[i] = None
+      self.ar[i] = None
     self.size = 0
   
   def add(self, elem):
@@ -24,22 +27,22 @@ class Array():
       
       self.capacity *= 2
       
-      new_arr = [None for _ in range(self.capacity)]
-      new_arr[:self.size] = self[:self.size]
-      self.arr = new_arr
+      new_ar = [None for _ in range(self.capacity)]
+      new_ar[:self.size] = self.ar[:self.size]
+      self.ar = new_ar
     
-    self.arr[self.size] = elem
+    self.ar[self.size] = elem
     self.size = self.size + 1
   
   # Removes an element at a specified index
   def remove_at(self, i):
     
-    if i < 0 or i >= self.capacity: raise IndexError("remove_at index out of bounds")
-    data = self[i]
+    if i < 0 or i >= self.size: raise IndexError("remove_at index out of bounds")
+    data = self.ar[i]
 
-    new_arr = [None for _ in range(self.size-1)]
-    new_arr[:i] = self[:i]
-    new_arr[i:] = self[i+1:]
+    new_ar = [None for _ in range(self.size-1)]
+    new_ar[:i] = self.ar[:i]
+    new_ar[i:] = self.ar[i+1:]
     
     self.capacity = self.size = self.size - 1
     return data
@@ -59,23 +62,23 @@ class Array():
         if self[i] == None:
           return i
       else:
-        if obj.__eq__(self[i]):
+        if obj.__eq__(self.ar[i]):
           return i
     return -1
-  
+
   # Allows you to treat this class as an array and set values
   # via the square bracket notation like: myarray[index] = someobject
   def __setitem__(self, index, item):
     if index < 0 or index >= self.size:
       raise IndexError("Remove index out of bounds")
-    self[index] = item
+    self.ar[index] = item
 
   # Allows you to treat this class as an array and get values
   # via the square bracket notation like: someobject = myarray[index]
   def __getitem__(self, index):
     if index < 0 or index >= self.size:
       raise IndexError("Get index out of bounds")
-    return self.arr[index]
+    return self.ar[index]
 
   # Overrides the 'in' keyword to easily check if
   # an element is contained within this array
@@ -102,6 +105,6 @@ class Array():
   
   # Returns a string representation of this array
   def __str__(self):
-    return "[" + ', '.join(map(str, self.arr[:self.size])) + "]"
+    return "[" + ', '.join(map(str, self[:self.size])) + "]"
 
 

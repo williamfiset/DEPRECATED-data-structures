@@ -137,7 +137,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
 
   }
 
-  // Removed an arbitrary node from the linked list, O(1)
+  // Remove an arbitrary node from the linked list, O(1)
   private T remove(Node <T> node) {
 
     // If the node to remove is somewhere either at the
@@ -149,7 +149,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     node.next.prev = node.prev;
     node.prev.next = node.next;
 
-    // Temporary store the data we want to return
+    // Temporarily store the data we want to return
     T data = node.data;
     
     // Memory cleanup
@@ -158,7 +158,7 @@ public class DoublyLinkedList <T> implements Iterable <T> {
 
     --size;
 
-    // Return the data at the node we just removed
+    // Return the data in the node we just removed
     return data;
 
   }

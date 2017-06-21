@@ -32,9 +32,9 @@ class Array():
     self.size = self.size + 1
   
   # Removes an element at a specified index
-  def removeAt(self, i):
+  def remove_at(self, i):
     
-    if i < 0 or i >= self.capacity: raise IndexError("removeAt index out of bounds")
+    if i < 0 or i >= self.capacity: raise IndexError("remove_at index out of bounds")
     data = self[i]
 
     new_arr = [None for _ in range(self.size-1)]
@@ -46,17 +46,21 @@ class Array():
   
   def remove(self, obj):
     
-    index = self.indexOf(obj)
+    index = self.index_of(obj)
     if index == -1: return False
     
-    self.removeAt(index)
+    self.remove_at(index)
     return True
   
-  def indexOf(self, obj):
+  def index_of(self, obj):
     
     for i in range(self.size):
-      if self[i] == obj:
-        return i
+      if obj == None:
+        if self[i] == None:
+          return i
+      else:
+        if obj.__eq__(self[i]):
+          return i
     return -1
   
   # Allows you to treat this class as an array and set values
@@ -76,7 +80,7 @@ class Array():
   # Overrides the 'in' keyword to easily check if
   # an element is contained within this array
   def __contains__(self, obj):
-    return self.indexOf(obj) != -1
+    return self.index_of(obj) != -1
   
   # Overrides the 'len' builtin to return the size of this array
   def __len__(self):

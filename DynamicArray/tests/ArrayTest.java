@@ -56,22 +56,32 @@ public class ArrayTest {
   public void testRemoving() {
 
     Array<String> list = new Array<>();
-    String[] strs = {"a", "b", "c", "d", "e", "f", "g", "h"};
-    for (String s : strs)
-      list.add(s);
+    String[] strs = {"a", "b", "c", "d", "e", null, "g", "h"};
+    for (String s : strs) list.add(s);
     
     boolean ret = list.remove("c");
     assertTrue(ret);
+
     ret = list.remove("c");
     assertFalse(ret);
+    
     ret = list.remove("h");
     assertTrue(ret);
+    
+    ret = list.remove(null);
+    assertTrue(ret);    
+    
     ret = list.remove("a");
     assertTrue(ret);
+    
     ret = list.remove("a");
     assertFalse(ret);
+    
     ret = list.remove("h");
     assertFalse(ret);
+    
+    ret = list.remove(null);
+    assertFalse(ret);    
 
   }
 
@@ -92,6 +102,14 @@ public class ArrayTest {
     assertFalse(list.remove("c"));
     assertFalse(list.remove("d"));
 
+  }
+
+  @Test
+  public void testIndexOfNullElement() {
+    Array<String> list = new Array<>();
+    String[] strs = {"a", "b", null, "d"};
+    for (String s : strs) list.add(s);
+    assertTrue(list.indexOf(null) == 2);
   }
 
   @Test
@@ -164,7 +182,7 @@ public class ArrayTest {
     
     Array<Integer> list = new Array<>();
     
-    int[] elems = {-76, 45, 66, 3, 234, 54, 33};
+    Integer[] elems = {-76, 45, 66, 3, null, 54, 33};
     for (int i = 0, sz = 1; i < elems.length; i++, sz++) {
       list.add(elems[i]);
       assertEquals(list.size(), sz);

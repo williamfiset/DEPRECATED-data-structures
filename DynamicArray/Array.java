@@ -60,16 +60,22 @@ public class Array <T> implements Iterable <T> {
   }
 
   public boolean remove(Object obj) {
-    for (int i = 0; i < len; i++) {
-      if (arr[i].equals(obj)) {
-        removeAt(i); return true; } }
-    return false;
+    int index = indexOf(obj);
+    if (index == -1) return false;
+    removeAt(index);
+    return true;
   }
 
   public int indexOf(Object obj) {
-    for (int i = 0; i < len; i++)
-      if (arr[i].equals(obj))
-        return i;
+    for (int i = 0; i < len; i++) {
+      if (obj == null) {
+        if (arr[i] == null)
+          return i;
+      } else {
+        if (obj.equals(arr[i]))
+          return i;
+      }
+    }
     return -1;
   }
 

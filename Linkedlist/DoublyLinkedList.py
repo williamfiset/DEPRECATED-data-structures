@@ -96,6 +96,66 @@ class DoublyLinkedList():
     # Return the data that was in the last node we just removed
     return data
   
+  # Remove an arbitrary node from the linked list, O(1)
+  def _remove(self, node):
+
+    # If the node to remove is somewhere either at the
+    # head or the tail handle those independently
+    if node.prev  == None: return self.remove_first()
+    if node.next_ == None: return self.remove_last()
+  
+    # Make the pointers of adjacent nodes skip over 'node'
+    node.next_.prev = node.prev
+    node.prev.next_ = node.next_
+    
+    # Temporarily store the data we want to return
+    data = node.data
+    
+    # Memory cleanup
+    node.data = None
+    node = node.prev = node.next_ = None
+    
+    self.size -= 1
+    
+    # Return the data in the node we just removed
+    return data
+  
+  # Remove a node at a particular index, O(n)
+  def remove_at(self, index):
+    
+    if index < 0 or index >= self.size: raise ValueError("Illegal index")
+    
+    trav = self.head
+    
+    for i in range(index+1):
+      if i == index: break
+      trav = trav.next_  
+    
+    return self._remove(trav)
+  
+  # Remove a particular value in the linked list, O(n)
+  def remove(self, elem):
+    
+    trav = self.head
+    
+    while trav != None:
+      
+      # Support searching for None elements
+      if elem == None:
+        if trav.data == elem:
+          self._remove(trav)
+          return True
+      
+      # Support searching for none None elements
+      else:
+        if elem.__eq__(trav.data):
+          self._remove(trav)
+          return True
+          
+      trav = trav.next_
+    
+    return False
+  
   def __len__(self):
     return self.size
   

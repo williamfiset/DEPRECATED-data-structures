@@ -1,4 +1,7 @@
-
+/**
+ * A doubly linked list implementation.
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class DoublyLinkedList <T> implements Iterable <T> {
   
@@ -48,6 +51,19 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     addLast(elem);
   }
 
+  // Add a node to the tail of the linked list, O(1)
+  public void addLast(T elem) {
+
+    // The linked list is empty
+    if (isEmpty()) {
+      head = tail = new Node <T> ( elem, null, null );
+    } else {
+      tail.next = new Node <T> ( elem, tail, null );
+      tail = tail.next;
+    }
+    size++;
+  }
+
   // Add an element to the beginning of this linked list, O(1)
   public void addFirst(T elem) {
 
@@ -61,19 +77,6 @@ public class DoublyLinkedList <T> implements Iterable <T> {
 
     size++;
 
-  }
-
-  // Add a node to the tail of the linked list, O(1)
-  public void addLast(T elem) {
-
-    // The linked list is empty
-    if (isEmpty()) {
-      head = tail = new Node <T> ( elem, null, null );
-    } else {
-      tail.next = new Node <T> ( elem, tail, null );
-      tail = tail.next;
-    }
-    size++;
   }
 
   // Check the value of the first node if it exists, O(1)
@@ -100,10 +103,10 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     head = head.next;
     --size;
 
-    // If the list is empty set the tail to null as well
+    // If the list is empty set the tail to null
     if (isEmpty()) tail = null;
 
-    // Do a memory clean of the previous node
+    // Do a memory cleanup of the previous node
     else head.prev = null;
 
     // Return the data that was at the first node we just removed
@@ -123,13 +126,13 @@ public class DoublyLinkedList <T> implements Iterable <T> {
     tail = tail.prev;
     --size;
 
-    // If the list is now empty set the head to null as well
+    // If the list is now empty set the head to null
     if (isEmpty()) head = null;
 
     // Do a memory clean of the node that was just removed
     else tail.next = null;
 
-    // Return the data that was at the first node we just removed
+    // Return the data that was in the last node we just removed
     return data;
 
   }

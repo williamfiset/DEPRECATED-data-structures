@@ -1,4 +1,3 @@
-
 /**
  * A min priority queue implementation using a binary heap.
  * @author William Fiset, william.alexandre.fiset@gmail.com

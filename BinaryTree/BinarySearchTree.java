@@ -68,7 +68,7 @@ public class BinarySearchTree <T extends Comparable<T>> {
       node = new Node (null, null, elem);
 
     } else {
-      // Place lower elements values in left subtree
+      // Pick a subtree to insert element
       if (elem.compareTo(node.data) < 0) {
         node.left = add(node.left, elem);
       } else {
@@ -80,7 +80,7 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   }
 
-  // Remove a value from this binary tree, if it exists
+  // Remove a value from this binary tree if it exists, O(n)
   public boolean remove(T elem) {
 
     // Make sure the node we want to remove 
@@ -173,18 +173,16 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   // Helper method to find the leftmost node
   private Node digLeft(Node node) {
-    Node cur = node;
-    while(cur.left != null) 
-      cur = cur.left;
-    return cur;
+    while(node.left != null) 
+      node = node.left;
+    return node;
   }
 
   // Helper method to find the rightmost node
   private Node digRight(Node node) {
-    Node cur = node;
-    while(cur.right != null) 
-      cur = cur.right;
-    return cur;
+    while(node.right != null) 
+      node = node.right;
+    return node;
   }
 
   // returns true is the element exists in the tree

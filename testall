@@ -35,7 +35,7 @@ do
         fi
     
       done
-    
+      
       rm *.class 2> /dev/null
     
     fi

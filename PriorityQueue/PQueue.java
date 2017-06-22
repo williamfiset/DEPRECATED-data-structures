@@ -133,7 +133,7 @@ class PQueue <T extends Comparable<T>> {
     
   }
 
-  // Bottom up node swim, O(log(n))
+  // Perform bottom up node swim, O(log(n))
   private void swim(int k) {
     
     // Grab the index of the next parent node WRT to k

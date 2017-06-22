@@ -81,7 +81,7 @@ class BinarySearchTree():
       if node.left == None:
         
         right_child = node.right
-        node.data = node = None
+        del node.data, node
         return right_child
       
       # This is the case with only a left subtree or 
@@ -90,7 +90,7 @@ class BinarySearchTree():
       elif node.right == None:
         
         left_child = node.left
-        node.data = node = None
+        del node.data, node
         return left_child
 
       # When removing a node from a binary tree with two links the

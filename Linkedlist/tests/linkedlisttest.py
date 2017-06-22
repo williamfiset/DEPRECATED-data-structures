@@ -42,13 +42,13 @@ class LinkedListTest(unittest.TestCase):
     ar = DoublyLinkedList()
     for _ in range(1000):
       ar.add("x")
-    self.assertRaises(IndexError, ar.__getitem__, 1000)
+    self.assertRaises(IndexError, ar.remove_at, 1000)
 
   def test_index_out_of_bounds4(self):
     ar = DoublyLinkedList()
     for _ in range(1000):
       ar.add("x")
-    self.assertRaises(IndexError, ar.__getitem__, -1)
+    self.assertRaises(IndexError, ar.remove_at, -1)
 
   def test_filling(self):
     llist = DoublyLinkedList()

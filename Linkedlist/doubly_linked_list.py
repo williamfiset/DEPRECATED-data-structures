@@ -123,7 +123,7 @@ class DoublyLinkedList():
   # Remove a node at a particular index, O(n)
   def remove_at(self, index):
     
-    if index < 0 or index >= self.size: raise ValueError("Illegal index")
+    if index < 0 or index >= self.size: raise IndexError("Illegal index")
     
     trav = self.head
     

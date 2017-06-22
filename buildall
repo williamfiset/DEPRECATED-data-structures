@@ -1,5 +1,0 @@
-#!/bin/sh
-
-java_files="$(find . -name '*.java')"
-javac -cp .:junit-4.12.jar $java_files
-echo $java_files

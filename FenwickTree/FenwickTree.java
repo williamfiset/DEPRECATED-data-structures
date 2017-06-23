@@ -37,7 +37,7 @@ public class FenwickTree {
   // lsb(104) = lsb(0b1101000) =    0b1000 = 8
   // lsb(96)  = lsb(0b1100000) =  0b100000 = 32
   // lsb(64)  = lsb(0b1000000) = 0b1000000 = 64
-  private int lsb(int i) {
+  private static int lsb(int i) {
 
     // Isolates the lowest one bit value
     return i & -i;
@@ -47,7 +47,7 @@ public class FenwickTree {
 
   }
 
-  // Computes the prefix sum from [1, i], one based
+  // Computes the prefix sum from [1, i], O(log(n))
   public long prefixSum(int i) {
     long sum = 0L;
     while (i != 0) {
@@ -57,24 +57,23 @@ public class FenwickTree {
     return sum;
   }
 
-  // Returns the sum of the interval [i, j], one based
+  // Returns the sum of the interval [i, j], O(log(n))
   public long sum(int i, int j) {
     if (j < i) throw new IllegalArgumentException("Make sure j >= i");
     return prefixSum(j) - prefixSum(i - 1);
   }
 
-  // Add 'k' to index 'i', one based
-  public void add(int i, long k) {
+  // Add 'v' to index 'i', O(log(n))
+  public void add(int i, long v) {
     while (i < tree.length) {
-      tree[i] += k;
+      tree[i] += v;
       i += lsb(i);
     }
   }
 
-  // Set index i to be equal to k, one based
-  public void set(int i, long k) {
-    long value = sum(i, i);
-    add( i, k - value );
+  // Set index i to be equal to v, O(log(n))
+  public void set(int i, long v) {
+    add( i, v - sum(i, i) );
   }
 
   @Override public String toString() {

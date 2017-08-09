@@ -1,18 +1,15 @@
 # Travis Continuous Integration script for travis-ci.org
 
+# Runs all unit tests
 language: java
-
 jdk:
   - oraclejdk8
   - oraclejdk7
-
 before_script:
   - sudo apt-get update
   - sudo apt-get install bash
-
 script:
   - bash testall
-
 
 # Checks for broken links in README.md
 language: ruby

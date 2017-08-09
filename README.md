@@ -17,13 +17,17 @@ The goal of the data structures initiative is to provide a complete, simple and 
 * [source code](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/DynamicArray.java)
 * [presentation](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/presentation/Arrays.pdf)
 ### FenwickTree
-* [source code]()
-* [presentation]()
-### Graph
-* [source code]()
+* [source code](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/FenwickTree.java)
+* [presentation](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/presentation/FenwickTree.pdf)
+### Graphs
+* [Adjacency list source code](https://github.com/williamfiset/data-structures/blob/master/Graph/GraphAdjacencyList.java)
+* [Adjacency matrix source code](https://github.com/williamfiset/data-structures/blob/master/Graph/GraphAdjacencyMatrix.java)
 ### Hashtable
-* [source code]()
-* [presentation]()
+* [Hashtable with seperate chaining](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableSeperateChaining.java)
+* [Hashtable with linear probing](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableLinearProbing.java)
+* [Hashtable with quadratic probing](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableQuadraticProbing.java)
+* [Hashtable with double hashing](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableDoubleHashing.java)
+* [Hashtable presentation](https://github.com/williamfiset/data-structures/blob/master/Hashtable/presentation/hashtable.pdf)
 ### Linkedlist
 * [source code]()
 * [presentation]()

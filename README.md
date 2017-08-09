@@ -69,8 +69,8 @@ The goal of the data structures initiative is to provide a complete, simple and 
 * [Trie source code]()
 
 **Union Find/Disjoint Set**
-* [Union fins source code]()
-* [Union fins presentation]()
+* [Union find source code]()
+* [Union find presentation]()
 
 # License
 

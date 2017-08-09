@@ -63,16 +63,16 @@ The goal of the data structures initiative is to provide a complete, simple and 
 * [Stack presentation](https://github.com/williamfiset/data-structures/blob/master/Stack/presentation/Stack.pdf)
 
 **Suffix Array**
-* [Suffix array source code (naive O(n<sup>2</sup>logn))]()
-* [Suffix array source code (naive O(nlog<sup>2</sup>n))]()
-* [Suffix array source code (naive O(nlogn)]()
+* [Suffix array source code, O(n<sup>2</sup>logn)](https://github.com/williamfiset/data-structures/blob/master/SuffixArray/SuffixArrayNaive.java)
+* [Suffix array source code, O(nlog<sup>2</sup>n)](https://github.com/williamfiset/data-structures/blob/master/SuffixArray/SuffixArray.java)
+* [Suffix array source code, O(nlogn)](https://github.com/williamfiset/data-structures/blob/master/SuffixArray/SuffixArrayFast.java)
 
 **Trie**
-* [Trie source code]()
+* [Trie source code](https://github.com/williamfiset/data-structures/blob/master/Trie/Trie.java)
 
 **Union Find/Disjoint Set**
-* [Union find source code]()
-* [Union find presentation]()
+* [Union find source code](https://github.com/williamfiset/data-structures/blob/master/Unionfind/UnionFind.java)
+* [Union find presentation](https://github.com/williamfiset/data-structures/blob/master/Unionfind/presentation/UnionFind.pdf)
 
 # License
 

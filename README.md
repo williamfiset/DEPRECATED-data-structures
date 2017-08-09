@@ -40,29 +40,31 @@ The goal of the data structures initiative is to provide a complete, simple and 
 * [Linked list presentation](https://github.com/williamfiset/data-structures/blob/master/Linkedlist/presentation/LinkedLists.pdf)
 
 **Priority Queue**
-* [Priority queue source code (binary heap)]()
-* [Priority queue presentation]()
+* [Priority queue source code (binary heap)](https://github.com/williamfiset/data-structures/blob/master/PriorityQueue/PQueue.java)
+* [Priority queue presentation](https://github.com/williamfiset/data-structures/blob/master/PriorityQueue/presentation/PriorityQueue.pdf)
 
 **Quad Tree**
-* [Quad tree source code]()
+* [Quad tree source code](https://github.com/williamfiset/data-structures/blob/master/QuadTree/QuadTree.java)
 
 **Queue**
-* [Queue source code (linked list)]()
-* [Queue presentation]()
+* [Queue source code (linked list)](https://github.com/williamfiset/data-structures/blob/master/Queue/Queue.java)
+* [Integer queue source code (array based)](https://github.com/williamfiset/data-structures/blob/master/Queue/IntQueue.java)
+* [Queue presentation](https://github.com/williamfiset/data-structures/blob/master/Queue/presentation/Queue.pdf)
 
 **Segment Tree**
-* [Segment tree source code]()
+* [Segment tree source code](https://github.com/williamfiset/data-structures/blob/master/SegmentTree/SegmentTree.java)
 
 **Set**
-* [Set source code]()
+* [Set source code](https://github.com/williamfiset/data-structures/blob/master/Set/HSet.java)
 
 **Stack**
-* [Stack source code]()
-* [Stack presentation]()
+* [Stack source code (linked list)](https://github.com/williamfiset/data-structures/blob/master/Stack/Stack.java)
+* [Integer stack source code (array based)](https://github.com/williamfiset/data-structures/blob/master/Stack/IntStack.java)
+* [Stack presentation](https://github.com/williamfiset/data-structures/blob/master/Stack/presentation/Stack.pdf)
 
 **Suffix Array**
-* [Suffix array source code (naive O(n<sup>2</sup>logn)]()
-* [Suffix array source code (naive O(nlog<sup>2</sup>n)]()
+* [Suffix array source code (naive O(n<sup>2</sup>logn))]()
+* [Suffix array source code (naive O(nlog<sup>2</sup>n))]()
 * [Suffix array source code (naive O(nlogn)]()
 
 **Trie**

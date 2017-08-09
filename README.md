@@ -6,23 +6,29 @@ The goal of the data structures initiative is to provide a complete, simple and 
 
 # Library
 
-### Binary Tree
+**Binary Tree**
 * [Binary tree source code](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/BinarySearchTree.java)
 * [Binary tree presentation](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/presentation/BinaryTrees.pdf)
-### Bloom Filter
+
+**Bloom Filter**
 * [Bloom filter source code](https://github.com/williamfiset/data-structures/blob/master/BloomFilter/BloomFilter.java)
-### D-Heap
+
+**D-Heap**
 * [D-heap source code](https://github.com/williamfiset/data-structures/blob/master/D-Heap/DHeap.java)
-### Dynamic Array
+
+**Dynamic Array**
 * [Dynamic array source code](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/DynamicArray.java)
 * [Dynamic array presentation](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/presentation/Arrays.pdf)
-### FenwickTree
+
+**FenwickTree**
 * [Fenwick tree source code](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/FenwickTree.java)
 * [Fenwick tree presentation](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/presentation/FenwickTree.pdf)
-### Graphs
+
+**Graphs**
 * [Adjacency list source code](https://github.com/williamfiset/data-structures/blob/master/Graph/GraphAdjacencyList.java)
 * [Adjacency matrix source code](https://github.com/williamfiset/data-structures/blob/master/Graph/GraphAdjacencyMatrix.java)
-### Hashtable
+
+**Hashtable**
 * [Hashtable source code (seperate chaining)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableSeperateChaining.java)
 * [Hashtable source code (linear probing)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableLinearProbing.java)
 * [Hashtable source code (quadratic probing)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableQuadraticProbing.java)

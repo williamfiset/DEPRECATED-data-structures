@@ -13,3 +13,9 @@ before_script:
 script:
   - bash testall
 
+
+# Checks for broken links in README.md
+language: ruby
+rvm: 2.2
+before_script: gem install awesome_bot
+script: awesome_bot README.md --allow-dupe

@@ -8,7 +8,7 @@ The goal of the data structures initiative is to provide a complete, simple and 
 
 **Binary Tree**
 * [Binary tree source code](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/BinarySearchTree.java)
-* [Binary tree presentation](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/presentation/BinaryTrees.pdf_____)
+* [Binary tree presentation](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/presentation/BinaryTrees.pdf)
 
 **Bloom Filter**
 * [Bloom filter source code](https://github.com/williamfiset/data-structures/blob/master/BloomFilter/BloomFilter.java)

@@ -7,33 +7,33 @@ The goal of the data structures initiative is to provide a complete, simple and 
 # Library
 
 ### Binary Tree
-* [source code](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/BinarySearchTree.java)
-* [presentation](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/presentation/BinaryTrees.pdf)
+* [Binary tree source code](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/BinarySearchTree.java)
+* [Binary tree presentation](https://github.com/williamfiset/data-structures/blob/master/BinaryTree/presentation/BinaryTrees.pdf)
 ### Bloom Filter
-* [source code](https://github.com/williamfiset/data-structures/blob/master/BloomFilter/BloomFilter.java)
+* [Bloom filter source code](https://github.com/williamfiset/data-structures/blob/master/BloomFilter/BloomFilter.java)
 ### D-Heap
-* [source code](https://github.com/williamfiset/data-structures/blob/master/D-Heap/DHeap.java)
+* [D-heap source code](https://github.com/williamfiset/data-structures/blob/master/D-Heap/DHeap.java)
 ### Dynamic Array
-* [source code](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/DynamicArray.java)
-* [presentation](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/presentation/Arrays.pdf)
+* [Dynamic array source code](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/DynamicArray.java)
+* [Dynamic array presentation](https://github.com/williamfiset/data-structures/blob/master/DynamicArray/presentation/Arrays.pdf)
 ### FenwickTree
-* [source code](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/FenwickTree.java)
-* [presentation](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/presentation/FenwickTree.pdf)
+* [Fenwick tree source code](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/FenwickTree.java)
+* [Fenwick tree presentation](https://github.com/williamfiset/data-structures/blob/master/FenwickTree/presentation/FenwickTree.pdf)
 ### Graphs
 * [Adjacency list source code](https://github.com/williamfiset/data-structures/blob/master/Graph/GraphAdjacencyList.java)
 * [Adjacency matrix source code](https://github.com/williamfiset/data-structures/blob/master/Graph/GraphAdjacencyMatrix.java)
 ### Hashtable
-* [Hashtable with seperate chaining](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableSeperateChaining.java)
-* [Hashtable with linear probing](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableLinearProbing.java)
-* [Hashtable with quadratic probing](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableQuadraticProbing.java)
-* [Hashtable with double hashing](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableDoubleHashing.java)
+* [Hashtable source code (seperate chaining)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableSeperateChaining.java)
+* [Hashtable source code (linear probing)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableLinearProbing.java)
+* [Hashtable source code (quadratic probing)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableQuadraticProbing.java)
+* [Hashtable source code (double hashing)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableDoubleHashing.java)
 * [Hashtable presentation](https://github.com/williamfiset/data-structures/blob/master/Hashtable/presentation/hashtable.pdf)
 ### Linkedlist
-* [source code]()
-* [presentation]()
+* [Doubly linked list source code](https://github.com/williamfiset/data-structures/blob/master/Linkedlist/DoublyLinkedList.java)
+* [Linked list presentation](https://github.com/williamfiset/data-structures/blob/master/Linkedlist/presentation/LinkedLists.pdf)
 ### Priority Queue
-* [source code]()
-* [presentation]()
+* [Priority queue source code (binary heap)]()
+* [Priority queue presentation]()
 ### Quad Tree
 * [source code]()
 ### Queue

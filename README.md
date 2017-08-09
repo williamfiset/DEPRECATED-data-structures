@@ -44,25 +44,25 @@ The goal of the data structures initiative is to provide a complete, simple and 
 * [Priority queue presentation]()
 
 **Quad Tree**
-* [source code]()
+* [Quad tree source code]()
 
 **Queue**
-* [source code]()
-* [presentation]()
+* [Queue source code (linked list)]()
+* [Queue presentation]()
 
 **Segment Tree**
-* [source code]()
+* [Segment tree source code]()
 
 **Set**
-* [source code]()
+* [Set source code]()
 
 **Stack**
-* [source code]()
-* [presentation]()
+* [Stack source code]()
+* [Stack presentation]()
 
 **Suffix Array**
-* [Suffix array source code (naive O(n^2logn)]()
-* [Suffix array source code (naive O(nlog^2n)]()
+* [Suffix array source code (naive O(n<sup>2</sup>logn)]()
+* [Suffix array source code (naive O(nlog<sup>2</sup>n)]()
 * [Suffix array source code (naive O(nlogn)]()
 
 **Trie**

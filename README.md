@@ -34,31 +34,43 @@ The goal of the data structures initiative is to provide a complete, simple and 
 * [Hashtable source code (quadratic probing)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableQuadraticProbing.java)
 * [Hashtable source code (double hashing)](https://github.com/williamfiset/data-structures/blob/master/Hashtable/HashTableDoubleHashing.java)
 * [Hashtable presentation](https://github.com/williamfiset/data-structures/blob/master/Hashtable/presentation/hashtable.pdf)
-### Linkedlist
+
+**Linkedlist**
 * [Doubly linked list source code](https://github.com/williamfiset/data-structures/blob/master/Linkedlist/DoublyLinkedList.java)
 * [Linked list presentation](https://github.com/williamfiset/data-structures/blob/master/Linkedlist/presentation/LinkedLists.pdf)
-### Priority Queue
+
+**Priority Queue**
 * [Priority queue source code (binary heap)]()
 * [Priority queue presentation]()
-### Quad Tree
+
+**Quad Tree**
 * [source code]()
-### Queue
-* [source code]()
-* [presentation]()
-### Segment Tree
-* [source code]()
-### Set
-* [source code]()
-### Stack
+
+**Queue**
 * [source code]()
 * [presentation]()
-### Suffix Array
+
+**Segment Tree**
 * [source code]()
-### Trie
+
+**Set**
 * [source code]()
-### Union Find/Disjoint Set
+
+**Stack**
 * [source code]()
 * [presentation]()
+
+**Suffix Array**
+* [Suffix array source code (naive O(n^2logn)]()
+* [Suffix array source code (naive O(nlog^2n)]()
+* [Suffix array source code (naive O(nlogn)]()
+
+**Trie**
+* [Trie source code]()
+
+**Union Find/Disjoint Set**
+* [Union fins source code]()
+* [Union fins presentation]()
 
 # License
 

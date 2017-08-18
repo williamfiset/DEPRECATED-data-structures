@@ -277,7 +277,8 @@ public class SuffixArrayFast {
   // Example usage
   public static void main(String[] args) {
 
-    SuffixArrayFast sa = new SuffixArrayFast("ababcabaa");
+    // SuffixArrayFast sa = new SuffixArrayFast("ababcabaa");
+    SuffixArrayFast sa = new SuffixArrayFast("camel");
     sa.display();
 
     // Output:

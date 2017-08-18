@@ -1,24 +1,15 @@
-/*
-Good read: 
-http://www.cs.yale.edu/homes/aspnes/pinewiki/SuffixArrays.html
-
-Generally speaking, suffix arrays are used to do multiple queries 
-efficiently on one piece of data rather than to do one operation 
-then move on to another piece of text.
-
-Some things suffix trees are great for are:
-1) Searching if a substring occurs in the text
-2) Finding all occurrences of a substring in the larger text
-3) Longest repeated substring
-4) Most frequently occurring substrings
-5) Longest duplicate substrings
-6) 
-
-*/
+/**
+ *
+ * Generally speaking, suffix arrays are used to do multiple queries
+ * efficiently on one piece of data rather than to do one operation
+ * then move on to another piece of text.
+ *
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ */
 
 public class SuffixArrayNaive {
 
-  class Suffix implements Comparable <Suffix> {
+  static class Suffix implements Comparable <Suffix> {
 
     // Starting position of suffix in text
     final int index, len;
@@ -83,12 +74,12 @@ public class SuffixArrayNaive {
   private void kasai() {
 
     LCP = new int[len];
-    
+
     // Compute inverse index values
     int [] inv = new int[len];
     for (int i = 0; i < len; i++)
       inv[suffixes[i].index] = i;
-    
+
     int lcp_len = 0;
 
     for (int i = 0; i < len; i++) {
@@ -137,7 +128,7 @@ public class SuffixArrayNaive {
       // Extract part of the suffix we need to compare
       if (suffix.len <= substr_len) suffix_str = suffix.toString();
       else suffix_str = new String(text, suffix.index, substr_len);
-       
+
       int cmp = suffix_str.compareTo(substr);
 
       // Found a match
@@ -145,7 +136,7 @@ public class SuffixArrayNaive {
         // To find the first occurrence linear scan down
         // or keep doing binary search
         return true;
-      
+
       // Substring is found above
       } else if (cmp < 0) {
         lo = mid + 1;
@@ -190,4 +181,3 @@ public class SuffixArrayNaive {
   }
 
 }
-

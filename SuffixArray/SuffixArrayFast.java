@@ -8,14 +8,14 @@ public class SuffixArrayFast {
   int ALPHABET_SZ = 256, N;
   int[] T, lcp, sa, sa2, rank, tmp, c;
 
-  public SuffixArrayFast(String str) {    
-    this(toIntArray(str));    
+  public SuffixArrayFast(String str) {
+    this(toIntArray(str));
   }
-   
-  private static int[] toIntArray(String s) {   
-    int[] text = new int[s.length()];   
-    for(int i=0;i<s.length();i++)text[i] = s.charAt(i);   
-    return text;    
+
+  private static int[] toIntArray(String s) {
+    int[] text = new int[s.length()];
+    for(int i=0;i<s.length();i++)text[i] = s.charAt(i);
+    return text;
   }
 
   // Designated constructor
@@ -78,11 +78,11 @@ public class SuffixArrayFast {
 
     for (int i = 0; i < N; i++) {
       if (lcp[i] > 0 && lcp[i] >= max_len) {
-        
+
         // We found a longer LRS
         if ( lcp[i] > max_len )
           lrss.clear();
-        
+
         // Append substring to the list and update max
         max_len = lcp[i];
         lrss.add( new String(T, sa[i], max_len) );
@@ -116,7 +116,7 @@ public class SuffixArrayFast {
       // Extract part of the suffix we need to compare
       if (suffix_len <= substr_len) suffix_str = new String(T, suffix_index, suffix_len);
       else suffix_str = new String(T, suffix_index, substr_len);
-       
+
       int cmp = suffix_str.compareTo(substr);
 
       // Found a match
@@ -152,12 +152,12 @@ public class SuffixArrayFast {
     int LOWEST_ASCII = Integer.MAX_VALUE;
 
     // Find the lowest ASCII value within the strings.
-    // Also construct the index map to know which original 
+    // Also construct the index map to know which original
     // string a given suffix belongs to.
     for (int i = 0, k = 0; i < strs.length; i++) {
-      
+
       String str = strs[i];
-      
+
       for (int j = 0; j < str.length(); j++) {
         int asciiVal = str.charAt(j);
         if (asciiVal < LOWEST_ASCII) LOWEST_ASCII = asciiVal;
@@ -222,7 +222,7 @@ public class SuffixArrayFast {
 
           lcss.add(new String(lcs));
 
-          // If you wish to find the original strings to which this longest 
+          // If you wish to find the original strings to which this longest
           // common substring belongs to the indexes of those strings can be
           // found in the windowColors set, so just use those indexes on the 'strs' array
 
@@ -251,7 +251,7 @@ public class SuffixArrayFast {
         Integer colorCount = windowColorCount.get(nextColor);
         if (colorCount == null) colorCount = 0;
         windowColorCount.put(nextColor, colorCount + 1);
-          
+
         // Remove all the worse values in the back of the deque
         while(!deque.isEmpty() && sa.lcp[deque.peekLast()] > sa.lcp[hi-1])
           deque.removeLast();
@@ -280,20 +280,25 @@ public class SuffixArrayFast {
     SuffixArrayFast sa = new SuffixArrayFast("ababcabaa");
     sa.display();
 
+    // Output:
+    // --i-------SA-----LCP--Suffix
+    //   0       8       1   a
+    //   1       7       1   aa
+    //   2       5       3   abaa
+    //   3       0       2   ababcabaa
+    //   4       2       0   abcabaa
+    //   5       6       2   baa
+    //   6       1       1   babcabaa
+    //   7       3       0   bcabaa
+    //   8       4       0   cabaa
+
     String[] strs = { "abcde", "habcab", "ghabcdf" };
     TreeSet <String> set = SuffixArrayFast.lcs(strs, 2);
     System.out.println(set);
 
+    // Output:
+    // [abcd, habc]
+
   }
 
 }
-
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
 /**
  *
- * Generally speaking, suffix arrays are used to do multiple queries 
- * efficiently on one piece of data rather than to do one operation 
+ * Generally speaking, suffix arrays are used to do multiple queries
+ * efficiently on one piece of data rather than to do one operation
  * then move on to another piece of text.
  *
  * Good suffix array read: http://www.cs.yale.edu/homes/aspnes/pinewiki/SuffixArrays.html
@@ -32,7 +32,7 @@ class SuffixArray {
   }
 
   // Size of the suffix array
-  int N; 
+  int N;
 
   // T is the text
   int[] T;
@@ -96,7 +96,7 @@ class SuffixArray {
       suffixRanks[1][ranks[0].originalIndex] = 0;
 
       for (int i = 1; i < N; i++ ) {
-        
+
         SuffixRankTuple lastSuffixRank = ranks[i-1];
         SuffixRankTuple currSuffixRank = ranks[i];
 
@@ -112,7 +112,7 @@ class SuffixArray {
       // Place top row (current row) to be the last row
       suffixRanks[0] = suffixRanks[1];
 
-      // Optimization to stop early 
+      // Optimization to stop early
       if (newRank == N-1) break;
 
     }
@@ -135,7 +135,7 @@ class SuffixArray {
   private void kasai() {
 
     lcp = new int[N];
-    
+
     // Compute inverse index values
     int [] inv = new int[N];
     for (int i = 0; i < N; i++)
@@ -183,7 +183,7 @@ class SuffixArray {
       // Extract part of the suffix we need to compare
       if (suffix_len <= substr_len) suffix_str = new String(T, suffix_index, suffix_len);
       else suffix_str = new String(T, suffix_index, substr_len);
-       
+
       int cmp = suffix_str.compareTo(substr);
 
       // Found a match
@@ -191,7 +191,7 @@ class SuffixArray {
         // To find the first occurrence linear scan up/down
         // from here or keep doing binary search
         return true;
-      
+
       // Substring is found above
       } else if (cmp < 0) {
         lo = mid + 1;
@@ -218,11 +218,11 @@ class SuffixArray {
 
     for (int i = 0; i < N; i++) {
       if (lcp[i] > 0 && lcp[i] >= max_len) {
-        
+
         // We found a longer LRS
         if ( lcp[i] > max_len )
           lrss.clear();
-        
+
         // Append substring to the list and update max
         max_len = lcp[i];
         lrss.add( new String(T, sa[i], max_len) );
@@ -257,12 +257,12 @@ class SuffixArray {
     int LOWEST_ASCII = Integer.MAX_VALUE;
 
     // Find the lowest ASCII value within the strings.
-    // Also construct the index map to know which original 
+    // Also construct the index map to know which original
     // string a given suffix belongs to.
     for (int i = 0, k = 0; i < strs.length; i++) {
-      
+
       String str = strs[i];
-      
+
       for (int j = 0; j < str.length(); j++) {
         int asciiVal = str.charAt(j);
         if (asciiVal < LOWEST_ASCII) LOWEST_ASCII = asciiVal;
@@ -327,7 +327,7 @@ class SuffixArray {
 
           lcss.add(new String(lcs));
 
-          // If you wish to find the original strings to which this longest 
+          // If you wish to find the original strings to which this longest
           // common substring belongs to the indexes of those strings can be
           // found in the windowColors set, so just use those indexes on the 'strs' array
 
@@ -356,7 +356,7 @@ class SuffixArray {
         Integer colorCount = windowColorCount.get(nextColor);
         if (colorCount == null) colorCount = 0;
         windowColorCount.put(nextColor, colorCount + 1);
-          
+
         // Remove all the worse values in the back of the deque
         while(!deque.isEmpty() && sa.lcp[deque.peekLast()] > sa.lcp[hi-1])
           deque.removeLast();
@@ -370,17 +370,19 @@ class SuffixArray {
 
   }
 
-  public void display() {
-    System.out.printf("-----i-----SA-----LCP---Suffix\n");
+  @Override public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("-----i-----SA-----LCP---Suffix\n");
     for(int i = 0; i < N; i++) {
       int suffixLen = N - sa[i];
       String suffix = new String(T, sa[i], suffixLen);
-      System.out.printf("% 7d % 7d % 7d %s\n", i, sa[i],lcp[i], suffix );
+      sb.append(String.format("% 7d % 7d % 7d %s\n", i, sa[i], lcp[i], suffix));
     }
+    return sb.toString();
   }
 
   public static void main(String[] args) {
-    
+
     // String[] strs = { "AAGAAGC", "AGAAGT", "CGAAGC" };
     // String[] strs = { "abca", "bcad", "daca" };
     // String[] strs = { "abca", "bcad", "daca" };
@@ -395,12 +397,11 @@ class SuffixArray {
     // System.out.println(java.util.Arrays.toString(sa.sa));
     // System.out.println(java.util.Arrays.toString(sa.lcp));
 
-    SuffixArray sa = new SuffixArray("ababcabaa");
-    sa.display();
-    
-  
+    // SuffixArray sa = new SuffixArray("ABBABAABAA");
+    SuffixArray sa = new SuffixArray("ABABBAB");
+    System.out.println(sa);
+
 
   }
 
 }
-

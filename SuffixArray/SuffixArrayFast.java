@@ -265,7 +265,7 @@ public class SuffixArrayFast {
 
   }
 
-  public void display() {
+  @Override public String toString() {
     System.out.printf("-----i-----SA-----LCP---Suffix\n");
     for(int i = 0; i < N; i++) {
       int suffixLen = N - sa[i];
@@ -277,9 +277,8 @@ public class SuffixArrayFast {
   // Example usage
   public static void main(String[] args) {
 
-    // SuffixArrayFast sa = new SuffixArrayFast("ababcabaa");
-    SuffixArrayFast sa = new SuffixArrayFast("camel");
-    sa.display();
+    SuffixArrayFast sa = new SuffixArrayFast("ababcabaa");
+    System.out.println(sa);
 
     // Output:
     // --i-------SA-----LCP--Suffix

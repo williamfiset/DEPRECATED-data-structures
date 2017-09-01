@@ -1,18 +1,24 @@
 # Travis Continuous Integration script for travis-ci.org
 
-# Runs all unit tests
+# Runs all unit tests and check for broken links
 language: java
+
 jdk:
   - oraclejdk8
-  - oraclejdk7
-before_script:
-  - sudo apt-get update
-  - sudo apt-get install bash
-script:
-  - bash testall
+#  - oraclejdk7
+  
+# Install ruby to get gem command
+before_install:
+  - sudo apt-add-repository -y ppa:brightbox/ruby-ng
+  - sudo apt-get -y update
+  - sudo apt-get -y install ruby2.4
+  - sudo apt-get -y install bash
 
-# Checks for broken links in README.md
-language: ruby
-rvm: 2.2
-before_script: gem install awesome_bot
-script: awesome_bot README.md --allow-dupe
+# Install awesome_bot for README.md broken link checking
+before_script:
+  - gem install awesome_bot
+
+# Run tests and broken link check
+script:
+  - awesome_bot README.md --allow-dupe --allow-redirect
+  - bash testall

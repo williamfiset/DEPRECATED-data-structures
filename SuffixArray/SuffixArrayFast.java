@@ -124,7 +124,10 @@ public class SuffixArrayFast {
         return true;
       } else if (cmp < 0) {
         lo = mid + 1;
-      } else { hi = mid - 1; }
+      } else {
+        hi = mid - 1;
+      }
+
     }
     return false;
   }

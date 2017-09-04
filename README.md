@@ -1,4 +1,4 @@
-[![Travis](https://img.shields.io/travis/williamfiset/data-structures.svg)](https://travis-ci.org/williamfiset/data-structures) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Travis](https://img.shields.io/travis/williamfiset/data-structures.svg)](https://travis-ci.org/williamfiset/data-structures) [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
 # The data structures initiative
 

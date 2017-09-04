@@ -397,8 +397,8 @@ class SuffixArray {
     // System.out.println(java.util.Arrays.toString(sa.sa));
     // System.out.println(java.util.Arrays.toString(sa.lcp));
 
-    // SuffixArray sa = new SuffixArray("ABBABAABAA");
-    SuffixArray sa = new SuffixArray("AC#BFG$BCE%");
+    SuffixArray sa = new SuffixArray("ABBABAABAA");
+    // SuffixArray sa = new SuffixArray("GAGAGAGAGAGAG");
     System.out.println(sa);
 
 

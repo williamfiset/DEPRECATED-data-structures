@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 import java.math.BigInteger;
 import java.util.Random;
 
-public class SuffixArrayNaiveTest {
+public class SuffixArraySlowTest {
 
   static final SecureRandom random = new SecureRandom();
   static final Random rand = new Random();
@@ -21,14 +21,14 @@ public class SuffixArrayNaiveTest {
   @Test
   public void testSuffixArrayContains() {
 
-    SuffixArrayNaive sa = new SuffixArrayNaive("");
+    SuffixArraySlow sa = new SuffixArraySlow("");
     // assertTrue(sa.contains("")); // forgivable failure?
     assertFalse(sa.contains("a"));
     assertFalse(sa.contains("hello"));
     assertFalse(sa.contains("world"));
     assertFalse(sa.contains(null));
 
-    sa = new SuffixArrayNaive("helloworld");
+    sa = new SuffixArraySlow("helloworld");
     assertTrue(sa.contains("llo"));
     assertTrue(sa.contains("hell"));
     assertTrue(sa.contains("world"));
@@ -48,12 +48,12 @@ public class SuffixArrayNaiveTest {
       String r = randomString(50);
 
       for (int i = 0; i < TEST_SZ ;i++ ) {
-        
+
         int s = randNum(0, r.length()-1);
         int e = randNum(s, r.length()-1);
         if (s == e) continue;
         String substr = r.substring(s,e);
-        SuffixArrayNaive sa = new SuffixArrayNaive( r );
+        SuffixArraySlow sa = new SuffixArraySlow( r );
         assertTrue(sa.contains(substr));
 
       }
@@ -68,13 +68,12 @@ public class SuffixArrayNaiveTest {
   }
 
   static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  
+
   static String randomString( int len ){
     StringBuilder sb = new StringBuilder( len );
-    for( int i = 0; i < len; i++ ) 
+    for( int i = 0; i < len; i++ )
        sb.append( AB.charAt( rand.nextInt(AB.length()) ) );
     return sb.toString();
   }
 
 }
-

@@ -26,11 +26,11 @@ public class SuffixArrayTest {
   public void testContruction() {
 
     for (int i = 0; i < LOOPS; i++) {
-      
+
       String r = randomString(randNum(1, TEST_SZ));
 
-      SuffixArray sa = new SuffixArray(r);
-      SuffixArrayNaive san = new SuffixArrayNaive(r);
+      SuffixArraySlow san = new SuffixArraySlow(r);
+      SuffixArrayMed  sa = new SuffixArrayMed(r);
       SuffixArrayFast saf = new SuffixArrayFast(r);
 
       int[] sa_arr = sa.sa; //getSuffixPositions();
@@ -46,13 +46,13 @@ public class SuffixArrayTest {
 
   }
 
-  @Test 
+  @Test
   public void containsSubstring() {
 
     String s = "abcdef";
-    SuffixArray sa = new SuffixArray(s);
+    SuffixArrayMed sa = new SuffixArrayMed(s);
     SuffixArrayFast saf = new SuffixArrayFast(s);
-    
+
     assertTrue( sa.contains("") );
     for (int i = 0; i < s.length(); i++ ) {
       for (int j = i+1; j <= s.length(); j++ ) {
@@ -75,7 +75,7 @@ public class SuffixArrayTest {
     List <String> list = new ArrayList<>();
 
     String s = "aabaab";
-    SuffixArray sa = new SuffixArray(s);
+    SuffixArrayMed sa = new SuffixArrayMed(s);
     Set <String> lrss = sa.lrs();
     list.addAll(lrss);
     assertEquals(1, lrss.size());
@@ -83,14 +83,14 @@ public class SuffixArrayTest {
     list.clear();
 
     s = "abcdefg";
-    sa = new SuffixArray(s);
-    lrss = sa.lrs();    
+    sa = new SuffixArrayMed(s);
+    lrss = sa.lrs();
     list.addAll(lrss);
     assertEquals(0, list.size());
     list.clear();
 
     s = "abca";
-    sa = new SuffixArray(s);
+    sa = new SuffixArrayMed(s);
     lrss = sa.lrs();
     list.addAll(lrss);
     assertEquals(1, lrss.size());
@@ -98,7 +98,7 @@ public class SuffixArrayTest {
     list.clear();
 
     s = "abcba";
-    sa = new SuffixArray(s);
+    sa = new SuffixArrayMed(s);
     lrss = sa.lrs();
     list.addAll(lrss);
     assertEquals(2, lrss.size() );
@@ -108,7 +108,7 @@ public class SuffixArrayTest {
 
 
     s = "aZZbZZcYYdYYe";
-    sa = new SuffixArray(s);
+    sa = new SuffixArrayMed(s);
     lrss = sa.lrs();
     list.addAll(lrss);
     assertEquals(2, lrss.size() );
@@ -117,7 +117,7 @@ public class SuffixArrayTest {
     list.clear();
 
     s = "AAAAAA";
-    sa = new SuffixArray(s);
+    sa = new SuffixArrayMed(s);
     lrss = sa.lrs();
     list.addAll(lrss);
     assertEquals(1, lrss.size() );
@@ -125,7 +125,7 @@ public class SuffixArrayTest {
     list.clear();
 
     s = "aWXYZsdfABCDbvABCDsWXYZyWXYZjisdssd";
-    sa = new SuffixArray(s);
+    sa = new SuffixArrayMed(s);
     lrss = sa.lrs();
     list.addAll(lrss);
     assertEquals(2, lrss.size() );
@@ -142,12 +142,12 @@ public class SuffixArrayTest {
       String r = randomString(50);
 
       for (int i = 0; i < TEST_SZ ;i++ ) {
-        
+
         int s = randNum(0, r.length()-1);
         int e = randNum(s, r.length()-1);
         if (s == e) continue;
         String substr = r.substring(s,e);
-        SuffixArray sa = new SuffixArray( r );
+        SuffixArrayMed sa = new SuffixArrayMed( r );
         SuffixArrayFast saf = new SuffixArrayFast( r );
         assertTrue(sa.contains(substr));
         assertTrue(saf.contains(substr));
@@ -178,10 +178,10 @@ public class SuffixArrayTest {
   }
 
   static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  
+
   static String randomString( int len ){
     StringBuilder sb = new StringBuilder( len );
-    for( int i = 0; i < len; i++ ) 
+    for( int i = 0; i < len; i++ )
        sb.append( AB.charAt( rand.nextInt(AB.length()) ) );
     return sb.toString();
   }

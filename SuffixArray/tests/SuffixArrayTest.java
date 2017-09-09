@@ -18,6 +18,17 @@ public class SuffixArrayTest {
   @Before
   public void setup() { }
 
-  
+  @Test
+  public void suffixArrayLength() {
+    
+    SuffixArray sa1 = new SuffixArraySlow("ABCD");
+    SuffixArray sa2 = new SuffixArrayMed("ABCD");
+    SuffixArray sa3 = new SuffixArrayFast("ABCD");
+    
+    assertEquals(sa1.N, 4);
+    assertEquals(sa2.N, 4);
+    assertEquals(sa3.N, 4);
+    
+  }
 
 }

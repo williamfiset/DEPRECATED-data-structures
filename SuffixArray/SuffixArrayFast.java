@@ -6,53 +6,39 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  */
 
-class SuffixArrayFast {
+public class SuffixArrayFast extends SuffixArray {
 
-  static final int DEFAULT_ALPHABET_SIZE = 256;
-  static final int DEFAULT_ALPHABET_SHIFT = 0;
-
-  int alphabetSize = DEFAULT_ALPHABET_SIZE, N, shift;
-  int[] T, lcp, sa, sa2, rank, tmp, c;
+  int[] sa2, rank, tmp, c;
 
   public SuffixArrayFast(String text) {
-    this(toIntArray(text), DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
+    super(toIntArray(text), DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
   }
 
   public SuffixArrayFast(int[] text) {
-    this(text, DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
+    super(text, DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
   }
 
   // TODO(williamfiset): Get rid of these constructors in favor of
   // automatically detecting the alphabet size shift required
   public SuffixArrayFast(String text, int shift) {
-    this(toIntArray(text), shift, DEFAULT_ALPHABET_SHIFT);
+    super(toIntArray(text), shift, DEFAULT_ALPHABET_SHIFT);
   }
   public SuffixArrayFast(int[] text, int shift) {
-    this(text, shift, DEFAULT_ALPHABET_SIZE);
+    super(text, shift, DEFAULT_ALPHABET_SIZE);
   }
 
   // Designated constructor
   public SuffixArrayFast(int[] text, int shift, int alphabetSize) {
-    if (text == null || alphabetSize <= 0) throw new IllegalArgumentException();
-    this.alphabetSize = alphabetSize;
-    T = text;
-    N = text.length;
+    super(text, shift, alphabetSize);
+  }
+
+  @Override protected void construct() {
+    
     sa = new int[N];
     sa2 = new int[N];
     rank = new int[N];
     c = new int[Math.max(alphabetSize, N)];
-    construct();
-    kasai();
-  }
-
-  private static int[] toIntArray(String s) {
-    if (s == null) return null;
-    int[] text = new int[s.length()];
-    for(int i=0;i<s.length();i++)text[i] = s.charAt(i);
-    return text;
-  }
-
-  private void construct() {
+    
     int i, p, r;
     for (i=0; i<N; ++i) c[rank[i] = T[i]]++;
     for (i=1; i<alphabetSize; ++i) c[i] += c[i-1];
@@ -72,40 +58,6 @@ class SuffixArrayFast {
       } tmp = rank; rank = sa2; sa2 = tmp;
       if (r == N-1) break; alphabetSize = r + 1;
     }
-  }
-
-  // Use Kasai algorithm to build LCP array
-  // http://www.mi.fu-berlin.de/wiki/pub/ABI/RnaSeqP4/suffix-array.pdf
-  private void kasai() {
-    lcp = new int[N];
-    int [] inv = new int[N];
-    for (int i = 0; i < N; i++) inv[sa[i]] = i;
-    for (int i = 0, len = 0; i < N; i++) {
-      if (inv[i] > 0) {
-        int k = sa[inv[i]-1];
-        while((i+len < N) && (k+len < N) && T[i+len] == T[k+len]) len++;
-        lcp[inv[i]] = len;
-        if (len > 0) len--;
-      }
-    }
-  }
-
-  @Override public String toString() {
-
-    StringBuilder sb = new StringBuilder();
-    System.out.printf("-----i-----SA-----LCP---Suffix\n");
-
-    for(int i = 0; i < N; i++) {
-      int suffixLen = N - sa[i];
-      char[] suffixArray = new char[suffixLen];
-      for (int j = sa[i], k = 0; j < N; j++, k++)
-        suffixArray[k] = (char)(T[j] - shift);
-      String suffix = new String(suffixArray);
-      System.out.printf("% 7d % 7d % 7d %s\n", i, sa[i], lcp[i], suffix);
-    }
-
-    return sb.toString();
-
   }
 
   public static void main(String[] args) {

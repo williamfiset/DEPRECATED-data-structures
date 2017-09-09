@@ -3,11 +3,11 @@
  * Time Complexity: O(nlog^2(n))
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 
 import java.util.*;
 
-class SuffixArrayMed {
+class SuffixArrayMed extends SuffixArray {
 
   // Helper class which sorts suffix ranks
   static class SuffixRankTuple implements Comparable <SuffixRankTuple> {
@@ -27,46 +27,36 @@ class SuffixArrayMed {
 
   }
 
-  // Size of the suffix array
-  int N;
-
-  // T is the text
-  int[] T;
-
-  // Suffix array. Contains the indexes of sorted suffixes.
-  int[] sa;
-
-  // Contains Longest Common Prefix (LCP) count between adjacent suffixes.
-  // lcp[i] = longestCommonPrefixLength( suffixes[i], suffixes[i+1] ).
-  // Also, LCP[len-1] = 0
-  int [] lcp;
-
   public SuffixArrayMed(String text) {
-    this(toIntArray(text));
-  }
-
-  private static int[] toIntArray(String s) {
-    int[] text = new int[s.length()];
-    for(int i=0;i<s.length();i++)text[i] = s.charAt(i);
-    return text;
+    super(toIntArray(text), DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
   }
 
   public SuffixArrayMed(int[] text) {
-    if (text == null) throw new IllegalArgumentException();
-    T = text.clone();
-    N = text.length;
-    construct();
-    kasai();
+    super(text, DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
+  }
+
+  // TODO(williamfiset): Get rid of these constructors in favor of
+  // automatically detecting the alphabet size shift required
+  public SuffixArrayMed(String text, int shift) {
+    super(toIntArray(text), shift, DEFAULT_ALPHABET_SHIFT);
+  }
+  public SuffixArrayMed(int[] text, int shift) {
+    super(text, shift, DEFAULT_ALPHABET_SIZE);
+  }
+
+  // Designated constructor
+  public SuffixArrayMed(int[] text, int shift, int alphabetSize) {
+    super(text, shift, alphabetSize);
   }
 
   // Construct a suffix array in O(nlog^2(n))
-  public void construct() {
+  @Override protected void construct() {
 
     sa = new int[N];
 
     // Maintain suffix ranks in both a matrix with two rows containing the
     // current and last rank information as well as some sortable rank objects
-    int [][] suffixRanks = new int[2][N];
+    int[][] suffixRanks = new int[2][N];
     SuffixRankTuple[] ranks = new SuffixRankTuple[N];
 
     // Assign a numerical value to each character in the text
@@ -124,33 +114,6 @@ class SuffixArrayMed {
     suffixRanks = null;
     ranks = null;
 
-  }
-
-  // Use Kasai algorithm to build LCP array
-  // http://www.mi.fu-berlin.de/wiki/pub/ABI/RnaSeqP4/suffix-array.pdf
-  private void kasai() {
-    lcp = new int[N];
-    int [] inv = new int[N];
-    for (int i = 0; i < N; i++) inv[sa[i]] = i;
-    for (int i = 0, len = 0; i < N; i++) {
-      if (inv[i] > 0) {
-        int k = sa[inv[i]-1];
-        while((i+len < N) && (k+len < N) && T[i+len] == T[k+len]) len++;
-        lcp[inv[i]] = len;
-        if (len > 0) len--;
-      }
-    }
-  }
-
-  @Override public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("-----i-----SA-----LCP---Suffix\n");
-    for(int i = 0; i < N; i++) {
-      int suffixLen = N - sa[i];
-      String suffix = new String(T, sa[i], suffixLen);
-      sb.append(String.format("% 7d % 7d % 7d %s\n", i, sa[i], lcp[i], suffix));
-    }
-    return sb.toString();
   }
 
   public static void main(String[] args) {

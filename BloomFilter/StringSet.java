@@ -1,8 +1,7 @@
 /**
  * The StringSet is a probabilistic string set data structure implemented using a bloom filter
- * and positional rolling hashing techniques. This data structure can be very fast, that is it 
- * can outperform Java's HashSet DS by many orders of magnitude on large data sets if you're doing
- * queries involving all substrings of a particular string for instance).
+ * and positional rolling hashing techniques. This data structure can be very fast (outperforming Java
+ * HashSet) if you're doing queries involving all substrings of a particular string.
  * Despite being probabilistic, this DS is very safe to use because the probability of 
  * a false positive can be set to as low as you wish it to be.
  *

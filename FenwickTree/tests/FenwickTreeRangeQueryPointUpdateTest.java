@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.*;
 
-public class FenwickTreeTest {
+public class FenwickTreeRangeQueryPointUpdateTest {
 
   static final int MIN_RAND_NUM = -1000;
   static final int MAX_RAND_NUM = +1000;
@@ -12,17 +12,19 @@ public class FenwickTreeTest {
   static final int TEST_SZ = 1000;
   static final int LOOPS = 1000;
 
+  static long UNUSED_VAL;
+
   @Before
   public void setup() {
-    
+    UNUSED_VAL = randValue();
   }
 
   @Test
   public void testIntervalSumPositiveValues() {
     
     // System.out.println("testIntervalSumPositiveValues");
-    long[] ar = {0,1,2,3,4,5,6};
-    FenwickTree ft = new FenwickTree(ar);
+    long[] ar = {UNUSED_VAL,1,2,3,4,5,6};
+    FenwickTreeRangeQueryPointUpdate ft = new FenwickTreeRangeQueryPointUpdate(ar);
     
     assertEquals( 21, ft.sum(1, 6) );
     assertEquals( 15, ft.sum(1, 5) );
@@ -49,8 +51,8 @@ public class FenwickTreeTest {
   public void testIntervalSumNegativeValues() {
 
     // System.out.println("testIntervalSumNegativeValues");
-    long[] ar = {0,-1,-2,-3,-4,-5,-6};
-    FenwickTree ft = new FenwickTree(ar);
+    long[] ar = {UNUSED_VAL,-1,-2,-3,-4,-5,-6};
+    FenwickTreeRangeQueryPointUpdate ft = new FenwickTreeRangeQueryPointUpdate(ar);
     
     assertEquals( -21, ft.sum(1, 6) );
     assertEquals( -15, ft.sum(1, 5) );
@@ -73,8 +75,8 @@ public class FenwickTreeTest {
   public void testIntervalSumNegativeValues2() {
 
     // System.out.println("testIntervalSumNegativeValues2");
-    long[] ar = {0, -76871, -164790};
-    FenwickTree ft = new FenwickTree(ar);
+    long[] ar = {UNUSED_VAL, -76871, -164790};
+    FenwickTreeRangeQueryPointUpdate ft = new FenwickTreeRangeQueryPointUpdate(ar);
     
     for(int i = 0; i < LOOPS;i++) {
       assertEquals( -76871,  ft.sum(1, 1) );
@@ -96,7 +98,7 @@ public class FenwickTreeTest {
     for (int i = 1; i <= LOOPS; i++) {
       
       long [] randList = genRandList( i );
-      FenwickTree ft = new FenwickTree(randList);
+      FenwickTreeRangeQueryPointUpdate ft = new FenwickTreeRangeQueryPointUpdate(randList);
 
       for (int j = 0; j < LOOPS / 10; j++ ) {
         doRandomRangeQuery(randList, ft);
@@ -106,7 +108,7 @@ public class FenwickTreeTest {
 
   }
 
-  public void doRandomRangeQuery( long[] arr, FenwickTree ft ) {
+  public void doRandomRangeQuery( long[] arr, FenwickTreeRangeQueryPointUpdate ft ) {
 
     long sum = 0L;
     int N = arr.length - 1;
@@ -130,7 +132,7 @@ public class FenwickTreeTest {
     for (int n = 2; n <= LOOPS; n++) {
       
       long [] randList = genRandList( n );
-      FenwickTree ft = new FenwickTree(randList);
+      FenwickTreeRangeQueryPointUpdate ft = new FenwickTreeRangeQueryPointUpdate(randList);
 
       for (int j = 0; j < LOOPS / 10; j++ ) {
         
@@ -152,10 +154,10 @@ public class FenwickTreeTest {
   public void testReusability() {
 
     int SIZE = 1000;
-    FenwickTree ft = new FenwickTree(SIZE);
+    FenwickTreeRangeQueryPointUpdate ft = new FenwickTreeRangeQueryPointUpdate(SIZE);
     long[] arr = new long[SIZE+1];
 
-    for ( int loop = 0; loop < LOOPS ; loop++ ) {
+    for (int loop = 0; loop < LOOPS ; loop++ ) {
       
       for(int i = 1; i <= SIZE; i++) {
         long val = randValue();
@@ -182,7 +184,7 @@ public class FenwickTreeTest {
 
   @Test(expected=IllegalArgumentException.class)
   public void testIllegalCreation() {
-    new FenwickTree(null);
+    new FenwickTreeRangeQueryPointUpdate(null);
   }
 
   // Generate a list of random numbers, one based

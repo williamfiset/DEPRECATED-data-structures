@@ -4,19 +4,20 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-public class FenwickTree {
+public class FenwickTreeRangeQueryPointUpdate {
 
   // This array contains the Fenwick tree ranges
   private long[] tree;
 
   // Create an empty Fenwick Tree
-  public FenwickTree(int sz) {
+  public FenwickTreeRangeQueryPointUpdate(int sz) {
     tree = new long[sz + 1];
   }
-
-  // Make sure the 'values' array is one based meaning 
-  // values[0] does not get used, O(n) construction
-  public FenwickTree(long[] values) {
+  
+  // Construct a Fenwick tree with an initial set of values. 
+  // The 'values' array is one based meaning values[0] 
+  // does not get used, O(n) construction
+  public FenwickTreeRangeQueryPointUpdate(long[] values) {
 
     if (values == null)
       throw new IllegalArgumentException("Values array cannot be null!");

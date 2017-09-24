@@ -38,7 +38,7 @@ public class FenwickTreeRangeUpdatePointQuery {
   }
 
   // Update the left+1 and right+2 index in fenwick tree with the update value
-  public void updateRange(int left, int right, int val) {
+  public void updateRange(int left, int right, long val) {
     add(left + 1, val);
     add(right + 2, -val);
   }

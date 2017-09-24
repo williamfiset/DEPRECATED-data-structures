@@ -18,16 +18,6 @@ public class FenwickTreeTest {
   }
 
   @Test
-  public void test() {
-    long[] ar = { 0,3,4,-2,7,3,11,5,-8,-9,2,4,-8 };
-    FenwickTree ft = new FenwickTree(ar);
-    // System.out.println(ft);
-    // ft.add(9, 5);
-    // ft.prefixSum(7);
-
-  }
-
-  @Test
   public void testIntervalSumPositiveValues() {
     
     // System.out.println("testIntervalSumPositiveValues");
@@ -179,7 +169,7 @@ public class FenwickTreeTest {
   }
 
   public static int lowBound(int N) {
-    return 1 + ((int) Math.random() * N);
+    return 1 + (int)(Math.random() * N);
   }
 
   public static int highBound(int low, int N) {

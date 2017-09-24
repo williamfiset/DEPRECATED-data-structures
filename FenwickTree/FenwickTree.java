@@ -23,7 +23,7 @@ public class FenwickTree {
 
     // Make a clone of the values array since we manipulate 
     // the array in place destroying all its original content
-    this.tree = values.clone();
+    tree = values.clone();
 
     for (int i = 1; i < tree.length; i++) {
       int j = i + lsb(i);

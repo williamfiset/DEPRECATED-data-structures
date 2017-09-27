@@ -27,8 +27,8 @@ public class FenwickTreeRangeQueryPointUpdate {
     tree = values.clone();
 
     for (int i = 1; i < tree.length; i++) {
-      int j = i + lsb(i);
-      if (j < tree.length) tree[j] += tree[i];
+      int parent = i + lsb(i);
+      if (parent < tree.length) tree[parent] += tree[i];
     }
 
   }

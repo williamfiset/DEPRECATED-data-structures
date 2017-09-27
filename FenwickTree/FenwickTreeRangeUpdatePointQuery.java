@@ -12,7 +12,6 @@ public class FenwickTreeRangeUpdatePointQuery {
   // This array contains the original Fenwick tree range
   // values from when it was first created.
   private long[] tree;
-  private long[] original;
 
   // The clone tree will contain the updated range values
   private long[] cloneTree;
@@ -26,26 +25,27 @@ public class FenwickTreeRangeUpdatePointQuery {
       throw new IllegalArgumentException("Values array cannot be null!");
       
     values[0] = 0L;
-    
-    // TODO(williamfiset): Make 1 based, not 2 based -_-
-    N = values.length + 1;
-    long[] ft = new long[N];
-    for(int i = 2; i < ft.length; i++) ft[i] = values[i-1];
 
-    for (int i = 1; i < values.length; i++) {
-      int j = i + lsb(i);
-      if (j < ft.length) ft[j] += ft[i];
-    }
+    N = values.length;
+    long[] ft = values.clone();
     
+    for (int i = 1; i < N; i++) {
+      int parent = i + lsb(i);
+      if (parent < N) ft[parent] += ft[i];
+    }
+
     tree = ft.clone();
     cloneTree = ft.clone();
 
   }
-
+  
+  // TODO(williamfiset): Improve comment.
   // Update the left+1 and right+2 index in fenwick tree with the update value
   public void updateRange(int left, int right, long val) {
-    add(left  + 1, +val);
-    add(right + 2, -val);
+    // add(left  + 1, +val);
+    // add(right + 2, -val);
+    add(left, +val);
+    add(right + 1, -val);
   }
 
   // Add 'v' to index 'i', O(log(n))
@@ -63,7 +63,7 @@ public class FenwickTreeRangeUpdatePointQuery {
   // Fhe logic behind it is same as to find a prefix sum in a Fenwick tree
   //Taking out prefix sum for both cloneTree and tree. Subtracting them to get the updated value.
   public long getPoint(int index) {
-
+    index--;
     long sum1 = 0L, sum2 = 0L;
     int index1 = index, index2 = index + 1;
     
@@ -98,10 +98,11 @@ public class FenwickTreeRangeUpdatePointQuery {
   public static void main(String[] args) {
     // long[] v = {534534,2,0,-7,34,5,2,-5};
     long[] v = {23847239,1,2,3,4};
+    // long[] v = {23847239,0,0,0,0,0,0,0,0,0,0,0};
     FenwickTreeRangeUpdatePointQuery ft = new FenwickTreeRangeUpdatePointQuery(v);
-    // ft.updateRange(7,7,+5);
-    // ft.updateRange(7,7,+5);
-    // System.out.println(ft.getPoint(7));
+    ft.updateRange(3,3,+5);
+    // ft.updateRange(3,3,+5);
+    System.out.println(ft.getPoint(3));
     // System.out.println(ft.getPoint(1));
   }
   

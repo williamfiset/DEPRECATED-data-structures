@@ -1,45 +1,50 @@
+/**
+ * A Fenwick Tree implementation which supports 
+ * range updates and point queries
+ * @author Braj65
+ **/
+ 
 public class FenwickTreeRangeUpdatePointQuery {
 
   // The size of the array holding the Fenwick tree values
   final int N;
 
-  // This array contains the Fenwick tree ranges in original form when creation
+  // This array contains the original Fenwick tree range
+  // values from when it was first created.
   private long[] tree;
+  private long[] original;
 
-  // The clone tree will contain the upgraded range values
+  // The clone tree will contain the updated range values
   private long[] cloneTree;
 
-  // Make sure the 'values' array is one based meaning
-  // values[0] does not get used, O(n) construction
+  // Construct a Fenwick tree with an initial set of values. 
+  // The 'values' array is one based meaning values[0] 
+  // does not get used, O(n) construction.
   public FenwickTreeRangeUpdatePointQuery(long[] values) {
 
     if (values == null)
       throw new IllegalArgumentException("Values array cannot be null!");
-
+      
+    values[0] = 0L;
+    
+    // TODO(williamfiset): Make 1 based, not 2 based -_-
     N = values.length + 1;
+    long[] ft = new long[N];
+    for(int i = 2; i < ft.length; i++) ft[i] = values[i-1];
 
-    tree = new long[N];
-    cloneTree = new long[N];
-
-    long[] feniTree = new long[N];
-
-    for(int i = 1, j = 0; i < feniTree.length; i++) {
-      long val = values[i-1];
-      j = i;
-      while(j < N) {
-        feniTree[j] += val;
-        j += lsb(j);
-      }
+    for (int i = 1; i < values.length; i++) {
+      int j = i + lsb(i);
+      if (j < ft.length) ft[j] += ft[i];
     }
-
-    tree = feniTree.clone();
-    cloneTree = feniTree.clone();
+    
+    tree = ft.clone();
+    cloneTree = ft.clone();
 
   }
 
   // Update the left+1 and right+2 index in fenwick tree with the update value
   public void updateRange(int left, int right, long val) {
-    add(left + 1, val);
+    add(left  + 1, +val);
     add(right + 2, -val);
   }
 
@@ -59,14 +64,14 @@ public class FenwickTreeRangeUpdatePointQuery {
   //Taking out prefix sum for both cloneTree and tree. Subtracting them to get the updated value.
   public long getPoint(int index) {
 
-    int sum1 = 0, sum2=0;
-    int index1 = index, index2 = index;
-
-    index2 += 1;
+    long sum1 = 0L, sum2 = 0L;
+    int index1 = index, index2 = index + 1;
+    
     while (index2 > 0) {
       sum1 += cloneTree[index2];
       index2 -= lsb(index2);
     }
+    
     while(index1 > 0) {
       sum2 += tree[index1];
       index1 -= lsb(index1);
@@ -89,4 +94,15 @@ public class FenwickTreeRangeUpdatePointQuery {
     // return Integer.lowestOneBit(i);
 
   }
+
+  public static void main(String[] args) {
+    // long[] v = {534534,2,0,-7,34,5,2,-5};
+    long[] v = {23847239,1,2,3,4};
+    FenwickTreeRangeUpdatePointQuery ft = new FenwickTreeRangeUpdatePointQuery(v);
+    // ft.updateRange(7,7,+5);
+    // ft.updateRange(7,7,+5);
+    // System.out.println(ft.getPoint(7));
+    // System.out.println(ft.getPoint(1));
+  }
+  
 }

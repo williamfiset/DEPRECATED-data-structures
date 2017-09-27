@@ -71,6 +71,11 @@ public class FenwickTreeRangeQueryPointUpdate {
     return prefixSum(right) - prefixSum(left - 1);
   }
 
+  // Get the value at index i
+  public long get(int i) {
+    return sum(i, i);
+  }
+
   // Add 'v' to index 'i', O(log(n))
   public void add(int i, long v) {
     while (i < N) {

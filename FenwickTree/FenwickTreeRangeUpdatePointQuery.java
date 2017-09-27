@@ -59,7 +59,7 @@ public class FenwickTreeRangeUpdatePointQuery {
   // same as finding the prefix sum in a Fenwick tree except that you need to 
   // take the difference between the current tree and the original to get 
   // the point value.
-  public long getPoint(int i) {
+  public long get(int i) {
     return prefixSum(i, currentTree) - prefixSum(i-1, originalTree);
   }
 

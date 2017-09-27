@@ -9,7 +9,7 @@ public class FenwickTreeRangeUpdatePointQueryTest {
     public MockRangeUpdateFt(long[] values) {
       ar = values.clone();
     }
-    public long getPoint(int i) {
+    public long get(int i) {
       return ar[i];
     }
     public void updateRange(int i, int j, long v) {
@@ -42,11 +42,11 @@ public class FenwickTreeRangeUpdatePointQueryTest {
     long[] values = {UNUSED_VAL,-1,-1,-1,-1,-1};
     FenwickTreeRangeUpdatePointQuery ft = new FenwickTreeRangeUpdatePointQuery(values);
     ft.updateRange(2, 4, 10);
-    assertEquals(-1, ft.getPoint(1));
-    assertEquals( 9, ft.getPoint(2));
-    assertEquals( 9, ft.getPoint(3));
-    assertEquals( 9, ft.getPoint(4));
-    assertEquals(-1, ft.getPoint(5));
+    assertEquals(-1, ft.get(1));
+    assertEquals( 9, ft.get(2));
+    assertEquals( 9, ft.get(3));
+    assertEquals( 9, ft.get(4));
+    assertEquals(-1, ft.get(5));
 
   }
 
@@ -56,11 +56,11 @@ public class FenwickTreeRangeUpdatePointQueryTest {
     long[] values = {UNUSED_VAL,2,3,4,5,6};
     FenwickTreeRangeUpdatePointQuery ft = new FenwickTreeRangeUpdatePointQuery(values);
     ft.updateRange(2, 4, 10);
-    assertEquals(2,  ft.getPoint(1));
-    assertEquals(13, ft.getPoint(2));
-    assertEquals(14, ft.getPoint(3));
-    assertEquals(15, ft.getPoint(4));
-    assertEquals(6,  ft.getPoint(5));
+    assertEquals(2,  ft.get(1));
+    assertEquals(13, ft.get(2));
+    assertEquals(14, ft.get(3));
+    assertEquals(15, ft.get(4));
+    assertEquals(6,  ft.get(5));
 
   }
 
@@ -70,11 +70,11 @@ public class FenwickTreeRangeUpdatePointQueryTest {
     long[] values={UNUSED_VAL,2,-3,-4,5,6};
     FenwickTreeRangeUpdatePointQuery ft = new FenwickTreeRangeUpdatePointQuery(values);
     ft.updateRange(2, 4, 10);
-    assertEquals(2,  ft.getPoint(1));
-    assertEquals(7,  ft.getPoint(2));
-    assertEquals(6,  ft.getPoint(3));
-    assertEquals(15, ft.getPoint(4));
-    assertEquals(6,  ft.getPoint(5));
+    assertEquals(2,  ft.get(1));
+    assertEquals(7,  ft.get(2));
+    assertEquals(6,  ft.get(3));
+    assertEquals(15, ft.get(4));
+    assertEquals(6,  ft.get(5));
 
   }
 
@@ -90,7 +90,7 @@ public class FenwickTreeRangeUpdatePointQueryTest {
     int delta = 10;
     
     for (int loop = 0; loop < TEST_SZ; loop++) {
-      for(int i = 1; i < n; i++) assertEquals(sum, ft.getPoint(i));
+      for(int i = 1; i < n; i++) assertEquals(sum, ft.get(i));
       ft.updateRange(1, n-1, delta);
       sum += delta;
     }
@@ -111,7 +111,7 @@ public class FenwickTreeRangeUpdatePointQueryTest {
     for (int loop = 0; loop < TEST_SZ; loop++) {
       
       for(int i = 1; i < n; i++) 
-        assertEquals(mockedFt.getPoint(i), ft.getPoint(i));
+        assertEquals(mockedFt.get(i), ft.get(i));
       
       long delta = randValue();
       int lo = lowBound(n);

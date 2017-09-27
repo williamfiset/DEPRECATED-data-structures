@@ -1,7 +1,7 @@
 /**
  * A Fenwick Tree implementation which supports 
  * range updates and point queries
- * @author Braj65
+ * @author Braj65, William Fiset
  **/
  
 public class FenwickTreeRangeUpdatePointQuery {
@@ -11,31 +11,33 @@ public class FenwickTreeRangeUpdatePointQuery {
 
   // This array contains the original Fenwick tree range
   // values from when it was first created.
-  private long[] tree;
+  private long[] originalTree;
 
-  // The clone tree will contain the updated range values
-  private long[] cloneTree;
+  // The current tree will contain the updated range values
+  private long[] currentTree;
 
   // Construct a Fenwick tree with an initial set of values. 
-  // The 'values' array is one based meaning values[0] 
+  // The 'values' array MUST BE ONE BASED meaning values[0] 
   // does not get used, O(n) construction.
   public FenwickTreeRangeUpdatePointQuery(long[] values) {
 
     if (values == null)
       throw new IllegalArgumentException("Values array cannot be null!");
     
-    values[0] = 0L;
-
     N = values.length;
-    long[] ft = values.clone();
+    values[0] = 0L;
+    
+    // Make a clone of the values array since we manipulate 
+    // the array in place destroying all its original content.   
+    long[] fenwickTree = values.clone();
     
     for (int i = 1; i < N; i++) {
       int parent = i + lsb(i);
-      if (parent < N) ft[parent] += ft[i];
+      if (parent < N) fenwickTree[parent] += fenwickTree[i];
     }
 
-    cloneTree = ft.clone();
-    tree = ft;
+    originalTree = fenwickTree;
+    currentTree  = fenwickTree.clone();
 
   }
   
@@ -48,7 +50,7 @@ public class FenwickTreeRangeUpdatePointQuery {
   // Add 'v' to index 'i' and all the ranges responsible for 'i', O(log(n))
   private void add(int i, long v) {
     while (i < N) {
-      cloneTree[i] += v;
+      currentTree[i] += v;
       i += lsb(i);
     }
   }
@@ -58,21 +60,17 @@ public class FenwickTreeRangeUpdatePointQuery {
   // take the difference between the current tree and the original to get 
   // the point value.
   public long getPoint(int i) {
+    return prefixSum(i, currentTree) - prefixSum(i-1, originalTree);
+  }
 
-    long sum1 = 0L, sum2 = 0L;
-    int index1 = i - 1, index2 = i;
-    
-    while (index2 > 0) {
-      sum1 += cloneTree[index2];
-      index2 -= lsb(index2);
+  // Computes the prefix sum from [1, i], O(log(n))
+  private long prefixSum(int i, long[] tree) {
+    long sum = 0L;
+    while (i != 0) {
+      sum += tree[i];
+      i &= ~lsb(i); // Equivalently, i -= lsb(i);
     }
-    
-    while(index1 > 0) {
-      sum2 += tree[index1];
-      index1 -= lsb(index1);
-    }
-
-    return sum1 - sum2;
+    return sum;
   }
 
   // Returns the value of the least significant bit (LSB)
@@ -88,19 +86,6 @@ public class FenwickTreeRangeUpdatePointQuery {
     // An alternative method is to use the Java's built in method
     // return Integer.lowestOneBit(i);
 
-  }
-
-  public static void main(String[] args) {
-    // long[] v = {534534,2,0,-7,34,5,2,-5};
-    // long[] v = {23847239,1,2,3,4};
-    long[] v = {23847239,0,0,0,0,0,0,0,0,0,0,0};
-    FenwickTreeRangeUpdatePointQuery ft = new FenwickTreeRangeUpdatePointQuery(v);
-    // ft.add(4, 10);
-    ft.updateRange(3,5,+5);
-    for (int i = 1; i < 8; i++) {
-      System.out.println(i + " " + ft.getPoint(i));
-    }
-    // System.out.println(ft.getPoint(1));
   }
   
 }

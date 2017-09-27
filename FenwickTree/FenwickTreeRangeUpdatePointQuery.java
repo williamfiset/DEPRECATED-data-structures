@@ -23,7 +23,7 @@ public class FenwickTreeRangeUpdatePointQuery {
 
     if (values == null)
       throw new IllegalArgumentException("Values array cannot be null!");
-      
+    
     values[0] = 0L;
 
     N = values.length;
@@ -34,38 +34,33 @@ public class FenwickTreeRangeUpdatePointQuery {
       if (parent < N) ft[parent] += ft[i];
     }
 
-    tree = ft.clone();
     cloneTree = ft.clone();
+    tree = ft;
 
   }
   
-  // TODO(williamfiset): Improve comment.
-  // Update the left+1 and right+2 index in fenwick tree with the update value
+  // Update the interval [left, right] with the value 'val', O(log(n))
   public void updateRange(int left, int right, long val) {
-    // add(left  + 1, +val);
-    // add(right + 2, -val);
     add(left, +val);
     add(right + 1, -val);
   }
 
-  // Add 'v' to index 'i', O(log(n))
-  // Updated cloneTree object with the range updates. Object tree still has the original
-  // Fenwick tree
-  public void add(int i, long v) {
+  // Add 'v' to index 'i' and all the ranges responsible for 'i', O(log(n))
+  private void add(int i, long v) {
     while (i < N) {
       cloneTree[i] += v;
       i += lsb(i);
     }
   }
 
-  // To get the point/index value, sum from starting of array till the point
-  // and return.
-  // Fhe logic behind it is same as to find a prefix sum in a Fenwick tree
-  //Taking out prefix sum for both cloneTree and tree. Subtracting them to get the updated value.
-  public long getPoint(int index) {
-    index--;
+  // Get the value at a specific index. The logic behind this method is the 
+  // same as finding the prefix sum in a Fenwick tree except that you need to 
+  // take the difference between the current tree and the original to get 
+  // the point value.
+  public long getPoint(int i) {
+
     long sum1 = 0L, sum2 = 0L;
-    int index1 = index, index2 = index + 1;
+    int index1 = i - 1, index2 = i;
     
     while (index2 > 0) {
       sum1 += cloneTree[index2];
@@ -97,12 +92,14 @@ public class FenwickTreeRangeUpdatePointQuery {
 
   public static void main(String[] args) {
     // long[] v = {534534,2,0,-7,34,5,2,-5};
-    long[] v = {23847239,1,2,3,4};
-    // long[] v = {23847239,0,0,0,0,0,0,0,0,0,0,0};
+    // long[] v = {23847239,1,2,3,4};
+    long[] v = {23847239,0,0,0,0,0,0,0,0,0,0,0};
     FenwickTreeRangeUpdatePointQuery ft = new FenwickTreeRangeUpdatePointQuery(v);
-    ft.updateRange(3,3,+5);
-    // ft.updateRange(3,3,+5);
-    System.out.println(ft.getPoint(3));
+    // ft.add(4, 10);
+    ft.updateRange(3,5,+5);
+    for (int i = 1; i < 8; i++) {
+      System.out.println(i + " " + ft.getPoint(i));
+    }
     // System.out.println(ft.getPoint(1));
   }
   

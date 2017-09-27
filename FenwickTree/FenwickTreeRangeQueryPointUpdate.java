@@ -22,6 +22,8 @@ public class FenwickTreeRangeQueryPointUpdate {
     if (values == null)
       throw new IllegalArgumentException("Values array cannot be null!");
 
+    values[0] = 0L;
+
     // Make a clone of the values array since we manipulate 
     // the array in place destroying all its original content
     tree = values.clone();

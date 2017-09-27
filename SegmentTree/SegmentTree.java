@@ -1,17 +1,46 @@
 /**
- * Segment Tree implementation
- * Segment Trees are an extremely useful data structure when dealing with ranges or intervals. They take O(n) time and space to construct, but they can do range updates or queries in O(log(n)) time. This data structure is quite flexible; although the code below supports minimum and sum queries, these could be modified to perform other types of queries. This implementation uses lazy propagation (which allows for O(log(n)) range updates instead of O(n)). It should also be noted that this implementation could easily be modified to support coordinate compression (you should only have to change a few lines in the constructor).
+ * Segment Trees are an extremely useful data structure when dealing with ranges 
+ * or intervals. They take O(n) time and space to construct, but they can do
+ * range updates or queries in O(log(n)) time. This data structure is quite 
+ * flexible; although the code below supports minimum and sum queries, these
+ * could be modified to perform other types of queries. This implementation uses
+ * lazy propagation (which allows for O(log(n)) range updates instead of O(n)). 
+ * It should also be noted that this implementation could easily be modified to 
+ * support coordinate compression (you should only have to change a few lines 
+ * in the constructor).
+ * 
  * @author Micah Stairs
  **/
-
 
 class Node {
 
   static final int INF = Integer.MAX_VALUE;
-  int minPos, maxPos, min = 0, sum = 0, lazy = 0;
+  
   Node left, right;
+  int minPos, maxPos, min = 0, sum = 0, lazy = 0;
 
-  public Node(int l, int r) {
+  public Node(int[] values) {
+    if (values == null) 
+      throw new IllegalArgumentException("Null input to segment tree.");
+    buildTree(0, values.length);
+    for (int i = 0; i < values.length; i++) {
+      update(i, i+1, values[i]);
+    }
+  }
+
+  public Node(int sz) {
+    buildTree(0, sz);
+  }
+
+  private Node(int l, int r) {
+    buildTree(l, r);
+  }
+  
+  // Recursive method that builds the segment tree
+  private void buildTree(int l, int r) {
+    
+    if (l < 0 || r < 0 || r < l)
+      throw new IllegalArgumentException("Illegal range: ("+l+","+r+")");
 
     minPos = l;
     maxPos = r;
@@ -26,7 +55,7 @@ class Node {
       left = new Node(l, mid);
       right = new Node(mid, r);
     }
-
+    
   }
 
   // Adjust all values in the interval [l, r) by a particular amount
@@ -108,7 +137,7 @@ class Node {
 
   // Does any updates to this node that haven't been done yet, and lazily updates its children
   // NOTE: This method must be called before updating or accessing a node
-  public void propagate() {
+  private void propagate() {
 
     if (lazy != 0) {
 

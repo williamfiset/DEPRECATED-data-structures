@@ -1,4 +1,3 @@
-
 /**
  * A compact array based segment tree implementation.
  * This segment tree supports point updates and range queries.
@@ -45,7 +44,7 @@ public class CompactSegmentTree {
 
   // Adjust point i by a value, O(log(n))
   public void modify(int i, long value) {
-    tree[i + N] = function( tree[i+N],  value);
+    tree[i + N] = function(tree[i+N],  value);
     for (i += N; i > 1; i >>= 1) {
       tree[i>>1] = function(tree[i], tree[i^1]);
     }

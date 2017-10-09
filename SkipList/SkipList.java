@@ -21,10 +21,12 @@ class SkipList {
   int height;
   Node head;
   Node tail;
-  public SkipList(int h, Node minNode, Node maxNode) {
-    height = h;
-    head = minNode;
-    tail = maxNode;
+  // Initialise with the height of the SkipList and Keys smaller and larger
+  // than all other keys that will be inserted in the SkipList
+  public SkipList(int height, Key minKey, Key maxKey) {
+    this.height = height;
+    head = new Node(minKey);
+    tail = new Node(maxKey);
     Node currLeft = head;
     Node currRight = tail;
     for (int i=0; i<=h; i++) {
@@ -46,8 +48,6 @@ class SkipList {
   }
 
   public void insert(Node n2) {
-    // Choose the node height randomly with larger heights
-    // exponentially less likely than smaller heights
     int r = rand.nextInt();
     if (r<0)
       r *= -1;

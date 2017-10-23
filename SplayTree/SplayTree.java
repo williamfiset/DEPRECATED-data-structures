@@ -1,60 +1,73 @@
-public class SplayTree {
-	Node root;
+public class SplayTree <T extends Comparable<T>> {
+
+	private Node<T> root;
+
+  private class Node<T> {
+    T value;
+    Node<T> left, right;
+
+    public Node(T key) {
+    	if (key == null) throw new IllegalArgumentException();
+      value = key;
+    }
+  }
 
 	// Function to insert a new key k in splay tree with given root
-	public Node insert(Node root, int key) {
-		// Simple Case: If tree is empty
-		if (root == null)
-			return new Node(key);
+	public Node<T> insert(Node<T> root, T key) {
+		
+		// Tree is empty.
+		if (root == null) return new Node<T>(key);
+
 		// Bring the closest leaf node to root
 		root = splay(root, key);
 
 		// If key is already present, then return
-		if (root.value == key)
-			return root;
+		if (root.value == key) return root;
+
 		// Otherwise create new node
-		Node n = new Node(key);
+		Node<T> n = new Node<T>(key);
+		
 		// If root's key is greater, make root as right child
 		// of newnode and copy the left child of root to newnode
-		if (root.value > key) {
+		if (root.value.compareTo(key) > 0) {
 			n.right = root;
 			n.left = root.left;
 			root.left = null;
-		}
 
 		// If root's key is smaller, make root as left child
 		// of newnode and copy the right child of root to newnode
-		else {
+		} else {
 			n.left = root;
 			n.right = root.right;
 			root.right = null;
 		}
-		return n;// newnode becomes new root
+		return n; // newnode becomes new root
 
 	}
 
 	// This function brings the key at root if key is present in tree.
 	// If key is not present, then it brings the last accessed item at
 	// root. This function modifies the tree and returns the new root
-	public Node splay(Node root, int key) {
+	public Node<T> splay(Node<T> root, T key) {
+
 		// Base cases: root is NULL or key is present at root
-		if (root == null || root.value == key)
+		if (root == null || root.value.compareTo(key) == 0)
 			return root;
 
 		// Key lies in left subtree
-		if (root.value > key) {
+		if (root.value.compareTo(key) > 0) {
 			// Key is not in tree, we are done
 			if (root.left == null)
 				return root;
 
 			// Left-Left case
-			if (root.left.value > key) {
+			if (root.left.value.compareTo(key) > 0) {
 				// First recursively bring the key as root of left-left
 				root.left.left = splay(root.left.left, key);
 				// Do first rotation for root, second rotation is done after
 				// else
 				root = rightRotate(root);
-			} else if (root.left.value < key) {// Letf-Right case
+			} else if (root.left.value.compareTo(key) < 0) {// Left-Right case
 				// First recursively bring the key as root of left-right
 				root.left.right = splay(root.left.right, key);
 				// Do first rotation for root->left
@@ -69,14 +82,14 @@ public class SplayTree {
 				return root;
 
 			// Right left
-			if (root.right.value > key) {
+			if (root.right.value.compareTo(key) > 0) {
 				// Bring the key as root of right-left
 				root.right.left = splay(root.right.left, key);
 
 				// Do first rotation for root.right
 				if (root.right.left != null)
 					root.right = rightRotate(root.right);
-			} else if (root.right.value < key) { // Right right case
+			} else if (root.right.value.compareTo(key) < 0) { // Right right case
 				// Bring the key as root of right-right and do first
 				// rotation
 				root.right.right = splay(root.right.right, key);
@@ -87,9 +100,9 @@ public class SplayTree {
 		}
 	}
 
-	public Node rightRotate(Node root) {
-		Node leftChild = root.left;
-		Node leftChildsRight = leftChild.right;
+	public Node<T> rightRotate(Node<T> root) {
+		Node<T> leftChild = root.left;
+		Node<T> leftChildsRight = leftChild.right;
 
 		// Perform rotation
 		leftChild.right = root;
@@ -98,9 +111,9 @@ public class SplayTree {
 		return leftChild;
 	}
 
-	public Node leftRotate(Node root) {
-		Node rightChild = root.right;
-		Node rightChildsLeft = rightChild.left;
+	public Node<T> leftRotate(Node<T> root) {
+		Node<T> rightChild = root.right;
+		Node<T> rightChildsLeft = rightChild.left;
 
 		// Perform rotation
 		rightChild.left = root;
@@ -109,20 +122,15 @@ public class SplayTree {
 		return rightChild;
 	}
 
-	public void preOrder(Node root) {
+	public void preOrder(Node<T> root) {
 		if (root != null) {
 			System.out.println(root.value + " ");
 			preOrder(root.left);
 			preOrder(root.right);
 		}
 	}
-}
 
-public class Node {
-	int value;
-	Node left, right;
-
-	public Node(int key) {
-		value = key;
-	}
+  public static void main(String[] args) {
+    SplayTree<Integer> tree = new SplayTree<>();
+  }
 }

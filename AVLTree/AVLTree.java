@@ -5,15 +5,15 @@ public class AVLTree <T extends Comparable<T>> {
   static class Node <T extends Comparable<T>> {
     // Balance factor
     int bf;
-    int height;
     T value;
+    int height;
     Node<T> left, right;
-    public Node(T value, Node<T> left, Node<T> right, int height) {
+    public Node(T value, Node<T> left, Node<T> right) {
       if (value == null) throw new IllegalArgumentException();
       this.value = value;
       this.left = left;
       this.right = right;
-      this.height = height;
+      this.height = -1;
     }
   }
 
@@ -27,7 +27,7 @@ public class AVLTree <T extends Comparable<T>> {
     
     // Base case: Hit null node
     if (node == null) {
-      return new Node<T>(value, null, null, 0);
+      return new Node<T>(value, null, null);
     }
 
     // Compare current value to the value in the node.
@@ -47,17 +47,26 @@ public class AVLTree <T extends Comparable<T>> {
       return node;
     }
 
-    int leftNodeHeight  = (node.left  == null ? 0) : node.left.height;
-    int rightNodeHeight = (node.right == null ? 0) : node.right.height;
+    update(node);
+
+    // Rebalance tree.
+    return balance(node);
+
+  }
+
+  // Update height and balance factor.
+  private void update(Node<T> node) {
+    
+    if (node == null) return;
+
+    int leftNodeHeight  = (node.left  == null) ? -1 : node.left.height;
+    int rightNodeHeight = (node.right == null) ? -1 : node.right.height;
 
     // Update this node's height.
     node.height = 1 + Math.max(leftNodeHeight, rightNodeHeight);
 
     // Update balance factor.
     node.bf = rightNodeHeight - leftNodeHeight;
-
-    // Rebalance tree.
-    return balance(node);
 
   }
 
@@ -98,20 +107,38 @@ public class AVLTree <T extends Comparable<T>> {
 
   }
 
-  private void leftLeftCase(Node<T> node) {
+  private Node<T> leftLeftCase(Node<T> node) {
     
   }
 
-  private void leftRightCase(Node<T> node) {
+  private Node<T> leftRightCase(Node<T> node) {
 
   }
 
-  private void rightLeftCase(Node<T> node) {
+  private Node<T> rightLeftCase(Node<T> node) {
     
   }
 
-  private void rightRightCase(Node<T> node) {
+  private Node<T> rightRightCase(Node<T> node) {
     
+  }
+
+  private Node<T> leftRotation(Node<T> node) {
+    Node<T> newParent = node.right;
+    node.right = newParent.left;
+    newParent.left = node;
+    update(node);
+    update(newParent);
+    return newParent;
+  }
+
+  private Node<T> rightRotation(Node<T> node) {
+    Node<T> newParent = node.left;
+    node.left = newParent.right;
+    newParent.right = node;
+    update(node);
+    update(newParent);
+    return newParent;
   }
 
 }

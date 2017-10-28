@@ -6,14 +6,14 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-public class AVLTree <T extends Comparable<T>> {
+public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
 
   static class Node <T extends Comparable<T>> implements TreePrinter.PrintableNode {
     
     // 'bf' is short for Balance Factor
     int bf;
 
-    // The value contained within the node.
+    // The value/data contained within the node.
     T value;
 
     // The height of this node in the tree.
@@ -29,12 +29,12 @@ public class AVLTree <T extends Comparable<T>> {
     }
 
     @Override 
-    public Node getLeft() {
+    public Node<T> getLeft() {
       return left;
     }
 
     @Override
-    public Node getRight() {
+    public Node<T> getRight() {
       return right;
     }
 
@@ -213,6 +213,46 @@ public class AVLTree <T extends Comparable<T>> {
     return newParent;
   }
 
+  // Returns as iterator to traverse the tree in order.
+  public java.util.Iterator<T> iterator () {
+
+    final int expectedNodeCount = nodeCount;
+    final java.util.Stack<Node<T>> stack = new java.util.Stack<>();
+    stack.push(root);
+
+    return new java.util.Iterator <T> () {
+      Node<T> trav = root;
+      @Override 
+      public boolean hasNext() {
+        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();        
+        return root != null && !stack.isEmpty();
+      }
+      @Override 
+      public T next () {
+        
+        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+
+        while(trav != null && trav.left != null) {
+          stack.push(trav.left);
+          trav = trav.left;
+        }
+        
+        Node<T> node = stack.pop();
+        
+        if (node.right != null) {
+          stack.push(node.right);
+          trav = node.right;
+        }
+        
+        return node.value;
+      }
+      @Override 
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }      
+    };
+  }
+
   public static void main(String[] args) {
     AVLTree<Integer> tree = new AVLTree<>();
     tree.insert(1);    
@@ -231,6 +271,9 @@ public class AVLTree <T extends Comparable<T>> {
     tree.insert(9);    
     tree.insert(43);    
     tree.display();
+    for (Integer value : tree) {
+      System.out.println(value);
+    }
   }
 
 }

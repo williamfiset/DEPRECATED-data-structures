@@ -119,7 +119,7 @@ public class AVLTreeTest {
     boolean isValid = true;
     if (node.left != null)  isValid = isValid && node.left.value.compareTo(val)  < 0;
     if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
-    return v && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
+    return isValid && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
   }
 
   @Test

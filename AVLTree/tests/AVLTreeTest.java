@@ -100,6 +100,21 @@ public class AVLTreeTest {
   }
 
   @Test
+  public void testRandomizedBalanceFactorTest() {
+    for (int i = 0; i < TEST_SZ; i++) {
+      tree.insert(randValue());
+      assertTrue(validateBalanceFactorValues(tree.root));
+    }
+  }
+
+  // Make sure all balance factor values are either -1, 0 or +1
+  static <T extends Comparable<T>> boolean validateBalanceFactorValues(AVLTree.Node<T> node) {
+    if (node == null) return true;
+    if (node.bf > +1 || node.bf < -1) return false;
+    return validateBalanceFactorValues(node.left) && validateBalanceFactorValues(node.right);
+  }
+
+  @Test
   public void testRandomizedValueInsertionsAgainstTreeSet() {
 
     TreeSet<Integer> set = new TreeSet<>();
@@ -113,6 +128,8 @@ public class AVLTreeTest {
 
   }
 
+  // Make sure all left child nodes are smaller in value than their parent and
+  // make sure all right child nodes are greater in value than their parent.
   static <T extends Comparable<T>> boolean validateBSTInvarient(AVLTree.Node<T> node) {
     if (node == null) return true;
     T val = node.value;

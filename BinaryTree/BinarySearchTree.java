@@ -146,7 +146,7 @@ public class BinarySearchTree <T extends Comparable<T>> {
       } else {
         
         // Find the leftmost node in the right subtree
-        Node tmp = digLeft(node.right);
+        Node tmp = findMin(node.right);
 
         // Swap the data
         node.data = tmp.data;
@@ -159,7 +159,7 @@ public class BinarySearchTree <T extends Comparable<T>> {
         // If instead we wanted to find the largest node in the left
         // subtree as opposed to smallest node in the right subtree 
         // here is what we would do:
-        // Node tmp = digRight(node.left);
+        // Node tmp = findMax(node.left);
         // node.data = tmp.data;
         // node.left = remove(node.left, tmp.data);
 
@@ -172,14 +172,14 @@ public class BinarySearchTree <T extends Comparable<T>> {
   }
 
   // Helper method to find the leftmost node
-  private Node digLeft(Node node) {
+  private Node findMin(Node node) {
     while(node.left != null) 
       node = node.left;
     return node;
   }
 
   // Helper method to find the rightmost node
-  private Node digRight(Node node) {
+  private Node findMax(Node node) {
     while(node.right != null) 
       node = node.right;
     return node;

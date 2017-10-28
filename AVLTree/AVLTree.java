@@ -1,33 +1,73 @@
+/**
+ * This file contains an implementation of an AVL tree. An AVL tree
+ * is a special type of binary tree which self balances itself to keep
+ * operations logarithmic.
+ *
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ **/
 
 public class AVLTree <T extends Comparable<T>> {
 
   static class Node <T extends Comparable<T>> implements TreePrinter.PrintableNode {
-    // Balance factor
+    
+    // 'bf' is short for Balance Factor
     int bf;
+
+    // The value contained within the node.
     T value;
+
+    // The height of this node in the tree.
     int height;
+
+    // The left and the right children of this node.    
     Node<T> left, right;
+
     public Node(T value, Node<T> left, Node<T> right) {
       this.value = value;
       this.left = left;
       this.right = right;
     }
+
     @Override 
     public Node getLeft() {
       return left;
     }
+
     @Override
     public Node getRight() {
       return right;
     }
+
     @Override
     public String getText() {
-      return value+""; // + "("+bf+","+height+")";
+      return String.valueOf(value);
     }
+
   }
 
   Node<T> root;
-  int size = 0;
+  private int nodeCount = 0;
+
+  // The height of a rooted tree is the number of edges between the tree's
+  // root and its furthest leaf. This means that a tree containing a single 
+  // node has a height of 0.
+  public int height() {
+    if (root == null) return 0;
+    return root.height;
+  }
+
+  // Returns the number of nodes in the tree.
+  public int size() {
+    return nodeCount;
+  }
+
+  public boolean isEmpty() {
+    return size() == 0;
+  }
+
+  public void display() {
+    TreePrinter.print(root);
+  }
 
   public boolean contains(T value) {
     return contains(root, value);
@@ -51,11 +91,12 @@ public class AVLTree <T extends Comparable<T>> {
 
   }
 
+  // Insert/add a value to the tree. The value must not be null.
   public void insert(T value) {
     if (value == null) throw new IllegalArgumentException();
     if (!contains(value)) {
       root = insert(root, value);
-      size++;
+      nodeCount++;
     }
   }
 
@@ -102,6 +143,7 @@ public class AVLTree <T extends Comparable<T>> {
 
   }
 
+  // Re-balance a node if its balance factor is +2 or -2.
   private Node<T> balance(Node<T> node) {
 
     // Left heavy subtree.
@@ -169,26 +211,6 @@ public class AVLTree <T extends Comparable<T>> {
     update(node);
     update(newParent);
     return newParent;
-  }
-
-  // The height of a rooted tree is the number of edges between the tree's
-  // root and its furthest leaf. This means that a tree containing a single 
-  // node has a height of 0.
-  public int height() {
-    if (root == null) return 0;
-    return root.height;
-  }
-
-  public int size() {
-    return size;
-  }
-
-  public boolean isEmpty() {
-    return size() == 0;
-  }
-
-  public void display() {
-    TreePrinter.print(root);
   }
 
   public static void main(String[] args) {

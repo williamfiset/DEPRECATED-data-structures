@@ -8,7 +8,7 @@ public class AVLTreeTest {
   static final int MAX_RAND_NUM = +100000;
   static final int MIN_RAND_NUM = -100000;
 
-  static final int TEST_SZ = 10000;
+  static final int TEST_SZ = 5000;
 
   private AVLTree<Integer> tree;
 
@@ -116,9 +116,9 @@ public class AVLTreeTest {
   static <T extends Comparable<T>> boolean validateBSTInvarient(AVLTree.Node<T> node) {
     if (node == null) return true;
     T val = node.value;
-    boolean v = true;
-    if (node.left != null)  v = v && node.left.value.compareTo(val)  < 0;
-    if (node.right != null) v = v && node.right.value.compareTo(val) > 0;
+    boolean isValid = true;
+    if (node.left != null)  isValid = isValid && node.left.value.compareTo(val)  < 0;
+    if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
     return v && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
   }
 

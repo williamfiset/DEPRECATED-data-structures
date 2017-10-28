@@ -25,7 +25,7 @@ public class AVLTree <T extends Comparable<T>> {
 
   private Node<T> insert(Node<T> node, T value) {
     
-    // Base case: Hit null node
+    // Base case.
     if (node == null) {
       return new Node<T>(value, null, null);
     }
@@ -54,9 +54,10 @@ public class AVLTree <T extends Comparable<T>> {
 
   }
 
-  // Update height and balance factor.
+  // Update a node's height and balance factor.
   private void update(Node<T> node) {
     
+    // Q: Will this every be null?
     if (node == null) return;
 
     int leftNodeHeight  = (node.left  == null) ? -1 : node.left.height;
@@ -73,32 +74,28 @@ public class AVLTree <T extends Comparable<T>> {
   private Node<T> balance(Node<T> node) {
 
     // Left heavy subtree.
-    if (node.bf == +2) {
+    if (node.bf == -2) {
 
-      // Left-Right case.
-      if (node.left.bf == -1) {
-        return leftRightCase(node);
-        
       // Left-Left case.
-      } else if (node.left.bf == +1) {
+      if (node.left.br <= 0) {
         return leftLeftCase(node);
+        
+      // Left-Right case.
+      } else {
+        return leftRightCase(node);
       }
 
-      // what about bf = 0?
-    
     // Right heavy subtree needs balancing.
-    } else if (node.bf == -2) {
-
-      // Right-Left case.
-      if (node.right.bf == +1) {
-        return rightLeftCase(node);
+    } else if (node.bf == +2) {
 
       // Right-Right case.
-      } else if (node.right.bf == -1) {
+      if (node.right.bf >= 0) {
+        return rightLeftCase(node);
+
+      // Right-Left case.
+      } else {
         return rightRightCase(node);
       }
-
-      // what about bf = 0?
 
     }
 
@@ -108,19 +105,21 @@ public class AVLTree <T extends Comparable<T>> {
   }
 
   private Node<T> leftLeftCase(Node<T> node) {
-    
+    return rightRotation(node);
   }
 
   private Node<T> leftRightCase(Node<T> node) {
-
-  }
-
-  private Node<T> rightLeftCase(Node<T> node) {
-    
+    node.left = leftRotation(node.left);
+    return leftLeftCase(node);
   }
 
   private Node<T> rightRightCase(Node<T> node) {
-    
+    return leftRotation(node);
+  }
+
+  private Node<T> rightLeftCase(Node<T> node) {
+    node.right = rightRotation(node.right);
+    return rightRightCase(node);
   }
 
   private Node<T> leftRotation(Node<T> node) {

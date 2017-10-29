@@ -105,6 +105,32 @@ public class RedBlackTreeTest {
 
   }
 
+  @Test
+  public void testRightRightRotation() {
+
+    tree.insert(1);
+    tree.insert(2);
+    tree.insert(3);
+
+    assertEquals(2, tree.root.value.intValue());
+    assertEquals(1, tree.root.left.value.intValue());
+    assertEquals(3, tree.root.right.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.RED, tree.root.left.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.color);
+
+    assertEquals(tree.root, tree.root.left.parent);
+    assertEquals(tree.root, tree.root.right.parent);
+
+    assertNull(tree.root.parent);
+    assertNull(tree.root.left.left);
+    assertNull(tree.root.left.right);
+    assertNull(tree.root.right.left);
+    assertNull(tree.root.right.right);
+
+  }
+
   static List<Integer> genRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++) lst.add(i); // unique values.

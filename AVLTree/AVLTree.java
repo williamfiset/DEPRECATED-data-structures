@@ -22,10 +22,8 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     // The left and the right children of this node.    
     Node left, right;
 
-    public Node(T value, Node left, Node right) {
+    public Node(T value) {
       this.value = value;
-      this.left = left;
-      this.right = right;
     }
 
     @Override 
@@ -55,7 +53,7 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
   // The TOKEN is used to indicate special return value signals. For example, 
   // we can return the TOKEN instead of null when we're inserting a new item
   // and discover the value we were inserting already exists in the tree.
-  private Node TOKEN = new Node(null, null, null);
+  private Node TOKEN = new Node(null);
 
   // The height of a rooted tree is the number of edges between the tree's
   // root and its furthest leaf. This means that a tree containing a single 
@@ -122,7 +120,7 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
   private Node insert(Node node, T value) {
     
     // Base case.
-    if (node == null) return new Node(value, null, null);
+    if (node == null) return new Node(value);
 
     // Compare current value to the value in the node.
     int cmp = value.compareTo(node.value);

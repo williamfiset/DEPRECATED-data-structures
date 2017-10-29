@@ -92,12 +92,15 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
   }
 
   // Insert/add a value to the tree. The value must not be null.
-  public void insert(T value) {
+  public boolean insert(T value) {
     if (value == null) throw new IllegalArgumentException();
-    if (!contains(value)) {
-      root = insert(root, value);
+    Node newRoot = insert(root, value);
+    if (newRoot != null) {
       nodeCount++;
+      root = newRoot;
+      return true;
     }
+    return false;
   }
 
   private Node insert(Node node, T value) {
@@ -108,16 +111,20 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     // Compare current value to the value in the node.
     int cmp = value.compareTo(node.value);
 
-    // Dig into left subtree.
+    // Insert node in left subtree.
     if (cmp < 0) {
-      node.left = insert(node.left, value);
+      Node newLeftNode = insert(node.left, value);
+      if (newLeftNode == null) return null;
+      node.left = newLeftNode;
 
-    // Dig into right subtree
+    // Insert node in right subtree.
     } else if (cmp > 0) {
-      node.right = insert(node.right, value);
+      Node newRightNode = insert(node.right, value);
+      if (newRightNode == null) return null;
+      node.right = newRightNode;
 
-    // Duplicate value in tree.
-    } else return node;
+    // Return null to indicate a duplicate value in tree.
+    } else return null;
 
     // Update balance factor and height values.
     update(node);
@@ -130,9 +137,6 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
   // Update a node's height and balance factor.
   private void update(Node node) {
     
-    // Q: Will this every be null?
-    if (node == null) return;
-
     int leftNodeHeight  = (node.left  == null) ? -1 : node.left.height;
     int rightNodeHeight = (node.right == null) ? -1 : node.right.height;
 
@@ -375,27 +379,12 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     return isValid && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
   }
 
+  // Example usage.  
   public static void main(String[] args) {
     AVLTree<Integer> tree = new AVLTree<>();
-    tree.insert(1);    
-    tree.insert(2);    
-    tree.insert(3);    
-    tree.insert(44);    
-    tree.insert(-4);    
-    tree.insert(6);    
-    tree.insert(-8);    
-    tree.insert(-12);    
-    tree.insert(-8);    
-    tree.insert(-9);    
-    tree.insert(-10);    
-    tree.insert(300);    
-    tree.insert(43);    
-    tree.insert(9);    
-    tree.insert(43);    
+    for (int i = 0; i < 22; i++)
+      tree.insert((int)(Math.random() * 100));    
     tree.display();
-    for (Integer value : tree) {
-      System.out.println(value);
-    }
   }
 
 }

@@ -120,8 +120,7 @@ public class AVLTreeTest {
     TreeSet<Integer> set = new TreeSet<>();
     for (int i = 0; i < TEST_SZ; i++) {
       int v = randValue();
-      set.add(v);
-      tree.insert(v);
+      assertEquals(set.add(v), tree.insert(v));
       assertEquals(set.size(), tree.size());
       assertTrue(tree.validateBSTInvarient(tree.root));
     }

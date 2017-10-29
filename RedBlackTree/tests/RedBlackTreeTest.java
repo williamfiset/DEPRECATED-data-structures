@@ -45,11 +45,8 @@ public class RedBlackTreeTest {
     assertEquals(tree.root, tree.root.left.parent);
     assertEquals(tree.root, tree.root.right.parent);
 
-    assertNull(tree.root.parent);
-    assertNull(tree.root.left.left);
-    assertNull(tree.root.left.right);
-    assertNull(tree.root.right.left);
-    assertNull(tree.root.right.right);
+    assertNullChildren(tree.root.left, tree.root.right);
+    assertCorrectParentLinks(tree.root, null);
 
   }
 
@@ -71,11 +68,8 @@ public class RedBlackTreeTest {
     assertEquals(tree.root, tree.root.left.parent);
     assertEquals(tree.root, tree.root.right.parent);
 
-    assertNull(tree.root.parent);
-    assertNull(tree.root.left.left);
-    assertNull(tree.root.left.right);
-    assertNull(tree.root.right.left);
-    assertNull(tree.root.right.right);
+    assertNullChildren(tree.root.left, tree.root.right);
+    assertCorrectParentLinks(tree.root, null);
 
   }
 
@@ -97,11 +91,8 @@ public class RedBlackTreeTest {
     assertEquals(tree.root, tree.root.left.parent);
     assertEquals(tree.root, tree.root.right.parent);
 
-    assertNull(tree.root.parent);
-    assertNull(tree.root.left.left);
-    assertNull(tree.root.left.right);
-    assertNull(tree.root.right.left);
-    assertNull(tree.root.right.right);
+    assertNullChildren(tree.root.left, tree.root.right);
+    assertCorrectParentLinks(tree.root, null);
 
   }
 
@@ -123,12 +114,62 @@ public class RedBlackTreeTest {
     assertEquals(tree.root, tree.root.left.parent);
     assertEquals(tree.root, tree.root.right.parent);
 
-    assertNull(tree.root.parent);
-    assertNull(tree.root.left.left);
-    assertNull(tree.root.left.right);
-    assertNull(tree.root.right.left);
-    assertNull(tree.root.right.right);
+    assertNullChildren(tree.root.left, tree.root.right);
+    assertCorrectParentLinks(tree.root, null);
 
+  }
+
+  @Test
+  public void testLeftRedUncleCase() {
+    
+    tree.insert(1);
+    tree.insert(2);
+    tree.insert(3);
+    tree.insert(4);
+
+    assertEquals(2, tree.root.value.intValue());
+    assertEquals(1, tree.root.left.value.intValue());
+    assertEquals(3, tree.root.right.value.intValue());
+    assertEquals(4, tree.root.right.right.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.left.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.right.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.right.color);
+
+    assertNull(tree.root.right.left);
+    assertNullChildren(tree.root.left, tree.root.right.right);
+    assertCorrectParentLinks(tree.root, null);
+
+    tree.insert(5);
+
+    assertEquals(2, tree.root.value.intValue());
+    assertEquals(1, tree.root.left.value.intValue());
+    assertEquals(4, tree.root.right.value.intValue());
+    assertEquals(3, tree.root.right.left.value.intValue());
+    assertEquals(5, tree.root.right.right.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.left.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.right.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.left.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.right.color);
+    assertCorrectParentLinks(tree.root, null);
+
+  }
+
+  static void assertNullChildren(RedBlackTree.Node... nodes) {
+    for (RedBlackTree.Node node : nodes) {
+      assertNull(node.left);
+      assertNull(node.right);
+    }
+  }
+
+  static void assertCorrectParentLinks(RedBlackTree.Node node, RedBlackTree.Node parent) {
+    if (node == null) return;
+    assertEquals(node.parent, parent);
+    assertCorrectParentLinks(node.left, node);
+    assertCorrectParentLinks(node.right, node);
   }
 
   static List<Integer> genRandList(int sz) {

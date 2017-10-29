@@ -111,6 +111,7 @@ public class RedBlackTree <T extends Comparable<T>> {
     if (root == null) {
       root = new Node(value, null);
       insertionRelabel(root);
+      nodeCount++;
       return true;      
     }
 
@@ -123,6 +124,7 @@ public class RedBlackTree <T extends Comparable<T>> {
         if (node.left == null) {
           node.left = new Node(value, node);
           insertionRelabel(node.left);
+          nodeCount++;
           return true;
         }
         node = node.left;
@@ -132,6 +134,7 @@ public class RedBlackTree <T extends Comparable<T>> {
         if (node.right == null) {
           node.right = new Node(value, node);
           insertionRelabel(node.right);
+          nodeCount++;
           return true;
         }
         node = node.right;

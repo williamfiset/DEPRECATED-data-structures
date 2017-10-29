@@ -153,6 +153,7 @@ public class RedBlackTree <T extends Comparable<T>> {
     // Root node case.
     if (parent == null) {
       node.color = BLACK;
+      root = node;
       return;
     }
 
@@ -208,12 +209,8 @@ public class RedBlackTree <T extends Comparable<T>> {
         grandParent = rightRightCase(grandParent);
       }
 
-      if (grandParent.parent == null) {
-        root = grandParent;
-      }
-
     }
-
+    display();
     insertionRelabel(grandParent);
     
   }
@@ -250,6 +247,8 @@ public class RedBlackTree <T extends Comparable<T>> {
     child.parent = grandParent;
     parent.parent = child;
 
+    updateParentChildLink(grandParent, parent, child);
+
     return child;
   }
 
@@ -262,6 +261,8 @@ public class RedBlackTree <T extends Comparable<T>> {
     child.left = parent;
     child.parent = grandParent;
     parent.parent = child;
+
+    updateParentChildLink(grandParent, parent, child);
     
     return child;
   }
@@ -269,15 +270,15 @@ public class RedBlackTree <T extends Comparable<T>> {
   // Sometimes the left or right child node of a parent changes and the
   // parent's reference needs to be updated to point to the new child. 
   // This is a helper method to do just that.
-  // private void updateParentChildLink(Node parent, Node oldChild, Node newChild) {
-  //   if (parent != null) {
-  //     if (parent.left == oldChild) {
-  //       parent.left = newChild;
-  //     } else {
-  //       parent.right = newChild;
-  //     }
-  //   }
-  // }
+  private void updateParentChildLink(Node parent, Node oldChild, Node newChild) {
+    if (parent != null) {
+      if (parent.left == oldChild) {
+        parent.left = newChild;
+      } else {
+        parent.right = newChild;
+      }
+    }
+  }
 
   // Helper method to find the leftmost node (which has the smallest value)
   private Node findMin(Node node) {

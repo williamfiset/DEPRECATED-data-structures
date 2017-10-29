@@ -26,7 +26,7 @@ public class RedBlackTreeTest {
   public void testTreeContainsNull() {
     assertFalse(tree.contains(null));
   }
-
+/*
   @Test
   public void testLeftLeftRotation() {
 
@@ -118,6 +118,7 @@ public class RedBlackTreeTest {
     assertCorrectParentLinks(tree.root, null);
 
   }
+  */
 
   @Test
   public void testLeftRedUncleCase() {
@@ -140,7 +141,7 @@ public class RedBlackTreeTest {
     assertNull(tree.root.right.left);
     assertNullChildren(tree.root.left, tree.root.right.right);
     assertCorrectParentLinks(tree.root, null);
-
+    // System.out.println("====================================");
     tree.insert(5);
 
     assertEquals(2, tree.root.value.intValue());

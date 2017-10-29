@@ -26,7 +26,7 @@ public class RedBlackTreeTest {
   public void testTreeContainsNull() {
     assertFalse(tree.contains(null));
   }
-/*
+
   @Test
   public void testLeftLeftRotation() {
 
@@ -118,11 +118,12 @@ public class RedBlackTreeTest {
     assertCorrectParentLinks(tree.root, null);
 
   }
-  */
 
   @Test
-  public void testLeftRedUncleCase() {
+  public void testLeftUncleCase() {
     
+    /* Red left uncle case. */
+
     tree.insert(1);
     tree.insert(2);
     tree.insert(3);
@@ -141,7 +142,9 @@ public class RedBlackTreeTest {
     assertNull(tree.root.right.left);
     assertNullChildren(tree.root.left, tree.root.right.right);
     assertCorrectParentLinks(tree.root, null);
-    // System.out.println("====================================");
+    
+    /* Black left uncle case. */
+
     tree.insert(5);
 
     assertEquals(2, tree.root.value.intValue());
@@ -155,6 +158,49 @@ public class RedBlackTreeTest {
     assertEquals(RedBlackTree.BLACK, tree.root.right.color);
     assertEquals(RedBlackTree.RED, tree.root.right.left.color);
     assertEquals(RedBlackTree.RED, tree.root.right.right.color);
+    assertCorrectParentLinks(tree.root, null);
+
+  }
+
+  @Test
+  public void testRightUncleCase() {
+    
+    /* Red right uncle case. */
+
+    tree.insert(2);
+    tree.insert(3);
+    tree.insert(4);
+    tree.insert(1);
+
+    assertEquals(3, tree.root.value.intValue());
+    assertEquals(2, tree.root.left.value.intValue());
+    assertEquals(4, tree.root.right.value.intValue());
+    assertEquals(1, tree.root.left.left.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.left.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.right.color);
+    assertEquals(RedBlackTree.RED, tree.root.left.left.color);
+
+    assertNull(tree.root.left.right);
+    assertNullChildren(tree.root.right, tree.root.left.left);
+    assertCorrectParentLinks(tree.root, null);
+
+    /* Black right uncle case. */
+
+    tree.insert(0);
+
+    assertEquals(3, tree.root.value.intValue());
+    assertEquals(1, tree.root.left.value.intValue());
+    assertEquals(4, tree.root.right.value.intValue());
+    assertEquals(0, tree.root.left.left.value.intValue());
+    assertEquals(2, tree.root.left.right.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.left.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.right.color);
+    assertEquals(RedBlackTree.RED, tree.root.left.left.color);
+    assertEquals(RedBlackTree.RED, tree.root.left.right.color);
     assertCorrectParentLinks(tree.root, null);
 
   }

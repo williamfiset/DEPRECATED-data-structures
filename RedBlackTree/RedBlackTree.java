@@ -210,7 +210,7 @@ public class RedBlackTree <T extends Comparable<T>> {
       }
 
     }
-    display();
+    // display();
     insertionRelabel(grandParent);
     
   }

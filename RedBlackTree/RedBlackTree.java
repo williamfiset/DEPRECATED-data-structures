@@ -1,5 +1,5 @@
 /**
- * This file contains an implementation of an AVL tree. An AVL tree
+ * This file contains an implementation of a Red-Black tree. A RB tree
  * is a special type of binary tree which self balances itself to keep
  * operations logarithmic.
  *
@@ -8,24 +8,23 @@
 
 public class RedBlackTree <T extends Comparable<T>> {
 
+  static final boolean RED = true;
+  static final boolean BLACK = false;
+
   class Node implements TreePrinter.PrintableNode {
     
-    // 'bf' is short for Balance Factor
-    int bf;
+    // The color of the node. By default all nodes start red.
+    boolean color = RED;
 
     // The value/data contained within the node.
     T value;
 
-    // The height of this node in the tree.
-    int height;
+    // The left, right and parent references for this node.    
+    Node left, right, parent;
 
-    // The left and the right children of this node.    
-    Node left, right;
-
-    public Node(T value, Node left, Node right) {
+    public Node(T value, Node parent) {
       this.value = value;
-      this.left = left;
-      this.right = right;
+      this.parent = parent;
     }
 
     @Override 
@@ -51,20 +50,6 @@ public class RedBlackTree <T extends Comparable<T>> {
   // Tracks the number of nodes inside the tree.
   private int nodeCount = 0;
 
-  // Special token value used as an alternative to returning 'null'.
-  // The TOKEN is used to indicate special return value signals. For example, 
-  // we can return the TOKEN instead of null when we're inserting a new item
-  // and discover the value we were inserting already exists in the tree.
-  private Node TOKEN = new Node(null, null, null);
-
-  // The height of a rooted tree is the number of edges between the tree's
-  // root and its furthest leaf. This means that a tree containing a single 
-  // node has a height of 0.
-  public int height() {
-    if (root == null) return 0;
-    return root.height;
-  }
-
   // Returns the number of nodes in the tree.
   public int size() {
     return nodeCount;
@@ -76,9 +61,9 @@ public class RedBlackTree <T extends Comparable<T>> {
   }
 
   // Prints a visual representation of the tree to the console.
-  // public void display() {
-  //   TreePrinter.print(root);
-  // }
+  public void display() {
+    TreePrinter.print(root);
+  }
 
   // Return true/false depending on whether a value exists in the tree.
   public boolean contains(T value) {
@@ -104,59 +89,96 @@ public class RedBlackTree <T extends Comparable<T>> {
 
   }
 
+  public boolean insert(T value) {
+
+    if (value == null) throw new IllegalArgumentException();
+
+    // No root node.
+    if (root == null) {
+      root = new Node(value, null);
+      return true;      
+    }
+
+    for(Node node = root;;) {
+
+      int cmp = node.value.compareTo(value);
+
+      if (cmp < 0) {
+        if (node.left == null) {
+          node.left = new Node(value, node);
+          // balance
+          return true;
+        }
+        node = node.left;
+
+      } else if (cmp > 0) {
+        if (node.right == null) {
+          node.right = new Node(value, node);
+          // balance
+          return true;
+        }
+        node = node.right;
+
+      // Duplicate value.
+      } else return false;
+
+    }
+
+  }
+
   // Helper method to find the leftmost node (which has the smallest value)
-  // private Node findMin(Node node) {
-  //   while(node.left != null) 
-  //     node = node.left;
-  //   return node;
-  // }
+  private Node findMin(Node node) {
+    while(node.left != null) 
+      node = node.left;
+    return node;
+  }
 
   // Helper method to find the rightmost node (which has the largest value)
-  // private Node findMax(Node node) {
-  //   while(node.right != null) 
-  //     node = node.right;
-  //   return node;
-  // }
+  private Node findMax(Node node) {
+    while(node.right != null) 
+      node = node.right;
+    return node;
+  }
 
   // Returns as iterator to traverse the tree in order.
-  // public java.util.Iterator<T> iterator () {
+  public java.util.Iterator<T> iterator () {
 
-  //   final int expectedNodeCount = nodeCount;
-  //   final java.util.Stack<Node> stack = new java.util.Stack<>();
-  //   stack.push(root);
+    final int expectedNodeCount = nodeCount;
+    final java.util.Stack<Node> stack = new java.util.Stack<>();
+    stack.push(root);
 
-  //   return new java.util.Iterator<T> () {
-  //     Node trav = root;
-  //     @Override 
-  //     public boolean hasNext() {
-  //       if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();        
-  //       return root != null && !stack.isEmpty();
-  //     }
-  //     @Override 
-  //     public T next () {
+    return new java.util.Iterator<T> () {
+      Node trav = root;
+      @Override 
+      public boolean hasNext() {
+        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();        
+        return root != null && !stack.isEmpty();
+      }
+      @Override 
+      public T next () {
         
-  //       if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
+        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
 
-  //       while(trav != null && trav.left != null) {
-  //         stack.push(trav.left);
-  //         trav = trav.left;
-  //       }
+        while(trav != null && trav.left != null) {
+          stack.push(trav.left);
+          trav = trav.left;
+        }
         
-  //       Node node = stack.pop();
+        Node node = stack.pop();
         
-  //       if (node.right != null) {
-  //         stack.push(node.right);
-  //         trav = node.right;
-  //       }
+        if (node.right != null) {
+          stack.push(node.right);
+          trav = node.right;
+        }
         
-  //       return node.value;
-  //     }
-  //     @Override 
-  //     public void remove() {
-  //       throw new UnsupportedOperationException();
-  //     }      
-  //   };
-  // }
+        return node.value;
+      }
+      @Override 
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }      
+    };
+  }
 
   // Make sure all left child nodes are smaller in value than their parent and
   // make sure all right child nodes are greater in value than their parent.

@@ -48,6 +48,12 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
   Node root;
   private int nodeCount = 0;
 
+  // Special token value used as an alternative to returning 'null'.
+  // The TOKEN is used to indicate special return value signals. For example, 
+  // we can return the TOKEN instead of null when we're inserting a new item
+  // and discover the value we were inserting already exists in the tree.
+  private Node TOKEN = new Node(null, null, null);
+
   // The height of a rooted tree is the number of edges between the tree's
   // root and its furthest leaf. This means that a tree containing a single 
   // node has a height of 0.
@@ -95,14 +101,17 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
   public boolean insert(T value) {
     if (value == null) throw new IllegalArgumentException();
     Node newRoot = insert(root, value);
-    if (newRoot != null) {
+    boolean insertedNode = (newRoot != TOKEN);
+    if (insertedNode) {
       nodeCount++;
       root = newRoot;
-      return true;
     }
-    return false;
+    return insertedNode;
   }
 
+  // Inserts a node inside the AVL tree. This method returns null if
+  // the value we tried to insert was already inside the tree, otherwise
+  // the new root node is returned.
   private Node insert(Node node, T value) {
     
     // Base case.
@@ -114,17 +123,17 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     // Insert node in left subtree.
     if (cmp < 0) {
       Node newLeftNode = insert(node.left, value);
-      if (newLeftNode == null) return null;
+      if (newLeftNode == TOKEN) return TOKEN;
       node.left = newLeftNode;
 
     // Insert node in right subtree.
     } else if (cmp > 0) {
       Node newRightNode = insert(node.right, value);
-      if (newRightNode == null) return null;
+      if (newRightNode == TOKEN) return TOKEN;
       node.right = newRightNode;
 
-    // Return null to indicate a duplicate value in tree.
-    } else return null;
+    // Return 'TOKEN' to indicate a duplicate value in tree.
+    } else return TOKEN;
 
     // Update balance factor and height values.
     update(node);
@@ -218,35 +227,42 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     return newParent;
   }
 
-  // Remove a value from this binary tree if it exists, O(n)
+  // Remove a value from this binary tree if it exists, O(log(n))
   public boolean remove(T elem) {
 
-    // Make sure the node we want to remove 
-    // actually exists before we remove it
-    if (contains(elem)) {
-      root = remove(root, elem);
+    Node newRoot = remove(root, elem);
+    boolean removedNode = (newRoot != TOKEN) || (newRoot == null);
+
+    if (removedNode) {
+      root = newRoot;
       nodeCount--;
       return true;
     }
+
     return false;
 
   }
 
   private Node remove(Node node, T elem) {
     
-    if (node == null) return null;
+    // Return 'TOKEN' to indicate value to remove was not found.
+    if (node == null) return TOKEN;
     
     int cmp = elem.compareTo(node.value);
 
     // Dig into left subtree, the value we're looking
     // for is smaller than the current value.
     if (cmp < 0) {
-      node.left = remove(node.left, elem);
-    
+      Node newLeftNode = remove(node.left, elem);
+      if (newLeftNode == TOKEN) return TOKEN;
+      node.left = newLeftNode;
+
     // Dig into right subtree, the value we're looking
     // for is greater than the current value.
     } else if (cmp > 0) {
-      node.right = remove(node.right, elem);
+      Node newRightNode = remove(node.right, elem);
+      if (newRightNode == TOKEN) return TOKEN;
+      node.right = newRightNode;
 
     // Found the node we wish to remove.
     } else {
@@ -292,7 +308,9 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
         // Go into the right subtree and remove the leftmost node we
         // found and swapped data with. This prevents us from having
         // two nodes in our tree with the same value.
-        node.right = remove(node.right, tmp.value);
+        Node newRightNode = remove(node.right, tmp.value);
+        if (newRightNode == TOKEN) return TOKEN;
+        node.right = newRightNode;
         
         // If instead we wanted to find the largest node in the left
         // subtree as opposed to smallest node in the right subtree 

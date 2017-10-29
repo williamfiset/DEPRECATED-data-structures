@@ -148,12 +148,15 @@ public class AVLTreeTest {
 
   @Test 
   public void randomRemoveTests() {
-
+    TreeSet<Integer> ts = new TreeSet<>();
     for (int i = 0; i < TEST_SZ; i++) {
       
       int size = i;
       List <Integer> lst = genRandList(size);
-      for (Integer value : lst) tree.insert(value);
+      for (Integer value : lst) {
+        tree.insert(value);
+        ts.add(value);
+      }
       Collections.shuffle(lst);
 
       // Remove all the elements we just placed in the tree.
@@ -161,7 +164,7 @@ public class AVLTreeTest {
         
         Integer value = lst.get(j);
 
-        assertTrue(tree.remove(value));
+        assertEquals(ts.remove(value), tree.remove(value));
         assertFalse(tree.contains(value));
         assertEquals(size - j - 1, tree.size());
 

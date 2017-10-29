@@ -3,6 +3,9 @@
  * is a special type of binary tree which self balances itself to keep
  * operations logarithmic.
  *
+ * Great visualization tool: 
+ * https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
+ *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
@@ -65,6 +68,12 @@ public class RedBlackTree <T extends Comparable<T>> {
     TreePrinter.print(root);
   }
 
+  private void swapColors(Node a, Node b) {
+    boolean tmpColor = a.color;
+    a.color = b.color;
+    b.color = tmpColor;
+  }
+
   // Return true/false depending on whether a value exists in the tree.
   public boolean contains(T value) {
     return contains(root, value);
@@ -96,6 +105,7 @@ public class RedBlackTree <T extends Comparable<T>> {
     // No root node.
     if (root == null) {
       root = new Node(value, null);
+      insertionRelabel(root);
       return true;      
     }
 
@@ -103,27 +113,155 @@ public class RedBlackTree <T extends Comparable<T>> {
 
       int cmp = node.value.compareTo(value);
 
+      // Left subtree.
       if (cmp < 0) {
         if (node.left == null) {
           node.left = new Node(value, node);
-          // balance
+          insertionRelabel(node.left);
           return true;
         }
         node = node.left;
 
+      // Right subtree.
       } else if (cmp > 0) {
         if (node.right == null) {
           node.right = new Node(value, node);
-          // balance
+          insertionRelabel(node.right);
           return true;
         }
         node = node.right;
 
-      // Duplicate value.
+      // The value we're trying to insert already exists in the tree.
       } else return false;
 
     }
 
+  }
+
+  private void insertionRelabel(Node node) {
+
+    Node parent = node.parent;
+
+    // Root node case.
+    if (parent == null) {
+      node.color = BLACK;
+      return;
+    }
+
+    Node grandParent = parent.parent;
+
+    // Tree has a height of one, in which case the root is black
+    // and the new node added is red, so everything is fine.
+    if (grandParent == null) return;
+
+    // The red-black tree invariant is already satisfied.
+    if (parent.color == BLACK) return;
+
+    boolean nodeIsLeftChild = (parent.left == node);
+    boolean nodeIsRightChild = !nodeIsLeftChild;
+    boolean parentIsLeftChild = (parent == grandParent.left);
+    boolean parentIsRightChild = !parentIsLeftChild;
+
+    Node uncle = parentIsLeftChild ? grandParent.right : grandParent.left;
+    
+    boolean uncleIsRedNode = (uncle == null) ? BLACK : uncle.color;
+
+    if (uncleIsRedNode) {
+      
+      parent.color = BLACK;
+      grandParent.color = RED;
+      uncle.color = BLACK;
+
+    } else {
+
+      // Left-left case.
+      if (parentIsLeftChild && nodeIsLeftChild) {
+        grandParent = leftLeftCase(grandParent);
+
+      // Left-right case.
+      } else if (parentIsLeftChild && nodeIsRightChild) {
+        grandParent = leftRightCase(grandParent);
+
+      // Right-left case.
+      } else if (parentIsRightChild && nodeIsLeftChild) {
+        grandParent = rightLeftCase(grandParent);
+
+      // Right-right case.
+      } else {
+        grandParent = rightRightCase(grandParent);
+      }
+
+    }
+
+    insertionRelabel(grandParent);
+    
+  }
+
+  private Node leftLeftCase(Node node) {
+    node = rightRotate(node);
+    swapColors(node, node.right);
+    return node;
+  }
+
+  private Node leftRightCase(Node node) {
+    node.left = leftRotate(node.left);
+    leftLeftCase(node);
+    return node;
+  }
+
+  private Node rightRightCase(Node node) {
+    node = leftRotate(node);
+    swapColors(node, node.left);
+    return node;
+  }
+
+  private Node rightLeftCase(Node node) {
+    node.right = rightRotate(node.right);
+    rightRightCase(node);
+    return node;
+  }
+
+  private Node rightRotate(Node parent) {
+    
+    Node grandParent = parent.parent;
+    Node child = parent.left;
+
+    parent.left = child.right;
+    child.right = parent;
+    child.parent = grandParent;
+    parent.parent = child;
+
+    updateParentChildLink(grandParent, parent, child);
+
+    return child;
+  }
+
+  private Node leftRotate(Node parent) {
+
+    Node grandParent = parent.parent;
+    Node child = parent.right;
+
+    parent.right = child.left;
+    child.left = parent;
+    child.parent = grandParent;
+    parent.parent = child;
+    
+    updateParentChildLink(grandParent, parent, child);
+
+    return child;
+  }
+
+  // Sometimes the left or right child node of a parent changes and the
+  // parent's reference needs to be updated to point to the new child. 
+  // This is a helper method to do just that.
+  private void updateParentChildLink(Node parent, Node oldChild, Node newChild) {
+    if (parent != null) {
+      if (parent.left == oldChild) {
+        parent.left = newChild;
+      } else {
+        parent.right = newChild;
+      }
+    }
   }
 
   // Helper method to find the leftmost node (which has the smallest value)

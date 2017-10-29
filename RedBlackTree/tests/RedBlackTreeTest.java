@@ -17,14 +17,92 @@ public class RedBlackTreeTest {
     tree = new RedBlackTree<>();
   }
 
-  // @Test(expected=IllegalArgumentException.class)
-  // public void testNullInsertion() {
-  //   tree.insert(null);
-  // }
+  @Test(expected=IllegalArgumentException.class)
+  public void testNullInsertion() {
+    tree.insert(null);
+  }
 
   @Test
   public void testTreeContainsNull() {
     assertFalse(tree.contains(null));
+  }
+
+  @Test
+  public void testLeftLeftRotation() {
+
+    tree.insert(3);
+    tree.insert(2);
+    tree.insert(1);
+
+    assertEquals(2, tree.root.value.intValue());
+    assertEquals(1, tree.root.left.value.intValue());
+    assertEquals(3, tree.root.right.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.RED, tree.root.left.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.color);
+
+    assertEquals(tree.root, tree.root.left.parent);
+    assertEquals(tree.root, tree.root.right.parent);
+
+    assertNull(tree.root.parent);
+    assertNull(tree.root.left.left);
+    assertNull(tree.root.left.right);
+    assertNull(tree.root.right.left);
+    assertNull(tree.root.right.right);
+
+  }
+
+  @Test
+  public void testLeftRightRotation() {
+
+    tree.insert(3);
+    tree.insert(1);
+    tree.insert(2);
+
+    assertEquals(2, tree.root.value.intValue());
+    assertEquals(1, tree.root.left.value.intValue());
+    assertEquals(3, tree.root.right.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.RED, tree.root.left.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.color);
+
+    assertEquals(tree.root, tree.root.left.parent);
+    assertEquals(tree.root, tree.root.right.parent);
+
+    assertNull(tree.root.parent);
+    assertNull(tree.root.left.left);
+    assertNull(tree.root.left.right);
+    assertNull(tree.root.right.left);
+    assertNull(tree.root.right.right);
+
+  }
+
+  @Test
+  public void testRightLeftRotation() {
+
+    tree.insert(1);
+    tree.insert(3);
+    tree.insert(2);
+
+    assertEquals(2, tree.root.value.intValue());
+    assertEquals(1, tree.root.left.value.intValue());
+    assertEquals(3, tree.root.right.value.intValue());
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.RED, tree.root.left.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.color);
+
+    assertEquals(tree.root, tree.root.left.parent);
+    assertEquals(tree.root, tree.root.right.parent);
+
+    assertNull(tree.root.parent);
+    assertNull(tree.root.left.left);
+    assertNull(tree.root.left.right);
+    assertNull(tree.root.right.left);
+    assertNull(tree.root.right.right);
+
   }
 
   static List<Integer> genRandList(int sz) {

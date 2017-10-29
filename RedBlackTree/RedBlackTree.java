@@ -42,7 +42,12 @@ public class RedBlackTree <T extends Comparable<T>> {
 
     @Override
     public String getText() {
-      return String.valueOf(value);
+      return String.valueOf(value) + "("+(color==RED?"r":"b")+")";
+    }
+
+    @Override
+    public String toString() {
+      return getText();
     }
 
   }
@@ -111,7 +116,7 @@ public class RedBlackTree <T extends Comparable<T>> {
 
     for(Node node = root;;) {
 
-      int cmp = node.value.compareTo(value);
+      int cmp = value.compareTo(node.value);
 
       // Left subtree.
       if (cmp < 0) {
@@ -174,21 +179,34 @@ public class RedBlackTree <T extends Comparable<T>> {
 
     } else {
 
+      // System.out.println("HERE");
+
       // Left-left case.
       if (parentIsLeftChild && nodeIsLeftChild) {
+        System.out.println("Left-left case.");
         grandParent = leftLeftCase(grandParent);
 
       // Left-right case.
       } else if (parentIsLeftChild && nodeIsRightChild) {
+        
+        System.out.println("Left-right case");
         grandParent = leftRightCase(grandParent);
-
+        // System.out.println("GP: " + grandParent.getText());
+        // System.out.println( (grandParent.left==null?"null":grandParent.left.getText()) + " - " + (grandParent.right==null?"null":grandParent.right.getText()));
+        
       // Right-left case.
       } else if (parentIsRightChild && nodeIsLeftChild) {
+        System.out.println("Right-left case.");
         grandParent = rightLeftCase(grandParent);
 
       // Right-right case.
       } else {
+        System.out.println("Right-right case.");
         grandParent = rightRightCase(grandParent);
+      }
+
+      if (grandParent.parent == null) {
+        root = grandParent;
       }
 
     }
@@ -205,8 +223,7 @@ public class RedBlackTree <T extends Comparable<T>> {
 
   private Node leftRightCase(Node node) {
     node.left = leftRotate(node.left);
-    leftLeftCase(node);
-    return node;
+    return leftLeftCase(node);
   }
 
   private Node rightRightCase(Node node) {
@@ -217,8 +234,7 @@ public class RedBlackTree <T extends Comparable<T>> {
 
   private Node rightLeftCase(Node node) {
     node.right = rightRotate(node.right);
-    rightRightCase(node);
-    return node;
+    return rightRightCase(node);
   }
 
   private Node rightRotate(Node parent) {
@@ -230,8 +246,6 @@ public class RedBlackTree <T extends Comparable<T>> {
     child.right = parent;
     child.parent = grandParent;
     parent.parent = child;
-
-    updateParentChildLink(grandParent, parent, child);
 
     return child;
   }
@@ -246,23 +260,21 @@ public class RedBlackTree <T extends Comparable<T>> {
     child.parent = grandParent;
     parent.parent = child;
     
-    updateParentChildLink(grandParent, parent, child);
-
     return child;
   }
 
   // Sometimes the left or right child node of a parent changes and the
   // parent's reference needs to be updated to point to the new child. 
   // This is a helper method to do just that.
-  private void updateParentChildLink(Node parent, Node oldChild, Node newChild) {
-    if (parent != null) {
-      if (parent.left == oldChild) {
-        parent.left = newChild;
-      } else {
-        parent.right = newChild;
-      }
-    }
-  }
+  // private void updateParentChildLink(Node parent, Node oldChild, Node newChild) {
+  //   if (parent != null) {
+  //     if (parent.left == oldChild) {
+  //       parent.left = newChild;
+  //     } else {
+  //       parent.right = newChild;
+  //     }
+  //   }
+  // }
 
   // Helper method to find the leftmost node (which has the smallest value)
   private Node findMin(Node node) {
@@ -332,6 +344,14 @@ public class RedBlackTree <T extends Comparable<T>> {
 
   public static void main(String[] args) {
     
+    RedBlackTree<Integer> rbTree = new RedBlackTree<>();
+    int[] values = {9,8,4,3,7,6,5,2,1,0};
+    for (int v : values) {
+      rbTree.insert(v);
+      rbTree.display();
+      System.out.println("------------------------------------------------------------------------------");
+    }
+
   }
 
 }

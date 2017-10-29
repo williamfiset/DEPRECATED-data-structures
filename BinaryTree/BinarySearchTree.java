@@ -171,14 +171,14 @@ public class BinarySearchTree <T extends Comparable<T>> {
 
   }
 
-  // Helper method to find the leftmost node
+  // Helper method to find the leftmost node (which has the smallest value)
   private Node findMin(Node node) {
     while(node.left != null) 
       node = node.left;
     return node;
   }
 
-  // Helper method to find the rightmost node
+  // Helper method to find the rightmost node (which has the largest value)
   private Node findMax(Node node) {
     while(node.right != null) 
       node = node.right;

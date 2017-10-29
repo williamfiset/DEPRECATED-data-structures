@@ -8,7 +8,7 @@ public class AVLTreeTest {
   static final int MAX_RAND_NUM = +100000;
   static final int MIN_RAND_NUM = -100000;
 
-  static final int TEST_SZ = 5000;
+  static final int TEST_SZ = 2500;
 
   private AVLTree<Integer> tree;
 
@@ -108,7 +108,7 @@ public class AVLTreeTest {
   }
 
   // Make sure all balance factor values are either -1, 0 or +1
-  static <T extends Comparable<T>> boolean validateBalanceFactorValues(AVLTree.Node<T> node) {
+  static boolean validateBalanceFactorValues(AVLTree.Node node) {
     if (node == null) return true;
     if (node.bf > +1 || node.bf < -1) return false;
     return validateBalanceFactorValues(node.left) && validateBalanceFactorValues(node.right);
@@ -123,20 +123,9 @@ public class AVLTreeTest {
       set.add(v);
       tree.insert(v);
       assertEquals(set.size(), tree.size());
-      assertTrue(validateBSTInvarient(tree.root));
+      assertTrue(tree.validateBSTInvarient(tree.root));
     }
 
-  }
-
-  // Make sure all left child nodes are smaller in value than their parent and
-  // make sure all right child nodes are greater in value than their parent.
-  static <T extends Comparable<T>> boolean validateBSTInvarient(AVLTree.Node<T> node) {
-    if (node == null) return true;
-    T val = node.value;
-    boolean isValid = true;
-    if (node.left != null)  isValid = isValid && node.left.value.compareTo(val)  < 0;
-    if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
-    return isValid && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
   }
 
   @Test
@@ -156,6 +145,41 @@ public class AVLTreeTest {
       assertTrue(height < upperBound);
 
     }
+  }
+
+  @Test 
+  public void randomRemoveTests() {
+
+    for (int i = 0; i < TEST_SZ; i++) {
+      
+      int size = i;
+      List <Integer> lst = genRandList(size);
+      for (Integer value : lst) tree.insert(value);
+      Collections.shuffle(lst);
+
+      // Remove all the elements we just placed in the tree.
+      for (int j = 0; j < size; j++) {
+        
+        Integer value = lst.get(j);
+
+        assertTrue(tree.remove(value));
+        assertFalse(tree.contains(value));
+        assertEquals(size - j - 1, tree.size());
+
+      }
+
+      assertTrue(tree.isEmpty());
+
+    }
+
+
+  }
+
+  static List<Integer> genRandList(int sz) {
+    List <Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++) lst.add(i); // unique values.
+    Collections.shuffle(lst);
+    return lst;
   }
 
   public static int randValue() {

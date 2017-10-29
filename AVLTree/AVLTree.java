@@ -45,7 +45,10 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
 
   }
 
+  // The root node of the AVL tree.
   Node root;
+
+  // Tracks the number of nodes inside the tree.
   private int nodeCount = 0;
 
   // Special token value used as an alternative to returning 'null'.
@@ -67,18 +70,22 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     return nodeCount;
   }
 
+  // Returns whether or not the tree is empty.
   public boolean isEmpty() {
     return size() == 0;
   }
 
+  // Prints a visual representation of the tree to the console.
   public void display() {
     TreePrinter.print(root);
   }
 
+  // Return true/false depending on whether a value exists in the tree.
   public boolean contains(T value) {
     return contains(root, value);
   }
 
+  // Recursive contains helper method.
   private boolean contains(Node node, T value) {
     
     if (node == null) return false;
@@ -97,7 +104,7 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
 
   }
 
-  // Insert/add a value to the tree. The value must not be null.
+  // Insert/add a value to the AVL tree. The value must not be null, O(log(n))
   public boolean insert(T value) {
     if (value == null) throw new IllegalArgumentException();
     Node newRoot = insert(root, value);
@@ -109,9 +116,9 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     return insertedNode;
   }
 
-  // Inserts a node inside the AVL tree. This method returns null if
+  // Inserts a value inside the AVL tree. This method returns 'TOKEN' if
   // the value we tried to insert was already inside the tree, otherwise
-  // the new root node is returned.
+  // the new (or old) root node is returned.
   private Node insert(Node node, T value) {
     
     // Base case.
@@ -132,7 +139,7 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
       if (newRightNode == TOKEN) return TOKEN;
       node.right = newRightNode;
 
-    // Return 'TOKEN' to indicate a duplicate value in tree.
+    // Return 'TOKEN' to indicate a duplicate value in the tree.
     } else return TOKEN;
 
     // Update balance factor and height values.
@@ -243,6 +250,9 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
 
   }
 
+  // Removes a value from the AVL tree. If the value we're trying to remove
+  // does not exist in the tree then the 'TOKEN' value is returned. Otherwise,
+  // the new (or old) root node is returned.
   private Node remove(Node node, T elem) {
     
     // Return 'TOKEN' to indicate value to remove was not found.
@@ -397,7 +407,7 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
     return isValid && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
   }
 
-  // Example usage.  
+  // Example usage of AVL tree.
   public static void main(String[] args) {
     AVLTree<Integer> tree = new AVLTree<>();
     for (int i = 0; i < 22; i++)

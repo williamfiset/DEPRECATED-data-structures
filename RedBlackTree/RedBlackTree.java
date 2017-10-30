@@ -44,14 +44,11 @@ public class RedBlackTree <T extends Comparable<T>> {
 
     @Override
     public String getText() {
-      // return String.valueOf(value) + "("+(color==RED?"r":"b")+","+(parent==null?null:parent.value)+")";
-      return String.valueOf(value) +
-      " " + (color==RED?"r":"b")
-      + " ("
-        +(left==null?"N":left.value)+","
-        +(right==null?"N":right.value)+","
-        +(parent==null?"N":parent.value)
-        +")";
+      return String.valueOf(value) + (color == RED ? " r" : " b") + " ("
+        + (left   == null ? "N" : left.value)  + ","
+        + (right  == null ? "N" : right.value) + ","
+        + (parent == null ? "N" : parent.value)
+        + ")";
     }
 
     @Override
@@ -61,7 +58,7 @@ public class RedBlackTree <T extends Comparable<T>> {
 
   }
 
-  // The root node of the AVL tree.
+  // The root node of the RB tree.
   Node root;
 
   // Tracks the number of nodes inside the tree.
@@ -96,20 +93,24 @@ public class RedBlackTree <T extends Comparable<T>> {
   // Recursive contains helper method.
   private boolean contains(Node node, T value) {
     
-    if (node == null) return false;
+    if (node == null || value == null) return false;
 
-    // Compare current value to the value in the node.
-    int cmp = value.compareTo(node.value);
+    while(node != null) {
 
-    // Dig into left subtree.
-    if (cmp < 0) return contains(node.left, value);
+      // Compare current value to the value in the node.
+      int cmp = value.compareTo(node.value);
 
-    // Dig into right subtree.
-    if (cmp > 0) return contains(node.right, value);
+      // Dig into left subtree.
+      if (cmp < 0) node = node.left;
 
-    // Found value in tree.
-    return true;
+      // Dig into right subtree.
+      else if (cmp > 0) node = node.right;
 
+      // Found value in tree.
+      else return true;
+    }
+
+    return false;
   }
 
   public boolean insert(T value) {
@@ -165,6 +166,7 @@ public class RedBlackTree <T extends Comparable<T>> {
       root = node;
       return;
     }
+
     Node grandParent = parent.parent;
 
     // Tree has a height of one, in which case the root is black
@@ -180,7 +182,6 @@ public class RedBlackTree <T extends Comparable<T>> {
     boolean parentIsRightChild = !parentIsLeftChild;
 
     Node uncle = parentIsLeftChild ? grandParent.right : grandParent.left;
-    
     boolean uncleIsRedNode = (uncle == null) ? BLACK : uncle.color;
 
     if (uncleIsRedNode) {
@@ -340,54 +341,14 @@ public class RedBlackTree <T extends Comparable<T>> {
     };
   }
 
-  // Make sure all left child nodes are smaller in value than their parent and
-  // make sure all right child nodes are greater in value than their parent.
-  // (Used only for testing)
-  boolean validateBinarySearchTreeInvariant(Node node) {
-    if (node == null) return true;
-    T val = node.value;
-    boolean isValid = true;
-    if (node.left  != null) isValid = isValid && node.left.value.compareTo(val)  < 0;
-    if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
-    return isValid && validateBinarySearchTreeInvariant(node.left) && validateBinarySearchTreeInvariant(node.right);
-  }
-
-  // Used for testing.
-  boolean validateParentLinksAreCorrect(Node node, Node parent) {
-    if (node == null) return true;
-    if (node.parent != parent) return false;
-    return validateParentLinksAreCorrect(node.left, node) && validateParentLinksAreCorrect(node.right, node);
-  }
-
   public static void main(String[] args) {
 
-    // int[] values = {88, 94, 99, 32, 3, 48, 93, 62, 85};
-    // RedBlackTree<Integer> rbTree = new RedBlackTree<>();
-    // for (int v : values) {
-    //   System.out.println("======================================================================================================================================================================================");
-    //   System.out.println("INSERTING: " + v);
-    //   rbTree.insert(v);
-    //   System.out.println("PARENT LINK STATUS: " + rbTree.validateParentLinksAreCorrect(rbTree.root, null));
-    //   rbTree.display();
-    // }
-
-    outer:
-    for (int loop = 0; loop < 1000000; loop++) {
-      RedBlackTree<Integer> rbTree = new RedBlackTree<>();  
-      List<Integer> ar = new ArrayList<>();
-      for (int i = 0; i < 9; i++) ar.add((int)(Math.random() * 100));
-      for (int j = 0; j < ar.size(); j++) {
-        rbTree.insert(ar.get(j));
-        boolean inv = rbTree.validateBinarySearchTreeInvariant(rbTree.root);
-        if (!inv) {
-          System.out.println("BROKE AT INDEX: " + j);
-          System.out.println(ar);
-          rbTree.display();    
-          break outer;    
-        }
-      }
+    int[] values = {88, 94, 99, 32, 3, 48, 93, 62, 85};
+    RedBlackTree<Integer> rbTree = new RedBlackTree<>();
+    for (int v : values) {
+      rbTree.insert(v);
+      rbTree.display();
     }
-
 
   }
 

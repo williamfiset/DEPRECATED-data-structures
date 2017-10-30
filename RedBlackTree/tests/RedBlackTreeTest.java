@@ -244,7 +244,8 @@ public class RedBlackTreeTest {
       int v = randValue();
       assertEquals(set.add(v), tree.insert(v));
       assertEquals(set.size(), tree.size());
-      assertTrue(tree.validateBinarySearchTreeInvariant(tree.root));
+      assertTrue(tree.contains(v));
+      assertBinarySearchTreeInvariant(tree.root);
       // validateRedBlackTreeInvariant
     }
 
@@ -309,6 +310,25 @@ public class RedBlackTreeTest {
     assertCorrectParentLinks(node.left, node);
     assertCorrectParentLinks(node.right, node);
   }
+
+  // Make sure all left child nodes are smaller in value than their parent and
+  // make sure all right child nodes are greater in value than their parent.
+  // (Used only for testing)
+  boolean assertBinarySearchTreeInvariant(RedBlackTree.Node node) {
+    if (node == null) return true;
+    boolean isValid = true;
+    if (node.left  != null) isValid = isValid && node.left.value.compareTo(node.value)  < 0;
+    if (node.right != null) isValid = isValid && node.right.value.compareTo(node.value) > 0;
+    return isValid && assertBinarySearchTreeInvariant(node.left) && assertBinarySearchTreeInvariant(node.right);
+  }
+
+  // Used for testing.
+  boolean validateParentLinksAreCorrect(RedBlackTree.Node node, RedBlackTree.Node parent) {
+    if (node == null) return true;
+    if (node.parent != parent) return false;
+    return validateParentLinksAreCorrect(node.left, node) && validateParentLinksAreCorrect(node.right, node);
+  }
+
 
   static List<Integer> genRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);

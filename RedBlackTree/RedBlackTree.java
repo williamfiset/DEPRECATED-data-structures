@@ -9,22 +9,20 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-import java.util.*;
-
-public class RedBlackTree <T extends Comparable<T>> {
+public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
 
   static final boolean RED = true;
   static final boolean BLACK = false;
 
   class Node implements TreePrinter.PrintableNode {
     
-    // The color of the node. By default all nodes start red.
+    // The color of this node. By default all nodes start red.
     boolean color = RED;
 
     // The value/data contained within the node.
     T value;
 
-    // The left, right and parent references for this node.    
+    // The left, right and parent references of this node.    
     Node left, right, parent;
 
     public Node(T value, Node parent) {
@@ -36,7 +34,7 @@ public class RedBlackTree <T extends Comparable<T>> {
     public Node getLeft() {
       return left;
     }
-
+    
     @Override
     public Node getRight() {
       return right;
@@ -79,20 +77,11 @@ public class RedBlackTree <T extends Comparable<T>> {
     TreePrinter.print(root);
   }
 
-  private void swapColors(Node a, Node b) {
-    boolean tmpColor = a.color;
-    a.color = b.color;
-    b.color = tmpColor;
-  }
-
   // Return true/false depending on whether a value exists in the tree.
   public boolean contains(T value) {
-    return contains(root, value);
-  }
-
-  // Recursive contains helper method.
-  private boolean contains(Node node, T value) {
     
+    Node node = root;
+
     if (node == null || value == null) return false;
 
     while(node != null) {
@@ -168,19 +157,13 @@ public class RedBlackTree <T extends Comparable<T>> {
     }
 
     Node grandParent = parent.parent;
-
-    // Tree has a height of one, in which case the root is black
-    // and the new node added is red, so everything is fine.
     if (grandParent == null) return;
 
     // The red-black tree invariant is already satisfied.
     if (parent.color == BLACK || node.color == BLACK) return;
 
     boolean nodeIsLeftChild = (parent.left == node);
-    boolean nodeIsRightChild = !nodeIsLeftChild;
     boolean parentIsLeftChild = (parent == grandParent.left);
-    boolean parentIsRightChild = !parentIsLeftChild;
-
     Node uncle = parentIsLeftChild ? grandParent.right : grandParent.left;
     boolean uncleIsRedNode = (uncle == null) ? BLACK : uncle.color;
 
@@ -190,32 +173,45 @@ public class RedBlackTree <T extends Comparable<T>> {
       grandParent.color = RED;
       uncle.color = BLACK;
 
-    // At this point the parent node is red and so is the new
-    // child node so we need to re-balance somehow because no two
-    // red nodes can be adjacent to one another.
+    // At this point the parent node is red and so is the new child node. 
+    // We need to re-balance somehow because no two red nodes can be 
+    // adjacent to one another.
     } else {
 
-      // Left-left case.
-      if (parentIsLeftChild && nodeIsLeftChild) {
-        grandParent = leftLeftCase(grandParent);
-
-      // Left-right case.
-      } else if (parentIsLeftChild && nodeIsRightChild) {
-        grandParent = leftRightCase(grandParent);
+      // Parent node is a left child.
+      if (parentIsLeftChild) {
         
-      // Right-left case.
-      } else if (parentIsRightChild && nodeIsLeftChild) {
-        grandParent = rightLeftCase(grandParent);
+        // Left-left case.
+        if (nodeIsLeftChild) {
+          grandParent = leftLeftCase(grandParent);
 
-      // Right-right case.
+        // Left-right case.
+        } else { 
+          grandParent = leftRightCase(grandParent);
+        }
+
+      // Parent node is a right child.
       } else {
-        grandParent = rightRightCase(grandParent);
-      }
 
+        // Right-left case.
+        if (nodeIsLeftChild) {
+          grandParent = rightLeftCase(grandParent);
+
+        // Right-right case.
+        } else {
+          grandParent = rightRightCase(grandParent);
+        }
+        
+      }
     }
 
     insertionRelabel(grandParent);
-    
+  }
+
+  private void swapColors(Node a, Node b) {
+    boolean tmpColor = a.color;
+    a.color = b.color;
+    b.color = tmpColor;
   }
 
   private Node leftLeftCase(Node node) {
@@ -302,6 +298,7 @@ public class RedBlackTree <T extends Comparable<T>> {
   }
 
   // Returns as iterator to traverse the tree in order.
+  @Override
   public java.util.Iterator<T> iterator () {
 
     final int expectedNodeCount = nodeCount;
@@ -341,14 +338,18 @@ public class RedBlackTree <T extends Comparable<T>> {
     };
   }
 
+  // Example usage of RB tree:
   public static void main(String[] args) {
 
-    int[] values = {88, 94, 99, 32, 3, 48, 93, 62, 85};
+    int[] values = {5, 8, 1, -4, 6, -2, 0, 7};
     RedBlackTree<Integer> rbTree = new RedBlackTree<>();
-    for (int v : values) {
-      rbTree.insert(v);
-      rbTree.display();
-    }
+    for (int v : values) rbTree.insert(v);
+    rbTree.display();
+
+    System.out.printf("RB tree contains %d: %s\n", 6, rbTree.contains(6));
+    System.out.printf("RB tree contains %d: %s\n", -5, rbTree.contains(-5));
+    System.out.printf("RB tree contains %d: %s\n", 1, rbTree.contains(1));
+    System.out.printf("RB tree contains %d: %s\n", 99, rbTree.contains(99));
 
   }
 

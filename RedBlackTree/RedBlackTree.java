@@ -9,6 +9,8 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
+import java.util.*;
+
 public class RedBlackTree <T extends Comparable<T>> {
 
   static final boolean RED = true;
@@ -42,7 +44,14 @@ public class RedBlackTree <T extends Comparable<T>> {
 
     @Override
     public String getText() {
-      return String.valueOf(value) + "("+(color==RED?"r":"b")+")";
+      // return String.valueOf(value) + "("+(color==RED?"r":"b")+","+(parent==null?null:parent.value)+")";
+      return String.valueOf(value) +
+      " " + (color==RED?"r":"b")
+      + " ("
+        +(left==null?"N":left.value)+","
+        +(right==null?"N":right.value)+","
+        +(parent==null?"N":parent.value)
+        +")";
     }
 
     @Override
@@ -156,7 +165,6 @@ public class RedBlackTree <T extends Comparable<T>> {
       root = node;
       return;
     }
-
     Node grandParent = parent.parent;
 
     // Tree has a height of one, in which case the root is black
@@ -164,7 +172,7 @@ public class RedBlackTree <T extends Comparable<T>> {
     if (grandParent == null) return;
 
     // The red-black tree invariant is already satisfied.
-    if (parent.color == BLACK) return;
+    if (parent.color == BLACK || node.color == BLACK) return;
 
     boolean nodeIsLeftChild = (parent.left == node);
     boolean nodeIsRightChild = !nodeIsLeftChild;
@@ -181,36 +189,30 @@ public class RedBlackTree <T extends Comparable<T>> {
       grandParent.color = RED;
       uncle.color = BLACK;
 
+    // At this point the parent node is red and so is the new
+    // child node so we need to re-balance somehow because no two
+    // red nodes can be adjacent to one another.
     } else {
-
-      // System.out.println("HERE");
 
       // Left-left case.
       if (parentIsLeftChild && nodeIsLeftChild) {
-        System.out.println("Left-left case.");
         grandParent = leftLeftCase(grandParent);
 
       // Left-right case.
       } else if (parentIsLeftChild && nodeIsRightChild) {
-        
-        System.out.println("Left-right case");
         grandParent = leftRightCase(grandParent);
-        // System.out.println("GP: " + grandParent.getText());
-        // System.out.println( (grandParent.left==null?"null":grandParent.left.getText()) + " - " + (grandParent.right==null?"null":grandParent.right.getText()));
         
       // Right-left case.
       } else if (parentIsRightChild && nodeIsLeftChild) {
-        System.out.println("Right-left case.");
         grandParent = rightLeftCase(grandParent);
 
       // Right-right case.
       } else {
-        System.out.println("Right-right case.");
         grandParent = rightRightCase(grandParent);
       }
 
     }
-    // display();
+
     insertionRelabel(grandParent);
     
   }
@@ -243,10 +245,12 @@ public class RedBlackTree <T extends Comparable<T>> {
     Node child = parent.left;
 
     parent.left = child.right;
-    child.right = parent;
-    child.parent = grandParent;
-    parent.parent = child;
+    if (child.right != null) child.right.parent = parent;
 
+    child.right = parent;
+    parent.parent = child;
+    
+    child.parent = grandParent;
     updateParentChildLink(grandParent, parent, child);
 
     return child;
@@ -258,10 +262,12 @@ public class RedBlackTree <T extends Comparable<T>> {
     Node child = parent.right;
 
     parent.right = child.left;
+    if (child.left != null) child.left.parent = parent;
+
     child.left = parent;
-    child.parent = grandParent;
     parent.parent = child;
 
+    child.parent = grandParent;
     updateParentChildLink(grandParent, parent, child);
     
     return child;
@@ -337,24 +343,51 @@ public class RedBlackTree <T extends Comparable<T>> {
   // Make sure all left child nodes are smaller in value than their parent and
   // make sure all right child nodes are greater in value than their parent.
   // (Used only for testing)
-  // boolean validateBSTInvarient(Node node) {
-  //   if (node == null) return true;
-  //   T val = node.value;
-  //   boolean isValid = true;
-  //   if (node.left  != null) isValid = isValid && node.left.value.compareTo(val)  < 0;
-  //   if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
-  //   return isValid && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
-  // }
+  boolean validateBinarySearchTreeInvariant(Node node) {
+    if (node == null) return true;
+    T val = node.value;
+    boolean isValid = true;
+    if (node.left  != null) isValid = isValid && node.left.value.compareTo(val)  < 0;
+    if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
+    return isValid && validateBinarySearchTreeInvariant(node.left) && validateBinarySearchTreeInvariant(node.right);
+  }
+
+  // Used for testing.
+  boolean validateParentLinksAreCorrect(Node node, Node parent) {
+    if (node == null) return true;
+    if (node.parent != parent) return false;
+    return validateParentLinksAreCorrect(node.left, node) && validateParentLinksAreCorrect(node.right, node);
+  }
 
   public static void main(String[] args) {
-    
-    RedBlackTree<Integer> rbTree = new RedBlackTree<>();
-    int[] values = {9,8,4,3,7,6,5,2,1,0};
-    for (int v : values) {
-      rbTree.insert(v);
-      rbTree.display();
-      System.out.println("------------------------------------------------------------------------------");
+
+    // int[] values = {88, 94, 99, 32, 3, 48, 93, 62, 85};
+    // RedBlackTree<Integer> rbTree = new RedBlackTree<>();
+    // for (int v : values) {
+    //   System.out.println("======================================================================================================================================================================================");
+    //   System.out.println("INSERTING: " + v);
+    //   rbTree.insert(v);
+    //   System.out.println("PARENT LINK STATUS: " + rbTree.validateParentLinksAreCorrect(rbTree.root, null));
+    //   rbTree.display();
+    // }
+
+    outer:
+    for (int loop = 0; loop < 1000000; loop++) {
+      RedBlackTree<Integer> rbTree = new RedBlackTree<>();  
+      List<Integer> ar = new ArrayList<>();
+      for (int i = 0; i < 9; i++) ar.add((int)(Math.random() * 100));
+      for (int j = 0; j < ar.size(); j++) {
+        rbTree.insert(ar.get(j));
+        boolean inv = rbTree.validateBinarySearchTreeInvariant(rbTree.root);
+        if (!inv) {
+          System.out.println("BROKE AT INDEX: " + j);
+          System.out.println(ar);
+          rbTree.display();    
+          break outer;    
+        }
+      }
     }
+
 
   }
 

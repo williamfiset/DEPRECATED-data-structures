@@ -205,6 +205,97 @@ public class RedBlackTreeTest {
 
   }
 
+  @Test
+  public void interestingCase1() {
+
+    int[] values = {41, 44, 95, 83, 72, 66, 94, 90, 59};
+    for (int v : values) tree.insert(v);
+
+    assertEquals(44, tree.root.value.intValue());
+
+    assertEquals(41, tree.root.left.value.intValue());
+    assertEquals(83, tree.root.right.value.intValue());
+
+    assertEquals(66, tree.root.right.left.value.intValue());    
+    assertEquals(94, tree.root.right.right.value.intValue());    
+
+    assertEquals(59, tree.root.right.left.left.value.intValue());    
+    assertEquals(72, tree.root.right.left.right.value.intValue());
+    assertEquals(90, tree.root.right.right.left.value.intValue());    
+    assertEquals(95, tree.root.right.right.right.value.intValue());    
+
+    assertEquals(RedBlackTree.BLACK, tree.root.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.left.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.color);
+    assertEquals(RedBlackTree.BLACK, tree.root.right.left.color);    
+    assertEquals(RedBlackTree.BLACK, tree.root.right.right.color);    
+    assertEquals(RedBlackTree.RED, tree.root.right.left.left.color);    
+    assertEquals(RedBlackTree.RED, tree.root.right.left.right.color);
+    assertEquals(RedBlackTree.RED, tree.root.right.right.left.color);    
+    assertEquals(RedBlackTree.RED, tree.root.right.right.right.color);    
+
+  }
+
+  @Test
+  public void testRandomizedValueInsertionsAgainstTreeSet() {
+
+    TreeSet<Integer> set = new TreeSet<>();
+    for (int i = 0; i < TEST_SZ; i++) {
+      int v = randValue();
+      assertEquals(set.add(v), tree.insert(v));
+      assertEquals(set.size(), tree.size());
+      assertTrue(tree.validateBinarySearchTreeInvariant(tree.root));
+      // validateRedBlackTreeInvariant
+    }
+
+  }
+
+/*
+  @Test 
+  public void randomRemoveTests() {
+    TreeSet<Integer> ts = new TreeSet<>();
+    for (int i = 0; i < TEST_SZ; i++) {
+      
+      int size = i;
+      List <Integer> lst = genRandList(size);
+      for (Integer value : lst) {
+        tree.insert(value);
+        ts.add(value);
+      }
+      Collections.shuffle(lst);
+
+      // Remove all the elements we just placed in the tree.
+      for (int j = 0; j < size; j++) {
+        
+        Integer value = lst.get(j);
+        assertEquals(ts.remove(value), tree.remove(value));
+        assertFalse(tree.contains(value));
+        assertEquals(size - j - 1, tree.size());
+      }
+      assertTrue(tree.isEmpty());
+    }
+  }
+
+  @Test
+  public void testTreeHeight() {
+    for (int n = 1; n <= TEST_SZ; n++) {
+      
+      tree.insert(randValue());
+      int height = tree.height();
+
+      // Get an upper bound on what the maximum height of
+      // an AVL tree should be. Values were taken from:
+      // https://en.wikipedia.org/wiki/AVL_tree#Comparison_to_other_structures
+      double c = 1.441;
+      double b = -0.329;
+      double upperBound = c*(Math.log(n+2.0)/Math.log(2)) + b;
+
+      assertTrue(height < upperBound);
+
+    }
+  }
+*/
+
   static void assertNullChildren(RedBlackTree.Node... nodes) {
     for (RedBlackTree.Node node : nodes) {
       assertNull(node.left);

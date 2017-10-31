@@ -1,29 +1,44 @@
 /**
+ * The Size Balanced Tree (SBT) is a balanced binary search tree that uses the
+ * size of subtrees to rebalance itself. 
+ *
+ * See nice article about the SBT:
+ * http://wcipeg.com/wiki/Size_Balanced_Tree#Insertion
+ *
+ * Read the excellent research paper in the research_paper/ folder.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
-public class SizeBalancedTree <T extends Comparable<T>> {
+public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
   
-  // Tracks the number of nodes in this BST
+  private static final int DEFAULT_SIZE = 16;
+
+  // Tracks the number of nodes in this tree.
   private int nodeCount = 0;
 
-  // This BST is a rooted tree so we maintain a handle on the root node
+  // This is a rooted tree so we maintain a handle on the root node.
   private Node root = null;
 
-  // Internal node containing node references
-  // and the actual node data
-  private class Node {
-    T data;
+  // Size tracks the number of children nodes below this number.
+  private int[] sz = new int[DEFAULT_SIZE];
+
+  // TODO: Implement TreePrinter interface
+  class Node {
+
+    T value;
+
+    int id;
+
     Node left, right;
-    public Node (Node left, Node right, T elem) {
-      this.data = elem;
-      this.left = left;
-      this.right = right;
+
+    public Node (T value) {
+      this.value = value;
+      id = nodeCount;
     }
   }
 
-  // Check if this binary tree is empty
+  // Check if the tree is empty.
   public boolean isEmpty() {
     return size() == 0;
   }
@@ -44,6 +59,7 @@ public class SizeBalancedTree <T extends Comparable<T>> {
 
     // Otherwise add this element to the binary tree
     } else {
+      checkSize();
       root = add(root, elem);
       nodeCount++;
       return true;
@@ -51,24 +67,62 @@ public class SizeBalancedTree <T extends Comparable<T>> {
 
   }
 
+  private void checkSize() {
+    if (nodeCount + 1 == sz.length) {
+      int[] newSz = new int[sz.length * 2];
+      System.arraycopy(sz, 0, newSz, 0, sz.length);
+      sz = newSz;
+    }
+  }
+
   // Private method to recursively add a value in the binary tree
   private Node add(Node node, T elem) {
 
     // Base case: found a leaf node
     if (node == null) {
-      node = new Node (null, null, elem);
-
+      node = new Node(elem);
     } else {
+      
+      sz[node.id]++;
+
       // Pick a subtree to insert element
-      if (elem.compareTo(node.data) < 0) {
+      if (elem.compareTo(node.value) < 0) {
         node.left = add(node.left, elem);
       } else {
         node.right = add(node.right, elem);
       }
     }
 
+    // Rebalance
     return node;
 
+  }
+
+  private int sz(Node node) {
+    if (node == null) return 0;
+    return sz[node.id];
+  }
+
+  private Node rightRotate(Node node) {
+    Node child = node.left;
+    node.left = child.right;
+    child.right = node;
+    sz[child.id] = sz(node);
+    sz[node.id] = sz(node.left) + sz(node.right) + 1;
+    return child;
+  }
+
+  private Node leftRotate(Node node) {
+    Node child = node.right;
+    node.right = child.left;
+    child.left = node;
+    sz[child.id] = sz(node);
+    sz[node.id] = sz(child.left) + sz(child.right) + 1;
+    return child;
+  }
+
+  private Node leftRotate(Node node) {
+    return null;
   }
 
   // Remove a value from this binary tree if it exists, O(n)
@@ -89,7 +143,7 @@ public class SizeBalancedTree <T extends Comparable<T>> {
     
     if (node == null) return null;
     
-    int cmp = elem.compareTo(node.data);
+    int cmp = elem.compareTo(node.value);
 
     // Dig into left subtree, the value we're looking
     // for is smaller than the current value
@@ -111,7 +165,7 @@ public class SizeBalancedTree <T extends Comparable<T>> {
         
         Node rightChild = node.right;
         
-        node.data = null;
+        node.value = null;
         node = null;
 
         return rightChild;
@@ -123,7 +177,7 @@ public class SizeBalancedTree <T extends Comparable<T>> {
 
         Node leftChild = node.left;
 
-        node.data = null;
+        node.value = null;
         node = null;
 
         return leftChild;
@@ -140,19 +194,19 @@ public class SizeBalancedTree <T extends Comparable<T>> {
         Node tmp = findMin(node.right);
 
         // Swap the data
-        node.data = tmp.data;
+        node.value = tmp.value;
 
         // Go into the right subtree and remove the leftmost node we
         // found and swapped data with. This prevents us from having
         // two nodes in our tree with the same value.
-        node.right = remove(node.right, tmp.data);
+        node.right = remove(node.right, tmp.value);
         
         // If instead we wanted to find the largest node in the left
         // subtree as opposed to smallest node in the right subtree 
         // here is what we would do:
         // Node tmp = findMax(node.left);
-        // node.data = tmp.data;
-        // node.left = remove(node.left, tmp.data);
+        // node.value = tmp.value;
+        // node.left = remove(node.left, tmp.value);
 
       }
 
@@ -176,30 +230,34 @@ public class SizeBalancedTree <T extends Comparable<T>> {
     return node;
   }
 
-  // returns true is the element exists in the tree
-  public boolean contains(T elem) {
-    return contains(root, elem);
+  // Return true/false depending on whether a value exists in the tree.
+  public boolean contains(T value) {
+    
+    Node node = root;
+
+    if (node == null || value == null) return false;
+
+    while(node != null) {
+
+      // Compare current value to the value in the node.
+      int cmp = value.compareTo(node.value);
+
+      // Dig into left subtree.
+      if (cmp < 0) node = node.left;
+
+      // Dig into right subtree.
+      else if (cmp > 0) node = node.right;
+
+      // Found value in tree.
+      else return true;
+    }
+
+    return false;
   }
-  
-  // private recursive method to find an element in the tree
-  private boolean contains(Node node, T elem) {
-    
-    // Base case: reached bottom, value not found
-    if (node == null) return false;
 
-    int cmp = elem.compareTo(node.data);
-    
-    // Dig into the left subtree because the value we're
-    // looking for is smaller than the current value
-    if (cmp < 0) return contains(node.left, elem);
-
-    // Dig into the right subtree because the value we're
-    // looking for is greater than the current value
-    else if (cmp > 0) return contains(node.right, elem);
-    
-    // We found the value we were looking for
-    else return true;
-
+  // TODO: Implement iterator. See other BST for examples.
+  public java.util.Iterator<T> iterator() {
+    return null;
   }
 
   public static void main(String[] args) {

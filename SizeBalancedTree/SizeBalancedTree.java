@@ -2,6 +2,7 @@
  * The Size Balanced Tree (SBT) is a balanced binary search tree that uses the
  * size of subtrees to rebalance itself. 
  *
+ *
  * See nice article about the SBT:
  * http://wcipeg.com/wiki/Size_Balanced_Tree#Insertion
  *
@@ -24,7 +25,7 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
   private int[] sz = new int[DEFAULT_SIZE];
 
   // TODO: Implement TreePrinter interface
-  class Node {
+  class Node implements TreePrinter.PrintableNode {
 
     T value;
 
@@ -35,7 +36,28 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
     public Node (T value) {
       this.value = value;
       id = nodeCount;
+      sz[id] = 0;
     }
+
+    @Override
+    public Node getLeft() {
+      return left;
+    }
+
+    @Override
+    public Node getRight() {
+      return right;
+    }
+
+    @Override
+    public String getText() {
+      return String.valueOf(value) + " (" + sz[id] + ")";
+    }
+
+  }
+
+  public void display() {
+    TreePrinter.print(root);
   }
 
   // Check if the tree is empty.
@@ -98,6 +120,7 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
 
   }
 
+  // Returns the number of nodes below a certain node.
   private int sz(Node node) {
     if (node == null) return 0;
     return sz[node.id];
@@ -119,10 +142,6 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
     sz[child.id] = sz(node);
     sz[node.id] = sz(child.left) + sz(child.right) + 1;
     return child;
-  }
-
-  private Node leftRotate(Node node) {
-    return null;
   }
 
   // Remove a value from this binary tree if it exists, O(n)
@@ -262,6 +281,15 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
 
   public static void main(String[] args) {
     
+    int[] values = {1,6,3,8,9,2,7,-5,5};
+    SizeBalancedTree<Integer> tree = new SizeBalancedTree<>();
+
+    for (int v : values) {
+      tree.add(v);
+      // System.out.println("========================================================================================================================");
+    }
+    tree.display();
+
   }
 
 }

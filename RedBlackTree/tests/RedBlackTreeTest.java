@@ -8,7 +8,7 @@ public class RedBlackTreeTest {
   static final int MAX_RAND_NUM = +100000;
   static final int MIN_RAND_NUM = -100000;
 
-  static final int TEST_SZ = 2500;
+  static final int TEST_SZ = 9000;
 
   private RedBlackTree<Integer> tree;
 

@@ -177,7 +177,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
     // We need to re-balance somehow because no two red nodes can be 
     // adjacent to one another.
     } else {
-
+      
       // Parent node is a left child.
       if (parentIsLeftChild) {
         
@@ -201,7 +201,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
         } else {
           grandParent = rightRightCase(grandParent);
         }
-        
+
       }
     }
 

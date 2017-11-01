@@ -137,6 +137,20 @@ public class SplayTree <T extends Comparable<T>> {
   public void displayTree() {
   	preOrder(root);
   }
+  public boolean isEmpty(){
+   return root==null;
+  }
+		
+  public int size_totalKeys(Node<T> root){
+   if(root==null)
+     return 0;
+   return 1+(size_totalKeys(root.left)+size_totalKeys(root.right));
+  }
+  public int height(Node<T> root){
+    if(root==null)
+      return 0;
+    return 1+Math.max(height(root.left), height(root.right));
+ }
 
   private void preOrder(Node<T> root) {
     if (root != null) {

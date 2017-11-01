@@ -22,21 +22,24 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
   private Node root = null;
 
   // Size tracks the number of children nodes below this number.
-  private int[] sz = new int[DEFAULT_SIZE];
+  // private int[] sz = new int[DEFAULT_SIZE];
 
   // TODO: Implement TreePrinter interface
   class Node implements TreePrinter.PrintableNode {
 
     T value;
 
-    int id;
+    // int id;
+
+    // The number of nodes below this node.
+    int sz;
 
     Node left, right;
 
     public Node (T value) {
       this.value = value;
       id = nodeCount;
-      sz[id] = 0;
+      // sz[id] = 0;
     }
 
     @Override
@@ -81,7 +84,7 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
 
     // Otherwise add this element to the binary tree
     } else {
-      checkSize();
+      // checkSize();
       root = add(root, elem);
       nodeCount++;
       return true;
@@ -89,13 +92,13 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
 
   }
 
-  private void checkSize() {
-    if (nodeCount + 1 == sz.length) {
-      int[] newSz = new int[sz.length * 2];
-      System.arraycopy(sz, 0, newSz, 0, sz.length);
-      sz = newSz;
-    }
-  }
+  // private void checkSize() {
+  //   if (nodeCount + 1 == sz.length) {
+  //     int[] newSz = new int[sz.length * 2];
+  //     System.arraycopy(sz, 0, newSz, 0, sz.length);
+  //     sz = newSz;
+  //   }
+  // }
 
   // Private method to recursively add a value in the binary tree
   private Node add(Node node, T elem) {
@@ -115,7 +118,7 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
       }
     }
 
-    // Rebalance
+    // Re-balance
     return node;
 
   }
@@ -123,7 +126,8 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
   // Returns the number of nodes below a certain node.
   private int sz(Node node) {
     if (node == null) return 0;
-    return sz[node.id];
+    return node.sz;
+    // return sz[node.id];
   }
 
   private Node rightRotate(Node node) {
@@ -139,8 +143,8 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
     Node child = node.right;
     node.right = child.left;
     child.left = node;
-    sz[child.id] = sz(node);
-    sz[node.id] = sz(child.left) + sz(child.right) + 1;
+    child.sz = sz(node);
+    node.sz = sz(child.left) + sz(child.right) + 1;
     return child;
   }
 

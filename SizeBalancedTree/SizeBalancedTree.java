@@ -13,23 +13,15 @@
 
 public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
   
-  private static final int DEFAULT_SIZE = 16;
-
   // Tracks the number of nodes in this tree.
   private int nodeCount = 0;
 
   // This is a rooted tree so we maintain a handle on the root node.
   private Node root = null;
 
-  // Size tracks the number of children nodes below this number.
-  // private int[] sz = new int[DEFAULT_SIZE];
-
-  // TODO: Implement TreePrinter interface
   class Node implements TreePrinter.PrintableNode {
 
     T value;
-
-    // int id;
 
     // The number of nodes below this node.
     int sz;
@@ -38,8 +30,6 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
 
     public Node (T value) {
       this.value = value;
-      id = nodeCount;
-      // sz[id] = 0;
     }
 
     @Override
@@ -54,7 +44,7 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
 
     @Override
     public String getText() {
-      return String.valueOf(value) + " (" + sz[id] + ")";
+      return String.valueOf(value) + " (" + sz + ")";
     }
 
   }
@@ -92,14 +82,6 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
 
   }
 
-  // private void checkSize() {
-  //   if (nodeCount + 1 == sz.length) {
-  //     int[] newSz = new int[sz.length * 2];
-  //     System.arraycopy(sz, 0, newSz, 0, sz.length);
-  //     sz = newSz;
-  //   }
-  // }
-
   // Private method to recursively add a value in the binary tree
   private Node add(Node node, T elem) {
 
@@ -108,7 +90,7 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
       node = new Node(elem);
     } else {
       
-      sz[node.id]++;
+      node.sz++;
 
       // Pick a subtree to insert element
       if (elem.compareTo(node.value) < 0) {
@@ -127,15 +109,14 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
   private int sz(Node node) {
     if (node == null) return 0;
     return node.sz;
-    // return sz[node.id];
   }
 
   private Node rightRotate(Node node) {
     Node child = node.left;
     node.left = child.right;
     child.right = node;
-    sz[child.id] = sz(node);
-    sz[node.id] = sz(node.left) + sz(node.right) + 1;
+    child.sz = sz(node);
+    node.sz = sz(node.left) + sz(node.right) + 1;
     return child;
   }
 

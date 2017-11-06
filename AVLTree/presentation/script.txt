@@ -1,0 +1,11 @@
+
+Q: Why does this work? Why are we allowed the change the structure of a tree like this?
+
+A: This is perhaps one of the best questions to ask about tree rotations. The answer 
+is that 'there are two things to remember, first that' (cut?) all BBST are BST, so the BST
+invariant holds meaning that the values in left subtrees are always less than the ndoe
+and the values in the right subtree are less than the vlaue in the node *. 
+
+
+
+* assumming unique values in the tree.

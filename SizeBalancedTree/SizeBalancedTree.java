@@ -16,7 +16,7 @@ public class SizeBalancedTree <T extends Comparable<T>> implements Iterable<T> {
   // Tracks the number of nodes in this tree.
   private int nodeCount = 0;
 
-  // This is a rooted tree so we maintain a handle on the root node.
+  // Maintain a handle on the root node.
   private Node root = null;
 
   class Node implements TreePrinter.PrintableNode {

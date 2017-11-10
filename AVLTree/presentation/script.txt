@@ -78,9 +78,29 @@ I'm pretty such the balance factor can also be computed as left subtree height m
 For clarity, because people do get this wrong or define it differently, the height of a node x is calculated as the number of edges between x and the furthest leaf. So, if your tree only has one node, the tree has height 0, not height 1 because there are no edges.
 The invariant on the AVL that keep it balanced it forcing the balance factor of every node to be either -1, 0 or +1. If the balance factor of a node is anything else we need to resolve that with tree rotations.
 
+In terms of information we need to store in each node to actually make the AVL tree work what we'll need is the actual value the node stores. You must make sure this value is comparable so we know how to insert it and in what position it goes in the tree. Then we'll also need to store the balance factor and height of the node as well as the left and right child pointers. So as the algorithm executes we'll need to update all these values except for the node's actual value, so keep that in mind.
 
+So a slide back or so I said that the balance factor of a node must always be -1, 0 or +1. A natural question to ask is how to we handle the case where that's not true? The answer is that when this is not true the BF is either +2 or -2 which we can easily handle with tree rotations. The rotations we need to perform depending on the structure of the tree can be broken down into four distinct cases.
+The first such case is when the tree is left heavy and there are two left children. This is an easy case to fix because all we need to do is to perform a right rotation about the yellow node to balance.
 
+The next case is the left-right case where you have a left child but then that node has a right child. To fix this you do a left rotation about left child node, so the green one in the leftmost image. What then happens is that this transforms that case into the left-left case we just saw which we can solve with a right rotation to balance.
 
+The third case is the right-right case which is symmetric to the left-left case, so instead of doing a right rotation we do a left rotation about the green node.
+
+Last but not least is the right-left case which is symmetric to the left-right case. For this case you would perform a right rotation about the yellow node on the left most image to transform this case into the right-right case and then do a left rotation about the green node on the middle image.
+
+Next I want to show you some pseudocode for inserting elements with an AVL tree. This first method is the public facing insert method which returns true or false depending on whether the value was successfully inserted. For simplicity we're going to ban duplicate values in our AVL tree. So if the value already exists or the value is null this method returns false.
+If the node is not null and it doesn't already exist in the tree we call our private recursive insert method where we pass in a pointer to the root node and the value we want to insert.
+
+The private recursive method is also simple, if we hit the base case, a null node we simply return a new instance of a node with the value we want to insert, otherwise we get our comparator value so we can decide if the node should go in the left or the right subtree. After that on the recursive callback we call the update method which update the balance factor and height values, and lastly we rebalance the tree with the balance method. Now let's take a closer look at what the update and balance methods are actually doing.
+
+The update method updates the balance factor and height values of our node. So, to calculate the height of the node we get the maximum height of the left and the right subtrees and add one. Notice that I initialize the left and right subtree heights to be -1 because this will cancel out with the +1 with the max function in the case where the node has no subtrees giving a correct height of 0 for leaf nodes. Then lastly I update the balance factor for this node by finding the difference between the right subtree and the left subtree.
+
+The balance method is slightly more involved, but not too crazy. Here we check if our balance factor has an illegal value of either -2 or +2. If the balance factor is -2 then we know that the node is left heavy, then we dig further into the left subtree to determine if we're dealing with a left-left case or a left-right case. We do a similar thing if the balance factor is +2 except we're dealing with the right-right or right-left case. If the balance factor is not +2 or -2 then we know that the balance factor is either +1, 0 or -1 and in either case we don't need to do anything.
+
+Inside the four cases we might run into you notice that all we have here are calls to the leftRotation and rightRotation methods that we saw in the last video. Also notice that the left-right and right-left cases call the leftLeftCase and rightRightCase method respectively since they reduce to those cases after a first rotation.
+
+In the last video we looked at this right rotation method, but since we're dealing with an AVL tree in this video we actually need to augment that method to update the heights and balance factor of the nodes we're moving around when we do the rotations. This is a subtle detail you must not forget otherwise your height and balance factor values will be inconsistent. the left rotation case is symmetric to this one, you should be able to figure it out pretty easily.
 
 
 

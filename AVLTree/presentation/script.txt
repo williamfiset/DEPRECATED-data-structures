@@ -102,26 +102,116 @@ Inside the four cases we might run into you notice that all we have here are cal
 
 In the last video we looked at this right rotation method, but since we're dealing with an AVL tree in this video we actually need to augment that method to update the heights and balance factor of the nodes we're moving around when we do the rotations. This is a subtle detail you must not forget otherwise your height and balance factor values will be inconsistent. the left rotation case is symmetric to this one, you should be able to figure it out pretty easily.
 
+In the next video we'll look at how to remove elements from an AVL tree, and in the video after that we'll look at some source code. Thank you for watching, if you learned something please like this video and subscribe for more mathematics and computer science videos.
+
+=========================================================================
+
+Welcome back,
+
+In this video we're going to look at how to remove elements from an AVL tree. What you'll discover is that removing elements from an AVL tree is almost identical to removing elements from a regular BST.
+
+Just for review I want to look at how we remove nodes from a BST before we see how to remove nodes from an AVL tree. The removal algorithm can be broken down into two steps: Finding and replacing.
+In the find phase you find the element you want to remove from the tree if it exists, and in the replace phase you find a successor node to replace the node you want to remove. The successor node is necessary to maintain the BST invariant on the tree.
+
+In the find phase when we're searching for an element four things can happen:
+1) We hit a null node in which case we know the value in our tree does not exists.
+2) The comparator value is equal to zero meaning we found the node we want to remove.
+3) The comparator value is less than 0, so the value if it exists is in the left subtree.
+4) The comparator value is greater than 0, so the value if it exists is in the right subtree.
 
 
+Let's do an example of finding nodes in a BST. Suppose we want to find the value 14.
 
+We'll we start at the root node which we should have a reference to. Now we compare 20 with 14 and we know 14 is less than 20 so we go in the left subtree.
 
+14 is greater than 10 so we go in the right subtree.
 
+14 is less than 15 so we go in the left subtree.
 
+14 is great than 12 so we go in the right subtree.
 
+And now we've found our node!
 
+Now let's see what happens when we try and find 26 in the tree.
 
+Again we start at the root and we would go down the right subtree because 26 is great than 20.
 
+Now we'd head down the left subtree since 26 is less than 31.
 
+Now we'd do to the right subtree since 26 is greater than 25.
 
+At this point we would have reached a null node, the right child of 25 and we'd know 26 is not in the tree.
 
+So once we know what node to remove we need to find a successor for the node we're going to remove. The motivation for this is that if we just removed the node without finding a successor then there'd be a gap in the tree.
+When looking for a successor node we're in one of four cases, either we're a leaf node and there are no subtrees, the node to remove has no left subtree, the node to remove has no right subtree, or the node to remove has both a left subtree and right subtree. We'll see how to handle each of these cases.
 
+In the first case where the node to remove is a leaf node you can simply remove it without any side effect. The successor node in this case would be a null node.
 
+Suppose we want to remove node 8 from this tree. The first thing we would do is find where 8 is in the tree.
 
+**press until node 8 is found**
 
+Once found we discover it is a leaf node since 8 has no subtrees so we can just remove it.
 
+**press**
 
+**press**
 
+For cases 2 and 3 which are symmetric there's only one subtree on either the left or the right side. In these cases, the successor node is the root node of that left or right subtree. The reason the successor is the immediate node down from the node we're removing is that it's the next node which is either just larger than it in the case of a right subtree or just less than it in the case of the left subtree.
+
+Let's do an example, suppose we want to remove node 9. The first thing we do is find where node 9 is in the subtree. 
+
+**press**
+
+**press**
+
+Once we find node 9 we discover that it only has a left subtree, so the successor node is it's left child, so 7 in this case.
+
+So we get ready to delete 9 and reference node 7
+
+then we remove 9 from the tree and make 7 the new successor.
+
+**press**
+
+**press**
+
+**press**
+
+The last case, case 4 is when there is both a left and a right subtree. The question in this case is in which subtree will the successor of the node we're trying to remove be? 
+The answer is both! The successor can either be the largest value in the left subtree of the smallest value in the right subtree. I won't go into the proof for this because I already did it in the BST videos, so you'll just have to trust me.
+
+Once the successor node has been found in either the left or the right subtree we replace the value of the node to remove with the value in the successor node. However, the story doesn't end there. We must not forget to remove the duplicate value of the successor node that still exists in the tree. One common strategy to resolve this is to recursively call the function again but with the value to remove as the value in the successor node.
+
+Let's see an example because this isn't totally trivial. Let's remove node 7 from this tree, the root node. Note that we're still doing a removal example for BST not an AVL tree per se, but I promise augmenting to suppose AVL tree removals is trivial once you understand BST removals.
+
+So we start at the root node and discover that in fact this is the node we want to remove and notice that it has two non-empty subtrees, so we must choose a successor. 
+
+To choose the successor we can either pick the smallest value in the right subtree or the largest value in the left subtree. Let's find the smallest value in the right subtree. To do this you always go right once and then dig as far left as possible.
+
+**press**
+
+**press**
+
+**press**
+
+Now that we've found the successor node, 11 we want to copy its value into the node we're removing node 7. 
+
+Notice that now we have two instances of 11 in our tree, so what we can do is recursively call the remove method but on 11 which lucky for us will always be a Case 1, 2 or 3 removal.
+
+In this case, 11 only has a right subtree, so it's successor is its immediate right child.
+
+**press**
+
+**press**
+
+**press**
+
+**press**
+
+Alright the moment you've been waiting for. How do we augment the BST removal algorithm for AVL trees? The solution is super simple, you only need to add two lines of code to ensure that the tree remains balanced and that the balance factor and height values remain up to date.
+On the recursive callback you invoke the update method and the balance method which will ensure that when you remove a node from the AVL tree that the tree reamins balanced. Yes it's as easy as that. 
+
+We'll have a look at how this is actually implemented in code in the next video, so stay tuned for that. You can also find some source code for the AVL tree on github at github dot com slash william fiset slash data dash structures. Thank you for watching, if you learned something please like this video and subscribe for more computer science and mathematics videos.
 
 
 

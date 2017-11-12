@@ -279,56 +279,47 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
       // In this situation just swap the node we wish to remove
       // with its right child.
       if (node.left == null) {
-        
-        Node rightChild = node.right;
-        
-        node.value = null;
-        node = null;
-
-        return rightChild;
+        return node.right;
         
       // This is the case with only a left subtree or 
       // no subtree at all. In this situation just
       // swap the node we wish to remove with its left child.
       } else if (node.right == null) {
-
-        Node leftChild = node.left;
-
-        node.value = null;
-        node = null;
-
-        return leftChild;
+        return node.left;
 
       // When removing a node from a binary tree with two links the
       // successor of the node being removed can either be the largest
       // value in the left subtree or the smallest value in the right 
-      // subtree. In this implementation I have decided to find the 
-      // smallest value in the right subtree which can be found by 
-      // traversing as far left as possible in the right subtree.
+      // subtree. As a heuristic, I will remove from the subtree with
+      // the most nodes in hopes that this may help with balancing.
       } else {
-        
-        // Find the leftmost node in the right subtree
-        Node tmp = findMin(node.right);
 
-        // Swap the values.
-        node.value = tmp.value;
+        // Choose to remove from left subtree
+        if (node.left.height > node.right.height) {
 
-        // Go into the right subtree and remove the leftmost node we
-        // found and swapped data with. This prevents us from having
-        // two nodes in our tree with the same value.
-        Node newRightNode = remove(node.right, tmp.value);
-        if (newRightNode == TOKEN) return TOKEN;
-        node.right = newRightNode;
-        
-        // If instead we wanted to find the largest node in the left
-        // subtree as opposed to smallest node in the right subtree 
-        // here is what we would do:
-        // Node tmp = findMax(node.left);
-        // node.value = tmp.value;
-        // node.left = remove(node.left, tmp.value);
+          // Swap the value of the successor into the node.
+          T successorValue = findMax(node.left);
+          node.value = successorValue;
 
+          // Find the largest node in the left subtree.
+          Node replacement = remove(node.left, successorValue);
+          if (replacement == TOKEN) return TOKEN;
+          node.left = replacement;
+
+        } else {
+  
+          // Swap the value of the successor into the node.
+          T successorValue = findMin(node.right);
+          node.value = successorValue;
+
+          // Go into the right subtree and remove the leftmost node we
+          // found and swapped data with. This prevents us from having
+          // two nodes in our tree with the same value.
+          Node replacement = remove(node.right, successorValue);
+          if (replacement == TOKEN) return TOKEN;
+          node.right = replacement;
+        }
       }
-
     }
 
     // Update balance factor and height values.
@@ -340,17 +331,17 @@ public class AVLTree <T extends Comparable<T>> implements Iterable<T> {
   }
 
   // Helper method to find the leftmost node (which has the smallest value)
-  private Node findMin(Node node) {
+  private T findMin(Node node) {
     while(node.left != null) 
       node = node.left;
-    return node;
+    return node.value;
   }
 
   // Helper method to find the rightmost node (which has the largest value)
-  private Node findMax(Node node) {
+  private T findMax(Node node) {
     while(node.right != null) 
       node = node.right;
-    return node;
+    return node.value;
   }
 
   // Returns as iterator to traverse the tree in order.

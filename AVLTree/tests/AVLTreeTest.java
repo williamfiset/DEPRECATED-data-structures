@@ -10,16 +10,21 @@ public class AVLTreeTest {
 
   static final int TEST_SZ = 2500;
 
-  private AVLTree<Integer> tree;
+  private AVLTreeRecursive<Integer> tree;
 
   @Before
   public void setup() {
-    tree = new AVLTree<>();
+    tree = new AVLTreeRecursive<>();
   }
 
-  @Test(expected=IllegalArgumentException.class)
+  @Test
   public void testNullInsertion() {
-    tree.insert(null);
+    assertFalse(tree.insert(null));
+  }
+
+  @Test
+  public void testNullRemoval() {
+    assertFalse(tree.remove(null));
   }
 
   @Test
@@ -108,7 +113,7 @@ public class AVLTreeTest {
   }
 
   // Make sure all balance factor values are either -1, 0 or +1
-  static boolean validateBalanceFactorValues(AVLTree.Node node) {
+  static boolean validateBalanceFactorValues(AVLTreeRecursive.Node node) {
     if (node == null) return true;
     if (node.bf > +1 || node.bf < -1) return false;
     return validateBalanceFactorValues(node.left) && validateBalanceFactorValues(node.right);

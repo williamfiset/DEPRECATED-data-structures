@@ -10,24 +10,22 @@ public class QuadTreeTest {
   static final int MAX_RAND_NUM = +2000;
 
   @Before
-  public void setup() {
-    
-  }
+  public void setup() {}
 
   @Test
   public void testRectIntersection() {
 
-    Rect r1 = new Rect(0,0, 5,5);
+    QuadTree.Rect r1 = new QuadTree.Rect(0,0, 5,5);
 
-    Rect r1Center   = new Rect(1,1, 4,4);
-    Rect r1NWCorner = new Rect(-1,5, 0,6);
-    Rect r1SWCorner = new Rect(-1,-1, 0,0);
-    Rect r1SECorner = new Rect(5,-1, 6,0);
-    Rect r1NECorner = new Rect(5,5, 6,6);
-    Rect r1Above = new Rect(2,6, 3,8);
-    Rect r1Below = new Rect(2,-5, 5,-1);
-    Rect r1Left  = new Rect(-5,-4, -1,8);
-    Rect r1Right = new Rect(6,-3, 7,8);
+    QuadTree.Rect r1Center   = new QuadTree.Rect(1,1, 4,4);
+    QuadTree.Rect r1NWCorner = new QuadTree.Rect(-1,5, 0,6);
+    QuadTree.Rect r1SWCorner = new QuadTree.Rect(-1,-1, 0,0);
+    QuadTree.Rect r1SECorner = new QuadTree.Rect(5,-1, 6,0);
+    QuadTree.Rect r1NECorner = new QuadTree.Rect(5,5, 6,6);
+    QuadTree.Rect r1Above = new QuadTree.Rect(2,6, 3,8);
+    QuadTree.Rect r1Below = new QuadTree.Rect(2,-5, 5,-1);
+    QuadTree.Rect r1Left  = new QuadTree.Rect(-5,-4, -1,8);
+    QuadTree.Rect r1Right = new QuadTree.Rect(6,-3, 7,8);
 
     assertTrue(r1.intersects(r1));
 
@@ -63,17 +61,17 @@ public class QuadTreeTest {
   @Test
   public void testRectContainment() {
 
-    Rect r1 = new Rect(0,0, 5,5);
+    QuadTree.Rect r1 = new QuadTree.Rect(0,0, 5,5);
 
-    Rect r1Center   = new Rect(1,1, 4,4);
-    Rect r1NWCorner = new Rect(-1,5, 0,6);
-    Rect r1SWCorner = new Rect(-1,-1, 0,0);
-    Rect r1SECorner = new Rect(5,-1, 6,0);
-    Rect r1NECorner = new Rect(5,5, 6,6);
-    Rect r1Above = new Rect(2,6, 3,8);
-    Rect r1Below = new Rect(2,-5, 5,-1);
-    Rect r1Left  = new Rect(-5,-4, -1,8);
-    Rect r1Right = new Rect(6,-3, 7,8);
+    QuadTree.Rect r1Center   = new QuadTree.Rect(1,1, 4,4);
+    QuadTree.Rect r1NWCorner = new QuadTree.Rect(-1,5, 0,6);
+    QuadTree.Rect r1SWCorner = new QuadTree.Rect(-1,-1, 0,0);
+    QuadTree.Rect r1SECorner = new QuadTree.Rect(5,-1, 6,0);
+    QuadTree.Rect r1NECorner = new QuadTree.Rect(5,5, 6,6);
+    QuadTree.Rect r1Above = new QuadTree.Rect(2,6, 3,8);
+    QuadTree.Rect r1Below = new QuadTree.Rect(2,-5, 5,-1);
+    QuadTree.Rect r1Left  = new QuadTree.Rect(-5,-4, -1,8);
+    QuadTree.Rect r1Right = new QuadTree.Rect(6,-3, 7,8);
 
     assertTrue(r1.contains(r1));
 
@@ -109,7 +107,7 @@ public class QuadTreeTest {
   @Test
   public void testPointContainment() {
 
-    Rect r1 = new Rect(0,0, 5,5);
+    QuadTree.Rect r1 = new QuadTree.Rect(0,0, 5,5);
 
     // Corner check
     assertTrue(r1.contains(0,0));
@@ -161,8 +159,8 @@ public class QuadTreeTest {
   public void testCountingPoints() {
 
     final int SZ = 100;
-    Rect region = new Rect(0, 0, SZ, SZ);
-    QTNode quadTree = new QTNode(region);
+    QuadTree.Rect region = new QuadTree.Rect(0, 0, SZ, SZ);
+    QuadTree quadTree = new QuadTree(region);
 
     // Add points on a diagonal
     for (int i = 0; i <= SZ; i++)
@@ -189,7 +187,7 @@ public class QuadTreeTest {
       int W = 1 + (int) (Math.random() * MAX_RAND_NUM);
       int H = 1 + (int) (Math.random() * MAX_RAND_NUM);
 
-      QTNode quadTree = new QTNode(new Rect(0,0,W,H));
+      QuadTree quadTree = new QuadTree(new QuadTree.Rect(0,0,W,H));
       int[][] grid = new int[H+1][W+1];
 
       for (int i = 0; i < TEST_SZ; i++) {
@@ -214,7 +212,7 @@ public class QuadTreeTest {
           
           // System.out.printf("(%d, %d) (%d %d)\n", x1,y1,x2,y2);
 
-          Rect region = new Rect(x1,y1,x2,y2);
+          QuadTree.Rect region = new QuadTree.Rect(x1,y1,x2,y2);
           int expectedPts = bruteForceCount(grid,x1,y1,x2,y2);
           int quadTreeCount = quadTree.count(region);
           // System.out.printf("EXPECTED: %d, GOT: %d\n", expectedPts, quadTreeCount);

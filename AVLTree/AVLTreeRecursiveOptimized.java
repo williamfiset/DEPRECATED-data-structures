@@ -87,13 +87,10 @@ public class AVLTreeRecursiveOptimized <T extends Comparable<T>> implements Iter
       // Compare current value to the value in the node.
       int cmp = value.compareTo(node.value);
 
-      // Dig into left subtree.
       if (cmp < 0) node = node.left;
-
-      // Dig into right subtree.
       else if (cmp > 0) node = node.right;
-
       else return true;
+     
     }
     return false;
   }

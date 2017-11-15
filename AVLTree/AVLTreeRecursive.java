@@ -107,9 +107,7 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
     return false;
   }
 
-  // Inserts a value inside the AVL tree. This method returns 'TOKEN' if
-  // the value we tried to insert was already inside the tree, otherwise
-  // the new (or old) root node is returned.
+  // Inserts a value inside the AVL tree.
   private Node insert(Node node, T value) {
     
     // Base case.
@@ -280,7 +278,7 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
           node.value = successorValue;
 
           // Find the largest node in the left subtree.
-          node.left = remove(node.left, successorValue);;
+          node.left = remove(node.left, successorValue);
 
         } else {
   

@@ -10,17 +10,17 @@ This repository is contribution friendly :smiley:. If you're a data structures e
 
 # Development
 
-This project uses [Gradle](https://gradle.org/) as a build system. To get started install the gradle command-line tool. 
+This project uses [Gradle](https://gradle.org/) as a build system. To get started install the gradle command-line tool and keep reading.
 
 ### Running all tests
 
-To run all tests type:
+Nearly all the data structures in this repository have tests to verify their functionality. To run all tests type:
 ```bash
 data-structures$ gradle test
 ```
 
 ### Running specific test file
-When developing you likely do not want to run all tests for every data structure. Instead specify the name of the test class you wish to run:
+When developing you likely do not want to run all tests for every data structure. Instead you probably only care about one particular test class you wish to run. For example if you want to run the LinkedListTest.java file under [LinkedList/tests/LinkedListTest.java](LinkedList/tests/LinkedListTest.java) you can execute:
 ```bash
 data-structures$ gradle test --tests "LinkedListTest"
 ```
@@ -32,6 +32,16 @@ gradle test --tests "FenwickTree*Test"
 # Equivalently for the explicit:
 gradle test --tests "FenwickTreeRangeQueryPointUpdateTest" --tests "FenwickTreeRangeUpdatePointQueryTest"
 ```
+
+### Adding a new data structure
+
+To add a new data structure called **Foo** do the following:
+
+1) Create a new folder called Foo at the root of the repository.
+2) Add data structure implementation in Foo/ as Foo/Foo.java
+3) Add tests for Foo in Foo/tests/FooTest.java
+4) Edit **build.gradle** and add Foo to project
+5) Send pull request for review :smiley:
 
 # License
 

@@ -10,7 +10,11 @@ This repository is contribution friendly :smiley:. If you're a data structures e
 
 # For developers
 
-This project uses [Gradle](https://gradle.org/) as a build system. To get started install the gradle command-line tool and keep reading.
+This project uses [Gradle](https://gradle.org/) as a build system and for testing. To get started install the gradle command-line tool and run the build command to make sure you don't get any errors:
+
+```bash
+data-structures$ gradle build
+```
 
 ### Adding a new data structure
 
@@ -24,9 +28,10 @@ The procedure to add a new data structure named **Foo** is the following:
 6) Send pull request for review :open_mouth:
 
 ### Testing
+
 This repository places a large emphasis on good testing practice to ensure that published data structures are bug free and high quality. Testing is done using a combinations of frameworks including: [JUnit](http://junit.org/junit4/), [Mockito](http://site.mockito.org/) and the [Google Truth](http://google.github.io/truth) framework, but mostly JUnit.
 
-When developing you likely do not want to run all tests for every data structure. Instead you probably only care about one particular test class you wish to run. For example if you want to run the LinkedListTest.java file under [LinkedList/tests/LinkedListTest.java](LinkedList/tests/LinkedListTest.java) you can execute:
+When developing you likely do not want to run all tests but only a subset of them. For example, if you want to run the LinkedListTest.java file under [LinkedList/tests/LinkedListTest.java](LinkedList/tests/LinkedListTest.java) you can execute:
 ```bash
 data-structures$ gradle test --tests "LinkedListTest"
 ```

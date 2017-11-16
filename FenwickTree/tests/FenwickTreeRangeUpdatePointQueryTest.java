@@ -60,7 +60,7 @@ public class FenwickTreeRangeUpdatePointQueryTest {
     assertEquals(13, ft.get(2));
     assertEquals(14, ft.get(3));
     assertEquals(15, ft.get(4));
-    assertEquals(6123,  ft.get(5));// 6
+    assertEquals(6,  ft.get(5));
 
   }
 

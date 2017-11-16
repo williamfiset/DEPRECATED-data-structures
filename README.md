@@ -6,7 +6,7 @@ Data structures are amongst the most fundamental ingredients in the recipe for e
 
 # Contributing!
 
-If you want to add/edit/improve a data structure in this repository contributions are welcome! Please be sure to include tests :)
+This repository is contribution friendly :smiley:. If you're a data structures enthusiast (like me!) and want to add, edit or improve a data structure in this repository your contribution is welcome! Please be sure to include tests :kissing_heart:.
 
 # Development
 
@@ -25,7 +25,7 @@ When developing you likely do not want to run all tests for every data structure
 data-structures$ gradle test --tests "LinkedListTest"
 ```
 
-Sometimes there are many test files for one data structure. One example is the FenwickTree which currently has two test files: [FenwickTreeRangeQueryPointUpdateTest.java](FenwickTree/FenwickTreeRangeQueryPointUpdateTest.java) and [FenwickTreeRangeUpdatePointQueryTest.java](FenwickTree/FenwickTreeRangeUpdatePointQueryTest.java), in which case you can specify a glob expression to capture all the appropriate test files:
+Sometimes there are many test files for one data structure. One example is the :evergreen_tree:FenwickTree:evergreen_tree: which currently has two test files: [FenwickTreeRangeQueryPointUpdateTest.java](FenwickTree/tests/FenwickTreeRangeQueryPointUpdateTest.java) and [FenwickTreeRangeUpdatePointQueryTest.java](FenwickTree/tests/FenwickTreeRangeUpdatePointQueryTest.java), in which case you can specify a glob expression to capture all the appropriate test files:
 ```bash
 gradle test --tests "FenwickTree*Test"
 

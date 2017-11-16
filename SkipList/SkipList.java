@@ -23,7 +23,7 @@ class SkipList {
   Node tail;
   // Initialise with the height of the SkipList and Keys smaller and larger
   // than all other keys that will be inserted in the SkipList
-  public SkipList(int height, Key minKey, Key maxKey) {
+  public SkipList(int height, Key minKey, Key maxKey, int h) {
     this.height = height;
     head = new Node(minKey);
     tail = new Node(maxKey);
@@ -74,91 +74,93 @@ class SkipList {
     }
     return distSum;
   }
-}
-class Node implements Comparable<Node> {
-  Node left;
-  Node right;
-  Node up;
-  Node down;
-  int height;
-  int leftDist;
-  Key k;
-  public Node(Key kk) {
-    k = kk;
-  }
-  public int compareTo(Node n2) {
-    return k.compareTo(n2.k);
-  }
-  public Node find(Node f) {
-    if (f.compareTo(right)>=0) {
-      return right.find(f);
-    } else if (down!=null) {
-      return down.find(f);
+
+  class Node implements Comparable<Node> {
+    Node left;
+    Node right;
+    Node up;
+    Node down;
+    int height;
+    int leftDist;
+    Key k;
+    public Node(Key kk) {
+      k = kk;
     }
-    return this;
-  }
-  
-  public void insert(Node n2, Node lower, int insertHeight, int distance) {
-    if (height<=insertHeight) {
-      n2.left = this;
-      n2.right = right;
-      n2.down = lower;
-      right.left = n2;
-      right = n2;
-      if (lower!=null)
-        lower.up = n2;
-      n2.height = height;
-      n2.leftDist = distance;
-      n2.right.leftDist -= n2.leftDist-1;
-      Node curr = this;
-      while (curr.up==null) {
-        distance += curr.leftDist;
-        curr = curr.left;
+    public int compareTo(Node n2) {
+      return k.compareTo(n2.k);
+    }
+    public Node find(Node f) {
+      if (f.compareTo(right)>=0) {
+        return right.find(f);
+      } else if (down!=null) {
+        return down.find(f);
       }
-      curr = curr.up;
-      curr.insert(new Node(n2.k), n2, insertHeight, distance);
-    } else {
+      return this;
+    }
+    
+    public void insert(Node n2, Node lower, int insertHeight, int distance) {
+      if (height<=insertHeight) {
+        n2.left = this;
+        n2.right = right;
+        n2.down = lower;
+        right.left = n2;
+        right = n2;
+        if (lower!=null)
+          lower.up = n2;
+        n2.height = height;
+        n2.leftDist = distance;
+        n2.right.leftDist -= n2.leftDist-1;
+        Node curr = this;
+        while (curr.up==null) {
+          distance += curr.leftDist;
+          curr = curr.left;
+        }
+        curr = curr.up;
+        curr.insert(new Node(n2.k), n2, insertHeight, distance);
+      } else {
+        Node curr = this;
+        curr.right.leftDist++;
+        while (curr.left!=null || curr.up!=null) {
+          while (curr.up==null) {
+            curr = curr.left;
+          }
+          curr = curr.up;
+          curr.right.leftDist++;
+        }
+      }
+    }
+
+    public void remove(Node n2) {
       Node curr = this;
-      curr.right.leftDist++;
+      if (curr.compareTo(n2)!=0)
+        return;
+      while(curr.up!=null) {
+        curr.left.right = curr.right;
+        curr.right.left = curr.left;
+        curr.right.leftDist += curr.leftDist-1;
+        curr = curr.up;
+      }
+      curr.left.right = curr.right;
+      curr.right.left = curr.left;
+      curr.right.leftDist += curr.leftDist-1;
       while (curr.left!=null || curr.up!=null) {
         while (curr.up==null) {
           curr = curr.left;
         }
         curr = curr.up;
-        curr.right.leftDist++;
+        curr.right.leftDist--;
       }
     }
   }
-
-  public void remove(Node n2) {
-    Node curr = this;
-    if (curr.compareTo(n2)!=0)
-      return;
-    while(curr.up!=null) {
-      curr.left.right = curr.right;
-      curr.right.left = curr.left;
-      curr.right.leftDist += curr.leftDist-1;
-      curr = curr.up;
+  class Key implements Comparable<Key> {
+    int k;
+    public Key(int kk) {
+      k = kk;
     }
-    curr.left.right = curr.right;
-    curr.right.left = curr.left;
-    curr.right.leftDist += curr.leftDist-1;
-    while (curr.left!=null || curr.up!=null) {
-      while (curr.up==null) {
-        curr = curr.left;
-      }
-      curr = curr.up;
-      curr.right.leftDist--;
+
+    public int compareTo(Key k2) {
+      return k-k2.k;
     }
   }
-}
-class Key implements Comparable<Key> {
-  int k;
-  public Key(int kk) {
-    k = kk;
-  }
 
-  public int compareTo(Key k2) {
-    return k-k2.k;
-  }
 }

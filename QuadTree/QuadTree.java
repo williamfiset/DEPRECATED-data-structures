@@ -3,8 +3,49 @@
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 
+import java.util.*;
+import static java.lang.Double.POSITIVE_INFINITY;
+
 public class QuadTree {
 
+  private static int NORTH_EAST = 1;
+  private static int NORTH_WEST = 2;
+  private static int SOUTH_EAST = 3;
+  private static int SOUTH_WEST = 4;
+
+  private static boolean isNorth(int dir) {
+    return dir == NORTH_EAST || dir == NORTH_WEST;
+  }
+
+  class Pt {
+    long x, y;
+    public Pt(long xx, long yy) {
+      y = yy; x = xx;
+    }
+    @Override 
+    public String toString() {
+      return "("+x+","+y+")";
+    }
+  }
+
+  static class SortedPt implements Comparable<SortedPt> {
+    Pt pt;
+    double dist;
+    public SortedPt(double dist, Pt pt) {
+      this.dist = dist;
+      this.pt = pt;
+    }
+    @Override
+    public int compareTo(SortedPt other) {
+      return Double.compare(dist, other.dist);
+    }
+    @Override 
+    public String toString() {
+      return dist + " - " + pt;
+    } 
+  }
+
+  // Node that represents a regions with points inside this region.
   class Node {
 
     // Keeps track of how many points are currently
@@ -75,7 +116,7 @@ public class QuadTree {
     }
 
     // Count how many points are found within a certain rectangular region
-    public int count(Rect area) {
+    private int count(Rect area) {
 
       if (area == null || !region.intersects(area)) return 0;
 
@@ -106,7 +147,170 @@ public class QuadTree {
 
     }
 
-  }
+    private List<Pt> kNearestNeighbors(int k, long x, long y) {
+      PriorityQueue<SortedPt> heap = new PriorityQueue<>(k, Collections.reverseOrder());
+      knn(k, x, y, heap);
+
+      List<Pt> neighbors = new ArrayList<>();
+      for (SortedPt n : heap) neighbors.add(n.pt);
+      return neighbors;
+    }
+
+    // Find the k-nearest neighbors.
+    private void knn(int k, long x, long y, PriorityQueue<SortedPt> heap) {
+
+      for (int i = 0; i < ptCount; i++) {
+        long xx = X[i], yy = Y[i];
+
+        // Get largest radius.
+        double radius = heap.isEmpty() ? POSITIVE_INFINITY : heap.peek().dist;
+
+        // Get distance from point to this point.
+        double distance = Math.sqrt((xx-x)*(xx-x) + (yy-y)*(yy-y));
+        
+        // Add node to heap.
+        if (heap.size() < k) {
+          heap.add(new SortedPt(distance, new Pt(xx, yy)));
+        } else if (distance < radius) {
+          heap.poll();
+          // System.out.println("POLLED: " + heap.poll());
+          heap.add(new SortedPt(distance, new Pt(xx, yy)));
+        }
+      }
+
+      int pointQuadrant = 0;
+
+      // Dig to find the quadrant (x, y) belongs to.
+      if (nw != null && region.contains(x, y)) {
+        nw.knn(k, x, y, heap);
+        pointQuadrant = NORTH_WEST;
+      } else if (ne != null && region.contains(x, y)) {
+        ne.knn(k, x, y, heap);
+        pointQuadrant = NORTH_EAST;
+      } else if (sw != null && region.contains(x, y)) {
+        sw.knn(k, x, y, heap);
+        pointQuadrant = SOUTH_WEST;
+      } else if (se != null && region.contains(x, y)) { // Use else clause?
+        se.knn(k, x, y, heap);
+        pointQuadrant = SOUTH_EAST;
+      }
+
+      if (pointQuadrant == 0) {
+        // System.out.println("UNDEFINED QUADRANT?");
+        // return;
+      }
+
+      // Get largest radius.
+      double radius = heap.isEmpty() ? POSITIVE_INFINITY : heap.peek().dist;
+
+      // Find the center of this region at (cx, cy)
+      long cx = (region.x1 + region.x2) / 2;
+      long cy = (region.y1 + region.y2) / 2;
+
+      // Compute the horizontal (dx) and vertical (dy) distance from the 
+      // point (x, y) to the nearest cell.
+      long dx = Math.abs(x - cx);
+      long dy = Math.abs(y - cy);
+
+      boolean checkHorizontalCell = radius >= dx;
+      boolean checkVerticalCell = radius >= dy;
+      boolean checkDiagonalCell = checkHorizontalCell && checkVerticalCell;
+
+      // TODO(williamfiset): Refactor.
+      if (heap.size() == k) {
+
+        if (isNorth(pointQuadrant)) {
+          if (pointQuadrant == NORTH_WEST) {
+            if (checkHorizontalCell) if (ne != null) ne.knn(k, x, y, heap);
+            if (checkVerticalCell)   if (sw != null) sw.knn(k, x, y, heap);
+            if (checkDiagonalCell)   if (se != null) se.knn(k, x, y, heap);
+          } else {
+            if (checkHorizontalCell) if (nw != null) nw.knn(k, x, y, heap);
+            if (checkVerticalCell)   if (se != null) se.knn(k, x, y, heap);
+            if (checkDiagonalCell)   if (nw != null) nw.knn(k, x, y, heap);
+          }
+        } else {
+          if (pointQuadrant == SOUTH_WEST) {
+            if (checkHorizontalCell) if (se != null) se.knn(k, x, y, heap);
+            if (checkVerticalCell)   if (nw != null) nw.knn(k, x, y, heap);
+            if (checkDiagonalCell)   if (ne != null) ne.knn(k, x, y, heap);
+          } else {
+            if (checkHorizontalCell) if (sw != null) sw.knn(k, x, y, heap);
+            if (checkVerticalCell)   if (ne != null) ne.knn(k, x, y, heap);
+            if (checkDiagonalCell)   if (nw != null) nw.knn(k, x, y, heap);
+          }
+        }
+
+      // Still need to find k - heap.size() nodes!
+      } else {
+
+        // explore all quadrants ?
+        // Do it lazy? Inspect return val after each call?
+
+        for (int quadrant = 1; quadrant <= 4; quadrant++) {
+
+          if (quadrant == pointQuadrant) continue;
+          radius = heap.isEmpty() ? POSITIVE_INFINITY : heap.peek().dist;
+          checkHorizontalCell = radius >= dx;
+          checkVerticalCell = radius >= dy;
+          checkDiagonalCell = checkHorizontalCell && checkVerticalCell;
+
+          // No validation
+          if (heap.size() != k) {
+            if (isNorth(pointQuadrant)) {
+              if (pointQuadrant == NORTH_WEST) {
+                if (ne != null) ne.knn(k, x, y, heap);
+                if (sw != null) sw.knn(k, x, y, heap);
+                if (se != null) se.knn(k, x, y, heap);
+              } else {
+                if (nw != null) nw.knn(k, x, y, heap);
+                if (se != null) se.knn(k, x, y, heap);
+                if (nw != null) nw.knn(k, x, y, heap);
+              }
+            } else {
+              if (pointQuadrant == SOUTH_WEST) {
+                if (se != null) se.knn(k, x, y, heap);
+                if (nw != null) nw.knn(k, x, y, heap);
+                if (ne != null) ne.knn(k, x, y, heap);
+              } else {
+                if (sw != null) sw.knn(k, x, y, heap);
+                if (ne != null) ne.knn(k, x, y, heap);
+                if (nw != null) nw.knn(k, x, y, heap);
+              }
+            }
+
+          // must intersect
+          } else {
+
+            if (isNorth(pointQuadrant)) {
+              if (pointQuadrant == NORTH_WEST) {
+                if (checkHorizontalCell) if (ne != null) ne.knn(k, x, y, heap);
+                if (checkVerticalCell)   if (sw != null) sw.knn(k, x, y, heap);
+                if (checkDiagonalCell)   if (se != null) se.knn(k, x, y, heap);
+              } else {
+                if (checkHorizontalCell) if (nw != null) nw.knn(k, x, y, heap);
+                if (checkVerticalCell)   if (se != null) se.knn(k, x, y, heap);
+                if (checkDiagonalCell)   if (nw != null) nw.knn(k, x, y, heap);
+              }
+            } else {
+              if (pointQuadrant == SOUTH_WEST) {
+                if (checkHorizontalCell) if (se != null) se.knn(k, x, y, heap);
+                if (checkVerticalCell)   if (nw != null) nw.knn(k, x, y, heap);
+                if (checkDiagonalCell)   if (ne != null) ne.knn(k, x, y, heap);
+              } else {
+                if (checkHorizontalCell) if (sw != null) sw.knn(k, x, y, heap);
+                if (checkVerticalCell)   if (ne != null) ne.knn(k, x, y, heap);
+                if (checkDiagonalCell)   if (nw != null) nw.knn(k, x, y, heap);
+              }
+            }
+
+          }
+
+        } // for
+
+      } // if
+    } // method
+  } // node
 
   static class Rect {
 
@@ -167,7 +371,28 @@ public class QuadTree {
     return root.count(region);
   }
 
+  public List<Pt> kNearestNeighbors(int k, long x, long y) {
+    return root.kNearestNeighbors(k, x, y);
+  }
+
+  public List<Pt> getPoints() {
+    List<Pt> points = new ArrayList<>();
+    getPoints(root, points);
+    return points;
+  }
+
+  private void getPoints(Node node, List<Pt> points) {
+    if (node == null) return;
+    for (int i = 0; i < node.ptCount; i++)
+      points.add(new Pt(node.X[i], node.Y[i]));
+    getPoints(node.nw, points);
+    getPoints(node.ne, points);
+    getPoints(node.sw, points);
+    getPoints(node.se, points);
+  }
+
 }
+
 
 
 

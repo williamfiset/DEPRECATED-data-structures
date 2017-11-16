@@ -223,10 +223,69 @@ public class QuadTreeTest {
 
         }
       }      
-
     }
 
   }
+  
+  /*
+  @Test
+  public void testKNN1() {
+
+    int W = 99, H = 99, NUM_NODES = 2;
+    QuadTree quadTree = new QuadTree(new QuadTree.Rect(0,0,W,H), NUM_NODES);
+
+    int x = 46, y = 92, k = 7;
+
+    // Cluster surrounding point
+    quadTree.add(x, y - 1); // Below
+    quadTree.add(x, y + 1); // Above
+    quadTree.add(x - 1, y); // Left
+    quadTree.add(x + 1, y); // Right
+
+    // Noise points far away left from point in NW quadrant.
+    quadTree.add(0, 77);
+    quadTree.add(4, 56);
+    quadTree.add(2, 80);
+    quadTree.add(6, 60);
+    quadTree.add(8, 90);
+
+    // Noise points in quadrants
+    quadTree.add(25, 25);
+    quadTree.add(75, 25);
+    quadTree.add(25, 75); // Target point in NW quadrant.
+    quadTree.add(75, 75);
+
+    // NE quadrant target points
+    quadTree.add(52, y);
+    quadTree.add(52, y+1);
+    quadTree.add(52, y-1);
+
+    List<QuadTree.Pt> points = quadTree.kNearestNeighbors(k, x, y);
+    System.out.println(points);
+
+    List<QuadTree.SortedPt> sPoints = new ArrayList<>();
+    for (QuadTree.Pt p : quadTree.getPoints()) {
+      sPoints.add(new QuadTree.SortedPt(Math.hypot(p.x - x, p.y - y), p));
+    }
+    Collections.sort(sPoints);
+    for (QuadTree.SortedPt p : sPoints) {
+      System.out.println(p);
+    }
+
+  }
+  */
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
 

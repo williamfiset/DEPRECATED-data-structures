@@ -4,9 +4,9 @@
 
 Data structures are amongst the most fundamental ingredients in the recipe for efficient algorithms and good software design. Knowledge of how to create and design excellent data structures is an essential skill required in becoming an exemplary programmer. The goal of this repository is to provide a complete and thorough explanation of the most common data structures.
 
-# Contributing!
+# Contributing
 
-This repository is contribution friendly :smiley:. If you're a data structures enthusiast (like me!) and want to add, edit or improve a data structure in this repository your contribution is welcome! Please be sure to include tests :kissing_heart:.
+This repository is contribution friendly :smiley:. If you're a data structures enthusiast (like me!) and want to add, edit or improve a data structure your contribution is welcome! Please be sure to include tests :kissing_heart:.
 
 # For developers
 

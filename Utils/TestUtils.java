@@ -6,7 +6,7 @@ public final class TestUtils {
   // [min, max) and there are possible repeats.
   public static List<Integer> randomIntegerList(int sz, int min, int max) {
     List <Integer> lst = new ArrayList<>(sz);
-    for (int i = 0; i < sz; i++) lst.add(randValue(min, max));
+    for (int i = 0; i < sz; i++) lst.add(randInt(min, max));
     return lst;
   }
   
@@ -19,9 +19,13 @@ public final class TestUtils {
     return lst;
   }
   
-  // Generates a random number between [min, max)
-  public static int randValue(int min, int max) {
+  // Generates a random int between [min, max)
+  public static int randInt(int min, int max) {
     return min + (int)(Math.random() * ((max - min)));
   }
   
+  // Generates a random long between [min, max)
+  public static long randLong(long min, long max) {
+    return min + (long)(Math.random() * ((max - min)));
+  }  
 }

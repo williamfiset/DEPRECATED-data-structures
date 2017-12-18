@@ -6,10 +6,18 @@ repositories {
 }
 
 dependencies {
+  // JUnit framework
   testCompile 'junit:junit:4.+'
   compile 'junit:junit:4.+'
+   
+  // Test mocking framework
   testCompile "org.mockito:mockito-core:1.+"
+
+  // Google Guava lib
   compile group: 'com.google.guava', name: 'guava', version: '22.0'
+
+  // Google truth API
+  compile "com.google.truth:truth:0.36"
 }
 
 sourceSets {
@@ -37,7 +45,7 @@ sourceSets {
         'SuffixArray',
         'Trie', 
         'UnionFind',
-        'Utils/TreeUtils'
+        'Utils/'
       ]
     }
   }

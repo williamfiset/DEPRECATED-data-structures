@@ -8,7 +8,7 @@
 
 public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
-  class Node implements TreePrinter.PrintableNode {
+  class Node { 
     
     // 'bf' is short for Balance Factor
     int bf;
@@ -24,21 +24,6 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
     public Node(T value) {
       this.value = value;
-    }
-
-    @Override 
-    public Node getLeft() {
-      return left;
-    }
-
-    @Override
-    public Node getRight() {
-      return right;
-    }
-
-    @Override
-    public String getText() {
-      return String.valueOf(value);
     }
 
   }
@@ -65,11 +50,6 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
   // Returns whether or not the tree is empty.
   public boolean isEmpty() {
     return size() == 0;
-  }
-
-  // Prints a visual representation of the tree to the console.
-  public void display() {
-    TreePrinter.print(root);
   }
 
   // Return true/false depending on whether a value exists in the tree.
@@ -366,14 +346,6 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
     if (node.left  != null) isValid = isValid && node.left.value.compareTo(val)  < 0;
     if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
     return isValid && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
-  }
-
-  // Example usage of AVL tree.
-  public static void main(String[] args) {
-    AVLTreeRecursive<Integer> tree = new AVLTreeRecursive<>();
-    for (int i = 0; i < 22; i++)
-      tree.insert((int)(Math.random() * 100));    
-    tree.display();
   }
 
 }

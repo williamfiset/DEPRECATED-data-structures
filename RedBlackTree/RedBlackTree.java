@@ -14,7 +14,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
   static final boolean RED = true;
   static final boolean BLACK = false;
 
-  class Node implements TreePrinter.PrintableNode {
+  class Node {
     
     // The color of this node. By default all nodes start red.
     boolean color = RED;
@@ -28,30 +28,6 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
     public Node(T value, Node parent) {
       this.value = value;
       this.parent = parent;
-    }
-
-    @Override 
-    public Node getLeft() {
-      return left;
-    }
-    
-    @Override
-    public Node getRight() {
-      return right;
-    }
-
-    @Override
-    public String getText() {
-      return String.valueOf(value) + (color == RED ? " r" : " b") + " ("
-        + (left   == null ? "N" : left.value)  + ","
-        + (right  == null ? "N" : right.value) + ","
-        + (parent == null ? "N" : parent.value)
-        + ")";
-    }
-
-    @Override
-    public String toString() {
-      return getText();
     }
 
   }
@@ -71,13 +47,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
   public boolean isEmpty() {
     return size() == 0;
   }
-
-  // Prints a visual representation of the tree to the console.
-  public void display() {
-    TreePrinter.print(root);
-  }
-
-  // Return true/false depending on whether a value exists in the tree.
+  
   public boolean contains(T value) {
     
     Node node = root;
@@ -344,7 +314,6 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
     int[] values = {5, 8, 1, -4, 6, -2, 0, 7};
     RedBlackTree<Integer> rbTree = new RedBlackTree<>();
     for (int v : values) rbTree.insert(v);
-    rbTree.display();
 
     System.out.printf("RB tree contains %d: %s\n", 6, rbTree.contains(6));
     System.out.printf("RB tree contains %d: %s\n", -5, rbTree.contains(-5));

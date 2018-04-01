@@ -78,3 +78,8 @@ sourceSets {
   }
 }
 
+// Display stdout and stderr
+test {
+  dependsOn cleanTest
+  testLogging.showStandardStreams = true
+}

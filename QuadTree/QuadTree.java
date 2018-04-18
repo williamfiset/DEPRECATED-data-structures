@@ -1,5 +1,8 @@
 /**
  * A QuadTree implementation with integer coordinates.
+ *
+ * NOTE: THIS FILE IS STILL UNDER DEVELOPMENT!
+ *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 

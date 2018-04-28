@@ -20,22 +20,22 @@ data-structures$ gradle build
 
 The procedure to add a new data structure named **Foo** is the following:
 
-1) Create a new folder called Foo at the root of the repository.
-2) Add data structure implementation in Foo/ as Foo/Foo.java
-3) Add tests for Foo in Foo/tests/FooTest.java
+1) Create a new folder called Foo in **com/williamfiset/datastrutures/Foo**
+2) Add the data structure implementation for Foo in **com/williamfiset/datastrutures/Foo/Foo.java**
+3) Add tests for Foo in **javatests/com/williamfiset/datastrutures/Foo/FooTest.java**
 4) Edit the **build.gradle** file and add Foo to the project.
-5) Test your data structure thoroughly.
+5) Add tests for your data structure :kissing_heart:
 6) Send pull request for review :open_mouth:
 
 ### Testing
 
 This repository places a large emphasis on good testing practice to ensure that published data structures are bug free and high quality. Testing is done using a combinations of frameworks including: [JUnit](http://junit.org/junit4/), [Mockito](http://site.mockito.org/) and the [Google Truth](http://google.github.io/truth) framework, but mostly JUnit.
 
-When developing you likely do not want to run all tests but only a subset of them. For example, if you want to run the LinkedListTest.java file under [LinkedList/tests/LinkedListTest.java](https://github.com/williamfiset/data-structures/tree/master/LinkedList/tests/LinkedListTest.java) you can execute:
+When developing you likely do not want to run all tests but only a subset of them. For example, if you want to run the LinkedListTest.java file under [javatests/com/williamfiset/datastructures/linkedlist/LinkedListTest.java](https://github.com/williamfiset/data-structures/tree/master/javatests/com/williamfiset/datastructures/linkedlist/LinkedListTest.java) you can execute:
 ```bash
-data-structures$ gradle test --tests "LinkedListTest"
+data-structures$ gradle test --tests "javatests.com.williamfiset.datastructures.linkedlist.LinkedListTest"
 ```
-
+<!-- 
 Sometimes there are many test files for one data structure. One example is the :evergreen_tree:FenwickTree:evergreen_tree: which currently has two test files: [FenwickTreeRangeQueryPointUpdateTest.java](https://github.com/williamfiset/data-structures/tree/master/FenwickTree/tests/FenwickTreeRangeQueryPointUpdateTest.java) and [FenwickTreeRangeUpdatePointQueryTest.java](https://github.com/williamfiset/data-structures/tree/master/FenwickTree/tests/FenwickTreeRangeUpdatePointQueryTest.java), in which case you can specify a glob expression to capture all the appropriate test files:
 ```bash
 # Using globbing:
@@ -43,7 +43,7 @@ gradle test --tests "FenwickTree*Test"
 
 # Equivalently for the explicit:
 gradle test --tests "FenwickTreeRangeQueryPointUpdateTest" --tests "FenwickTreeRangeUpdatePointQueryTest"
-```
+``` -->
 
 # License
 

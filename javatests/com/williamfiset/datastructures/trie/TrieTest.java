@@ -1,4 +1,8 @@
+package javatests.com.williamfiset.datastructures.trie;
+
 import static org.junit.Assert.*;
+
+import com.williamfiset.datastructures.trie.Trie;
 import org.junit.*;
 
 public class TrieTest {
@@ -11,7 +15,6 @@ public class TrieTest {
     t.insert("some string");
     t.delete("some string", 0);
   } 
-
 
   @Test(expected=IllegalArgumentException.class)
   public void testBadTrieDelete2() {

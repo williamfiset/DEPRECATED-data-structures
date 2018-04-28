@@ -3,6 +3,7 @@
  * 
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.bloomfilter;
 
 public class BloomFilter {
   

@@ -1,6 +1,13 @@
+package javatests.com.williamfiset.datastructures.priorityqueue;
+
 import static org.junit.Assert.*;
+
+import com.williamfiset.datastructures.priorityqueue.PQueue;
 import org.junit.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class PQueueTest {
 

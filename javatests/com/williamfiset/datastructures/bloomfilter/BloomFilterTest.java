@@ -1,7 +1,13 @@
+package javatests.com.williamfiset.datastructures.bloomfilter;
+
+import com.williamfiset.datastructures.bloomfilter.StringSet;
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.*;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Random;
 import java.security.SecureRandom;
 import java.math.BigInteger;
 
@@ -78,7 +84,7 @@ public class BloomFilterTest {
       for(int loops = 5; loops <= 50; loops += 5 ) {
   
         StringSet set = new StringSet(sz);
-        HashSet <String> javaset = new HashSet<>();
+        Set<String> javaset = new HashSet<>();
 
         for (int l = 0; l < loops; l++) {
           String randStr = randomString( sz );

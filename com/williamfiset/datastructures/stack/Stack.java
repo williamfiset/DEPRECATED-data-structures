@@ -2,6 +2,7 @@
  * A linked list implementation of a stack
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.stack;
 
 public class Stack <T> implements Iterable <T> {
 

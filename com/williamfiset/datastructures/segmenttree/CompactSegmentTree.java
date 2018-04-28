@@ -3,6 +3,7 @@
  * This segment tree supports point updates and range queries.
  * @author Al.Cash & William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.segmenttree;
 
 public class CompactSegmentTree {
 

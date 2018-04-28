@@ -1,6 +1,12 @@
-import static org.junit.Assert.*;
-import org.junit.*;
+package javatests.com.williamfiset.datastructures.suffixarray;
 
+import static org.junit.Assert.*;
+
+import com.williamfiset.datastructures.suffixarray.SuffixArray;
+import com.williamfiset.datastructures.suffixarray.SuffixArraySlow;
+import com.williamfiset.datastructures.suffixarray.SuffixArrayMed;
+import com.williamfiset.datastructures.suffixarray.SuffixArrayFast;
+import org.junit.*;
 import java.security.SecureRandom;
 import java.math.BigInteger;
 import java.util.Random;

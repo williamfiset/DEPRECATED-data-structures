@@ -1,8 +1,18 @@
+package javatests.com.williamfiset.datastructures.binarysearchtree;
+
 import static org.junit.Assert.*;
+
+import com.williamfiset.datastructures.binarysearchtree.BinarySearchTree;
+import com.williamfiset.datastructures.binarysearchtree.TreeTraversalOrder;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.ConcurrentModificationException;
+import java.util.Deque;
+import java.util.List;
 import org.junit.Test;
 import org.junit.Before;
-
-import java.util.*;
 
 class TestTreeNode {
   
@@ -31,7 +41,7 @@ class TestTreeNode {
 
   }
 
-  static void preOrder(List <Integer> lst, TestTreeNode node) {
+  static void preOrder(List<Integer> lst, TestTreeNode node) {
     
     if (node == null) return;
 
@@ -41,7 +51,7 @@ class TestTreeNode {
 
   }
 
-  static void inOrder(List <Integer> lst, TestTreeNode node) {
+  static void inOrder(List<Integer> lst, TestTreeNode node) {
     
     if (node == null) return;
 
@@ -51,7 +61,7 @@ class TestTreeNode {
 
   }
 
-  static void postOrder(List <Integer> lst, TestTreeNode node) {
+  static void postOrder(List<Integer> lst, TestTreeNode node) {
     
     if (node == null) return;
 
@@ -61,9 +71,9 @@ class TestTreeNode {
 
   }
 
-  static void levelOrder(List <Integer> lst, TestTreeNode node) {
+  static void levelOrder(List<Integer> lst, TestTreeNode node) {
 
-    Deque <TestTreeNode> q = new ArrayDeque<>();
+    Deque<TestTreeNode> q = new ArrayDeque<>();
     if (node != null) q.offer(node);
 
     while(!q.isEmpty()) {
@@ -453,18 +463,6 @@ public class BinarySearchTreeTest {
     }
     
   } 
-  
 
 }
-
-
-
-
-
-
-
-
-
-
-
 

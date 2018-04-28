@@ -11,8 +11,9 @@
  * 
  * @author Micah Stairs
  **/
+package com.williamfiset.datastructures.segmenttree;
 
-class Node {
+public class Node {
 
   static final int INF = Integer.MAX_VALUE;
   

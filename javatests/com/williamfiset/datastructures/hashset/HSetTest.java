@@ -1,6 +1,6 @@
+package javatests.com.williamfiset.datastructures.hashset;
 
-
-
+import com.williamfiset.datastructures.hashset.HSet;
 import static java.lang.Math.*;
 import static org.junit.Assert.*;
 import org.junit.*;

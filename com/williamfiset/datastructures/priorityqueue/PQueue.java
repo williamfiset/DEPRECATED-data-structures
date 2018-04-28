@@ -2,10 +2,17 @@
  * A min priority queue implementation using a binary heap.
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.priorityqueue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
-class PQueue <T extends Comparable<T>> {
+public class PQueue <T extends Comparable<T>> {
 
   // The number of elements currently inside the heap
   private int heapSize = 0;
@@ -14,13 +21,13 @@ class PQueue <T extends Comparable<T>> {
   private int heapCapacity = 0;
 
   // A dynamic list to track the elements inside the heap
-  private List <T> heap = null;
+  private List<T> heap = null;
 
   // This map keeps track of the possible indices a particular 
   // node value is found in the heap. Having this mapping lets
   // us have O(log(n)) removals and O(1) element containment check
   // at the cost of some additional space and minor overhead
-  private Map <T, TreeSet<Integer>> map = new HashMap<>();
+  private Map<T, TreeSet<Integer>> map = new HashMap<>();
 
   // Construct and initially empty priority queue
   public PQueue() {
@@ -37,7 +44,7 @@ class PQueue <T extends Comparable<T>> {
   public PQueue (T[] elems) {
 
     heapSize = heapCapacity = elems.length;
-    heap = new ArrayList<T>( heapCapacity );
+    heap = new ArrayList<T>(heapCapacity);
     
     // Place all element in heap
     for(int i = 0; i < heapSize; i++) {
@@ -52,7 +59,7 @@ class PQueue <T extends Comparable<T>> {
   }
 
   // Priority queue construction, O(nlog(n))
-  public PQueue (Collection <T> elems) {
+  public PQueue (Collection<T> elems) {
     this(elems.size());
     for( T elem : elems) add(elem);
   }
@@ -269,7 +276,7 @@ class PQueue <T extends Comparable<T>> {
   // Add a node value and its index to the map
   private void mapAdd(T value, int index) {
     
-    TreeSet <Integer> set = map.get(value);
+    TreeSet<Integer> set = map.get(value);
 
     // New value being inserted in map
     if (set == null) {
@@ -285,7 +292,7 @@ class PQueue <T extends Comparable<T>> {
 
   // Removes the index at a given value, O(log(n))
   private void mapRemove(T value, int index) {
-    TreeSet <Integer> set = map.get(value);
+    TreeSet<Integer> set = map.get(value);
     set.remove(index); // TreeSets take O(log(n)) removal time
     if (set.size() == 0) map.remove(value);
   }
@@ -294,7 +301,7 @@ class PQueue <T extends Comparable<T>> {
   // NOTE: If a value exists multiple times in the heap the highest 
   // index is returned (this has arbitrarily been chosen)
   private Integer mapGet(T value) {
-    TreeSet <Integer> set = map.get(value);
+    TreeSet<Integer> set = map.get(value);
     if (set != null) return set.last();
     return null;
   }
@@ -302,8 +309,8 @@ class PQueue <T extends Comparable<T>> {
   // Exchange the index of two nodes internally within the map
   private void mapSwap(T val1, T val2, int val1Index, int val2Index) {
 
-    Set <Integer> set1 = map.get(val1);
-    Set <Integer> set2 = map.get(val2);
+    Set<Integer> set1 = map.get(val1);
+    Set<Integer> set2 = map.get(val2);
 
     set1.remove(val1Index);
     set2.remove(val2Index);

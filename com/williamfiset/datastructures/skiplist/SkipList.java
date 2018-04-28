@@ -14,6 +14,8 @@
  * other operations is O(n)
  * @author Finn Lidbetter
  */
+package com.williamfiset.datastructures.skiplist;
+
 import java.util.Random;
 
 class SkipList {

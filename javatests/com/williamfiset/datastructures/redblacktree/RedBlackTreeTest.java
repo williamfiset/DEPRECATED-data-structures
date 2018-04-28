@@ -1,4 +1,9 @@
+package javatests.com.williamfiset.datastructures.redblacktree;
+
 import static org.junit.Assert.*;
+
+
+import com.williamfiset.datastructures.redblacktree.RedBlackTree;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.*;

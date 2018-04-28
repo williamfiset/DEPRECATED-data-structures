@@ -1,5 +1,6 @@
 // Taken from @MightyPork at:
 // https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+package com.williamfiset.datastructures.utils;
 
 import java.util.*;
 

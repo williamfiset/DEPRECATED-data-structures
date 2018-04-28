@@ -1,3 +1,5 @@
+package com.williamfiset.datastructures.utils;
+
 import java.util.*;
 
 public final class TestUtils {

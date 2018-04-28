@@ -1,3 +1,8 @@
+package javatests.com.williamfiset.datastructures.hashtable;
+
+import com.williamfiset.datastructures.hashtable.HashTableDoubleHashing;
+import com.williamfiset.datastructures.hashtable.DoubleHashingTestObject; // Move to test dir?
+
 import static org.junit.Assert.*;
 import org.junit.*;
 import java.util.*;
@@ -13,7 +18,7 @@ public class HashTableDoubleHashingTest {
     MAX_RAND_NUM = randInt(1, 350);
   }
 
-  HashTableDoubleHashing <DoubleHashingTestObject, Integer> map;
+  HashTableDoubleHashing<DoubleHashingTestObject, Integer> map;
 
   @Before
   public void setup() {

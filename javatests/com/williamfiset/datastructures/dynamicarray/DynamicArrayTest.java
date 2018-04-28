@@ -1,3 +1,6 @@
+package javatests.com.williamfiset.datastructures.dynamicarray;
+
+import com.williamfiset.datastructures.dynamicarray.DynamicArray;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;

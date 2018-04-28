@@ -2,6 +2,7 @@
  * Simple interface file for double hashing
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.hashtable;
  
 public interface SecondaryHash {
 

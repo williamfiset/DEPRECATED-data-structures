@@ -1,3 +1,4 @@
+package com.williamfiset.datastructures.suffixarray;
 
 public abstract class SuffixArray {
   

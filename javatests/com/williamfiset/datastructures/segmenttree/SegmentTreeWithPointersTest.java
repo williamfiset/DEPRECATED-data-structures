@@ -1,4 +1,8 @@
+package javatests.com.williamfiset.datastructures.segmenttree;
+
 import static org.junit.Assert.*;
+
+import com.williamfiset.datastructures.segmenttree.Node;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.*;

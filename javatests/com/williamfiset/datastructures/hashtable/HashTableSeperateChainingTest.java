@@ -1,3 +1,6 @@
+package javatests.com.williamfiset.datastructures.hashtable;
+
+import com.williamfiset.datastructures.hashtable.HashTableSeperateChaining;
 import static org.junit.Assert.*;
 import org.junit.*;
 import java.util.*;

@@ -8,6 +8,7 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.queue;
 
 public class IntQueue {
 

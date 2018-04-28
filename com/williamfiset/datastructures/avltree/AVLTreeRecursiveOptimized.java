@@ -5,22 +5,23 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.avltree;
 
 public class AVLTreeRecursiveOptimized <T extends Comparable<T>> implements Iterable<T> {
 
-  class Node {
+  public class Node {
     
     // 'bf' is short for Balance Factor
-    int bf;
+    public int bf;
 
     // The value/data contained within the node.
-    T value;
+    public T value;
 
     // The height of this node in the tree.
-    int height;
+    public int height;
 
     // The left and the right children of this node.    
-    Node left, right;
+    public Node left, right;
 
     public Node(T value) {
       this.value = value;
@@ -29,7 +30,7 @@ public class AVLTreeRecursiveOptimized <T extends Comparable<T>> implements Iter
   }
 
   // The root node of the AVL tree.
-  Node root;
+  public Node root;
 
   // Tracks the number of nodes inside the tree.
   private int nodeCount = 0;

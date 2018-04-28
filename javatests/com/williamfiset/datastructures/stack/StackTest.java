@@ -1,5 +1,9 @@
+package javatests.com.williamfiset.datastructures.stack;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+
+import com.williamfiset.datastructures.stack.Stack;
 import org.junit.Before;
 import org.junit.Test;
 

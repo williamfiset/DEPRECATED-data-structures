@@ -2,8 +2,10 @@
  * A benchmark file to test the speed of the various hashtable implementations
  * @author William Fiset
  **/
+package com.williamfiset.datastructures.hashtable;
 
 import java.util.*;
+
 public class Benchmark {
   
   final static int N = 1000000;

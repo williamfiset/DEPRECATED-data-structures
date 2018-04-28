@@ -2,6 +2,7 @@
  * A doubly linked list implementation.
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.linkedlist;
 
 public class DoublyLinkedList <T> implements Iterable <T> {
   

@@ -5,6 +5,7 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.unionfind;
 
 public class UnionFind {
 

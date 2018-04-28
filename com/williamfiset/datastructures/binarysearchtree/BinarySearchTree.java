@@ -11,6 +11,7 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.binarysearchtree;
 
 public class BinarySearchTree <T extends Comparable<T>> {
   

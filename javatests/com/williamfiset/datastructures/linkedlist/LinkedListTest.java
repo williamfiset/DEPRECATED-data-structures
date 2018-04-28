@@ -1,6 +1,9 @@
+package javatests.com.williamfiset.datastructures.linkedlist;
+
 import static org.junit.Assert.*;
 import org.junit.*;
 
+import com.williamfiset.datastructures.linkedlist.DoublyLinkedList;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -3,6 +3,7 @@
  * range updates and point queries
  * @author Braj65, William Fiset
  **/
+package com.williamfiset.datastructures.fenwicktree;
  
 public class FenwickTreeRangeUpdatePointQuery {
 

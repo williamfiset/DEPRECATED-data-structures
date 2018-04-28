@@ -2,6 +2,7 @@
  * An implementation of a hash-table using separate chaining with a linked list.
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.hashtable;
  
  import java.util.*;
 

@@ -1,9 +1,11 @@
+package javatests.com.williamfiset.datastructures.unionfind;
+
 import static org.junit.Assert.*;
+
+import com.williamfiset.datastructures.unionfind.UnionFind;
 import org.junit.*;
 
 public class UnionFindTest {
-
-  // @Before public void setup() { }
 
   @Test
   public void testNumComponents() {

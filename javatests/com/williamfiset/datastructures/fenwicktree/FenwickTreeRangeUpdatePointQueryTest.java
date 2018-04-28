@@ -1,3 +1,7 @@
+package javatests.com.williamfiset.datastructures.fenwicktree;
+
+import com.williamfiset.datastructures.fenwicktree.FenwickTreeRangeUpdatePointQuery;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

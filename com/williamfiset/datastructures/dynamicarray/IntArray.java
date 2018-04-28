@@ -7,8 +7,9 @@
  * 
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.dynamicarray;
 
-public class IntArray implements Iterable <Integer> {
+public class IntArray implements Iterable<Integer> {
 
   private static final int DEFAULT_CAP = 1 << 3;
 

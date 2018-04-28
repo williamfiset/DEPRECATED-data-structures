@@ -4,6 +4,7 @@
  * @author David Brink
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.dheap;
 
 @SuppressWarnings("unchecked")
 public class DHeap <T extends Comparable<T>> {

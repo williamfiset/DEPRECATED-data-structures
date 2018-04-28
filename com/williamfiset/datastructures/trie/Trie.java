@@ -1,3 +1,4 @@
+package com.williamfiset.datastructures.trie;
 
 public class Trie {
 

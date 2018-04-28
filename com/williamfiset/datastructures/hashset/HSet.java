@@ -1,3 +1,4 @@
+package com.williamfiset.datastructures.hashset;
 
 public class HSet <T> implements Iterable <T> {
 

@@ -5,6 +5,7 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.quadtree;
 
 import java.util.*;
 import static java.lang.Double.POSITIVE_INFINITY;
@@ -315,7 +316,7 @@ public class QuadTree {
     } // method
   } // node
 
-  static class Rect {
+  public static class Rect {
 
     long x1, y1, x2, y2;
 
@@ -351,10 +352,10 @@ public class QuadTree {
   // This variable can have a significant impact on performance.
   final int NUM_POINTS;
 
-  static final int DEFAULT_NUM_POINTS = 16;
+  public static final int DEFAULT_NUM_POINTS = 16;
 
   // Root node of the quad tree. Public for testing.
-  Node root;
+  public Node root;
 
   public QuadTree(Rect region) {
     this.NUM_POINTS = DEFAULT_NUM_POINTS;

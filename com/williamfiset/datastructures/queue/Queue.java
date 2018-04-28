@@ -2,6 +2,7 @@
  * A simple queue implementation with a linkedlist
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.queue;
 
 public class Queue <T> implements Iterable <T> {
 

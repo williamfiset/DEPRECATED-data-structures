@@ -2,6 +2,7 @@
  * A generic dynamic array implementation
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.dynamicarray;
 
 @SuppressWarnings("unchecked")
 public class DynamicArray <T> implements Iterable <T> {

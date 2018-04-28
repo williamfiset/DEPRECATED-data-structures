@@ -8,22 +8,23 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.redblacktree;
 
 public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
 
-  static final boolean RED = true;
-  static final boolean BLACK = false;
+  public static final boolean RED = true;
+  public static final boolean BLACK = false;
 
-  class Node {
+  public class Node {
     
     // The color of this node. By default all nodes start red.
-    boolean color = RED;
+    public boolean color = RED;
 
     // The value/data contained within the node.
-    T value;
+    public T value;
 
     // The left, right and parent references of this node.    
-    Node left, right, parent;
+    public Node left, right, parent;
 
     public Node(T value, Node parent) {
       this.value = value;
@@ -33,7 +34,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
   }
 
   // The root node of the RB tree.
-  Node root;
+  public Node root;
 
   // Tracks the number of nodes inside the tree.
   private int nodeCount = 0;

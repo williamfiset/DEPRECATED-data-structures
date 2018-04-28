@@ -1,5 +1,9 @@
+package javatests.com.williamfiset.datastructures.queue;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+
+import com.williamfiset.datastructures.queue.Queue;
 import org.junit.Before;
 import org.junit.Test;
 

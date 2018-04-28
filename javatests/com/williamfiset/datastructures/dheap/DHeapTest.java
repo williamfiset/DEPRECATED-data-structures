@@ -1,6 +1,14 @@
+package javatests.com.williamfiset.datastructures.dheap;
+
 import static org.junit.Assert.*;
-import org.junit.*;
-import java.util.*;
+
+import com.williamfiset.datastructures.dheap.DHeap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.PriorityQueue;
+import org.junit.Test;
+import org.junit.Before;
 
 public class DHeapTest {
 
@@ -12,7 +20,7 @@ public class DHeapTest {
 
   @Test
   public void testEmpty() {
-    DHeap <Integer> q = new DHeap<>(4, 0);
+    DHeap<Integer> q = new DHeap<>(4, 0);
     assertEquals(q.size(), 0);
     assertTrue(q.isEmpty());
     assertEquals(q.poll(), null);
@@ -22,7 +30,7 @@ public class DHeapTest {
   @Test
   public void testHeapProperty () {
     
-    DHeap <Integer> q = new DHeap<>(3, 30);
+    DHeap<Integer> q = new DHeap<>(3, 30);
     Integer[] nums = { 3,2,5,6,7,9,4,8,1 };
 
     // Try manually creating heap
@@ -39,8 +47,8 @@ public class DHeapTest {
       
       Integer[] lst = genRandArray(i);
 
-      DHeap <Integer> pq = new DHeap<>(i, lst.length);
-      PriorityQueue <Integer> pq2 = new PriorityQueue<>(i);
+      DHeap<Integer> pq = new DHeap<>(i, lst.length);
+      PriorityQueue<Integer> pq2 = new PriorityQueue<>(i);
 
       for(int x : lst) { pq2.add(x); pq.add(x); }
       while(!pq2.isEmpty()) assertEquals( pq.poll(), pq2.poll() );
@@ -54,7 +62,7 @@ public class DHeapTest {
   public void testClear() {
 
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
-    DHeap <String> q = new DHeap<>(2, strs.length);
+    DHeap<String> q = new DHeap<>(2, strs.length);
     for(String s : strs) q.add(s);
     q.clear();
     assertEquals(q.size(), 0);
@@ -293,16 +301,16 @@ public class DHeapTest {
   }
 
   // Generate a list of random numbers
-  static List <Integer> genRandList(int sz) {
-    List <Integer> lst = new ArrayList<>(sz);
+  static List<Integer> genRandList(int sz) {
+    List<Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++)
       lst.add( (int) (Math.random()*MAX_SZ) );
     return lst;
   }
 
   // Generate a list of unique random numbers
-  static List <Integer> genUniqueRandList(int sz) {
-    List <Integer> lst = new ArrayList<>(sz);
+  static List<Integer> genUniqueRandList(int sz) {
+    List<Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++) lst.add( i );
     Collections.shuffle( lst );
     return lst;

@@ -3,6 +3,7 @@
  * point updates and sum range queries
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.fenwicktree;
 
 public class FenwickTreeRangeQueryPointUpdate {
 

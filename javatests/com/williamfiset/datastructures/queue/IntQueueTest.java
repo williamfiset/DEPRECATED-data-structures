@@ -1,4 +1,8 @@
+package javatests.com.williamfiset.datastructures.queue;
+
 import static org.junit.Assert.*;
+
+import com.williamfiset.datastructures.queue.IntQueue;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.*;

@@ -4,10 +4,11 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  */
+package com.williamfiset.datastructures.suffixarray;
 
 import java.util.*;
 
-class SuffixArrayMed extends SuffixArray {
+public class SuffixArrayMed extends SuffixArray {
 
   // Helper class which sorts suffix ranks
   static class SuffixRankTuple implements Comparable <SuffixRankTuple> {

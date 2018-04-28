@@ -7,6 +7,7 @@
  *
  * @author William Alexandre Fiset, william.alexandre.fiset@gmail.com
  **/
+package com.williamfiset.datastructures.bloomfilter;
 
 public class StringSet {
 

@@ -1,7 +1,14 @@
+package javatests.com.williamfiset.datastructures.avltree;
+
+import com.williamfiset.datastructures.avltree.AVLTreeRecursive;
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeSet;
 
 public class AVLTreeTest {
 

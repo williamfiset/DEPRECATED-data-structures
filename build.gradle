@@ -1,11 +1,16 @@
-
 apply plugin: 'java'
 
+// Assume Java 8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 repositories {
+  mavenLocal()
   mavenCentral()
 }
 
 dependencies {
+  
   // JUnit framework
   testCompile 'junit:junit:4.+'
   compile 'junit:junit:4.+'
@@ -18,68 +23,83 @@ dependencies {
 
   // Google truth API
   compile "com.google.truth:truth:0.36"
+
+  // Apache commons lang
+  compile 'org.apache.commons:commons-lang3:3.6'
 }
+
+// Tests display stdout and stderr
+test {
+  dependsOn cleanTest
+  testLogging.showStandardStreams = true
+}
+
+String javaPackage = "com/williamfiset/datastructures";
+String javatestsPackage = "javatests/com/williamfiset/datastructures";
 
 sourceSets {
   main {
     java {
       srcDirs = [
-        'AVLTree',
-        'BinarySearchTree',
-        'BloomFilter',
-        'D-Heap',
-        'DynamicArray',
-        'DynamicArray',
-        'FenwickTree',
-        'Graph',
-        'Hashtable',
-        'LinkedList',
-        'PriorityQueue',
-        'QuadTree',
-        'Queue',
-        'RedBlackTree',
-        'SegmentTree',
-        'Set',
-        'SkipList',
-        'Stack',
-        'SuffixArray',
-        'Trie', 
-        'UnionFind',
-        'Utils/'
+        javaPackage + '/avltree',
+        javaPackage + '/binarysearchtree',
+        javaPackage + '/bloomfilter',
+        javaPackage + '/dheap',
+        javaPackage + '/dynamicarray',
+        javaPackage + '/fenwicktree',
+        javaPackage + '/hashtable',
+        javaPackage + '/linkedlist',
+        javaPackage + '/priorityqueue',
+        javaPackage + '/quadtree',
+        javaPackage + '/queue',
+        javaPackage + '/redblacktree',
+        javaPackage + '/segmenttree',
+        javaPackage + '/hashset',
+        javaPackage + '/skiplist',
+        javaPackage + '/stack',
+        javaPackage + '/suffixarray',
+        javaPackage + '/trie', 
+        javaPackage + '/unionfind',
+        javaPackage + '/utils'
       ]
     }
   }
   test {
     java {
       srcDirs = [
-        'AVLTree/tests',
-        'BinarySearchTree/tests',
-        'BloomFilter/tests',
-        'D-Heap/tests',
-        'DynamicArray/tests',
-        'DynamicArray/tests',
-        'FenwickTree/tests',
-        'Graph/tests',
-        'Hashtable/tests',
-        'LinkedList/tests',
-        'PriorityQueue/tests',
-        'QuadTree/tests',
-        'Queue/tests',
-        'RedBlackTree/tests',
-        'SegmentTree/tests',
-        'Set/tests',
-        'SkipList/tests',
-        'Stack/tests',
-        'SuffixArray/tests',
-        'Trie/tests', 
-        'UnionFind/tests',
+        javatestsPackage + '/avltree',
+        javatestsPackage + '/binarysearchtree',
+        javatestsPackage + '/bloomfilter',
+        javatestsPackage + '/dheap',
+        javatestsPackage + '/dynamicarray',
+        javatestsPackage + '/fenwicktree',
+        javatestsPackage + '/hashtable',
+        javatestsPackage + '/linkedlist',
+        javatestsPackage + '/priorityqueue',
+        javatestsPackage + '/quadtree',
+        javatestsPackage + '/queue',
+        javatestsPackage + '/redblacktree',
+        javatestsPackage + '/segmenttree',
+        javatestsPackage + '/hashset',
+        javatestsPackage + '/skiplist',
+        javatestsPackage + '/stack',
+        javatestsPackage + '/suffixarray',
+        javatestsPackage + '/trie', 
+        javatestsPackage + '/unionfind',
+        javatestsPackage + '/utils'
       ]
     }
   }
 }
 
-// Display stdout and stderr
-test {
-  dependsOn cleanTest
-  testLogging.showStandardStreams = true
+
+task buildDependenciesFolder(type: Copy) {
+  from configurations.compile
+  into './dependencies'
 }
+
+
+
+
+
+

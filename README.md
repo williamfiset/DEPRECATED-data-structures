@@ -4,9 +4,54 @@
 
 Data structures are amongst the most fundamental ingredients in the recipe for efficient algorithms and good software design. Knowledge of how to create and design excellent data structures is an essential skill required in becoming an exemplary programmer. The goal of this repository is to provide a complete and thorough explanation of the most common data structures.
 
+# Data Structures
+
+* [Balanced Trees]()
+    * [Avl Tree (recursive)]()
+    * [Avl Tree (recursive, mildly optimized)]()
+    * [Red Black Tree](recursive)
+* [Binary Search Tree]()
+* [Bloom Filter]()
+* [Dynamic Array]()
+    * [Dynamic array (integer only, fast)]()
+    * [Dynamic array (generic)]()
+* [Fenwick Tree]()
+    * [Fenwick Tree (range query, point updates)]()
+    * [Fenwick Tree (range update, point query)]()
+* [Set]()
+    * [Set (hash-set)]()
+* [Hashtable]()
+    * [Hashtable (double hashing)]()
+    * [Hashtable (linear probing)]()
+    * [Hashtable (quadratic probing)]()
+    * [Hashtable (separate chaining)]()
+* [Linked List]()
+    * [Singly linked list]()
+    * [Doubly linked list]()
+* [Priority Queue]()
+    * [Binary Heap]()
+    * [D-Heap]()
+* [Quad Tree [WIP]]()
+* [Queue]()
+    * [Queue (integer only, fixed size, fast)]()
+    * [Queue (linked list, generic)]()
+* [Segment Tree]()
+    * [Segment tree (array based, compact)]()
+    * [Segment tree (pointer based)]()
+* [Skip List [UNTESTED]]()
+* [Stack]()
+    * [Stack (integer only, fixed size, fast)]()
+    * [Stack (linked list, generic)]()
+* [Suffix Array]()
+    * [Suffix Array (O(n²logn) construction)]()
+    * [Suffix Array (O(nlog²(n)) construction)]()
+    * [Suffix Array (O(nlog(n)) construction)]()
+* [Trie]()
+* [Union Find]()
+
 # Contributing
 
-This repository is contribution friendly :smiley:. If you're a data structures enthusiast (like me!) and want to add or improve a data structure your contribution is welcome! Please be sure to include tests :kissing_heart:.
+This repository is contribution friendly :smiley:. If you're a data structures enthusiast (like me!) and want to add or improve a data structure your contribution is welcome! Please be sure to include tests :kissing_heart:
 
 # For developers
 

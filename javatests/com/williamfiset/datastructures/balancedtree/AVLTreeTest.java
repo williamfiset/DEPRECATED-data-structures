@@ -1,6 +1,6 @@
 package javatests.com.williamfiset.datastructures.avltree;
 
-import com.williamfiset.datastructures.avltree.AVLTreeRecursive;
+import com.williamfiset.datastructures.balancedtree.AVLTreeRecursive;
 
 import static org.junit.Assert.*;
 import org.junit.Before;

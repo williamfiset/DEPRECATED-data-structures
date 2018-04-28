@@ -5,7 +5,7 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
-package com.williamfiset.datastructures.avltree;
+package com.williamfiset.datastructures.balancedtree;
 
 public class AVLTreeRecursiveOptimized <T extends Comparable<T>> implements Iterable<T> {
 

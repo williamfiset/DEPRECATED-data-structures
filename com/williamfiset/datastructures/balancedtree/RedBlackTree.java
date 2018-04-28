@@ -8,7 +8,7 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
-package com.williamfiset.datastructures.redblacktree;
+package com.williamfiset.datastructures.balancedtree;
 
 public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
 

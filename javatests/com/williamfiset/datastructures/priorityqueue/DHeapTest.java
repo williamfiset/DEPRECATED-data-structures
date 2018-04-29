@@ -42,7 +42,6 @@ public class DHeapTest {
 
   @Test
   public void testPriorityQueueSizeParam() {
-
     for (int i = 1 ; i < LOOPS; i++) {
       
       Integer[] lst = genRandArray(i);
@@ -52,22 +51,54 @@ public class DHeapTest {
 
       for(int x : lst) { pq2.add(x); pq.add(x); }
       while(!pq2.isEmpty()) assertEquals( pq.poll(), pq2.poll() );
-
     }
+  }
 
+  @Test
+  public void testPriorityRandomOperations() {
+    for (int loop = 0; loop < LOOPS; loop++) {
+
+      double p1 = Math.random();
+      double p2 = Math.random();
+      if (p2 < p1) {
+        double tmp = p1;
+        p1 = p2;
+        p2 = p1;
+      }
+
+      Integer[] ar = genRandArray(LOOPS);
+      int d = 2 + (int)(Math.random() * 6);
+      DHeap<Integer> pq = new DHeap<>(d, LOOPS);
+      PriorityQueue<Integer> pq2 = new PriorityQueue<>(LOOPS);
+
+      for (int i = 0; i < LOOPS; i++) {
+        int e = ar[i];
+        double r = Math.random();
+        if (0 <= r && r <= p1) {
+          pq.add(e); 
+          pq2.add(e);
+        } else if (p1 < r && r <= p2) {
+          if (!pq2.isEmpty()) 
+            assertEquals(pq.poll(), pq2.poll());
+        } else {
+          pq.clear();
+          pq2.clear();
+        }
+      }
+
+      assertEquals(pq.peek(), pq2.peek());
+    }
   }
   
   
   @Test
   public void testClear() {
-
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
     DHeap<String> q = new DHeap<>(2, strs.length);
     for(String s : strs) q.add(s);
     q.clear();
     assertEquals(q.size(), 0);
     assertTrue(q.isEmpty());
-
   }
 
   /*

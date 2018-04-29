@@ -69,10 +69,10 @@ public class DHeap <T extends Comparable<T>> {
   }
 
   private void sink(int i) {
-    int j = minChild(i);
-    while(j != -1) {
+    for(int j = minChild(i); j != -1;) {
       swap(i, j);
-      j = minChild(i = j);
+      i = j;
+      j = minChild(i);
     }
   }
 
@@ -85,14 +85,10 @@ public class DHeap <T extends Comparable<T>> {
 
   // From the parent node at index i find the minimum child below it
   private int minChild(int i) {
-    T minElem = heap[i];
     int index = -1, from = child[i], to = Math.min(sz, from + d);
-    for(int j = from; j < to; j++) {
-      if (heap[j].compareTo(minElem) < 0 ) {
-        minElem = heap[j];
-        index = j;
-      }
-    }
+    for(int j = from; j < to; j++)
+      if (less(j, i))
+        index = i = j;
     return index;
   }
 

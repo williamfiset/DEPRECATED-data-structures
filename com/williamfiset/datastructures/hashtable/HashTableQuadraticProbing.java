@@ -10,6 +10,7 @@
  * is guaranteed to find an empty cell (i.e it generates all the numbers
  * in the range [0, 2^n) without repetition for the first 2^n numbers).
  *
+ *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
 package com.williamfiset.datastructures.hashtable;

@@ -7,7 +7,8 @@
  **/
 package com.williamfiset.datastructures.hashtable;
 
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
 public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
@@ -364,19 +365,19 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   }
 
   @Override
-  public java.util.Iterator<K> iterator() {
+  public Iterator<K> iterator() {
     // Before the iteration begins record the number of modifications 
     // done to the hash-table. This value should not change as we iterate
     // otherwise a concurrent modification has occurred :0
     final int MODIFICATION_COUNT = modificationCount;
 
-    return new java.util.Iterator <K> () {
+    return new Iterator<K> () {
       int index, keysLeft = keyCount;
 
       @Override public boolean hasNext() {
         // The contents of the table have been altered
         if (MODIFICATION_COUNT != modificationCount) 
-          throw new java.util.ConcurrentModificationException();
+          throw new ConcurrentModificationException();
         return keysLeft != 0;
       }
 

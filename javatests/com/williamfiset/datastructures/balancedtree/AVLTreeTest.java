@@ -1,4 +1,4 @@
-package javatests.com.williamfiset.datastructures.avltree;
+package javatests.com.williamfiset.datastructures.balancedtree;
 
 import com.williamfiset.datastructures.balancedtree.AVLTreeRecursive;
 

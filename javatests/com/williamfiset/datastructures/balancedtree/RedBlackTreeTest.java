@@ -1,7 +1,6 @@
-package javatests.com.williamfiset.datastructures.redblacktree;
+package javatests.com.williamfiset.datastructures.balancedtree;
 
 import static org.junit.Assert.*;
-
 
 import com.williamfiset.datastructures.balancedtree.RedBlackTree;
 import org.junit.Before;

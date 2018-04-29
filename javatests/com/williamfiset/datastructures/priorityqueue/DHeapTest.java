@@ -1,8 +1,8 @@
-package javatests.com.williamfiset.datastructures.dheap;
+package javatests.com.williamfiset.datastructures.priorityqueue;
 
 import static org.junit.Assert.*;
 
-import com.williamfiset.datastructures.dheap.DHeap;
+import com.williamfiset.datastructures.priorityqueue.DHeap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;

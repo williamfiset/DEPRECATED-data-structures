@@ -2,14 +2,14 @@ package javatests.com.williamfiset.datastructures.priorityqueue;
 
 import static org.junit.Assert.*;
 
-import com.williamfiset.datastructures.priorityqueue.PQueue;
+import com.williamfiset.datastructures.priorityqueue.BinaryHeap;
 import org.junit.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class PQueueTest {
+public class BinaryHeapTest {
 
   static final int LOOPS = 1000;
   static final int MAX_SZ = 100;
@@ -19,7 +19,7 @@ public class PQueueTest {
 
   @Test
   public void testEmpty() {
-    PQueue<Integer> q = new PQueue<>();
+    BinaryHeap<Integer> q = new BinaryHeap<>();
     assertEquals(q.size(), 0);
     assertTrue(q.isEmpty());
     assertEquals(q.poll(), null);
@@ -29,7 +29,7 @@ public class PQueueTest {
   @Test
   public void testHeapProperty () {
     
-    PQueue <Integer> q = new PQueue<>();
+    BinaryHeap <Integer> q = new BinaryHeap<>();
     Integer[] nums = { 3,2,5,6,7,9,4,8,1 };
 
     // Try manually creating heap
@@ -40,7 +40,7 @@ public class PQueueTest {
     q.clear();
 
     // Try heapify constructor 
-    q = new PQueue<>(nums);
+    q = new BinaryHeap<>(nums);
     for (int i = 1; i <= 9; i++)
       assertTrue( i == q.poll() );
 
@@ -52,7 +52,7 @@ public class PQueueTest {
     for (int i = 1 ; i < LOOPS; i++) {
       
       Integer[] lst = genRandArray(i);
-      PQueue <Integer> pq = new PQueue<>(lst);
+      BinaryHeap <Integer> pq = new BinaryHeap<>(lst);
 
       PriorityQueue <Integer> pq2 = new PriorityQueue<>(i);
       for(int x : lst) pq2.add(x);
@@ -70,9 +70,9 @@ public class PQueueTest {
   @Test
   public void testClear() {
 
-    PQueue <String> q;
+    BinaryHeap <String> q;
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
-    q = new PQueue<>(strs);
+    q = new BinaryHeap<>(strs);
     q.clear();
     assertEquals(q.size(), 0);
     assertTrue(q.isEmpty());
@@ -83,7 +83,7 @@ public class PQueueTest {
   public void testContainment() {
 
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};    
-    PQueue <String> q = new PQueue<>(strs);
+    BinaryHeap <String> q = new BinaryHeap<>(strs);
     q.remove("aa");
     assertFalse(q.contains("aa"));
     q.remove("bb");
@@ -105,7 +105,7 @@ public class PQueueTest {
       
       List <Integer> randNums = genRandList(100);
       PriorityQueue <Integer> PQ = new PriorityQueue<>();
-      PQueue <Integer> pq = new PQueue<>();
+      BinaryHeap <Integer> pq = new BinaryHeap<>();
       for (int j = 0; j < randNums.size(); j++) {
         pq.add(randNums.get(j));
         PQ.add(randNums.get(j));
@@ -128,7 +128,7 @@ public class PQueueTest {
 
     assertEquals(in.length, removeOrder.length);
     
-    PQueue <Integer> pq = new PQueue<>(in);
+    BinaryHeap <Integer> pq = new BinaryHeap<>(in);
     PriorityQueue <Integer> PQ = new PriorityQueue<>();
     for (int value : in) PQ.offer(value);
     
@@ -178,7 +178,7 @@ public class PQueueTest {
   public void testRemovingDuplicates() {
 
     Integer[] in = new Integer[] {2,7,2,11,7,13,2};
-    PQueue <Integer> pq = new PQueue<>(in);
+    BinaryHeap <Integer> pq = new BinaryHeap<>(in);
 
     assertTrue(pq.peek()==2);
     pq.add(3);
@@ -202,7 +202,7 @@ public class PQueueTest {
       int sz = i;
       List <Integer> randNums = genRandList(sz);
       PriorityQueue <Integer> pq1 = new PriorityQueue<>();
-      PQueue <Integer> pq2 = new PQueue<>();
+      BinaryHeap <Integer> pq2 = new BinaryHeap<>();
 
       // Add all the elements to both priority queues
       for (Integer value : randNums) {
@@ -239,7 +239,7 @@ public class PQueueTest {
       int sz = i;
       List <Integer> randNums = genRandList(sz);
       PriorityQueue <Integer> pq1 = new PriorityQueue<>();
-      PQueue <Integer> pq2 = new PQueue<>();
+      BinaryHeap <Integer> pq2 = new BinaryHeap<>();
 
       // Add all the elements to both priority queues
       for (Integer value : randNums) {
@@ -274,7 +274,7 @@ public class PQueueTest {
     List <Integer> SZs = genUniqueRandList(LOOPS);
 
     PriorityQueue <Integer> PQ = new PriorityQueue<>();
-    PQueue <Integer> pq = new PQueue<>();
+    BinaryHeap <Integer> pq = new BinaryHeap<>();
 
     for (int sz : SZs) {
       
@@ -291,7 +291,7 @@ public class PQueueTest {
 
       for (int i = 0; i < sz/2; i++) {
         
-        // Sometimes add a new number into the Pqueue
+        // Sometimes add a new number into the BinaryHeap
         if (0.25 < Math.random()) {
           int randNum = (int) (Math.random() * 10000);
           PQ.add(randNum);

@@ -41,10 +41,9 @@ sourceSets {
   main {
     java {
       srcDirs = [
-        javaPackage + '/avltree',
+        javaPackage + '/balancedtree',
         javaPackage + '/binarysearchtree',
         javaPackage + '/bloomfilter',
-        javaPackage + '/dheap',
         javaPackage + '/dynamicarray',
         javaPackage + '/fenwicktree',
         javaPackage + '/hashtable',
@@ -52,7 +51,6 @@ sourceSets {
         javaPackage + '/priorityqueue',
         javaPackage + '/quadtree',
         javaPackage + '/queue',
-        javaPackage + '/redblacktree',
         javaPackage + '/segmenttree',
         javaPackage + '/hashset',
         javaPackage + '/skiplist',
@@ -67,10 +65,9 @@ sourceSets {
   test {
     java {
       srcDirs = [
-        javatestsPackage + '/avltree',
+        javatestsPackage + '/balancedtree',
         javatestsPackage + '/binarysearchtree',
         javatestsPackage + '/bloomfilter',
-        javatestsPackage + '/dheap',
         javatestsPackage + '/dynamicarray',
         javatestsPackage + '/fenwicktree',
         javatestsPackage + '/hashtable',
@@ -78,7 +75,6 @@ sourceSets {
         javatestsPackage + '/priorityqueue',
         javatestsPackage + '/quadtree',
         javatestsPackage + '/queue',
-        javatestsPackage + '/redblacktree',
         javatestsPackage + '/segmenttree',
         javatestsPackage + '/hashset',
         javatestsPackage + '/skiplist',

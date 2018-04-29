@@ -1,10 +1,9 @@
 /**
  * A generic implementation of a D-ary heap inspired by the work of David Brink.
  *
- * @author David Brink
- * @author William Fiset, william.alexandre.fiset@gmail.com
+ * @author David Brink, William Fiset
  **/
-package com.williamfiset.datastructures.dheap;
+package com.williamfiset.datastructures.priorityqueue;
 
 @SuppressWarnings("unchecked")
 public class DHeap <T extends Comparable<T>> {
@@ -15,7 +14,6 @@ public class DHeap <T extends Comparable<T>> {
 
   // Initializes a D-ary heap with a maximum capacity of n
   public DHeap(int degree, int maxNodes) {
-    
     d = Math.max(2, degree);
     n = Math.max(d+1, maxNodes);
     
@@ -26,14 +24,17 @@ public class DHeap <T extends Comparable<T>> {
       parent[i] = (i-1)/d;
       child[i] = i*d+1;
     }
-
   }
 
   // Returns the number of elements currently present inside the PQ
-  public int size() { return sz; }
+  public int size() {
+    return sz;
+  }
 
   // Returns true/false depending on whether the PQ is empty
-  public boolean isEmpty() { return sz == 0; }
+  public boolean isEmpty() {
+    return sz == 0;
+  }
 
   // Clears all the elements inside the PQ
   public void clear() {
@@ -104,6 +105,5 @@ public class DHeap <T extends Comparable<T>> {
     heap[i] = heap[j];
     heap[j] = tmp;
   }
-
 }
 

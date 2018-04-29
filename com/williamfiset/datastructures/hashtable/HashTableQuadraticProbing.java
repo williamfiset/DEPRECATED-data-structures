@@ -17,31 +17,17 @@ package com.williamfiset.datastructures.hashtable;
 @SuppressWarnings("unchecked")
 public class HashTableQuadraticProbing<K, V> extends HashTableOpenAddressingBase<K, V> {
 
-  private static final int DEFAULT_CAPACITY = 8;
-  private static final double DEFAULT_LOAD_FACTOR = 0.65;
-
   public HashTableQuadraticProbing() {
-    this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
+    super();
   }
 
   public HashTableQuadraticProbing(int capacity) {
-    this(capacity, DEFAULT_LOAD_FACTOR);
+    super(capacity);
   }
 
   // Designated constructor
   public HashTableQuadraticProbing(int capacity, double loadFactor) {
-    if (capacity <= 0)
-      throw new IllegalArgumentException("Illegal capacity: " + capacity);
-    
-    if (loadFactor <= 0 || Double.isNaN(loadFactor) || Double.isInfinite(loadFactor))
-      throw new IllegalArgumentException("Illegal loadFactor: " + loadFactor);
-    
-    this.loadFactor = loadFactor;
-    this.capacity = Math.max(DEFAULT_CAPACITY, nextPowerOfTwo(capacity));
-    threshold = (int) (this.capacity * loadFactor);
-
-    keys   = (K[]) new Object[this.capacity];
-    values = (V[]) new Object[this.capacity];
+    super(capacity, loadFactor);
   }
 
   // Given a number this method finds the next 
@@ -75,21 +61,4 @@ public class HashTableQuadraticProbing<K, V> extends HashTableOpenAddressingBase
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

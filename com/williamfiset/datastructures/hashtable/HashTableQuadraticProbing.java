@@ -60,10 +60,18 @@ public class HashTableQuadraticProbing<K, V> extends HashTableOpenAddressingBase
     return (x*x + x) >> 1;
   }
 
-  // Adjust the capacity of the hashtable to the next power of two.
+  // Increase the capacity of the hashtable to the next power of two.
+  @Override
+  protected void increaseCapacity() {
+    capacity = nextPowerOfTwo(capacity);
+  }
+
+  // Adjust the capacity of the hashtable to be a power of two.
   @Override
   protected void adjustCapacity() {
-    capacity = nextPowerOfTwo(capacity);
+    int pow2 = Integer.highestOneBit(capacity);
+    if (capacity == pow2) return;
+    increaseCapacity();
   }
 
 }

@@ -29,7 +29,8 @@ public class HashTableLinearProbing<K, V> extends HashTableOpenAddressingBase<K,
   @Override 
   protected void setupProbing(K key) {}
 
-  @Override protected int probe(int x) {
+  @Override 
+  protected int probe(int x) {
     return LINEAR_CONSTANT * x;
   }
 

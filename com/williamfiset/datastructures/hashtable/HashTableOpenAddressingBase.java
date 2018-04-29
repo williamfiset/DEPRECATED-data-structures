@@ -60,10 +60,15 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   protected abstract void setupProbing(K key);
   protected abstract int probe(int x);
 
-  // Adjust the capacity of the hash table when it's time to make it larger.
+  // Adjusts the capacity of the hash table after it's been made larger.
   // This is important to be able to override because the size of the hashtable
   // controls the functionality of the probing function.
   protected abstract void adjustCapacity();
+
+  // Increases the capacity of the hash table.
+  protected void increaseCapacity() {
+    capacity = (2 * capacity) + 1;
+  }
 
   public void clear() {
     for (int i = 0; i < capacity; i++) {
@@ -122,8 +127,9 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
 
   // Double the size of the hash-table
   protected void resizeTable() {
-    capacity *= 2;
+    increaseCapacity();
     adjustCapacity();
+
     threshold = (int) (capacity * loadFactor);
 
     K[] oldKeyTable   = (K[]) new Object[capacity];

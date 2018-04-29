@@ -18,7 +18,7 @@ Data structures are amongst the most fundamental ingredients in the recipe for e
 * [Fenwick Tree](https://github.com/williamfiset/data-structures/tree/master/com/williamfiset/datastructures/fenwicktree)
     * [Fenwick Tree (range query, point updates)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/fenwicktree/FenwickTreeRangeQueryPointUpdate.java)
     * [Fenwick Tree (range update, point query)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/fenwicktree/FenwickTreeRangeUpdatePointQuery.java)
-* [Set](https://github.com/williamfiset/data-structures/tree/master/com/williamfiset/datastructures/hashset)
+* [Set](https://github.com/williamfiset/data-structures/tree/master/com/williamfiset/datastructures/set)
 * [Hashtable](https://github.com/williamfiset/data-structures/tree/master/com/williamfiset/datastructures/hashtable)
     * [Hashtable (double hashing)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/hashtable/HashTableDoubleHashing.java)
     * [Hashtable (linear probing)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/hashtable/HashTableLinearProbing.java)

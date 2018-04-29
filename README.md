@@ -79,7 +79,6 @@ data-structures$ gradle test --tests "javatests.com.williamfiset.datastructures.
 ```
 Sometimes there are many test files for one data structure. One example is the :evergreen_tree:FenwickTree:evergreen_tree: which currently has two test files: [FenwickTreeRangeQueryPointUpdateTest.java](https://github.com/williamfiset/data-structures/tree/master/javatests/com/williamfiset/datastructures/fenwicktree/FenwickTreeRangeQueryPointUpdateTest.java) and [FenwickTreeRangeUpdatePointQueryTest.java](https://github.com/williamfiset/data-structures/tree/master/javatests/com/williamfiset/datastructures/fenwicktree/FenwickTreeRangeUpdatePointQueryTest.java), in which case you can specify a glob expression to capture all the appropriate test files:
 ```bash
-# Using globbing:
 gradle test --tests "javatests.com.williamfiset.datastructures.fenwicktree.FenwickTree*Test"
 ```
 

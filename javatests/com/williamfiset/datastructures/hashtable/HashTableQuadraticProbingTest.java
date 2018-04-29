@@ -31,7 +31,7 @@ public class HashTableQuadraticProbingTest {
     MAX_RAND_NUM = randInt(1, 350);
   }
 
-  HashTableQuadraticProbing <Integer, Integer> map;
+  HashTableQuadraticProbing<Integer, Integer> map;
 
   @Before
   public void setup() {
@@ -75,6 +75,28 @@ public class HashTableQuadraticProbingTest {
     map.add(1, -7);
     assertTrue(-7 == map.get(1));
 
+  }
+
+  private void assertCapacityIsPowerOfTwo(HashTableQuadraticProbing<Integer, Integer> ht) {
+    int sz = ht.getCapacity();
+    if (sz == 0) return;
+    assertTrue( (sz & (sz-1)) == 0 );
+  }
+
+
+  // Test that as the table size increases the hashtable
+  // remains as a power of two.
+  @Test
+  public void testTableSize() {
+    int loops = 10000;
+    for(int sz = 1; sz <= 32; sz++) {
+      HashTableQuadraticProbing<Integer, Integer> ht;
+      ht = new HashTableQuadraticProbing<>(sz);
+      for (int i = 0; i < loops; i++) {
+        assertCapacityIsPowerOfTwo(ht);
+        ht.add(i, i);
+      }
+    }
   }
 
   @Test

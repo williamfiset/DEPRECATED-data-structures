@@ -8,9 +8,9 @@ package com.williamfiset.datastructures.priorityqueue;
 @SuppressWarnings("unchecked")
 public class DHeap <T extends Comparable<T>> {
 
-  T [] heap;
-  int d, n, sz;
-  int[] child, parent;
+  private T [] heap;
+  private int d, n, sz;
+  private int[] child, parent;
 
   // Initializes a D-ary heap with a maximum capacity of n
   public DHeap(int degree, int maxNodes) {

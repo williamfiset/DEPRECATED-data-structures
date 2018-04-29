@@ -13,13 +13,6 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> extends HashTab
 
   private int hash;
 
-  // Special marker token used to indicate the deletion of a key-value pair.
-  private final SecondaryHash TOMBSTONE = new SecondaryHash() {
-    @Override public int hashCode2() {
-      return 0;
-    }
-  };
-
   public HashTableDoubleHashing() {
     super();
   }

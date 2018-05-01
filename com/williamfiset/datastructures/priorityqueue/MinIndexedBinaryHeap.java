@@ -35,38 +35,44 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     return n == 0;
   }
 
-  public boolean contains(int i) {
-    return qp[i] != -1;
+  public boolean contains(int ki) {
+    return qp[ki] != -1;
   }
 
-  public void insert(int i, T value) {
-    if (contains(i)) throw new IllegalArgumentException("index already present.");
-    pq[n] = i;
-    qp[i] = n;
+  public void insert(int ki, T value) {
+    if (contains(ki)) throw new IllegalArgumentException("index already present.");
+    pq[n] = ki;
+    qp[ki] = n;
     values[n] = value;
     swim(n);
     n++;
   }
 
-  public T valueOf(int i) {
-    if (!contains(i)) throw new NoSuchElementException("index does not exist");
-    return values[i];
+  public T valueOf(int ki) {
+    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
+    return values[qp[ki]];
   }
 
-  public void update(int i, T value) {
+  public void update(int ki, T value) {
     // Update the value mapped with index i
   }
 
-  public void decreaseValue(int i, T value) {
+  public void decreaseValue(int ki, T value) {
     if (value == null) throw new IllegalArgumentException("value cannot be null");
+    final int i = qp[ki];
     if (value.compareTo(values[i]) <= 0) {
       values[i] = value;
       swim(i);
     }
   }
 
-  public void increaseValue(int i, T value) {
-
+  public void increaseValue(int ki, T value) {
+    if (value == null) throw new IllegalArgumentException("value cannot be null");
+    final int i = qp[ki];
+    if (value.compareTo(values[i]) >= 0) {
+      values[i] = value;
+      sink(i);
+    }
   }
 
   private void sink(int i) {

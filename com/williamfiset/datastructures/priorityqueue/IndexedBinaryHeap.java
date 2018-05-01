@@ -2,6 +2,9 @@
  * File WIP.
  */
 
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
 public class IndexedBinaryHeap <T extends Comparable<T>> {
 
   // Number of elements in the heap
@@ -13,14 +16,15 @@ public class IndexedBinaryHeap <T extends Comparable<T>> {
   private final T[] values;
   private final int[] pq, qp;
 
+  @SuppressWarnings("unchecked")
   public IndexedBinaryHeap(int N) {
     // if (N <= 0) ...
     this.N = N;
     pq = new int[N];
     qp = new int[N];
     values = (T[]) new Object[N];
-    java.util.Arrays.fill(pq, -1);
-    java.util.Arrays.fill(qp, -1);
+    Arrays.fill(pq, -1);
+    Arrays.fill(qp, -1);
   }
 
   public int size() {

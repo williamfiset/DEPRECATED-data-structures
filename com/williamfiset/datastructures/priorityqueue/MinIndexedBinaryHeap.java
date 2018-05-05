@@ -1,6 +1,7 @@
 /**
  * File WIP.
  */
+package com.williamfiset.datastructures.priorityqueue;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -13,18 +14,21 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   // Maximum number of elements in the size of the heap.
   private final int N;
 
+  // The values associated with the key indexes. It is very important
+  // to note that these values are indexed by the key indexes themselves.
   private final T[] values;
-  private final int[] pq, qp;
+
+  private final int[] pq, keyposmap; // kpm?
 
   @SuppressWarnings("unchecked")
   public MinIndexedBinaryHeap(int N) {
     if (N <= 0) throw new IllegalArgumentException("N <= 0");
     this.N = N;
     pq = new int[N];
-    qp = new int[N];
-    values = (T[]) new Object[N];
+    keyposmap = new int[N];
+    values = (T[]) new Comparable[N];
     for (int i = 0; i < N; i++)
-      pq[i] = qp[i] = -1;
+      pq[i] = keyposmap[i] = -1;
   }
 
   public int size() {
@@ -36,41 +40,51 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   }
 
   public boolean contains(int ki) {
-    return qp[ki] != -1;
+    return keyposmap[ki] != -1;
   }
+
+  // TODO(williamfiset): Poll, Min, Delete
 
   public void insert(int ki, T value) {
     if (contains(ki)) throw new IllegalArgumentException("index already present.");
+    if (value == null) throw new IllegalArgumentException("value cannot be null");
+    keyposmap[ki] = n;
+    values[ki] = value;
     pq[n] = ki;
-    qp[ki] = n;
-    values[n] = value;
     swim(n);
     n++;
   }
 
   public T valueOf(int ki) {
     if (!contains(ki)) throw new NoSuchElementException("index does not exist");
-    return values[qp[ki]];
+    return values[ki];
   }
 
   public void update(int ki, T value) {
-    // Update the value mapped with index i
+    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
+    if (value == null) throw new IllegalArgumentException("value cannot be null");
+    final int i = keyposmap[ki];
+    values[ki] = value;
+    sink(i);
+    swim(i);
   }
 
   public void decreaseValue(int ki, T value) {
+    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
     if (value == null) throw new IllegalArgumentException("value cannot be null");
-    final int i = qp[ki];
-    if (value.compareTo(values[i]) <= 0) {
-      values[i] = value;
+    final int i = keyposmap[ki];
+    if (value.compareTo(values[ki]) <= 0) {
+      values[ki] = value;
       swim(i);
     }
   }
 
   public void increaseValue(int ki, T value) {
+    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
     if (value == null) throw new IllegalArgumentException("value cannot be null");
-    final int i = qp[ki];
-    if (value.compareTo(values[i]) >= 0) {
-      values[i] = value;
+    final int i = keyposmap[ki];
+    if (value.compareTo(values[ki]) >= 0) {
+      values[ki] = value;
       sink(i);
     }
   }
@@ -98,7 +112,6 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
 
   private void swim(int i) {
     for(int p = (i-1)/2; i > 0 && less(i, p); p = (i-1)/2) {
-      // Exchange i with the parent
       swap(p, i);
       i = p;
     }
@@ -108,8 +121,8 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     int tmp = pq[i];
     pq[i] = pq[j];
     pq[j] = tmp;
-    qp[pq[i]] = i;
-    qp[pq[j]] = j;
+    keyposmap[pq[i]] = i;
+    keyposmap[pq[j]] = j;
   }
 
   // Tests if the value of node i <= node j

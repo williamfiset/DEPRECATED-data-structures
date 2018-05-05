@@ -3,9 +3,12 @@ package javatests.com.williamfiset.datastructures.priorityqueue;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.williamfiset.datastructures.priorityqueue.MinIndexedBinaryHeap;
+
 import org.junit.*;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -100,19 +103,33 @@ public class MinIndexedBinaryHeapTest {
 
   @Test
   public void testPeekAndPollMinIndex() {
-    int[] indexes = {4, 7, 1, 5, 3, 6, 8, 9, 0, 2};
-    int[] values  = {7, 1, 3, 5, 6, 8, 9, 0, 2, 4};
-    int n = indexes.length;
-    pq = new MinIndexedBinaryHeap<Integer>(n+1);
+    // pairs[i][0] is the index
+    // pairs[i][1] is the value
+    Integer[][] pairs = {
+      {4, 1},
+      {7, 5},
+      {1, 6},
+      {5, 8},
+      {3, 7},
+      {6, 9},
+      {8, 0},
+      {2, 4},
+      {9, 3},
+      {0, 2}
+    };
+    sortPairsByValue(pairs);
+    
+    int n = pairs.length;
+    pq = new MinIndexedBinaryHeap<Integer>(n);
     for(int i = 0; i < n; i++)
-      pq.insert(indexes[i], values[i]);
-    // java.util.Arrays.sort(indexes);
-    // for (int i = 0, minIndex; i < n; i++) {
-    //   minIndex = pq.peekMinIndex();
-    //   assertThat(minIndex).isEqualTo(indexes[i]);
-    //   minIndex = pq.pollMinIndex();
-    //   assertThat(minIndex).isEqualTo(indexes[i]);
-    // }
+      pq.insert(pairs[i][0], pairs[i][1]);
+
+    for (int i = 0, minIndex; i < n; i++) {
+      minIndex = pq.peekMinIndex();
+      assertThat(minIndex).isEqualTo(pairs[i][0]);
+      minIndex = pq.pollMinIndex();
+      assertThat(minIndex).isEqualTo(pairs[i][0]);
+    }
   }
 
   @Test
@@ -130,8 +147,16 @@ public class MinIndexedBinaryHeapTest {
 
 
 
-  public static int[] genRandArray(int n, int lo, int hi) {
+  static int[] genRandArray(int n, int lo, int hi) {
     return new Random().ints(n, lo, hi).toArray();
+  }
+
+  static void sortPairsByValue(Integer[][] pairs) {
+    Arrays.sort(pairs, new Comparator<Integer[]>(){
+      @Override public int compare(Integer[] pair1, Integer[] pair2) {
+        return pair1[1] - pair2[1];
+      }
+    });
   }
 
   // Generate a list of random numbers

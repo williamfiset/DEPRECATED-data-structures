@@ -15,9 +15,9 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
 
   // The values associated with the key indexes. It is very important
   // to note that these values are indexed by the key indexes themselves.
-  private final T[] values;
+  public final T[] values;
 
-  private final int[] pq, keyposmap; // kpm?
+  public final int[] pq, keyposmap; // kpm?
 
   @SuppressWarnings("unchecked")
   public MinIndexedBinaryHeap(int N) {
@@ -71,6 +71,7 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     sink(i);
     values[ki] = null;
     keyposmap[ki] = -1;
+    pq[n] = -1;
   }
 
   public void insert(int ki, T value) {
@@ -80,10 +81,6 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     keyposmap[ki] = n;
     values[ki] = value;
     pq[n] = ki;
-    // System.out.println("insert: " + ki + " with value: " + value);
-    // System.out.println(java.util.Arrays.toString(pq));
-    // System.out.println(java.util.Arrays.toString(keyposmap));
-    // System.out.println(java.util.Arrays.toString(values));
     swim(n++);
   }
 
@@ -114,7 +111,7 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
       values[ki] = value;
       sink(keyposmap[ki]);
     }
-  } 
+  }
 
   private void sink(int i) {
     while (true) {
@@ -138,7 +135,7 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
 
   private void swim(int i) {
     for(int p = (i-1)/2; i > 0 && less(i, p); p = (i-1)/2) {
-      swap(p, i);
+      swap(i, p);
       i = p;
     }
   }

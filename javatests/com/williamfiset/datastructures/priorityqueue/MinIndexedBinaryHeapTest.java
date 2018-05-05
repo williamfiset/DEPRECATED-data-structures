@@ -99,6 +99,23 @@ public class MinIndexedBinaryHeapTest {
   }
 
   @Test
+  public void testPeekAndPollMinIndex() {
+    int[] indexes = {4, 7, 1, 5, 3, 6, 8, 9, 0, 2};
+    int[] values  = {7, 1, 3, 5, 6, 8, 9, 0, 2, 4};
+    int n = indexes.length;
+    pq = new MinIndexedBinaryHeap<Integer>(n+1);
+    for(int i = 0; i < n; i++)
+      pq.insert(indexes[i], values[i]);
+    // java.util.Arrays.sort(indexes);
+    // for (int i = 0, minIndex; i < n; i++) {
+    //   minIndex = pq.peekMinIndex();
+    //   assertThat(minIndex).isEqualTo(indexes[i]);
+    //   minIndex = pq.pollMinIndex();
+    //   assertThat(minIndex).isEqualTo(indexes[i]);
+    // }
+  }
+
+  @Test
   public void testInsertionAndValueOf() {
     String[] names = {"jackie", "wilson", "catherine", "jason", "bobby", "sia"};
     pq = new MinIndexedBinaryHeap<String>(names.length);

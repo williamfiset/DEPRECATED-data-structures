@@ -43,7 +43,35 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     return keyposmap[ki] != -1;
   }
 
-  // TODO(williamfiset): Poll, Min, Delete
+  public int peekMinIndex() {
+    isNotEmptyOrThrow();
+    return pq[0];
+  }
+
+  public int pollMinIndex() {
+    int minki = peekMinIndex();
+    delete(minki);
+    return minki;
+  }
+
+  public T peekMinValue() {
+    isNotEmptyOrThrow();
+    return values[pq[0]];
+  }
+
+  public T pollMinValue() {
+    T minValue = peekMinValue();
+    delete(peekMinIndex());
+    return minValue;
+  }
+
+  public void delete(int ki) {
+    final int i = keyposmap[ki];
+    swap(i, --n);
+    sink(i);
+    values[ki] = null;
+    keyposmap[ki] = -1;
+  }
 
   public void insert(int ki, T value) {
     if (contains(ki))
@@ -52,8 +80,11 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     keyposmap[ki] = n;
     values[ki] = value;
     pq[n] = ki;
-    swim(n);
-    n++;
+    // System.out.println("insert: " + ki + " with value: " + value);
+    // System.out.println(java.util.Arrays.toString(pq));
+    // System.out.println(java.util.Arrays.toString(keyposmap));
+    // System.out.println(java.util.Arrays.toString(values));
+    swim(n++);
   }
 
   public T valueOf(int ki) {
@@ -83,16 +114,15 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
       values[ki] = value;
       sink(keyposmap[ki]);
     }
-  }
+  } 
 
   private void sink(int i) {
     while (true) {
-      int left  = 2 * i + 1; // Left node
-      int right = 2 * i + 2; // Right node
-      int smallest = left;   // Assume left is the smallest node of the two children
+      int left  = 2 * i + 1;
+      int right = 2 * i + 2;
+      int smallest = left;
 
-      // Find which is smaller left or right
-      // If right is smaller set smallest to be right
+      // Find which is smaller left or right.
       if (right < n && less(right, left))
         smallest = right;
 
@@ -122,9 +152,13 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   }
 
   // Tests if the value of node i <= node j
-  // This method assumes i & j are valid indices, O(1)
+  // This method assumes i & j are valid indexes, O(1)
   private boolean less(int i, int j) {
-    return values[i].compareTo(values[j]) <= 0;
+    return values[pq[i]].compareTo(values[pq[j]]) <= 0;
+  }
+
+  private void isNotEmptyOrThrow() {
+    if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
   }
 
   private void keyExistsAndValueNotNullOrThrow(int ki, T value) {

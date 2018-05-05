@@ -67,10 +67,36 @@ public class MinIndexedBinaryHeapTest {
   }
 
   @Test
-  public void testTestDecreaseKey() {}
+  public void testTestDecreaseKey() {
+    pq = new MinIndexedBinaryHeap<Integer>(10);
+    pq.insert(3, 5);
+    pq.decrease(3, 4);
+    assertThat(pq.valueOf(3)).isEqualTo(4);
+  }
 
   @Test
-  public void testTestIncreaseKey() {}
+  public void testTestDecreaseKeyNoUpdate() {
+    pq = new MinIndexedBinaryHeap<Integer>(10);
+    pq.insert(3, 5);
+    pq.decrease(3, 6);
+    assertThat(pq.valueOf(3)).isEqualTo(5);
+  }
+
+  @Test
+  public void testTestIncreaseKey() {
+    pq = new MinIndexedBinaryHeap<Integer>(10);
+    pq.insert(3, 5);
+    pq.increase(3, 6);
+    assertThat(pq.valueOf(3)).isEqualTo(6);
+  }
+
+  @Test
+  public void testTestIncreaseKeyNoUpdate() {
+    pq = new MinIndexedBinaryHeap<Integer>(10);
+    pq.insert(3, 5);
+    pq.increase(3, 4);
+    assertThat(pq.valueOf(3)).isEqualTo(5);
+  }
 
   @Test
   public void testInsertionAndValueOf() {

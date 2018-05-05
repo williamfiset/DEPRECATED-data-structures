@@ -68,8 +68,8 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     sink(i);
     swim(i);
   }
-
-  public void decreaseValue(int ki, T value) {
+  
+  public void decrease(int ki, T value) {
     if (!contains(ki)) throw new NoSuchElementException("index does not exist");
     if (value == null) throw new IllegalArgumentException("value cannot be null");
     final int i = keyposmap[ki];
@@ -79,7 +79,7 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     }
   }
 
-  public void increaseValue(int ki, T value) {
+  public void increase(int ki, T value) {
     if (!contains(ki)) throw new NoSuchElementException("index does not exist");
     if (value == null) throw new IllegalArgumentException("value cannot be null");
     final int i = keyposmap[ki];

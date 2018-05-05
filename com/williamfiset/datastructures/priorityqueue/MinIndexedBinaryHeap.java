@@ -3,7 +3,6 @@
  */
 package com.williamfiset.datastructures.priorityqueue;
 
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class MinIndexedBinaryHeap <T extends Comparable<T>> {
@@ -40,14 +39,16 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   }
 
   public boolean contains(int ki) {
+    keyInBoundsOrThrow(ki);
     return keyposmap[ki] != -1;
   }
 
   // TODO(williamfiset): Poll, Min, Delete
 
   public void insert(int ki, T value) {
-    if (contains(ki)) throw new IllegalArgumentException("index already present.");
-    if (value == null) throw new IllegalArgumentException("value cannot be null");
+    if (contains(ki))
+      throw new IllegalArgumentException("index already exists; received: " + ki);
+    valueNotNullOrThrow(value);
     keyposmap[ki] = n;
     values[ki] = value;
     pq[n] = ki;
@@ -56,36 +57,31 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   }
 
   public T valueOf(int ki) {
-    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
+    keyExistsOrThrow(ki);
     return values[ki];
   }
 
   public void update(int ki, T value) {
-    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
-    if (value == null) throw new IllegalArgumentException("value cannot be null");
+    keyExistsAndValueNotNullOrThrow(ki, value);
     final int i = keyposmap[ki];
     values[ki] = value;
     sink(i);
     swim(i);
   }
-  
+
   public void decrease(int ki, T value) {
-    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
-    if (value == null) throw new IllegalArgumentException("value cannot be null");
-    final int i = keyposmap[ki];
+    keyExistsAndValueNotNullOrThrow(ki, value);
     if (value.compareTo(values[ki]) <= 0) {
       values[ki] = value;
-      swim(i);
+      swim(keyposmap[ki]);
     }
   }
 
   public void increase(int ki, T value) {
-    if (!contains(ki)) throw new NoSuchElementException("index does not exist");
-    if (value == null) throw new IllegalArgumentException("value cannot be null");
-    final int i = keyposmap[ki];
+    keyExistsAndValueNotNullOrThrow(ki, value);
     if (value.compareTo(values[ki]) >= 0) {
       values[ki] = value;
-      sink(i);
+      sink(keyposmap[ki]);
     }
   }
 
@@ -129,6 +125,26 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   // This method assumes i & j are valid indices, O(1)
   private boolean less(int i, int j) {
     return values[i].compareTo(values[j]) <= 0;
+  }
+
+  private void keyExistsAndValueNotNullOrThrow(int ki, T value) {
+    keyExistsOrThrow(ki);
+    valueNotNullOrThrow(value);
+  }
+
+  private void keyExistsOrThrow(int ki) {
+    if (!contains(ki)) 
+      throw new NoSuchElementException("Index does not exist; received: " + ki);
+  }
+
+  private void valueNotNullOrThrow(T value) {
+    if (value == null) 
+      throw new IllegalArgumentException("value cannot be null");
+  }
+
+  private void keyInBoundsOrThrow(int ki) {
+    if (ki < 0 || ki >= N) 
+      throw new IllegalArgumentException("Key index out of bounds; received: " + ki);
   }
 
 }

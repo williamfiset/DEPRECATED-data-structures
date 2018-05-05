@@ -108,6 +108,11 @@ public class MinIndexedBinaryHeapTest {
       assertThat(pq.valueOf(i)).isEqualTo(names[i]);
   }
 
+
+  // TODO(williamfiset): Randomized testing against java.util.PriorityQueue
+
+
+
   public static int[] genRandArray(int n, int lo, int hi) {
     return new Random().ints(n, lo, hi).toArray();
   }

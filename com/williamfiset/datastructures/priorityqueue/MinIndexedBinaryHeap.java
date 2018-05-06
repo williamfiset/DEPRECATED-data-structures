@@ -63,13 +63,13 @@ public class MinIndexedBinaryHeap <T> {
     return pm[ki] != -1;
   }
 
-  public int peekMinIndex() {
+  public int peekMinKeyIndex() {
     isNotEmptyOrThrow();
     return pq[0];
   }
 
-  public int pollMinIndex() {
-    int minki = peekMinIndex();
+  public int pollMinKeyIndex() {
+    int minki = peekMinKeyIndex();
     delete(minki);
     return minki;
   }
@@ -82,7 +82,7 @@ public class MinIndexedBinaryHeap <T> {
 
   public T pollMinValue() {
     T minValue = peekMinValue();
-    delete(peekMinIndex());
+    delete(peekMinKeyIndex());
     return minValue;
   }
 

@@ -124,9 +124,9 @@ public class MinIndexedBinaryHeapTest {
 
     Integer minIndex;
     for (int i = 0; i < n; i++) {
-      minIndex = pq.peekMinIndex();
+      minIndex = pq.peekMinKeyIndex();
       assertThat(minIndex).isEqualTo(pairs[i][0]);
-      minIndex = pq.pollMinIndex();
+      minIndex = pq.pollMinKeyIndex();
       assertThat(minIndex).isEqualTo(pairs[i][0]);
     }
   }
@@ -182,30 +182,30 @@ public class MinIndexedBinaryHeapTest {
     pq.insert(4, 4);
     assertThat(pq.contains(4)).isTrue();
     assertThat(pq.peekMinValue()).isEqualTo(4);
-    assertThat(pq.peekMinIndex()).isEqualTo(4);
+    assertThat(pq.peekMinKeyIndex()).isEqualTo(4);
     pq.update(4, 8);
     assertThat(pq.peekMinValue()).isEqualTo(8);
-    assertThat(pq.pollMinIndex()).isEqualTo(4);
+    assertThat(pq.pollMinKeyIndex()).isEqualTo(4);
     assertThat(pq.contains(4)).isFalse();
     pq.insert(3, 99);
     pq.insert(1, 101);
     pq.insert(2, 60);
     assertThat(pq.peekMinValue()).isEqualTo(60);
-    assertThat(pq.peekMinIndex()).isEqualTo(2);
+    assertThat(pq.peekMinKeyIndex()).isEqualTo(2);
     pq.increase(2, 150);
     assertThat(pq.peekMinValue()).isEqualTo(99);
-    assertThat(pq.peekMinIndex()).isEqualTo(3);
+    assertThat(pq.peekMinKeyIndex()).isEqualTo(3);
     pq.increase(3, 250);
     assertThat(pq.peekMinValue()).isEqualTo(101);
-    assertThat(pq.peekMinIndex()).isEqualTo(1);
+    assertThat(pq.peekMinKeyIndex()).isEqualTo(1);
     pq.decrease(3, -500);
     assertThat(pq.peekMinValue()).isEqualTo(-500);
-    assertThat(pq.peekMinIndex()).isEqualTo(3);
+    assertThat(pq.peekMinKeyIndex()).isEqualTo(3);
     assertThat(pq.contains(3)).isTrue();
     pq.delete(3);
     assertThat(pq.contains(3)).isFalse();
     assertThat(pq.peekMinValue()).isEqualTo(101);
-    assertThat(pq.peekMinIndex()).isEqualTo(1);
+    assertThat(pq.peekMinKeyIndex()).isEqualTo(1);
     assertThat(pq.valueOf(1)).isEqualTo(101);
   }
 

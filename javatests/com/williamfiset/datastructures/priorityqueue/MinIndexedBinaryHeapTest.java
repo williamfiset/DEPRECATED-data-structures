@@ -150,15 +150,16 @@ public class MinIndexedBinaryHeapTest {
     sortPairsByValue(pairs);
     
     int n = pairs.length;
-    MinIndexedBinaryHeap<Integer> pq1 = new MinIndexedBinaryHeap<Integer>(n);
+    MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(n);
     for(int i = 0; i < n; i++)
-      pq1.insert(pairs[i][0], pairs[i][1]);
+      pq.insert(pairs[i][0], pairs[i][1]);
 
     Integer minValue;
     for (int i = 0; i < n; i++) {
-      minValue = pq1.peekMinValue();
+      assertThat(pq.valueOf(pairs[i][0])).isEqualTo(pairs[i][1]);
+      minValue = pq.peekMinValue();
       assertThat(minValue).isEqualTo(pairs[i][1]);
-      minValue = pq1.pollMinValue();
+      minValue = pq.pollMinValue();
       assertThat(minValue).isEqualTo(pairs[i][1]);
     }
   }
@@ -205,6 +206,7 @@ public class MinIndexedBinaryHeapTest {
     assertThat(pq.contains(3)).isFalse();
     assertThat(pq.peekMinValue()).isEqualTo(101);
     assertThat(pq.peekMinIndex()).isEqualTo(1);
+    assertThat(pq.valueOf(1)).isEqualTo(101);
   }
 
   @Test
@@ -228,6 +230,7 @@ public class MinIndexedBinaryHeapTest {
         }
 
         assertThat(pq1.size()).isEqualTo(pq2.size());
+        assertThat(pq1.isEmpty()).isEqualTo(pq2.isEmpty());
         if (!pq2.isEmpty()) assertThat(pq1.peekMinValue()).isEqualTo(pq2.peek());
       }
     }
@@ -273,6 +276,7 @@ public class MinIndexedBinaryHeapTest {
         }
 
         assertThat(pq1.size()).isEqualTo(pq2.size());
+        assertThat(pq1.isEmpty()).isEqualTo(pq2.isEmpty());
         if (!pq2.isEmpty()) assertThat(pq1.peekMinValue()).isEqualTo(pq2.peek());
       }
     }

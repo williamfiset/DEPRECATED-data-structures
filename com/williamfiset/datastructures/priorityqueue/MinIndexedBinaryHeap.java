@@ -32,7 +32,7 @@ public class MinIndexedBinaryHeap <T> {
 
   // The Position Map (pm) maps Key Indexes (ki) to where the
   // position of that key is represented in the priority queue
-  // in the domain [0, n).
+  // which uses the domain [0, n).
   public final int[] pm;
 
   // The Priority Queue (pq) stores the indexes of the keys in the range
@@ -137,25 +137,7 @@ public class MinIndexedBinaryHeap <T> {
     }
   }
 
-  // Recursively checks if this heap is a min heap. This method is used
-  // for testing purposes to validate the heap invariant.
-  public boolean isMinHeap() {
-    return isMinHeap(0);
-  }
-
-  private boolean isMinHeap(int i) {
-    if (i >= n) return true;
-    int left  = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    // Make sure that the current node i is less than both of its children left, 
-    // and right if they exist return false otherwise to indicate an invalid heap.
-    if (left < n && !less(i, left)) return false;
-    if (right < n && !less(i, right)) return false;
-
-    // Recurse on both children to make sure they're also valid heaps
-    return isMinHeap(left) && isMinHeap(right);
-  }
+    /* Helper functions */
 
   private void sink(int i) {
     while (true) {
@@ -234,6 +216,28 @@ public class MinIndexedBinaryHeap <T> {
     List<Integer> lst = new ArrayList<>(n);
     for(int i = 0; i < n; i++) lst.add(pq[i]);
     return lst.toString();
+  }
+
+    /* Test functions */
+
+  // Recursively checks if this heap is a min heap. This method is used
+  // for testing purposes to validate the heap invariant.
+  public boolean isMinHeap() {
+    return isMinHeap(0);
+  }
+
+  private boolean isMinHeap(int i) {
+    if (i >= n) return true;
+    int left  = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    // Make sure that the current node i is less than both of its children left, 
+    // and right if they exist return false otherwise to indicate an invalid heap.
+    if (left < n && !less(i, left)) return false;
+    if (right < n && !less(i, right)) return false;
+
+    // Recurse on both children to make sure they're also valid heaps
+    return isMinHeap(left) && isMinHeap(right);
   }
 
 }

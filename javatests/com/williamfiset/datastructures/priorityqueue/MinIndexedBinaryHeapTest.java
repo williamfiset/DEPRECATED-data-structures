@@ -290,14 +290,6 @@ public class MinIndexedBinaryHeapTest {
     });
   }
 
-  // Generate a list of random numbers
-  // static List <Integer> genRandList(int sz) {
-  //   List <Integer> lst = new ArrayList<>(sz);
-  //   for (int i = 0; i < sz; i++)
-  //     lst.add( (int) (Math.random()*MAX_SZ) );
-  //   return lst;
-  // }
-
   // Generate a list of unique random numbers
   static List<Integer> genUniqueRandList(int sz) {
     List <Integer> lst = new ArrayList<>(sz);

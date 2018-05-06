@@ -1,36 +1,53 @@
 /**
- * File WIP.
+ * An implementation of an indexed binary heap priority queue.
+ * 
+ * This implementation supports arbitrary keys with comparable values.  
+ * To use arbitrary keys (such as strings or objects) first map all your
+ * keys to the integer domain [0, N) where N is the number of keys
+ * you have and then use the mapping with this indexed priority queue.
+ *
+ * As convention, I denote  'ki' as the index value in the domain [0, N)
+ * associated with key k, therefore: ki = map[k]
+ *
+ * @author William Fiset, william.alexandre.fiset@gmail.com
  */
+
 package com.williamfiset.datastructures.priorityqueue;
 
-import java.util.NoSuchElementException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class MinIndexedBinaryHeap <T> {
 
-  // Number of elements in the heap
+  // Current number of elements in the heap
   private int n;
 
   // Maximum number of elements in the heap.
   private final int N;
 
-  // The values associated with the key indexes. It is very important
-  // to note that these values are indexed by the key indexes themselves.
+  // The values associated with the keys. It is very important  to note 
+  // that this array is indexed by the key indexes (aka 'ki')
   public final Object[] values;
 
-  public final int[] pq;
+  // The Position Map (pm) maps Key Indexes (ki) to where the
+  // position of that key is represented in the priority queue
+  // in the domain [0, n).
+  public final int[] pm;
 
-  public final int[] keyposmap;
+  // The Priority Queue (pq) stores the indexes of the keys in the range
+  // [0, n) which make up the priority queue. It should be noted that
+  // pq and pm are inverses of each other, so: pm[pq[i]] = pq[pm[i]] = i
+  public final int[] pq;
 
   public MinIndexedBinaryHeap(int maxSize) {
     if (maxSize <= 0) throw new IllegalArgumentException("maxSize <= 0");
     N = maxSize;
     pq = new int[N];
-    keyposmap = new int[N];
+    pm = new int[N];
     values = new Object[N];
     for (int i = 0; i < N; i++)
-      pq[i] = keyposmap[i] = -1;
+      pq[i] = pm[i] = -1;
   }
 
   public int size() {
@@ -43,7 +60,7 @@ public class MinIndexedBinaryHeap <T> {
 
   public boolean contains(int ki) {
     keyInBoundsOrThrow(ki);
-    return keyposmap[ki] != -1;
+    return pm[ki] != -1;
   }
 
   public int peekMinIndex() {
@@ -71,12 +88,12 @@ public class MinIndexedBinaryHeap <T> {
 
   public void delete(int ki) {
     keyExistsOrThrow(ki);
-    final int i = keyposmap[ki];
+    final int i = pm[ki];
     swap(i, --n);
     sink(i);
     swim(i);
     values[ki] = null;
-    keyposmap[ki] = -1;
+    pm[ki] = -1;
     pq[n] = -1;
   }
 
@@ -84,7 +101,7 @@ public class MinIndexedBinaryHeap <T> {
     if (contains(ki))
       throw new IllegalArgumentException("index already exists; received: " + ki);
     valueNotNullOrThrow(value);
-    keyposmap[ki] = n;
+    pm[ki] = n;
     values[ki] = value;
     pq[n] = ki;
     swim(n++);
@@ -98,7 +115,7 @@ public class MinIndexedBinaryHeap <T> {
 
   public void update(int ki, Object value) {
     keyExistsAndValueNotNullOrThrow(ki, value);
-    final int i = keyposmap[ki];
+    final int i = pm[ki];
     values[ki] = value;
     sink(i);
     swim(i);
@@ -108,7 +125,7 @@ public class MinIndexedBinaryHeap <T> {
     keyExistsAndValueNotNullOrThrow(ki, value);
     if (less(value, values[ki])) {
       values[ki] = value;
-      swim(keyposmap[ki]);
+      swim(pm[ki]);
     }
   }
 
@@ -116,7 +133,7 @@ public class MinIndexedBinaryHeap <T> {
     keyExistsAndValueNotNullOrThrow(ki, value);
     if (less(values[ki], value)) {
       values[ki] = value;
-      sink(keyposmap[ki]);
+      sink(pm[ki]);
     }
   }
 
@@ -127,15 +144,12 @@ public class MinIndexedBinaryHeap <T> {
   }
 
   private boolean isMinHeap(int i) {
-    // If we are outside the bounds of the heap return true 
     if (i >= n) return true;
-
     int left  = 2 * i + 1;
     int right = 2 * i + 2;
 
-    // Make sure that the current node i is less than
-    // both of its children left, and right if they exist
-    // return false otherwise to indicate an invalid heap
+    // Make sure that the current node i is less than both of its children left, 
+    // and right if they exist return false otherwise to indicate an invalid heap.
     if (left < n && !less(i, left)) return false;
     if (right < n && !less(i, right)) return false;
 
@@ -174,8 +188,8 @@ public class MinIndexedBinaryHeap <T> {
     int tmp = pq[i];
     pq[i] = pq[j];
     pq[j] = tmp;
-    keyposmap[pq[i]] = i;
-    keyposmap[pq[j]] = j;
+    pm[pq[i]] = i;
+    pm[pq[j]] = j;
   }
 
   // Tests if the value of node i <= node j
@@ -188,6 +202,8 @@ public class MinIndexedBinaryHeap <T> {
   private boolean less(Object obj1, Object obj2) {
     return ((Comparable<? super T>) obj1).compareTo((T) obj2) <= 0;
   }
+
+    /* Helper functions to make the code more readable. */
 
   private void isNotEmptyOrThrow() {
     if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
@@ -215,15 +231,9 @@ public class MinIndexedBinaryHeap <T> {
 
   @Override
   public String toString() {
-    List<Integer> lst1 = new ArrayList<>(n);
-    List<Integer> lst2 = new ArrayList<>(n);
-    List<Object> lst3 = new ArrayList<>(n);
-    for(int i = 0; i < n; i++) {
-      lst1.add(pq[i]);
-      lst2.add(keyposmap[i]);
-      lst3.add(values[i]);
-    }
-    return lst1.toString() + "\n" + lst2.toString() + "\n" + lst3.toString();
+    List<Integer> lst = new ArrayList<>(n);
+    for(int i = 0; i < n; i++) lst.add(pq[i]);
+    return lst.toString();
   }
 
 }

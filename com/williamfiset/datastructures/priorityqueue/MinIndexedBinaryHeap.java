@@ -4,28 +4,31 @@
 package com.williamfiset.datastructures.priorityqueue;
 
 import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.ArrayList;
 
-public class MinIndexedBinaryHeap <T extends Comparable<T>> {
+public class MinIndexedBinaryHeap <T> {
 
   // Number of elements in the heap
   private int n;
 
-  // Maximum number of elements in the size of the heap.
+  // Maximum number of elements in the heap.
   private final int N;
 
   // The values associated with the key indexes. It is very important
   // to note that these values are indexed by the key indexes themselves.
-  public final T[] values;
+  public final Object[] values;
 
-  public final int[] pq, keyposmap; // kpm?
+  public final int[] pq;
 
-  @SuppressWarnings("unchecked")
-  public MinIndexedBinaryHeap(int N) {
-    if (N <= 0) throw new IllegalArgumentException("N <= 0");
-    this.N = N;
+  public final int[] keyposmap;
+
+  public MinIndexedBinaryHeap(int maxSize) {
+    if (maxSize <= 0) throw new IllegalArgumentException("maxSize <= 0");
+    N = maxSize;
     pq = new int[N];
     keyposmap = new int[N];
-    values = (T[]) new Comparable[N];
+    values = new Object[N];
     for (int i = 0; i < N; i++)
       pq[i] = keyposmap[i] = -1;
   }
@@ -54,9 +57,10 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     return minki;
   }
 
+  @SuppressWarnings("unchecked")
   public T peekMinValue() {
     isNotEmptyOrThrow();
-    return values[pq[0]];
+    return (T) values[pq[0]];
   }
 
   public T pollMinValue() {
@@ -66,15 +70,17 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   }
 
   public void delete(int ki) {
+    keyExistsOrThrow(ki);
     final int i = keyposmap[ki];
     swap(i, --n);
     sink(i);
+    swim(i);
     values[ki] = null;
     keyposmap[ki] = -1;
     pq[n] = -1;
   }
 
-  public void insert(int ki, T value) {
+  public void insert(int ki, Object value) {
     if (contains(ki))
       throw new IllegalArgumentException("index already exists; received: " + ki);
     valueNotNullOrThrow(value);
@@ -84,12 +90,13 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     swim(n++);
   }
 
+  @SuppressWarnings("unchecked")
   public T valueOf(int ki) {
     keyExistsOrThrow(ki);
-    return values[ki];
+    return (T) values[ki];
   }
 
-  public void update(int ki, T value) {
+  public void update(int ki, Object value) {
     keyExistsAndValueNotNullOrThrow(ki, value);
     final int i = keyposmap[ki];
     values[ki] = value;
@@ -97,20 +104,43 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
     swim(i);
   }
 
-  public void decrease(int ki, T value) {
+  public void decrease(int ki, Object value) {
     keyExistsAndValueNotNullOrThrow(ki, value);
-    if (value.compareTo(values[ki]) <= 0) {
+    if (less(value, values[ki])) {
       values[ki] = value;
       swim(keyposmap[ki]);
     }
   }
 
-  public void increase(int ki, T value) {
+  public void increase(int ki, Object value) {
     keyExistsAndValueNotNullOrThrow(ki, value);
-    if (value.compareTo(values[ki]) >= 0) {
+    if (less(values[ki], value)) {
       values[ki] = value;
       sink(keyposmap[ki]);
     }
+  }
+
+  // Recursively checks if this heap is a min heap. This method is used
+  // for testing purposes to validate the heap invariant.
+  public boolean isMinHeap() {
+    return isMinHeap(0);
+  }
+
+  private boolean isMinHeap(int i) {
+    // If we are outside the bounds of the heap return true 
+    if (i >= n) return true;
+
+    int left  = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    // Make sure that the current node i is less than
+    // both of its children left, and right if they exist
+    // return false otherwise to indicate an invalid heap
+    if (left < n && !less(i, left)) return false;
+    if (right < n && !less(i, right)) return false;
+
+    // Recurse on both children to make sure they're also valid heaps
+    return isMinHeap(left) && isMinHeap(right);
   }
 
   private void sink(int i) {
@@ -149,16 +179,21 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   }
 
   // Tests if the value of node i <= node j
-  // This method assumes i & j are valid indexes, O(1)
+  @SuppressWarnings("unchecked")
   private boolean less(int i, int j) {
-    return values[pq[i]].compareTo(values[pq[j]]) <= 0;
+    return ((Comparable<? super T>) values[pq[i]]).compareTo((T) values[pq[j]]) <= 0;
+  }
+
+  @SuppressWarnings("unchecked")
+  private boolean less(Object obj1, Object obj2) {
+    return ((Comparable<? super T>) obj1).compareTo((T) obj2) <= 0;
   }
 
   private void isNotEmptyOrThrow() {
     if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
   }
 
-  private void keyExistsAndValueNotNullOrThrow(int ki, T value) {
+  private void keyExistsAndValueNotNullOrThrow(int ki, Object value) {
     keyExistsOrThrow(ki);
     valueNotNullOrThrow(value);
   }
@@ -168,7 +203,7 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
       throw new NoSuchElementException("Index does not exist; received: " + ki);
   }
 
-  private void valueNotNullOrThrow(T value) {
+  private void valueNotNullOrThrow(Object value) {
     if (value == null) 
       throw new IllegalArgumentException("value cannot be null");
   }
@@ -176,6 +211,19 @@ public class MinIndexedBinaryHeap <T extends Comparable<T>> {
   private void keyInBoundsOrThrow(int ki) {
     if (ki < 0 || ki >= N) 
       throw new IllegalArgumentException("Key index out of bounds; received: " + ki);
+  }
+
+  @Override
+  public String toString() {
+    List<Integer> lst1 = new ArrayList<>(n);
+    List<Integer> lst2 = new ArrayList<>(n);
+    List<Object> lst3 = new ArrayList<>(n);
+    for(int i = 0; i < n; i++) {
+      lst1.add(pq[i]);
+      lst2.add(keyposmap[i]);
+      lst3.add(values[i]);
+    }
+    return lst1.toString() + "\n" + lst2.toString() + "\n" + lst3.toString();
   }
 
 }

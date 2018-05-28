@@ -150,10 +150,10 @@ public class MinIndexedBinaryHeap <T> {
         smallest = right;
 
       // Stop if we're outside the bounds of the tree
-      // or stop early if we cannot sink k anymore
+      // or stop early if we cannot sink i anymore.
       if (left >= n || less(i, smallest)) break;
       
-      // Move down the tree following the smallest node
+      // Move down the tree following the smallest node.
       swap(smallest, i);
       i = smallest;
     }

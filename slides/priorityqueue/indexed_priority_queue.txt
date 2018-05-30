@@ -50,18 +50,28 @@ For all these operations you need the key-index associated with any particular k
 
 An IPQ can be implemented in several ways with really good time complexities using specialized heap structures, but together we're going to cover the binary heap implementation for simplicity. So you'll notice that the time complexity for all the operations here are either constant or logarithmic which is really good. In a traditional PQ the remove and update operations are linear because we are not maintaining a mapping to their position.
 
-I want to spend a few slides giving a refresher on the traditional PQ data structure which only supports values, not key-value pairs so we can compare and contrast it with the IPQ.
+I want to spend a few slides giving a refresher on the traditional PQ data structure which only supports values, not key-value pairs so we can compare and contrast it with how a binary heap indexed PQ works because it's very similar.
 
+Recall that a very common way to represent a binary heap is with an array since every node is indexed sequentially.
 
+So the first thing to recall is that a very common way to represent a binary heap is with an array since every node can be indexed sequentially.
 
+So if we were to represent the following binary heap in an array we would gets this array of values. <pause>
 
+If we know the index of a node i we can figure out what its left and right child nodes are using simple formulas. The left child is 2 times i plus 1 and the right child is 2 times i plus 2 assuming indexes are zero based.
 
+For example, what are children of the node at index 4?
 
+Well we can just plug i into the two formulas I just gave you to obtain 9 and 10. Of course, you can also run the math backwards to figure out what the parent of a given node is. This is especially useful if you're either walking up or down the tree.
 
+Whenever you want to insert a new value into the PQ you insert the new value at the insertion position at the bottom right of the binary tree.
 
+Suppose we want to insert the value 8. This would violate the heap invariant, so we bubble/sift up the value until the invariant is met.
 
+So swap nodes 5 and 12. The heap is still not satisfied so let's swap again.
 
+Now swap nodes 2 and 5. Now the tree is balanced.
 
-
+<press>
 
 

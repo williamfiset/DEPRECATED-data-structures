@@ -3,6 +3,7 @@
 matrix:
   include:
 
+    # Run Java tests with JDK 8
     - language: java
       jdk: oraclejdk8
       script:

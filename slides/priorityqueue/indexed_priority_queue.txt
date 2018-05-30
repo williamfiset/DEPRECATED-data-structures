@@ -1,0 +1,31 @@
+Hello and welcome, my name is William and today's data structure we're going to cover is probably one of the most useful you'll encounter and also one of my personal favorites and it is the indexed priority queue.
+
+Just before we get started, this video builds off concepts from the previous priority queue videos which simply go over the basics. Strictly speaking you can probably get by without watching all those as I will do a quick recap, but for those who want to know PQs in full detail check out the description for links to those.
+
+So what exactly is an IPQ? It is a traditional priority queue variant which on top of having all the regular PQ operations it also supports quick updates and deletions of key-value pairs. So the big problem the IPQ solves is being able to quickly lookup and dynamically change the values in your PQ on the fly which is often useful.
+
+Let's look at an example, suppose a hospital has a waiting room with N people which need attention with different levels of priority. Each person in the waiting room has a certain condition that needs to be dealt with:
+- Mary is in Labour with priority of 9
+- Akarsh has a paper cut so he has a priority of 1
+- James has an arrow in his leg so he gets a priority of 7
+- Naida's stomach hurts so she gets a priority of 3
+- Richard fractured his wrist so priority of 5
+- and lastly Leah's stomach also hurts
+
+We want to process these patients by highest pririty first. The hospital would then serve Mary first.
+
+Followed by James.
+
+Then something happens, suppose Naida’s condition worsens as she starts vomiting. Her priority gets updated to 6
+
+Because of this Naida gets served when the hospital is finished with James.
+
+During this time Richard get impatient and leaves to go to another clinic down the street so he's no longer in the picture.
+
+Further suppose that Akarsh goes to take a drink of water and slips on the floor and cracks his head open increasing his priority to 10.
+
+Once Naida is dealt with, Akarsh is next.
+
+Followed by Leah.
+
+<press>

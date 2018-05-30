@@ -29,3 +29,39 @@ Once Naida is dealt with, Akarsh is next.
 Followed by Leah.
 
 <press>
+
+In the hospital example, we saw that it was very important to be able to dynamically update the priority (value) of certain people (keys).
+The Indexed Priority Queue (IPQ) data structure lets us do this efficiently. The first step to using an IPQ is to assign index values to all the keys forming a bidirectional mapping.
+
+So if we're going to use an indexed priority queue to track who should get served next in our hospital we need to assign each person a unique key index value between 0 and N non-inclusive. Note this this mapping is intended to be bidirectional so I would advise using a bidirectional hashtable to be able to flip back and fourth between the key and its key-index. Basically any operation on the IPQ will require the associated key-index of a particular key.
+
+So you're probably wondering why I'm saying that we need to map the keys to indexed in the domain [0, N). The reason for doing this is that typically priority queues are implemented as heaps under the hood which internally use arrays which we want to facilitate indexing into, this will become apparent shortly.
+I will say though that often, and I mean very often, the keys themselves are integers in the range [0, N) so there’s no need to construct a mapping. However, it is handy to be able to support any type of key such as names.
+
+We can think of the IPQ as an ADT with operations we want to support. There's about a dozen or so operations we want out IPQ to support which are:
+- deleting keys, 
+- getting the value associated with a key
+- checking if a key exists in the PQ
+- getting the key index with the smallest or largest value
+- getting the smallest or largest value in the PQ
+- being able to insert and update key-value pairs
+- and finally the specialized update operations increase and decrease key.
+For all these operations you need the key-index associated with any particular key you're dealing with. Throughout these slides I will be denoting the key-index simply as the variable 'ki' to distinguish it from other index values.
+
+An IPQ can be implemented in several ways with really good time complexities using specialized heap structures, but together we're going to cover the binary heap implementation for simplicity. So you'll notice that the time complexity for all the operations here are either constant or logarithmic which is really good. In a traditional PQ the remove and update operations are linear because we are not maintaining a mapping to their position.
+
+I want to spend a few slides giving a refresher on the traditional PQ data structure which only supports values, not key-value pairs so we can compare and contrast it with the IPQ.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

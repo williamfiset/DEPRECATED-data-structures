@@ -4,10 +4,7 @@ matrix:
   include:
 
     - language: java
-      jdk:
-        - oraclejdk8
-          #- oraclejdk9
-          #- openjdk8
+      jdk: oraclejdk8
       script:
         - gradle test
  

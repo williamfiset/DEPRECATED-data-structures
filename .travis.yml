@@ -6,9 +6,12 @@ matrix:
     - language: java
       jdk:
         - oraclejdk8
+          #- oraclejdk9
+          #- openjdk8
       script:
         - gradle test
-
+ 
+    # Install awesome_bot to check for README.md broken links
     - language: ruby
       rvm: 
         - 2.4.1

@@ -193,6 +193,41 @@ First we update the positions of where a particular key-index values are found i
 
 Followed by this is simply updating the key-index values associated with nodes i and j in the Inverse Map and this is straight forward exchange.
 
+-------------------------------
+
+Next up I want to talk about polling and removing elements from an IPQ. This is really the operation that makes you use an IPQ over a regular PQ, and I guess also key-value updates. Polling and removing in a min indexed binary heap are both O(log(n)) operations rather than O(n) for a traditional PQ since node position lookups are constant but repositioning is still O(log(n))
+
+Let's jump into an example. Suppose we want to poll the root node, this is something we often want to do often since it'll give use the key-value pair which has the lowest value in the heap.
+
+First step with removing is to exchange the root node with the bottom right node.
+
+As we do that remember to swap the index values. Now we can remove the red node from the tree.
+
+As we remove the value let's make sure we store the key-value pair we're removing to return it from the function we're calling.
+
+Cleanup the removed node.
+
+Finally restore heap invariant by moving swapped purple node down. Since the left the right child nodes have an equal value of two i'm going to default to selecting the left one.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -207,32 +207,78 @@ As we remove the value let's make sure we store the key-value pair we're removin
 
 Cleanup the removed node.
 
-Finally restore heap invariant by moving swapped purple node down. Since the left the right child nodes have an equal value of two i'm going to default to selecting the left one.
+Finally restore the heap invariant by moving the swapped purple node down. Since the left the right child nodes have an equal value of 2 let's default to selecting the left one.
+
+<press>
+
+<press>
+
+Let's do a slightly more involved removal which asks to remove a specific key from the IPQ. In this example we're going to remove Laura from the PQ.
+
+First thing we always do is get the key-index for whatever key we're working with, so in this case 'ki' is equal to 11.
+
+Once we know the key-index we can use that information to locate the node in the heap by looking inside the position map.
+
+Then swap the node we want to remove, that is the node which contains the key-value pair for Laura and exchange it with the bottom rightmost node.
+
+Store the key-value pair before the actual removal.
+
+Cleanup the removed node.
+
+Finally restore heap invariant by moving swapped purple node up or down. We're again going to make the purple node down because it has a large value.
+
+<press>
+
+<press><pause>
+
+Let's look at some pseudo code for removing key-value pairs. The code is also very short, only 5 lines plus three cleanup lines.
+
+The first thing to do is exchange the position of the node to remove and the bottom rightmost node which is always at index position n, the number of nodes in the heap.
+
+Once we've exchanged the nodes, the bottom rightmost node is now in the position where the node we wanted to remove was and we need to move it either up or down the heap to satisfy the heap invariant. We don't know which it will be, so we try moving the node up and down, hence the sink and swim.
+
+Lastly I just cleanup the values associated with the node we wanted to remove. You can also return the key-value pair being removed but I didn't bother here.
+
+Let's also take a quick look at the sink method so we understand how that works. 
+
+To sink a node we want to select the child node with the smallest value defaulting to the left node when there's a tie which is what i'm doing in the selected block of code.
+
+In this next block I update the smallest of the left or the right child if the right child node index is within the size of the heap and its value is less than left node.
+
+The stopping condition is if there is no other left child node or we cannot sink the current node any further.
+
+Lastly we want to make sure we swap the current node with whichever was the node with the smallest value.
 
 
+------------------------
 
 
+The last core operation we can do on an IPQ is key-value pair updates. Similar to removals, updates in a min indexed binary heap also take logarithmic time due to O(1) lookup time to find the node and O(log(n)) time to adjust where the key-value pair should appear in the heap.
 
+Let's just dive in, suppose we want to update the value of the key "Carly" to now have a value of 1.
 
+Like every operation, find the key-index for the key we want to work with. The 'ki' for "Carly" happens to be 2
 
+Then we can use that key-index value to update the values array with the new value.
 
+Of course the heap invariant may not be satisfied so we need to move the node either up or down the heap.
 
+<press>
 
+<press>
 
+<press>
 
+<press>
 
+The pseudocode for updating the value of a key is super simple, simply update the value in the values array and move the node either up or down the heap, it's that easy.
 
+Alright so there was nothing too special about updates, but the part I really wanted to get to was increase and decrease key. In many applications such as Dijkstra’s or Prims algorithm it is often useful to only update a given key to make its value either always smaller (or larger). In the event that a worse value is given the value in the IPQ should not be updated. In such situations it is useful to define a more restrictive form of update operation we call increaseKey(ki, v) or decreaseKey(ki, v) depending on whether you always want to increase the value associated with a key or always try to decrease the value associated with a key.
 
+Both of these operations are very simple, they simply consist of doing an if statement before performing an update operation that either increases or decreases the value associated with a key. So bottom line, these two functions are just convenience methods that wrap a get operation with an if statement to update a value.
 
+Well that's all I got for you on the IPQ, let me know if you have any questions, I do love answering those. Next video I should be showing you some source code for a min indexed binary heap. Remember you can always go see that source code on my data structures github repository, there should be a link in the description.
 
-
-
-
-
-
-
-
-
-
+Thanks for watching, I hope you learned something. Please like this video if you learned something and subscribe for more mathematics and computer science videos.
 
 

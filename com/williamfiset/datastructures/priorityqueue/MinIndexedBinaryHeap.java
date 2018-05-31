@@ -182,7 +182,7 @@ public class MinIndexedBinaryHeap <T> {
 
   @SuppressWarnings("unchecked")
   private boolean less(Object obj1, Object obj2) {
-    return ((Comparable<? super T>) obj1).compareTo((T) obj2) <= 0;
+    return ((Comparable<? super T>) obj1).compareTo((T) obj2) < 0;
   }
 
     /* Helper functions to make the code more readable. */

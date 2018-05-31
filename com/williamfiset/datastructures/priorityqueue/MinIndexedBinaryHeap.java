@@ -240,46 +240,6 @@ public class MinIndexedBinaryHeap <T> {
     return isMinHeap(left) && isMinHeap(right);
   }
 
-  public static void main(String[] args) {
-    MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<>(20);
-    int[] vals = {3, 15, 11, 17, 7, 9, 2, 1, 6, 5, 16, 4};
-    java.util.List<Integer> v = java.util.Arrays.stream(vals).boxed().collect(java.util.stream.Collectors.toList());
-    // java.util.Collections.shuffle(v);
-    for(int ki = 0; ki < v.size(); ki++) pq.insert(ki, v.get(ki));
-    System.out.println("values: " + java.util.Arrays.toString(pq.values));
-    System.out.println("pm:     " + java.util.Arrays.toString(pq.pm));
-    System.out.println("kim:    " + java.util.Arrays.toString(pq.pq));
-
-    for(int i = 0; i < v.size(); i++) {
-      int ki = pq.pq[i];
-      System.out.printf("i = %d, ki = %d, v = %d\n", i, ki, pq.values[ki]);
-    }
-
-    System.out.println("Insert (12, 2)");
-    pq.insert(12, 2);
-    System.out.println("values: " + java.util.Arrays.toString(pq.values));
-    System.out.println("pm:     " + java.util.Arrays.toString(pq.pm));
-    System.out.println("kim:    " + java.util.Arrays.toString(pq.pq));
-
-    System.out.println("Poll root");
-    pq.pollMinKeyIndex();
-    System.out.println("values: " + java.util.Arrays.toString(pq.values));
-    System.out.println("pm:     " + java.util.Arrays.toString(pq.pm));
-    System.out.println("kim:    " + java.util.Arrays.toString(pq.pq));
-
-    System.out.println("Delete ki = 11");
-    pq.delete(11);
-    System.out.println("values: " + java.util.Arrays.toString(pq.values));
-    System.out.println("pm:     " + java.util.Arrays.toString(pq.pm));
-    System.out.println("kim:    " + java.util.Arrays.toString(pq.pq));
-
-    System.out.println("Update ki = 2, v = 1");
-    pq.update(2, 1);
-    System.out.println("values: " + java.util.Arrays.toString(pq.values));
-    System.out.println("pm:     " + java.util.Arrays.toString(pq.pm));
-    System.out.println("kim:    " + java.util.Arrays.toString(pq.pq));
-
-  }
 
 }
 

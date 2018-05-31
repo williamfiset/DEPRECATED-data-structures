@@ -174,7 +174,7 @@ public class MinIndexedBinaryHeap <T> {
     pq[j] = tmp;
   }
 
-  // Tests if the value of node i <= node j
+  // Tests if the value of node i < node j
   @SuppressWarnings("unchecked")
   private boolean less(int i, int j) {
     return ((Comparable<? super T>) values[pq[i]]).compareTo((T) values[pq[j]]) < 0;

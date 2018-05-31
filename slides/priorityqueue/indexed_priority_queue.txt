@@ -50,6 +50,8 @@ For all these operations you need the key-index associated with any particular k
 
 An IPQ can be implemented in several ways with really good time complexities using specialized heap structures, but together we're going to cover the binary heap implementation for simplicity. So you'll notice that the time complexity for all the operations here are either constant or logarithmic which is really good. In a traditional PQ the remove and update operations are linear because we are not maintaining a mapping to their position.
 
+---------------------------
+
 I want to spend a few slides giving a refresher on the traditional PQ data structure which only supports values, not key-value pairs so we can compare and contrast it with how a binary heap indexed PQ works because it's very similar.
 
 Recall that a very common way to represent a binary heap is with an array since every node is indexed sequentially.
@@ -134,10 +136,62 @@ Great, now we know how to lookup the node for a given key, but how do we find th
 
 To maintain the inverse lookup for nodes to keys we'll need to maintain an inverse lookup table I will denote as 'im' short for Inverse Map.
 
+Let's see if we can figure out which person is represented in the node at index 2.
 
+To do that, simply do a lookup in the inverse map at index 2.
 
+That give us information about which key-index is associated with that node.
 
+Knowing the key-index enables us to retrieve the actual key by doing a lookup in our bidirectional hashtable. In this case the node at position 2 represents the key "Anna". 
+<pause>
 
+Followup question to make sure you're still paying attention, which key is being represented in the node at index position 3?
+
+Same as before, find the key-index through the Inverse Map.
+
+Then with the key-index figure out the actual key from the bidirectional hashtable.
+
+We can then conclude that the node at position 3 represents the key "Isaac"
+
+---------------------------------
+
+What we just covered was simply how an indexed PQ is structured internally and what all the moving parts are, now we want to actually do some useful operations with this IPQ such as inserting new key-value pairs, removing key-value pairs based on key, and also updating the value associated with a key. These are all possible and actually very similar to how you would do it in a regular PQ.
+
+Insertion is nearly the same except that we have to update the Position Map 'pm' and the Inverse Map 'im' indexes to reflect the movement of the key-value pairs. Suppose we want to insert the key "Mary" with a value of 2 into the IPQ. What we first have to do is assign Mary a unique key-index value. Then we're going to insert the new key value pair at the insertion position.
+
+Notice that upon insertion we updated all our arrays at index 12 to reflect that a new value was inserted.
+
+Currently the heap invariant is not satisfied since the new node at index 12 has a value less then node 5.
+
+To resolve this we're going to swap the newly inserted value upwards until the heap invariant is satisfied. When swapping nodes we need to update the Position Map and the Inverse Map by swapping the values of the two nodes we're exchanging. The values array does not need to be touched since it gets indexed by the key-index value we get from the map and not the node index per se.
+
+It turn out that the heap invariant is still not satisfied so keep swapping upwards.
+
+<press & pause>
+
+<press>
+
+Let's have a look at some pseudo code for insertions. In this snippet the user calling this function needs to provide a valid key index as well as a non null value they want to insert.
+
+The first thing I do is store the value associated with the key inside the value array.
+
+Then I update the Position Map and the Inverse Map to reflect the fact that a new key-value pair has been inserted into the IPQ.
+
+Finally I move the node up the heap until the heap invariant is satisfied. Let's take a closer look at this swim method to see how that happens.
+
+Here we are looking at the swim method, you'll notice that it has two supporting functions, swap and less. Swap simply exchanges two nodes based on index and less determines if node i has a value less than node j.
+
+The logic for the swim function is fairly simple, it begins by finding the index of the parent node and walking up the tree.
+
+Every iteration we walk up one layer in the tree if the index of the current node is not the root node and the value of the current node is less than parent node. Remember that we're dealing with a min heap and want small value to be as high as possible in our heap.
+
+To actually issue a node exchange simply call the swap function and provide the index of the current node and the parent node and then update the current node and parent index values.
+
+I also want to talk about how the swapping actually occurs because it's different from the traditional PQ. In this swap method we're not actually moving around any values in the values array, we're only swapping around index values. Remember that the values array is indexed by the key-index not the node index, so effectively the values array can remain constant while we update the Inverse Map and the Position Map.
+
+First we update the positions of where a particular key-index values are found in the IPQ, remember what the Position Map is: it is the position of which node index a given key-index is found at. So we can do a straight forward swap by indexing into the inverse map the find the key-index values and swap indexes i and j.
+
+Followed by this is simply updating the key-index values associated with nodes i and j in the Inverse Map and this is straight forward exchange.
 
 
 

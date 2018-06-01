@@ -6,16 +6,16 @@
 package com.williamfiset.datastructures.priorityqueue;
 
 @SuppressWarnings("unchecked")
-public class DHeap <T extends Comparable<T>> {
+public class MinDHeap <T extends Comparable<T>> {
 
   private T [] heap;
   private int d, n, sz;
   private int[] child, parent;
 
   // Initializes a D-ary heap with a maximum capacity of n
-  public DHeap(int degree, int maxNodes) {
+  public MinDHeap(int degree, int maxNodes) {
     d = Math.max(2, degree);
-    n = Math.max(d+1, maxNodes);
+    n = Math.max(d, maxNodes);
     
     heap = (T[]) new Comparable[n];
     child = new int[n];

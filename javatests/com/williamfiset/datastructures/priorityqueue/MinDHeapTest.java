@@ -2,7 +2,7 @@ package javatests.com.williamfiset.datastructures.priorityqueue;
 
 import static org.junit.Assert.*;
 
-import com.williamfiset.datastructures.priorityqueue.DHeap;
+import com.williamfiset.datastructures.priorityqueue.MinDHeap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
 import org.junit.Test;
 import org.junit.Before;
 
-public class DHeapTest {
+public class MinDHeapTest {
 
   static final int LOOPS = 1000;
   static final int MAX_SZ = 100;
@@ -20,7 +20,7 @@ public class DHeapTest {
 
   @Test
   public void testEmpty() {
-    DHeap<Integer> q = new DHeap<>(4, 0);
+    MinDHeap<Integer> q = new MinDHeap<>(4, 0);
     assertEquals(q.size(), 0);
     assertTrue(q.isEmpty());
     assertEquals(q.poll(), null);
@@ -30,7 +30,7 @@ public class DHeapTest {
   @Test
   public void testHeapProperty () {
     
-    DHeap<Integer> q = new DHeap<>(3, 30);
+    MinDHeap<Integer> q = new MinDHeap<>(3, 30);
     Integer[] nums = { 3,2,5,6,7,9,4,8,1 };
 
     // Try manually creating heap
@@ -46,7 +46,7 @@ public class DHeapTest {
       
       Integer[] lst = genRandArray(i);
 
-      DHeap<Integer> pq = new DHeap<>(i, lst.length);
+      MinDHeap<Integer> pq = new MinDHeap<>(i, lst.length);
       PriorityQueue<Integer> pq2 = new PriorityQueue<>(i);
 
       for(int x : lst) { pq2.add(x); pq.add(x); }
@@ -68,7 +68,7 @@ public class DHeapTest {
 
       Integer[] ar = genRandArray(LOOPS);
       int d = 2 + (int)(Math.random() * 6);
-      DHeap<Integer> pq = new DHeap<>(d, LOOPS);
+      MinDHeap<Integer> pq = new MinDHeap<>(d, LOOPS);
       PriorityQueue<Integer> pq2 = new PriorityQueue<>(LOOPS);
 
       for (int i = 0; i < LOOPS; i++) {
@@ -94,7 +94,7 @@ public class DHeapTest {
   @Test
   public void testClear() {
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
-    DHeap<String> q = new DHeap<>(2, strs.length);
+    MinDHeap<String> q = new MinDHeap<>(2, strs.length);
     for(String s : strs) q.add(s);
     q.clear();
     assertEquals(q.size(), 0);
@@ -183,7 +183,7 @@ public class DHeapTest {
   public void testRemovingDuplicates() {
 
     Integer[] in = new Integer[] {2,7,2,11,7,13,2};
-    DHeap <Integer> pq = new DHeap<>(3, in.length+1);
+    MinDHeap <Integer> pq = new MinDHeap<>(3, in.length+1);
 
     for(Integer x : in) pq.add(x);
     assertTrue(pq.peek()==2);

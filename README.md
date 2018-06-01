@@ -29,7 +29,7 @@ Data structures are amongst the most fundamental ingredients in the recipe for e
     * [Min Binary Heap](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/priorityqueue/BinaryHeap.java)
     * [Min Indexed Binary Heap (sorted key-value pairs, similar to hash-table)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/priorityqueue/MinIndexedBinaryHeap.java)
     * [Min D-Heap](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/priorityqueue/MinDHeap.java)
-    * [Min Indexed D-Heap (sorted key-value pairs, similar to hash-table)]https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/priorityqueue/MinIndexedDHeap.java)
+    * [Min Indexed D-Heap (sorted key-value pairs, similar to hash-table)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/priorityqueue/MinIndexedDHeap.java)
 * [Quad Tree [WIP]](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/quadtree/QuadTree.java)
 * [Queue](https://github.com/williamfiset/data-structures/tree/master/com/williamfiset/datastructures/queue)
     * [Queue (integer only, fixed size, fast)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/queue/IntQueue.java)

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class MinIndexedDHeap <T> {
+public class MinIndexedDHeap <T extends Comparable<T>> {
 
   // Current number of elements in the heap.
   private int sz;

@@ -63,14 +63,16 @@ public class MinIndexedBinaryHeapTest {
   }
 
   @Test
-  public void testUpdateValueToRoot() {
-    // test updating a vlaue to the smallest value puts it
-  }
-
-  @Test
   public void testTestDecreaseKey() {
     MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(10);
     pq.insert(3, 5);
+    pq.decrease(3, 4);
+    assertThat(pq.valueOf(3)).isEqualTo(4);
+  }
+
+  @Test
+  public void testTestDecreaseKeyInsertsValue() {
+    MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(10);
     pq.decrease(3, 4);
     assertThat(pq.valueOf(3)).isEqualTo(4);
   }
@@ -89,6 +91,28 @@ public class MinIndexedBinaryHeapTest {
     pq.insert(3, 5);
     pq.increase(3, 6);
     assertThat(pq.valueOf(3)).isEqualTo(6);
+  }
+
+  @Test
+  public void testTestIncreaseKey2() {
+    MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(10);
+    pq.increase(1, 1);
+    pq.increase(2, 2);
+    pq.increase(3, 3);
+    pq.increase(4, 4);
+    pq.increase(5, 5);
+    pq.increase(6, 6);
+    pq.increase(7, 7);
+    assertThat(pq.pollMinValue()).isEqualTo(1);
+    pq.increase(2, 8);
+    assertThat(pq.peekMinValue()).isEqualTo(3);
+  }
+
+  @Test
+  public void testTestIncreaseKeyInsertsValue() {
+    MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(10);
+    pq.increase(3, 4);
+    assertThat(pq.valueOf(3)).isEqualTo(4);
   }
 
   @Test

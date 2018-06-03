@@ -7,7 +7,7 @@
  * you have and then use the mapping with this indexed priority queue.
  *
  * As convention, I denote 'ki' as the index value in the domain [0, N)
- * associated with key k, therefore: ki = map[k]
+ * associated with a key k, therefore: ki = map[k]
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  **/
@@ -145,17 +145,23 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
     return oldValue;
   }
 
+  // Strictly decreases the value associated with 'ki' to 'value'
+  // or inserts the value if it does not exist.
   public void decrease(int ki, T value) {
-    keyExistsAndValueNotNullOrThrow(ki, value);
-    if (less(value, values[ki])) {
+    if (!contains(ki)) {
+      insert(ki, value);
+    } else if (less(value, values[ki])) {
       values[ki] = value;
       swim(pm[ki]);
     }
   }
 
+  // Strictly increases the value associated with 'ki' to 'value'
+  // or inserts the value if it does not exist.
   public void increase(int ki, T value) {
-    keyExistsAndValueNotNullOrThrow(ki, value);
-    if (less(values[ki], value)) {
+    if (!contains(ki)) {
+      insert(ki, value);
+    } else if (less(values[ki], value)) {
       values[ki] = value;
       sink(pm[ki]);
     }

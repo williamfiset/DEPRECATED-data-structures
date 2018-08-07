@@ -21,8 +21,9 @@ public class TreePrinter {
   }
 
   // Print a binary tree.
-  public static void print(PrintableNode root) {
+  public static String getTreeDisplay(PrintableNode root) {
     
+    StringBuilder sb = new StringBuilder();
     List<List<String>>  lines = new ArrayList<List<String>>();
     List<PrintableNode> level = new ArrayList<PrintableNode>();
     List<PrintableNode> next  = new ArrayList<PrintableNode>();
@@ -73,29 +74,29 @@ public class TreePrinter {
           char c = ' ';
           if (j % 2 == 1) {
             if (line.get(j - 1) != null) {
-              c = (line.get(j) != null) ? '┴' : '┘';
+              c = (line.get(j) != null) ? '#' : '#';
             } else {
-              if (j < line.size() && line.get(j) != null) c = '└';
+              if (j < line.size() && line.get(j) != null) c = '#';
             }
           }
-          System.out.print(c);
+          sb.append(c);
 
           // lines and spaces
           if (line.get(j) == null) {
             for (int k = 0; k < perpiece - 1; k++) {
-              System.out.print(" ");
+              sb.append(' ');
             }
           } else {
             for (int k = 0; k < hpw; k++) {
-              System.out.print(j % 2 == 0 ? " " : "─");
+              sb.append(j % 2 == 0 ? " " : "#");
             }
-            System.out.print(j % 2 == 0 ? "┌" : "┐");
+            sb.append(j % 2 == 0 ? "#" : "#");
             for (int k = 0; k < hpw; k++) {
-              System.out.print(j % 2 == 0 ? "─" : " ");
+              sb.append(j % 2 == 0 ? "#" : " ");
             }
           }
         }
-        System.out.println();
+        sb.append('\n');
       }
       for (int j = 0; j < line.size(); j++) {
         String f = line.get(j);
@@ -104,16 +105,17 @@ public class TreePrinter {
         int gap2 = (int) Math.floor(perpiece / 2f - f.length() / 2f);
 
         for (int k = 0; k < gap1; k++) {
-          System.out.print(" ");
+          sb.append(' ');
         }
-        System.out.print(f);
+        sb.append(f);
         for (int k = 0; k < gap2; k++) {
-          System.out.print(" ");
+          sb.append(' ');
         }
       }
-      System.out.println();
+      sb.append('\n');
 
       perpiece /= 2;
     }
+    return sb.toString();
   }
 }

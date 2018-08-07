@@ -7,9 +7,12 @@
  **/
 package com.williamfiset.datastructures.balancedtree;
 
+import com.williamfiset.datastructures.utils.TreePrinter;
+import com.williamfiset.datastructures.utils.TreePrinter.PrintableNode;
+
 public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
-  public class Node { 
+  public class Node implements PrintableNode { 
     
     // 'bf' is short for Balance Factor
     public int bf;
@@ -25,6 +28,21 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
     public Node(T value) {
       this.value = value;
+    }
+
+    @Override 
+    public PrintableNode getLeft() {
+      return left;
+    }
+
+    @Override
+    public PrintableNode getRight() {
+      return right;
+    }
+
+    @Override
+    public String getText() {
+      return value.toString();
     }
 
   }
@@ -335,6 +353,11 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
         throw new UnsupportedOperationException();
       }      
     };
+  }
+
+  @Override
+  public String toString() {
+    return TreePrinter.getTreeDisplay(root);
   }
 
   // Make sure all left child nodes are smaller in value than their parent and

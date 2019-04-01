@@ -6,7 +6,6 @@
 package com.williamfiset.datastructures.segmenttree;
 
 public class CompactSegmentTree {
-
   private int N;
 
   // Let UNIQUE be a value which does NOT 
@@ -32,7 +31,6 @@ public class CompactSegmentTree {
   // Common associative functions used with segment trees
   // include: min, max, sum, product, GCD, and etc...
   private long function(long a, long b) {
-
     if (a == UNIQUE) return b;
     else if (b == UNIQUE) return a;
 
@@ -40,7 +38,6 @@ public class CompactSegmentTree {
     // return (a > b) ? a : b; // maximum value over a range
     return (a < b) ? a : b; // minimum value over a range
     // return a * b; // product over a range (watch out for overflow!)
-
   }
 
   // Adjust point i by a value, O(log(n))
@@ -58,7 +55,9 @@ public class CompactSegmentTree {
       if ((l&1) != 0) res = function(res, tree[l++]);
       if ((r&1) != 0) res = function(res, tree[--r]);
     }
+    if (res == UNIQUE) {
+      throw new IllegalStateException("UNIQUE should not be the return value.");
+    }
     return res;
   }
-
 }

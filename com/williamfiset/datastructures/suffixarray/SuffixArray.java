@@ -1,52 +1,72 @@
+/**
+ * Abstract class that captures the behavior of a suffix array.
+ *
+ * @author William Fiset, william.alexandre.fiset@gmail.com
+ */
+
 package com.williamfiset.datastructures.suffixarray;
 
 public abstract class SuffixArray {
   
-  protected static final int DEFAULT_ALPHABET_SHIFT = 0;
-  protected static final int DEFAULT_ALPHABET_SIZE = 256;
-  
   // Length of the suffix array
-  public final int N;
-  
-  protected int shift = DEFAULT_ALPHABET_SHIFT;
-  
-  protected int alphabetSize = DEFAULT_ALPHABET_SIZE;
+  protected final int N;
 
   // T is the text
-  public int[] T;
+  protected int[] T;
 
   // The sorted suffix array values.
-  public int[] sa;
+  protected int[] sa;
   
   // Longest Common Prefix array
-  public int [] lcp;
+  protected int [] lcp;
 
-  // Designated constructor
-  public SuffixArray(int[] text, int shift, int alphabetSize) {
-    
-    if (text == null || alphabetSize <= 0) 
-      throw new IllegalArgumentException();
-    
+  private boolean constructedSa = false;
+  private boolean constructedLcpArray = false;
+
+  public SuffixArray(int[] text) {
+    if (text == null) 
+      throw new IllegalArgumentException("Text cannot be null.");
     this.T = text;
     this.N = text.length;
-    
-    this.shift = shift;
-    this.alphabetSize = alphabetSize;
-    
-    // Build suffix array
+  }
+
+  public int getTextLength() {
+    return T.length;
+  }
+
+  // Returns the suffix array.
+  public int[] getSa() {
+    buildSuffixArray();
+    return sa;
+  }
+
+  // Returns the LCP array.
+  public int[] getLcpArray() {
+    buildLcpArray();
+    return lcp;
+  }
+
+  // Builds the suffix array by calling the construct() method.
+  private void buildSuffixArray() {
+    if (constructedSa) return;
     construct();
-    
-    // Build LCP array
+    constructedSa = true;
+  }
+
+  // Builds the LCP array by first creating the SA and then running the kasai algorithm.
+  private void buildLcpArray() {
+    if (constructedLcpArray) return;
+    buildSuffixArray();
     kasai();
-    
+    constructedLcpArray = true;
   }
   
   protected static int[] toIntArray(String s) {
     if (s == null) return null;
-    int[] text = new int[s.length()];
+    int[] t = new int[s.length()];
     for(int i = 0; i < s.length(); i++)
-      text[i] = s.charAt(i);
-    return text;
+      t[i] = s.charAt(i);
+    return t;
   }
   
   // The suffix array construction algorithm is left undefined 
@@ -69,8 +89,8 @@ public abstract class SuffixArray {
     }
   }
 
-  @Override public String toString() {
-
+  @Override 
+  public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("-----i-----SA-----LCP---Suffix\n");
 
@@ -78,14 +98,12 @@ public abstract class SuffixArray {
       int suffixLen = N - sa[i];
       char[] suffixArray = new char[suffixLen];
       for (int j = sa[i], k = 0; j < N; j++, k++)
-        suffixArray[k] = (char)(T[j] - shift);
+        suffixArray[k] = (char) T[j];
       String suffix = new String(suffixArray);
       String formattedStr = String.format("% 7d % 7d % 7d %s\n", i, sa[i], lcp[i], suffix);
       sb.append(formattedStr);
     }
-
     return sb.toString();
-
   }
   
 }

@@ -10,49 +10,36 @@ import java.util.*;
 
 public class SuffixArrayMed extends SuffixArray {
 
-  // Helper class which sorts suffix ranks
-  static class SuffixRankTuple implements Comparable <SuffixRankTuple> {
+  // Wrapper class to help sort suffix ranks
+  static class SuffixRankTuple implements Comparable<SuffixRankTuple> {
 
     int firstHalf, secondHalf, originalIndex;
 
     // Sort Suffix ranks first on the first half then the second half
-    @Override public int compareTo(SuffixRankTuple other) {
+    @Override 
+    public int compareTo(SuffixRankTuple other) {
       int cmp = Integer.compare(firstHalf, other.firstHalf);
       if (cmp == 0) return Integer.compare(secondHalf, other.secondHalf);
       return cmp;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return originalIndex + " -> (" + firstHalf + ", " + secondHalf + ")";
     }
-
   }
 
   public SuffixArrayMed(String text) {
-    super(toIntArray(text), DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
+    super(toIntArray(text));
   }
 
   public SuffixArrayMed(int[] text) {
-    super(text, DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
-  }
-
-  // TODO(williamfiset): Get rid of these constructors in favor of
-  // automatically detecting the alphabet size shift required
-  public SuffixArrayMed(String text, int shift) {
-    super(toIntArray(text), shift, DEFAULT_ALPHABET_SHIFT);
-  }
-  public SuffixArrayMed(int[] text, int shift) {
-    super(text, shift, DEFAULT_ALPHABET_SIZE);
-  }
-
-  // Designated constructor
-  public SuffixArrayMed(int[] text, int shift, int alphabetSize) {
-    super(text, shift, alphabetSize);
+    super(text);
   }
 
   // Construct a suffix array in O(nlog^2(n))
-  @Override protected void construct() {
-
+  @Override 
+  protected void construct() {
     sa = new int[N];
 
     // Maintain suffix ranks in both a matrix with two rows containing the
@@ -114,7 +101,6 @@ public class SuffixArrayMed extends SuffixArray {
     suffixRanks[0] = suffixRanks[1] = null;
     suffixRanks = null;
     ranks = null;
-
   }
 
   public static void main(String[] args) {

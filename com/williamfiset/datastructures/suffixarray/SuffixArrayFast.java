@@ -9,32 +9,27 @@ package com.williamfiset.datastructures.suffixarray;
 
 public class SuffixArrayFast extends SuffixArray {
 
+  private static final int DEFAULT_ALPHABET_SIZE = 256;
+
+  int alphabetSize;
   int[] sa2, rank, tmp, c;
 
   public SuffixArrayFast(String text) {
-    super(toIntArray(text), DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
+    this(toIntArray(text), DEFAULT_ALPHABET_SIZE);
   }
 
   public SuffixArrayFast(int[] text) {
-    super(text, DEFAULT_ALPHABET_SHIFT, DEFAULT_ALPHABET_SIZE);
-  }
-
-  // TODO(williamfiset): Get rid of these constructors in favor of
-  // automatically detecting the alphabet size shift required
-  public SuffixArrayFast(String text, int shift) {
-    super(toIntArray(text), shift, DEFAULT_ALPHABET_SHIFT);
-  }
-  public SuffixArrayFast(int[] text, int shift) {
-    super(text, shift, DEFAULT_ALPHABET_SIZE);
+    this(text, DEFAULT_ALPHABET_SIZE);
   }
 
   // Designated constructor
-  public SuffixArrayFast(int[] text, int shift, int alphabetSize) {
-    super(text, shift, alphabetSize);
+  public SuffixArrayFast(int[] text, int alphabetSize) {
+    super(text);
+    this.alphabetSize = alphabetSize;
   }
 
-  @Override protected void construct() {
-    
+  @Override
+  protected void construct() {
     sa = new int[N];
     sa2 = new int[N];
     rank = new int[N];

@@ -49,7 +49,7 @@ public class DynamicArray <T> implements Iterable <T> {
 
   // Removes an element at the specified index in this array. 
   public T removeAt(int rm_index) {
-    if (rm_index >= len && rm_index < 0) throw new IndexOutOfBoundsException();
+    if (rm_index >= len || rm_index < 0) throw new IndexOutOfBoundsException();
     T data = arr[rm_index];
     T[] new_arr = (T[]) new Object[len-1];
     for (int i = 0, j = 0; i < len; i++, j++)

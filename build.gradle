@@ -58,6 +58,7 @@ sourceSets {
         javaPackage + '/suffixarray',
         javaPackage + '/trie', 
         javaPackage + '/unionfind',
+	javaPackage + '/splaytree',
         javaPackage + '/utils'
       ]
     }
@@ -82,6 +83,7 @@ sourceSets {
         javatestsPackage + '/suffixarray',
         javatestsPackage + '/trie', 
         javatestsPackage + '/unionfind',
+	javaPackage + '/splaytree',
         javatestsPackage + '/utils'
       ]
     }

@@ -1,4 +1,4 @@
-package ashiqur_java_util.tree.splaytree;
+package com.williamfiset.datastructures.splaytree;
 
 import java.util.ArrayList;
 import java.util.Scanner;

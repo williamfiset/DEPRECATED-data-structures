@@ -1,4 +1,4 @@
-package ashiqur_java_util.tree.splaytree;
+package javatests.com.williamfiset.datastructures.splaytree;
 
 import org.junit.jupiter.api.Test;
 

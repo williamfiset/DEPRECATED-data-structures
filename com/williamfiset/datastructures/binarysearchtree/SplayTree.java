@@ -1,11 +1,7 @@
 import com.williamfiset.datastructures.utils.TreePrinter;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import java.util.Collections;
-import java.util.List;
 
 
 class BinaryTree<T extends Comparable<T>> implements TreePrinter.PrintableNode {

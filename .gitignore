@@ -1,6 +1,7 @@
 *.class
 .DS_STORE
 *.pyc
+*.hprof
 
 .gradle
 /build/

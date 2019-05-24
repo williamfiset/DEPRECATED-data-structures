@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0765e15-ce4b-41bf-8db9-5f05a1025f88" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com/williamfiset/datastructures/binarysearchtree/SplayTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/com/williamfiset/datastructures/binarysearchtree/SplayTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -35,11 +34,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/com/williamfiset/datastructures/binarysearchtree/SplayTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="29" column="17" lean-forward="true" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+            <state relative-caret-position="-3446">
+              <caret line="29" column="17" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -48,19 +47,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/com/williamfiset/datastructures/utils/TreePrinter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="41" column="15" selection-start-line="41" selection-start-column="15" selection-end-line="41" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/javatests/com/williamfiset/datastructures/binarysearchtree/SplayTreeTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1120">
-              <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+            <state relative-caret-position="240">
+              <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -71,17 +61,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/com/williamfiset/datastructures/utils/TestUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
+            <state relative-caret-position="576">
               <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1142">
-              <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+            <state relative-caret-position="-320">
+              <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -100,10 +90,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/javatests/com/williamfiset/datastructures/bloomfilter/BloomFilterTest.java" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/com/williamfiset/datastructures/utils/TestUtils.java" />
         <option value="$PROJECT_DIR$/javatests/com/williamfiset/datastructures/binarysearchtree/SplayTreeTest.java" />
         <option value="$PROJECT_DIR$/com/williamfiset/datastructures/binarysearchtree/SplayTree.java" />
+        <option value="$PROJECT_DIR$/build.gradle" />
       </list>
     </option>
   </component>
@@ -117,7 +107,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1930" />
     <option name="height" value="1050" />
   </component>
@@ -134,6 +124,11 @@
             <path>
               <item name="data-structures" type="b2602c69:ProjectViewProjectNode" />
               <item name="data-structures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="data-structures" type="b2602c69:ProjectViewProjectNode" />
+              <item name="data-structures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="javatests" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -177,33 +172,13 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.data-structures [dependencies]">
+  <component name="RunManager" selected="JUnit.SplayTreeTest">
     <configuration name="SplayTreeRun" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="SplayTreeRun" />
       <module name="data-structures.main" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="SplayTreeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests &quot;SplayTreeTest&quot;" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":cleanTest" />
-            <option value=":test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
-      <method v="2" />
     </configuration>
     <configuration name="data-structures [buildDependenciesFolder]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -243,6 +218,25 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="data-structures [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="SplayTreeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="data-structures.test" />
       <option name="PACKAGE_NAME" value="" />
@@ -254,11 +248,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SplayTreeTest" />
+        <item itemvalue="Gradle.data-structures [test]" />
         <item itemvalue="Gradle.data-structures [dependencies]" />
         <item itemvalue="Application.SplayTreeRun" />
-        <item itemvalue="JUnit.SplayTreeTest" />
         <item itemvalue="Gradle.data-structures [buildDependenciesFolder]" />
-        <item itemvalue="Gradle.SplayTreeTest" />
       </list>
     </recent_temporary>
   </component>
@@ -273,29 +267,11 @@
       <option name="presentableId" value="Default" />
       <updated>1558678238157</updated>
       <workItem from="1558678241902" duration="7602000" />
-      <workItem from="1558692048984" duration="270000" />
+      <workItem from="1558692048984" duration="1210000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="SplayTreeTest - 2019.05.24 at 14h 43m 20s.xml">
-      <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
-    </history-entry>
-    <history-entry file="SplayTreeTest - 2019.05.24 at 14h 43m 29s.xml">
-      <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
-    </history-entry>
-    <history-entry file="SplayTreeTest - 2019.05.24 at 14h 43m 40s.xml">
-      <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
-    </history-entry>
-    <history-entry file="SplayTreeTest - 2019.05.24 at 14h 43m 46s.xml">
-      <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
-    </history-entry>
-    <history-entry file="SplayTreeTest - 2019.05.24 at 14h 43m 53s.xml">
-      <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
-    </history-entry>
-    <history-entry file="SplayTreeTest - 2019.05.24 at 14h 43m 59s.xml">
-      <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
-    </history-entry>
     <history-entry file="SplayTreeTest - 2019.05.24 at 14h 58m 58s.xml">
       <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
     </history-entry>
@@ -308,15 +284,33 @@
     <history-entry file="SplayTreeTest - 2019.05.24 at 15h 10m 30s.xml">
       <configuration name="SplayTreeTest" configurationId="GradleRunConfiguration" />
     </history-entry>
+    <history-entry file="SplayTreeTest - 2019.05.24 at 16h 03m 21s.xml">
+      <configuration name="SplayTreeTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SplayTreeTest - 2019.05.24 at 16h 03m 31s.xml">
+      <configuration name="SplayTreeTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="data-structures_[test] - 2019.05.24 at 16h 20m 08s.xml">
+      <configuration name="data-structures [test]" configurationId="GradleRunConfiguration" />
+    </history-entry>
+    <history-entry file="data-structures_[test] - 2019.05.24 at 16h 20m 17s.xml">
+      <configuration name="data-structures [test]" configurationId="GradleRunConfiguration" />
+    </history-entry>
+    <history-entry file="data-structures_[test] - 2019.05.24 at 16h 22m 43s.xml">
+      <configuration name="data-structures [test]" configurationId="GradleRunConfiguration" />
+    </history-entry>
+    <history-entry file="SplayTreeTest - 2019.05.24 at 16h 23m 54s.xml">
+      <configuration name="SplayTreeTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7872000" />
+    <option name="totallyTimeSpent" value="8812000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22818792" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22818792" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -327,7 +321,7 @@
       <window_info anchor="bottom" id="Messages" weight="0.3297587" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.386059" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.386059" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3994638" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -375,6 +369,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-320">
+          <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/com/williamfiset/datastructures/utils/TestUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/javatests/com/williamfiset/datastructures/binarysearchtree/SplayTreeTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/com/williamfiset/datastructures/utils/TreePrinter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="640">
@@ -382,37 +400,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/com/williamfiset/datastructures/utils/TestUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/javatests/com/williamfiset/datastructures/binarysearchtree/SplayTreeTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1120">
-          <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/com/williamfiset/datastructures/binarysearchtree/SplayTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="29" column="17" lean-forward="true" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+        <state relative-caret-position="-3446">
+          <caret line="29" column="17" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1142">
-          <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
         </state>
       </provider>
     </entry>

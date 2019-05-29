@@ -67,43 +67,26 @@ class SplayTreeTest {
     }
 
     /*Comparison With Built In Priority Queue*/
-    @Test
-    void priorityQ1() {
-        Queue<Integer> pq = new PriorityQueue<>();
-        List<Integer> data = com.williamfiset.datastructures.utils.TestUtils.
-                randomUniformUniqueIntegerList(100);
-        for (int i :
-                data) {
-            pq.add(i);
-        }
-        for (int i :
-                data) {
-            assertTrue(pq.contains(i));
-        }
-        for (int i :
-                data) {
-            pq.remove(i);
-            assertFalse(pq.contains(i));
 
-        }
-
-    }
     @Test
-    void splayTree1() {
+    void splayTreePriorityQueueConsistencyTest() {
         SplayTree<Integer> splayTree = new SplayTree<>();
+        Queue<Integer> pq = new PriorityQueue<>();
         List<Integer> data = com.williamfiset.datastructures.utils.TestUtils.randomUniformUniqueIntegerList(100);
         for (int i :
                 data) {
-            splayTree.insert(i);
+            assertEquals(pq.add(i),splayTree.insert(i)!=null);
         }
         for (int i :
                 data) {
-            assertNotNull(splayTree.search(i));
+            assertEquals(splayTree.search(i).getData().equals(i),pq.contains(i));
         }
         for (int i :
                 data) {
             splayTree.delete(i);
             assertNull(splayTree.search(i));
+            pq.remove(i);
+            assertFalse(pq.contains(i));
         }
 
     }

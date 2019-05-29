@@ -5,41 +5,56 @@ import java.util.Scanner;
 
 
 class BinaryTree<T extends Comparable<T>> implements TreePrinter.PrintableNode {
-    private BinaryTree<T> left, right;
+    private BinaryTree<T> leftChild, rightChild;
     private T data;
 
     public BinaryTree(T data) {
-        this.data = data;
+        if(data == null) {
+            try {
+                throw new Exception("Null data not allowed into tree");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else this.data = data;
     }
 
     @Override
     public BinaryTree<T> getLeft() {
-        return left;
+        return leftChild;
+    }
+
+    public void setLeft(BinaryTree<T> leftChild) {
+        this.leftChild = leftChild;
     }
 
     @Override
     public BinaryTree<T> getRight() {
-        return right;
+        return rightChild;
+    }
+
+    public void setRight(BinaryTree<T> rightChild) {
+        this.rightChild = rightChild;
     }
 
     @Override
     public String getText() {
         return data.toString();
     }
-    public void setRight(BinaryTree<T> right) {
-        this.right = right;
-        //   right.parent = this;
-    }
-    public void setLeft(BinaryTree<T> left) {
-        this.left = left;
-        // left.parent = this;
-    }
+
     public T getData() {
         return data;
     }
 
     public void setData(T data) {
-        this.data = data;
+        if(data == null) {
+            try {
+                throw new Exception("Null data not allowed into tree");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else this.data = data;
     }
 
     @Override
@@ -51,11 +66,14 @@ class BinaryTree<T extends Comparable<T>> implements TreePrinter.PrintableNode {
 
 }
 
-/**Note : Each Operation of a SplayTree tries returns the new splayed root after the operation **/
+/**
+ * Note : Each Operation of a SplayTree returns the new splayed root after the operation
+ **/
 public class SplayTree<T extends Comparable<T>> {
 
     private BinaryTree<T> root;
 
+    /** Public Methods **/
     public SplayTree() {
         this.root = null;
     }
@@ -68,17 +86,89 @@ public class SplayTree<T extends Comparable<T>> {
         return root;
     }
 
-    private BinaryTree<T> rightRotate(BinaryTree<T> x) {
-        BinaryTree<T> p = x.getLeft();
-        x.setLeft(p.getRight());
-        p.setRight(x);
+    public BinaryTree<T> search(T node) {
+        if (root == null) return null;
+
+        this.root = splayUtil(root, node);
+
+        return this.root.getData().compareTo(node) == 0 ? this.root : null;
+    }
+
+    public BinaryTree<T> insert(T node) {
+        if (root == null) {
+            root = new BinaryTree<>(node);
+            return root;
+        }
+        splay(node);
+
+        ArrayList<BinaryTree<T>> l_r = split(node);
+
+        BinaryTree<T> left = l_r.get(0);
+        BinaryTree<T> right = l_r.get(1);
+
+        root = new BinaryTree<>(node);
+        root.setLeft(left);
+        root.setRight(right);
+
+
+        return root;
+    }
+
+    public BinaryTree<T> delete(T node) {
+        if (root == null) return null;
+
+        BinaryTree<T> searchResult = splay(node);
+
+        if (searchResult.getData().compareTo(node) != 0)
+            return null;
+
+        BinaryTree<T> leftSubtree = root.getLeft();
+        BinaryTree<T> rightSubtree = root.getRight();
+
+        // Set the 'to be deleted' key ready for garbage collection
+        root.setLeft(null);
+        root.setRight(null);
+
+        root = join(leftSubtree, rightSubtree);
+
+        return root;
+    }
+
+    public T findMax(BinaryTree<T> root) {
+        BinaryTree<T> temp = root;
+        while (temp.getRight() != null)
+            temp = temp.getRight();
+        return temp.getData();
+    }
+
+    public T findMin(BinaryTree<T> root) {
+        BinaryTree<T> temp = root;
+        while (temp.getLeft() != null)
+            temp = temp.getLeft();
+        return temp.getData();
+    }
+
+
+    @Override
+    public String toString() {
+
+        System.out.println("Elements:" + inorder(root, new ArrayList<>()));
+        return (root != null) ? root.toString() : null;
+    }
+
+
+    /** Private Methods **/
+    private BinaryTree<T> rightRotate(BinaryTree<T> node) {
+        BinaryTree<T> p = node.getLeft();
+        node.setLeft(p.getRight());
+        p.setRight(node);
         return p;
     }
 
-    private BinaryTree<T> leftRotate(BinaryTree<T> x) {
-        BinaryTree<T> p = x.getRight();
-        x.setRight(p.getLeft());
-        p.setLeft(x);
+    private BinaryTree<T> leftRotate(BinaryTree<T> node) {
+        BinaryTree<T> p = node.getRight();
+        node.setRight(p.getLeft());
+        p.setLeft(node);
         return p;
     }
 
@@ -94,8 +184,7 @@ public class SplayTree<T extends Comparable<T>> {
                 root.getLeft().setLeft(splayUtil(root.getLeft().getLeft(), key));
 
                 root = rightRotate(root);
-            }
-            else if (root.getLeft().getData().compareTo(key) < 0) {
+            } else if (root.getLeft().getData().compareTo(key) < 0) {
 
                 root.getLeft().setRight(splayUtil(root.getLeft().getRight(), key));
 
@@ -109,7 +198,7 @@ public class SplayTree<T extends Comparable<T>> {
 
             if (root.getRight().getData().compareTo(key) > 0) {
                 root.getRight().setLeft(splayUtil(root.getRight().getLeft(), key));
-        if (root.getRight().getLeft() != null)
+                if (root.getRight().getLeft() != null)
                     root.setRight(rightRotate(root.getRight()));
             } else if (root.getRight().getData().compareTo(key) < 0)// Zag-Zag (Right Right)
             {
@@ -122,26 +211,19 @@ public class SplayTree<T extends Comparable<T>> {
 
     }
 
-    public BinaryTree<T> splay(T x) {
+    private BinaryTree<T> splay(T node) {
         if (root == null) return null;
 
-        this.root = splayUtil(root, x);
+        this.root = splayUtil(root, node);
 
         return this.root;
     }
-    public BinaryTree<T> search(T x) {
-        if (root == null) return null;
 
-        this.root = splayUtil(root, x);
-
-        return this.root.getData().compareTo(x)==0 ? this.root:null;
-    }
-
-    private ArrayList<BinaryTree<T>> split(T x) {
+    private ArrayList<BinaryTree<T>> split(T node) {
         BinaryTree<T> right;
         BinaryTree<T> left;
 
-        if (x.compareTo(root.getData()) > 0) {
+        if (node.compareTo(root.getData()) > 0) {
             right = root.getRight();
             left = root;
             left.setRight(null);
@@ -157,47 +239,6 @@ public class SplayTree<T extends Comparable<T>> {
         return l_r;
     }
 
-    public BinaryTree<T> insert(T x) {
-        if (root == null) {
-            root = new BinaryTree<>(x);
-            return root;
-        }
-        splay(x);
-
-        ArrayList<BinaryTree<T>> l_r = split(x);
-
-        BinaryTree<T> left = l_r.get(0);
-        BinaryTree<T> right = l_r.get(1);
-
-        root = new BinaryTree<>(x);
-        root.setLeft(left);
-        root.setRight(right);
-
-
-        return root;
-    }
-
-    public BinaryTree<T> delete(T x) {
-        if (root == null) return null;
-
-        BinaryTree<T> searchResult = splay(x);
-
-        if (searchResult.getData().compareTo(x) != 0)
-            return null;
-
-        BinaryTree<T> leftSubtree = root.getLeft();
-        BinaryTree<T> rightSubtree = root.getRight();
-
-        // Set the 'to be deleted' key ready for garbage collection
-        root.setLeft(null);
-        root.setRight(null);
-        root.setData(null);
-
-        root = join(leftSubtree, rightSubtree);
-
-        return root;
-    }
-
     private BinaryTree<T> join(BinaryTree<T> L, BinaryTree<T> R) {
 
         if (L == null) {
@@ -208,21 +249,8 @@ public class SplayTree<T extends Comparable<T>> {
         root.setRight(R);
         return root;
     }
-    public T findMax(BinaryTree<T> root){
-        BinaryTree<T> temp = root;
-        while (temp.getRight()!=null)
-            temp=temp.getRight();
-        return temp.getData();
-    }
 
-    @Override
-    public String toString() {
-
-        System.out.println("Elements:"+inorder(root, new ArrayList<>()));
-        return (root != null) ? root.toString() : null;
-    }
-
-    public ArrayList<T> inorder(BinaryTree<T> root, ArrayList<T> sorted) {
+    private ArrayList<T> inorder(BinaryTree<T> root, ArrayList<T> sorted) {
 
         if (root == null) {
             return sorted;
@@ -232,21 +260,26 @@ public class SplayTree<T extends Comparable<T>> {
         inorder(root.getRight(), sorted);
         return sorted;
     }
+
+
+
 }
 
 class SplayTreeRun {
     public static void main(String[] args) {
 
         SplayTree<Integer> splayTree = new SplayTree<>();
-        int[] data = {2, 29, 26,-1,10,0,2,11};
         Scanner sc = new Scanner(System.in);
+        int[] data = {2, 29, 26, -1, 10, 0, 2, 11};
+
         for (int i :
                 data) {
             splayTree.insert(i);
         }
 
+
         while (true) {
-            System.out.println("1. Insert 2. Delete 3. Search 4. PrintTree");
+            System.out.println("1. Insert 2. Delete 3. Search 4.FindMin 5.FindMax 6. PrintTree");
             int c = sc.nextInt();
             switch (c) {
                 case 1:
@@ -262,6 +295,12 @@ class SplayTreeRun {
                     splayTree.search(sc.nextInt());
                     break;
                 case 4:
+                    System.out.println("Min: "+splayTree.findMin(splayTree.getRoot()));
+                    break;
+                case 5:
+                    System.out.println("Max: "+splayTree.findMax(splayTree.getRoot()));
+                    break;
+                case 6:
                     System.out.println(splayTree);
                     break;
             }

@@ -1,10 +1,24 @@
 import com.williamfiset.datastructures.utils.TreePrinter;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/** Standard Splay Tree Implementation,supports generic data(must implement Comparable)
+ *
+ * @author Ashiqur Rahman,https://github.com/ashiqursuperfly
+ *
+ */
+
+/*The Basic Concept of SplayTree is to keep frequently used nodes close to the root of the tree
+ *  It performs basic operations such as insertion,search,delete,findMin,findMax in O(log n) amortized time
+ *  Having frequently-used nodes near to the root can be useful in implementing many algorithms.
+ *  e.g: Implementing caches,garbage collection algorithms etc
+ *  Primary disadvantage of the splay tree can be the fact that its height can go linear.
+ *  This causes the worst case running times to go O(n)
+ *  However, the amortized costs of this worst case situation is logarithmic, O(log n)
+ *  */
 
 class BinaryTree<T extends Comparable<T>> implements TreePrinter.PrintableNode {
+
     private BinaryTree<T> leftChild, rightChild;
     private T data;
 
@@ -63,12 +77,8 @@ class BinaryTree<T extends Comparable<T>> implements TreePrinter.PrintableNode {
         return TreePrinter.getTreeDisplay(this);
     }
 
-
 }
 
-/**
- * Note : Each Operation of a SplayTree returns the new splayed root after the operation
- **/
 public class SplayTree<T extends Comparable<T>> {
 
     private BinaryTree<T> root;
@@ -86,6 +96,7 @@ public class SplayTree<T extends Comparable<T>> {
         return root;
     }
 
+    /** Searches a node and splays it on top,returns the new root **/
     public BinaryTree<T> search(T node) {
         if (root == null) return null;
 
@@ -94,6 +105,7 @@ public class SplayTree<T extends Comparable<T>> {
         return this.root.getData().compareTo(node) == 0 ? this.root : null;
     }
 
+    /** Inserts a node into the tree and splays it on top,returns the new root**/
     public BinaryTree<T> insert(T node) {
         if (root == null) {
             root = new BinaryTree<>(node);
@@ -114,6 +126,7 @@ public class SplayTree<T extends Comparable<T>> {
         return root;
     }
 
+    /** Deletes a node,returns the new root **/
     public BinaryTree<T> delete(T node) {
         if (root == null) return null;
 
@@ -134,6 +147,23 @@ public class SplayTree<T extends Comparable<T>> {
         return root;
     }
 
+    /**To FindMax Of Entire Tree **/
+    public T findMax() {
+        BinaryTree<T> temp = root;
+        while (temp.getRight() != null)
+            temp = temp.getRight();
+        return temp.getData();
+    }
+
+    /**To FindMin Of Entire Tree **/
+    public T findMin() {
+        BinaryTree<T> temp = root;
+        while (temp.getLeft() != null)
+            temp = temp.getLeft();
+        return temp.getData();
+    }
+
+    /*** To FindMax Of Tree with specified root **/
     public T findMax(BinaryTree<T> root) {
         BinaryTree<T> temp = root;
         while (temp.getRight() != null)
@@ -141,13 +171,13 @@ public class SplayTree<T extends Comparable<T>> {
         return temp.getData();
     }
 
+    /*** To FindMin Of Tree with specified root **/
     public T findMin(BinaryTree<T> root) {
         BinaryTree<T> temp = root;
         while (temp.getLeft() != null)
             temp = temp.getLeft();
         return temp.getData();
     }
-
 
     @Override
     public String toString() {
@@ -266,6 +296,7 @@ public class SplayTree<T extends Comparable<T>> {
 }
 
 class SplayTreeRun {
+
     public static void main(String[] args) {
 
         SplayTree<Integer> splayTree = new SplayTree<>();
@@ -276,7 +307,6 @@ class SplayTreeRun {
                 data) {
             splayTree.insert(i);
         }
-
 
         while (true) {
             System.out.println("1. Insert 2. Delete 3. Search 4.FindMin 5.FindMax 6. PrintTree");
@@ -295,10 +325,10 @@ class SplayTreeRun {
                     splayTree.search(sc.nextInt());
                     break;
                 case 4:
-                    System.out.println("Min: "+splayTree.findMin(splayTree.getRoot()));
+                    System.out.println("Min: "+splayTree.findMin());
                     break;
                 case 5:
-                    System.out.println("Max: "+splayTree.findMax(splayTree.getRoot()));
+                    System.out.println("Max: "+splayTree.findMax());
                     break;
                 case 6:
                     System.out.println(splayTree);

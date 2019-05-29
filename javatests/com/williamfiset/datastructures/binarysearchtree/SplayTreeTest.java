@@ -1,12 +1,11 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SplayTreeTest {
+
     public static final int MAX = Integer.MAX_VALUE/4,MIN=Integer.MIN_VALUE/4;
 
     @Test
@@ -43,6 +42,7 @@ class SplayTreeTest {
         }
 
     }
+
     @Test
     void insertSearch(){
         SplayTree<Integer> splayTree = new SplayTree<>();
@@ -66,27 +66,32 @@ class SplayTreeTest {
 
     }
 
-    /*Comparison With Built In Priority Queue*/
-
+    /**Comparison With Built In Priority Queue**/
     @Test
     void splayTreePriorityQueueConsistencyTest() {
         SplayTree<Integer> splayTree = new SplayTree<>();
-        Queue<Integer> pq = new PriorityQueue<>();
         List<Integer> data = com.williamfiset.datastructures.utils.TestUtils.randomUniformUniqueIntegerList(100);
+        Queue<Integer> pq = new PriorityQueue<>(100, Collections.reverseOrder());
+
+        //insertion
         for (int i :
                 data) {
             assertEquals(pq.add(i),splayTree.insert(i)!=null);
         }
+        //searching
         for (int i :
                 data) {
             assertEquals(splayTree.search(i).getData().equals(i),pq.contains(i));
         }
-        for (int i :
-                data) {
-            splayTree.delete(i);
-            assertNull(splayTree.search(i));
-            pq.remove(i);
-            assertFalse(pq.contains(i));
+        //findMax & delete
+        while (!pq.isEmpty()){
+            Integer splayTreeMax = splayTree.findMax();
+            assertEquals(pq.peek(),splayTreeMax);
+
+            splayTree.delete(splayTreeMax);
+            assertNull(splayTree.search(splayTreeMax));
+            pq.remove(splayTreeMax);
+            assertFalse(pq.contains(splayTreeMax));
         }
 
     }

@@ -47,14 +47,14 @@ public abstract class SuffixArray {
   }
 
   // Builds the suffix array by calling the construct() method.
-  private void buildSuffixArray() {
+  protected void buildSuffixArray() {
     if (constructedSa) return;
     construct();
     constructedSa = true;
   }
 
   // Builds the LCP array by first creating the SA and then running the kasai algorithm.
-  private void buildLcpArray() {
+  protected void buildLcpArray() {
     if (constructedLcpArray) return;
     buildSuffixArray();
     kasai();

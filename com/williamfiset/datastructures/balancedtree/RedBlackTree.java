@@ -1,36 +1,33 @@
 /**
- * This file contains an implementation of a Red-Black tree. A RB tree
- * is a special type of binary tree which self balances itself to keep
- * operations logarithmic.
+ * This file contains an implementation of a Red-Black tree. A RB tree is a special type of binary
+ * tree which self balances itself to keep operations logarithmic.
  *
- * Great visualization tool: 
- * https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
+ * <p>Great visualization tool: https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.balancedtree;
 
-public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
+public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
 
   public static final boolean RED = true;
   public static final boolean BLACK = false;
 
   public class Node {
-    
+
     // The color of this node. By default all nodes start red.
     public boolean color = RED;
 
     // The value/data contained within the node.
     public T value;
 
-    // The left, right and parent references of this node.    
+    // The left, right and parent references of this node.
     public Node left, right, parent;
 
     public Node(T value, Node parent) {
       this.value = value;
       this.parent = parent;
     }
-
   }
 
   // The root node of the RB tree.
@@ -48,14 +45,14 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
   public boolean isEmpty() {
     return size() == 0;
   }
-  
+
   public boolean contains(T value) {
-    
+
     Node node = root;
 
     if (node == null || value == null) return false;
 
-    while(node != null) {
+    while (node != null) {
 
       // Compare current value to the value in the node.
       int cmp = value.compareTo(node.value);
@@ -82,10 +79,10 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
       root = new Node(value, null);
       insertionRelabel(root);
       nodeCount++;
-      return true;      
+      return true;
     }
 
-    for(Node node = root;;) {
+    for (Node node = root; ; ) {
 
       int cmp = value.compareTo(node.value);
 
@@ -99,7 +96,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
         }
         node = node.left;
 
-      // Right subtree.
+        // Right subtree.
       } else if (cmp > 0) {
         if (node.right == null) {
           node.right = new Node(value, node);
@@ -109,11 +106,9 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
         }
         node = node.right;
 
-      // The value we're trying to insert already exists in the tree.
+        // The value we're trying to insert already exists in the tree.
       } else return false;
-
     }
-
   }
 
   private void insertionRelabel(Node node) {
@@ -139,40 +134,39 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
     boolean uncleIsRedNode = (uncle == null) ? BLACK : uncle.color;
 
     if (uncleIsRedNode) {
-      
+
       parent.color = BLACK;
       grandParent.color = RED;
       uncle.color = BLACK;
 
-    // At this point the parent node is red and so is the new child node. 
-    // We need to re-balance somehow because no two red nodes can be 
-    // adjacent to one another.
+      // At this point the parent node is red and so is the new child node.
+      // We need to re-balance somehow because no two red nodes can be
+      // adjacent to one another.
     } else {
-      
+
       // Parent node is a left child.
       if (parentIsLeftChild) {
-        
+
         // Left-left case.
         if (nodeIsLeftChild) {
           grandParent = leftLeftCase(grandParent);
 
-        // Left-right case.
-        } else { 
+          // Left-right case.
+        } else {
           grandParent = leftRightCase(grandParent);
         }
 
-      // Parent node is a right child.
+        // Parent node is a right child.
       } else {
 
         // Right-left case.
         if (nodeIsLeftChild) {
           grandParent = rightLeftCase(grandParent);
 
-        // Right-right case.
+          // Right-right case.
         } else {
           grandParent = rightRightCase(grandParent);
         }
-
       }
     }
 
@@ -208,7 +202,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
   }
 
   private Node rightRotate(Node parent) {
-    
+
     Node grandParent = parent.parent;
     Node child = parent.left;
 
@@ -217,7 +211,7 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
 
     child.right = parent;
     parent.parent = child;
-    
+
     child.parent = grandParent;
     updateParentChildLink(grandParent, parent, child);
 
@@ -237,12 +231,12 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
 
     child.parent = grandParent;
     updateParentChildLink(grandParent, parent, child);
-    
+
     return child;
   }
 
   // Sometimes the left or right child node of a parent changes and the
-  // parent's reference needs to be updated to point to the new child. 
+  // parent's reference needs to be updated to point to the new child.
   // This is a helper method to do just that.
   private void updateParentChildLink(Node parent, Node oldChild, Node newChild) {
     if (parent != null) {
@@ -256,56 +250,57 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
 
   // Helper method to find the leftmost node (which has the smallest value)
   private Node findMin(Node node) {
-    while(node.left != null) 
-      node = node.left;
+    while (node.left != null) node = node.left;
     return node;
   }
 
   // Helper method to find the rightmost node (which has the largest value)
   private Node findMax(Node node) {
-    while(node.right != null) 
-      node = node.right;
+    while (node.right != null) node = node.right;
     return node;
   }
 
   // Returns as iterator to traverse the tree in order.
   @Override
-  public java.util.Iterator<T> iterator () {
+  public java.util.Iterator<T> iterator() {
 
     final int expectedNodeCount = nodeCount;
     final java.util.Stack<Node> stack = new java.util.Stack<>();
     stack.push(root);
 
-    return new java.util.Iterator<T> () {
+    return new java.util.Iterator<T>() {
       Node trav = root;
-      @Override 
+
+      @Override
       public boolean hasNext() {
-        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();        
+        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
         return root != null && !stack.isEmpty();
       }
-      @Override 
-      public T next () {
-        
+
+      @Override
+      public T next() {
+
         if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
 
-        while(trav != null && trav.left != null) {
+        while (trav != null && trav.left != null) {
           stack.push(trav.left);
           trav = trav.left;
         }
-        
+
         Node node = stack.pop();
-        
+
         if (node.right != null) {
           stack.push(node.right);
           trav = node.right;
         }
-        
+
         return node.value;
       }
-      @Override 
+
+      @Override
       public void remove() {
         throw new UnsupportedOperationException();
-      }      
+      }
     };
   }
 
@@ -320,23 +315,5 @@ public class RedBlackTree <T extends Comparable<T>> implements Iterable<T> {
     System.out.printf("RB tree contains %d: %s\n", -5, rbTree.contains(-5));
     System.out.printf("RB tree contains %d: %s\n", 1, rbTree.contains(1));
     System.out.printf("RB tree contains %d: %s\n", 99, rbTree.contains(99));
-
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

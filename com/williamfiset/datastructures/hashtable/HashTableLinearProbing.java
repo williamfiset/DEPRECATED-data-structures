@@ -1,15 +1,15 @@
 /**
- * An implementation of a hash-table using open addressing with 
- * linear probing as a collision resolution method.
+ * An implementation of a hash-table using open addressing with linear probing as a collision
+ * resolution method.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.hashtable;
 
 @SuppressWarnings("unchecked")
 public class HashTableLinearProbing<K, V> extends HashTableOpenAddressingBase<K, V> {
 
-  // This is the linear constant used in the linear probing, it can be 
+  // This is the linear constant used in the linear probing, it can be
   // any positive number. The table capacity will be adjusted so that
   // the GCD(capacity, LINEAR_CONSTANT) = 1 so that all buckets can be probed.
   private static final int LINEAR_CONSTANT = 17;
@@ -26,10 +26,10 @@ public class HashTableLinearProbing<K, V> extends HashTableOpenAddressingBase<K,
     super(capacity, loadFactor);
   }
 
-  @Override 
+  @Override
   protected void setupProbing(K key) {}
 
-  @Override 
+  @Override
   protected int probe(int x) {
     return LINEAR_CONSTANT * x;
   }
@@ -38,29 +38,8 @@ public class HashTableLinearProbing<K, V> extends HashTableOpenAddressingBase<K,
   // the table capacity are relatively prime.
   @Override
   protected void adjustCapacity() {
-    while(gcd(LINEAR_CONSTANT, capacity) != 1) {
+    while (gcd(LINEAR_CONSTANT, capacity) != 1) {
       capacity++;
     }
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

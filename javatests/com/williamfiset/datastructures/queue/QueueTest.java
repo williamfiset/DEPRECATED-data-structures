@@ -1,7 +1,7 @@
 package javatests.com.williamfiset.datastructures.queue;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.williamfiset.datastructures.queue.Queue;
 import org.junit.Before;
@@ -9,11 +9,11 @@ import org.junit.Test;
 
 public class QueueTest {
 
-  Queue <Integer> queue;
+  Queue<Integer> queue;
 
   @Before
   public void setup() {
-    queue = new Queue <Integer>();
+    queue = new Queue<Integer>();
   }
 
   @Test
@@ -21,37 +21,37 @@ public class QueueTest {
     assertTrue(queue.isEmpty());
     assertEquals(queue.size(), 0);
   }
-  
-  @Test(expected=Exception.class)
+
+  @Test(expected = Exception.class)
   public void testPollOnEmpty() {
-    queue.poll(); 
+    queue.poll();
   }
-  
-  @Test(expected=Exception.class)
+
+  @Test(expected = Exception.class)
   public void testPeekOnEmpty() {
-    queue.peek(); 
+    queue.peek();
   }
- 
+
   @Test
   public void testOffer() {
     queue.offer(2);
     assertEquals(queue.size(), 1);
   }
-  
+
   @Test
   public void testPeek() {
     queue.offer(2);
     assertTrue(queue.peek() == 2);
     assertEquals(queue.size(), 1);
   }
-  
+
   @Test
   public void testPoll() {
     queue.offer(2);
     assertTrue(queue.poll() == 2);
     assertEquals(queue.size(), 0);
   }
-  
+
   @Test
   public void testExhaustively() {
     assertTrue(queue.isEmpty());
@@ -69,5 +69,4 @@ public class QueueTest {
     assertEquals(queue.size(), 0);
     assertTrue(queue.isEmpty());
   }
-
 }

@@ -1,15 +1,14 @@
 package javatests.com.williamfiset.datastructures.bloomfilter;
 
-import com.williamfiset.datastructures.bloomfilter.StringSet;
-
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-import java.util.Set;
+
+import com.williamfiset.datastructures.bloomfilter.StringSet;
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Random;
-import java.security.SecureRandom;
-import java.math.BigInteger;
+import java.util.Set;
+import org.junit.Before;
+import org.junit.Test;
 
 public class BloomFilterTest {
 
@@ -23,9 +22,7 @@ public class BloomFilterTest {
   static final int LOOPS = 1000;
 
   @Before
-  public void setup() {
-    
-  }
+  public void setup() {}
 
   @Test
   public void testStringSetAllSubsets() {
@@ -35,12 +32,11 @@ public class BloomFilterTest {
     set.addAllSubstrings(s);
 
     for (int i = 0; i < s.length(); i++) {
-      for (int j = i+1; j < s.length(); j++) {
-        String sub = s.substring(i, j+1);
+      for (int j = i + 1; j < s.length(); j++) {
+        String sub = s.substring(i, j + 1);
         assertTrue(set.contains(sub));
       }
     }
-
   }
 
   @Test
@@ -54,8 +50,8 @@ public class BloomFilterTest {
     // Add a few substrings to the set
     int len = 26;
     for (int i = 0; i < len; i++) {
-      for (int j = i+1; j < len; j++) {
-        String sub = s.substring(i, j+1);
+      for (int j = i + 1; j < len; j++) {
+        String sub = s.substring(i, j + 1);
         set.add(sub);
       }
     }
@@ -64,8 +60,8 @@ public class BloomFilterTest {
     // there should be plenty of collisions
     len = s.length();
     for (int i = 27; i < len; i++) {
-      for (int j = i+1; j < len; j++) {
-        String sub = s.substring(i, j+1);
+      for (int j = i + 1; j < len; j++) {
+        String sub = s.substring(i, j + 1);
         if (set.contains(sub)) collisionHappened = true;
       }
     }
@@ -73,41 +69,37 @@ public class BloomFilterTest {
     // The probablity of a collision should be really high
     // because we're using small prime numbers
     assertTrue(collisionHappened);
-
   }
 
   @Test
   public void containsTests() {
-    
-    for(int sz = 1; sz <= 10; sz ++) {
 
-      for(int loops = 5; loops <= 50; loops += 5 ) {
-  
+    for (int sz = 1; sz <= 10; sz++) {
+
+      for (int loops = 5; loops <= 50; loops += 5) {
+
         StringSet set = new StringSet(sz);
         Set<String> javaset = new HashSet<>();
 
         for (int l = 0; l < loops; l++) {
-          String randStr = randomString( sz );
+          String randStr = randomString(sz);
           javaset.add(randStr);
           set.add(randStr);
         }
 
         for (String s : javaset) assertTrue(set.contains(s));
 
-        // Check that strings that aren't in the string set actually aren't 
+        // Check that strings that aren't in the string set actually aren't
         // in the set, the probablity should be low enough that a false positive
         // should not happen.
         for (int l = 0; l < 100; l++) {
-          String randStr = randomString( sz );
+          String randStr = randomString(sz);
           if (!randStr.contains(randStr)) {
             assertFalse(set.contains(randStr));
           }
         }
-
       }
-
     }
-
   }
 
   static int randNum(int min, int max) {
@@ -115,14 +107,12 @@ public class BloomFilterTest {
     return rand.nextInt(range) + min;
   }
 
-  static final String AB = " )(*&^%$#@!0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  
-  static String randomString( int len ){
-    StringBuilder sb = new StringBuilder( len );
-    for( int i = 0; i < len; i++ ) 
-       sb.append( AB.charAt( rand.nextInt(AB.length()) ) );
+  static final String AB =
+      " )(*&^%$#@!0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+  static String randomString(int len) {
+    StringBuilder sb = new StringBuilder(len);
+    for (int i = 0; i < len; i++) sb.append(AB.charAt(rand.nextInt(AB.length())));
     return sb.toString();
   }
-
 }
-

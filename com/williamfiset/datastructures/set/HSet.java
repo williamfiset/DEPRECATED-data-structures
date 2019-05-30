@@ -1,14 +1,14 @@
 package com.williamfiset.datastructures.set;
 
-public class HSet <T> implements Iterable <T> {
+public class HSet<T> implements Iterable<T> {
 
   private static final Object DUMMY = new Object();
   private static final int DEFAULT_CAPACITY = 3;
   private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
-  private java.util.Map <T, Object> map;
+  private java.util.Map<T, Object> map;
 
-  public HSet () {
+  public HSet() {
     this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
   }
 
@@ -44,17 +44,16 @@ public class HSet <T> implements Iterable <T> {
     return map.containsKey(elem);
   }
 
-  public java.util.Iterator <T> iterator() {
+  public java.util.Iterator<T> iterator() {
     return map.keySet().iterator();
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
     for (T key : map.keySet()) sb.append(key + ", ");
     sb.append("]");
     return sb.toString();
   }
-
-} 
-
+}

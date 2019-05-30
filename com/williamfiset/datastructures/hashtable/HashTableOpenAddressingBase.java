@@ -1,10 +1,9 @@
 /**
- * Base class for hashtables with an open addressing collision 
- * resolution method such as linear probing, quadratic probing
- * and double hashing.
+ * Base class for hashtables with an open addressing collision resolution method such as linear
+ * probing, quadratic probing and double hashing.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.hashtable;
 
 import java.util.ArrayList;
@@ -18,14 +17,14 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   protected double loadFactor;
   protected int capacity, threshold, modificationCount;
 
-  // 'usedBuckets' counts the total number of used buckets inside the 
+  // 'usedBuckets' counts the total number of used buckets inside the
   // hash-table (includes cells marked as deleted). While 'keyCount'
   // tracks the number of unique keys currently inside the hash-table.
   protected int usedBuckets, keyCount;
 
-  // These arrays store the key-value pairs. 
-  protected K [] keys;
-  protected V [] values;
+  // These arrays store the key-value pairs.
+  protected K[] keys;
+  protected V[] values;
 
   // Special marker token used to indicate the deletion of a key-value pair
   protected final K TOMBSTONE = (K) (new Object());
@@ -43,9 +42,8 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
 
   // Designated constructor
   protected HashTableOpenAddressingBase(int capacity, double loadFactor) {
-    if (capacity <= 0)
-      throw new IllegalArgumentException("Illegal capacity: " + capacity);
-    
+    if (capacity <= 0) throw new IllegalArgumentException("Illegal capacity: " + capacity);
+
     if (loadFactor <= 0 || Double.isNaN(loadFactor) || Double.isInfinite(loadFactor))
       throw new IllegalArgumentException("Illegal loadFactor: " + loadFactor);
 
@@ -54,13 +52,14 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
     adjustCapacity();
     threshold = (int) (this.capacity * loadFactor);
 
-    keys   = (K[]) new Object[this.capacity];
+    keys = (K[]) new Object[this.capacity];
     values = (V[]) new Object[this.capacity];
   }
 
-  // These three methods are used to dictate how the probing is to actually 
+  // These three methods are used to dictate how the probing is to actually
   // occur for whatever open addressing scheme you are implementing.
   protected abstract void setupProbing(K key);
+
   protected abstract int probe(int x);
 
   // Adjusts the capacity of the hash table after it's been made larger.
@@ -91,13 +90,13 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   public int getCapacity() {
     return capacity;
   }
-  
+
   // Returns true/false depending on whether the hash-table is empty
   public boolean isEmpty() {
     return keyCount == 0;
   }
 
-  public V put(K key, V value) { 
+  public V put(K key, V value) {
     return insert(key, value);
   }
 
@@ -105,7 +104,7 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
     return insert(key, value);
   }
 
-    // Returns true/false on whether a given key exists within the hash-table.
+  // Returns true/false on whether a given key exists within the hash-table.
   public boolean containsKey(K key) {
     return hasKey(key);
   }
@@ -114,18 +113,16 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   public List<K> keys() {
     List<K> hashtableKeys = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
-      if (keys[i] != null && keys[i] != TOMBSTONE)
-        hashtableKeys.add(keys[i]);
-    return hashtableKeys;     
+      if (keys[i] != null && keys[i] != TOMBSTONE) hashtableKeys.add(keys[i]);
+    return hashtableKeys;
   }
 
   // Returns a list of non-unique values found in the hash table
   public List<V> values() {
     List<V> hashtableValues = new ArrayList<>(size());
     for (int i = 0; i < capacity; i++)
-      if (keys[i] != null && keys[i] != TOMBSTONE)
-        hashtableValues.add(values[i]);
-    return hashtableValues;    
+      if (keys[i] != null && keys[i] != TOMBSTONE) hashtableValues.add(values[i]);
+    return hashtableValues;
   }
 
   // Double the size of the hash-table
@@ -135,7 +132,7 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
 
     threshold = (int) (capacity * loadFactor);
 
-    K[] oldKeyTable   = (K[]) new Object[capacity];
+    K[] oldKeyTable = (K[]) new Object[capacity];
     V[] oldValueTable = (V[]) new Object[capacity];
 
     // Perform key table pointer swap
@@ -148,7 +145,7 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
     values = oldValueTable;
     oldValueTable = valueTableTmp;
 
-    // Reset the key count and buckets used since we are about to 
+    // Reset the key count and buckets used since we are about to
     // re-insert all the keys into the hash-table.
     keyCount = usedBuckets = 0;
 
@@ -158,7 +155,6 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
       oldValueTable[i] = null;
       oldKeyTable[i] = null;
     }
-
   }
 
   // Converts a hash value to an index. Essentially, this strips the
@@ -178,17 +174,17 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   public V insert(K key, V val) {
     if (key == null) throw new IllegalArgumentException("Null key");
     if (usedBuckets >= threshold) resizeTable();
-    
+
     setupProbing(key);
     final int offset = normalizeIndex(key.hashCode());
 
-    for(int i = offset, j = -1, x = 1;;i = normalizeIndex(offset + probe(x++))) {
-      
+    for (int i = offset, j = -1, x = 1; ; i = normalizeIndex(offset + probe(x++))) {
+
       // The current slot was previously deleted
       if (keys[i] == TOMBSTONE) {
         if (j == -1) j = i;
-      
-      // The current cell already contains a key
+
+        // The current cell already contains a key
       } else if (keys[i] != null) {
         // The key we're trying to insert already exists in the hash-table,
         // so update its value with the most recent value
@@ -207,23 +203,24 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
           return oldValue;
         }
 
-      // Current cell is null so an insertion/update can occur
+        // Current cell is null so an insertion/update can occur
       } else {
         // No previously encountered deleted buckets
         if (j == -1) {
-          usedBuckets++; keyCount++;
+          usedBuckets++;
+          keyCount++;
           keys[i] = key;
           values[i] = val;
 
-        // Previously seen deleted bucket. Instead of inserting
-        // the new element at i where the null element is insert
-        // it where the deleted token was found.
+          // Previously seen deleted bucket. Instead of inserting
+          // the new element at i where the null element is insert
+          // it where the deleted token was found.
         } else {
           keyCount++;
           keys[j] = key;
           values[j] = val;
         }
-        
+
         modificationCount++;
         return null;
       }
@@ -233,21 +230,21 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   // Returns true/false on whether a given key exists within the hash-table
   public boolean hasKey(K key) {
     if (key == null) throw new IllegalArgumentException("Null key");
-    
+
     setupProbing(key);
     final int offset = normalizeIndex(key.hashCode());
-    
+
     // Starting at the original hash linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
-    for(int i = offset, j = -1, x = 1;;i = normalizeIndex(offset + probe(x++))) {
+    for (int i = offset, j = -1, x = 1; ; i = normalizeIndex(offset + probe(x++))) {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
       if (keys[i] == TOMBSTONE) {
-        
+
         if (j == -1) j = i;
 
-      // We hit a non-null key, perhaps it's the one we're looking for.
+        // We hit a non-null key, perhaps it's the one we're looking for.
       } else if (keys[i] != null) {
 
         // The key we want is in the hash-table!
@@ -266,8 +263,8 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
           }
           return true;
         }
-      
-      // Key was not found in the hash-table :/
+
+        // Key was not found in the hash-table :/
       } else return false;
     }
   }
@@ -277,21 +274,21 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
   // null if the key does not exists.
   public V get(K key) {
     if (key == null) throw new IllegalArgumentException("Null key");
-    
+
     setupProbing(key);
     final int offset = normalizeIndex(key.hashCode());
-    
+
     // Starting at the original hash linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist.
-    for(int i = offset, j = -1, x = 1;;i = normalizeIndex(offset + probe(x++))) {
+    for (int i = offset, j = -1, x = 1; ; i = normalizeIndex(offset + probe(x++))) {
 
       // Ignore deleted cells, but record where the first index
       // of a deleted cell is found to perform lazy relocation later.
       if (keys[i] == TOMBSTONE) {
-        
+
         if (j == -1) j = i;
 
-      // We hit a non-null key, perhaps it's the one we're looking for.
+        // We hit a non-null key, perhaps it's the one we're looking for.
       } else if (keys[i] != null) {
 
         // The key we want is in the hash-table!
@@ -312,11 +309,10 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
             return values[i];
           }
         }
-      
-      // Element was not found in the hash-table :/
+
+        // Element was not found in the hash-table :/
       } else return null;
     }
-
   }
 
   // Removes a key from the map and returns the value.
@@ -330,7 +326,7 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
 
     // Starting at the hash linearly probe until we find a spot where
     // our key is or we hit a null element in which case our element does not exist
-    for(int i = offset, x = 1;;i = normalizeIndex(offset + probe(x++))) {
+    for (int i = offset, x = 1; ; i = normalizeIndex(offset + probe(x++))) {
 
       // Ignore deleted cells
       if (keys[i] == TOMBSTONE) continue;
@@ -348,19 +344,16 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
         return oldValue;
       }
     }
-
   }
 
-
   // Return a String view of this hash-table.
-  @Override 
+  @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
 
     sb.append("{");
     for (int i = 0; i < capacity; i++)
-      if (keys[i] != null && keys[i] != TOMBSTONE)
-        sb.append( keys[i] + " => " + values[i] + ", ");
+      if (keys[i] != null && keys[i] != TOMBSTONE) sb.append(keys[i] + " => " + values[i] + ", ");
     sb.append("}");
 
     return sb.toString();
@@ -368,34 +361,33 @@ public abstract class HashTableOpenAddressingBase<K, V> implements Iterable<K> {
 
   @Override
   public Iterator<K> iterator() {
-    // Before the iteration begins record the number of modifications 
+    // Before the iteration begins record the number of modifications
     // done to the hash-table. This value should not change as we iterate
     // otherwise a concurrent modification has occurred :0
     final int MODIFICATION_COUNT = modificationCount;
 
-    return new Iterator<K> () {
+    return new Iterator<K>() {
       int index, keysLeft = keyCount;
 
-      @Override public boolean hasNext() {
+      @Override
+      public boolean hasNext() {
         // The contents of the table have been altered
-        if (MODIFICATION_COUNT != modificationCount) 
-          throw new ConcurrentModificationException();
+        if (MODIFICATION_COUNT != modificationCount) throw new ConcurrentModificationException();
         return keysLeft != 0;
       }
 
       // Find the next element and return it
-      @Override public K next() {
-        while(keys[index] == null || keys[index] == TOMBSTONE) index++;
+      @Override
+      public K next() {
+        while (keys[index] == null || keys[index] == TOMBSTONE) index++;
         keysLeft--;
         return keys[index++];
       }
-      @Override public void remove() {
+
+      @Override
+      public void remove() {
         throw new UnsupportedOperationException();
       }
     };
   }
-
 }
-
-
-

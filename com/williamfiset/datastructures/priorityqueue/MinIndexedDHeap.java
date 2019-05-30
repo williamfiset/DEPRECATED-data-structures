@@ -1,17 +1,15 @@
 /**
  * An implementation of an indexed min D-ary heap priority queue.
- * 
- * This implementation supports arbitrary keys with comparable values.  
- * To use arbitrary keys (such as strings or objects) first map all your
- * keys to the integer domain [0, N) where N is the number of keys
- * you have and then use the mapping with this indexed priority queue.
  *
- * As convention, I denote 'ki' as the index value in the domain [0, N)
- * associated with a key k, therefore: ki = map[k]
+ * <p>This implementation supports arbitrary keys with comparable values. To use arbitrary keys
+ * (such as strings or objects) first map all your keys to the integer domain [0, N) where N is the
+ * number of keys you have and then use the mapping with this indexed priority queue.
+ *
+ * <p>As convention, I denote 'ki' as the index value in the domain [0, N) associated with a key k,
+ * therefore: ki = map[k]
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
-
+ */
 package com.williamfiset.datastructures.priorityqueue;
 
 import static java.lang.Math.max;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class MinIndexedDHeap <T extends Comparable<T>> {
+public class MinIndexedDHeap<T extends Comparable<T>> {
 
   // Current number of elements in the heap.
   private int sz;
@@ -35,7 +33,7 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
   // Lookup arrays to track the child/parent indexes of each node.
   private final int[] child, parent;
 
-  // The Position Map (pm) maps Key Indexes (ki) to where the position of that 
+  // The Position Map (pm) maps Key Indexes (ki) to where the position of that
   // key is represented in the priority queue in the domain [0, sz).
   public final int[] pm;
 
@@ -44,7 +42,7 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
   // 'im' and 'pm' are inverses of each other, so: pm[im[i]] = im[pm[i]] = i
   public final int[] im;
 
-  // The values associated with the keys. It is very important  to note 
+  // The values associated with the keys. It is very important  to note
   // that this array is indexed by the key indexes (aka 'ki').
   public final Object[] values;
 
@@ -53,7 +51,7 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
     if (maxSize <= 0) throw new IllegalArgumentException("maxSize <= 0");
 
     D = max(2, degree);
-    N = max(D+1, maxSize);
+    N = max(D + 1, maxSize);
 
     im = new int[N];
     pm = new int[N];
@@ -62,8 +60,8 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
     values = new Object[N];
 
     for (int i = 0; i < N; i++) {
-      parent[i] = (i-1) / D;
-      child[i] = i*D + 1;
+      parent[i] = (i - 1) / D;
+      child[i] = i * D + 1;
       pm[i] = im[i] = -1;
     }
   }
@@ -105,8 +103,7 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
   }
 
   public void insert(int ki, T value) {
-    if (contains(ki))
-      throw new IllegalArgumentException("index already exists; received: " + ki);
+    if (contains(ki)) throw new IllegalArgumentException("index already exists; received: " + ki);
     valueNotNullOrThrow(value);
     pm[ki] = sz;
     im[sz] = ki;
@@ -163,10 +160,10 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
     }
   }
 
-    /* Helper functions */
+  /* Helper functions */
 
   private void sink(int i) {
-    for(int j = minChild(i); j != -1;) {
+    for (int j = minChild(i); j != -1; ) {
       swap(i, j);
       i = j;
       j = minChild(i);
@@ -174,7 +171,7 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
   }
 
   private void swim(int i) {
-    while(less(i, parent[i])) {
+    while (less(i, parent[i])) {
       swap(i, parent[i]);
       i = parent[i];
     }
@@ -183,9 +180,7 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
   // From the parent node at index i find the minimum child below it
   private int minChild(int i) {
     int index = -1, from = child[i], to = min(sz, from + D);
-    for(int j = from; j < to; j++)
-      if (less(j, i))
-        index = i = j;
+    for (int j = from; j < to; j++) if (less(j, i)) index = i = j;
     return index;
   }
 
@@ -211,11 +206,11 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
   @Override
   public String toString() {
     List<Integer> lst = new ArrayList<>(sz);
-    for(int i = 0; i < sz; i++) lst.add(im[i]);
+    for (int i = 0; i < sz; i++) lst.add(im[i]);
     return lst.toString();
   }
 
-    /* Helper functions to make the code more readable. */
+  /* Helper functions to make the code more readable. */
 
   private void isNotEmptyOrThrow() {
     if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
@@ -227,21 +222,19 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
   }
 
   private void keyExistsOrThrow(int ki) {
-    if (!contains(ki)) 
-      throw new NoSuchElementException("Index does not exist; received: " + ki);
+    if (!contains(ki)) throw new NoSuchElementException("Index does not exist; received: " + ki);
   }
 
   private void valueNotNullOrThrow(Object value) {
-    if (value == null) 
-      throw new IllegalArgumentException("value cannot be null");
+    if (value == null) throw new IllegalArgumentException("value cannot be null");
   }
 
   private void keyInBoundsOrThrow(int ki) {
-    if (ki < 0 || ki >= N) 
+    if (ki < 0 || ki >= N)
       throw new IllegalArgumentException("Key index out of bounds; received: " + ki);
   }
 
-    /* Test functions */
+  /* Test functions */
 
   // Recursively checks if this heap is a min heap. This method is used
   // for testing purposes to validate the heap invariant.
@@ -251,12 +244,10 @@ public class MinIndexedDHeap <T extends Comparable<T>> {
 
   private boolean isMinHeap(int i) {
     int from = child[i], to = min(sz, from + D);
-    for(int j = from; j < to; j++) {
+    for (int j = from; j < to; j++) {
       if (!less(i, j)) return false;
       if (!isMinHeap(j)) return false;
     }
     return true;
   }
-
 }
-

@@ -1,19 +1,18 @@
 /**
- * This file contains an implementation of an AVL tree. An AVL tree
- * is a special type of binary tree which self balances itself to keep
- * operations logarithmic.
+ * This file contains an implementation of an AVL tree. An AVL tree is a special type of binary tree
+ * which self balances itself to keep operations logarithmic.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.balancedtree;
 
 import com.williamfiset.datastructures.utils.TreePrinter;
 import com.williamfiset.datastructures.utils.TreePrinter.PrintableNode;
 
-public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
+public class AVLTreeRecursive<T extends Comparable<T>> implements Iterable<T> {
 
-  public class Node implements PrintableNode { 
-    
+  public class Node implements PrintableNode {
+
     // 'bf' is short for Balance Factor
     public int bf;
 
@@ -23,14 +22,14 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
     // The height of this node in the tree.
     public int height;
 
-    // The left and the right children of this node.    
+    // The left and the right children of this node.
     public Node left, right;
 
     public Node(T value) {
       this.value = value;
     }
 
-    @Override 
+    @Override
     public PrintableNode getLeft() {
       return left;
     }
@@ -44,7 +43,6 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
     public String getText() {
       return value.toString();
     }
-
   }
 
   // The root node of the AVL tree.
@@ -54,7 +52,7 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
   private int nodeCount = 0;
 
   // The height of a rooted tree is the number of edges between the tree's
-  // root and its furthest leaf. This means that a tree containing a single 
+  // root and its furthest leaf. This means that a tree containing a single
   // node has a height of 0.
   public int height() {
     if (root == null) return 0;
@@ -78,7 +76,7 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
   // Recursive contains helper method.
   private boolean contains(Node node, T value) {
-    
+
     if (node == null) return false;
 
     // Compare current value to the value in the node.
@@ -92,7 +90,6 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
     // Found value in tree.
     return true;
-
   }
 
   // Insert/add a value to the AVL tree. The value must not be null, O(log(n))
@@ -108,7 +105,7 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
   // Inserts a value inside the AVL tree.
   private Node insert(Node node, T value) {
-    
+
     // Base case.
     if (node == null) return new Node(value);
 
@@ -117,9 +114,10 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
     // Insert node in left subtree.
     if (cmp < 0) {
-      node.left = insert(node.left, value);;
+      node.left = insert(node.left, value);
+      ;
 
-    // Insert node in right subtree.
+      // Insert node in right subtree.
     } else {
       node.right = insert(node.right, value);
     }
@@ -129,13 +127,12 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
     // Re-balance tree.
     return balance(node);
-
   }
 
   // Update a node's height and balance factor.
   private void update(Node node) {
-    
-    int leftNodeHeight  = (node.left  == null) ? -1 : node.left.height;
+
+    int leftNodeHeight = (node.left == null) ? -1 : node.left.height;
     int rightNodeHeight = (node.right == null) ? -1 : node.right.height;
 
     // Update this node's height.
@@ -143,7 +140,6 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
     // Update balance factor.
     node.bf = rightNodeHeight - leftNodeHeight;
-
   }
 
   // Re-balance a node if its balance factor is +2 or -2.
@@ -155,29 +151,27 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
       // Left-Left case.
       if (node.left.bf <= 0) {
         return leftLeftCase(node);
-        
-      // Left-Right case.
+
+        // Left-Right case.
       } else {
         return leftRightCase(node);
       }
 
-    // Right heavy subtree needs balancing.
+      // Right heavy subtree needs balancing.
     } else if (node.bf == +2) {
 
       // Right-Right case.
       if (node.right.bf >= 0) {
         return rightRightCase(node);
 
-      // Right-Left case.
+        // Right-Left case.
       } else {
         return rightLeftCase(node);
       }
-
     }
 
     // Node either has a balance factor of 0, +1 or -1 which is fine.
     return node;
-
   }
 
   private Node leftLeftCase(Node node) {
@@ -232,9 +226,9 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
   // Removes a value from the AVL tree.
   private Node remove(Node node, T elem) {
-    
+
     if (node == null) return null;
-    
+
     int cmp = elem.compareTo(node.value);
 
     // Dig into left subtree, the value we're looking
@@ -242,31 +236,31 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
     if (cmp < 0) {
       node.left = remove(node.left, elem);
 
-    // Dig into right subtree, the value we're looking
-    // for is greater than the current value.
+      // Dig into right subtree, the value we're looking
+      // for is greater than the current value.
     } else if (cmp > 0) {
       node.right = remove(node.right, elem);
 
-    // Found the node we wish to remove.
+      // Found the node we wish to remove.
     } else {
 
-      // This is the case with only a right subtree or no subtree at all. 
+      // This is the case with only a right subtree or no subtree at all.
       // In this situation just swap the node we wish to remove
       // with its right child.
       if (node.left == null) {
         return node.right;
-        
-      // This is the case with only a left subtree or 
-      // no subtree at all. In this situation just
-      // swap the node we wish to remove with its left child.
+
+        // This is the case with only a left subtree or
+        // no subtree at all. In this situation just
+        // swap the node we wish to remove with its left child.
       } else if (node.right == null) {
         return node.left;
 
-      // When removing a node from a binary tree with two links the
-      // successor of the node being removed can either be the largest
-      // value in the left subtree or the smallest value in the right 
-      // subtree. As a heuristic, I will remove from the subtree with
-      // the greatest hieght in hopes that this may help with balancing.
+        // When removing a node from a binary tree with two links the
+        // successor of the node being removed can either be the largest
+        // value in the left subtree or the smallest value in the right
+        // subtree. As a heuristic, I will remove from the subtree with
+        // the greatest hieght in hopes that this may help with balancing.
       } else {
 
         // Choose to remove from left subtree
@@ -280,7 +274,7 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
           node.left = remove(node.left, successorValue);
 
         } else {
-  
+
           // Swap the value of the successor into the node.
           T successorValue = findMin(node.right);
           node.value = successorValue;
@@ -298,60 +292,60 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
 
     // Re-balance tree.
     return balance(node);
-
   }
 
   // Helper method to find the leftmost node (which has the smallest value)
   private T findMin(Node node) {
-    while(node.left != null) 
-      node = node.left;
+    while (node.left != null) node = node.left;
     return node.value;
   }
 
   // Helper method to find the rightmost node (which has the largest value)
   private T findMax(Node node) {
-    while(node.right != null) 
-      node = node.right;
+    while (node.right != null) node = node.right;
     return node.value;
   }
 
   // Returns as iterator to traverse the tree in order.
-  public java.util.Iterator<T> iterator () {
+  public java.util.Iterator<T> iterator() {
 
     final int expectedNodeCount = nodeCount;
     final java.util.Stack<Node> stack = new java.util.Stack<>();
     stack.push(root);
 
-    return new java.util.Iterator<T> () {
+    return new java.util.Iterator<T>() {
       Node trav = root;
-      @Override 
+
+      @Override
       public boolean hasNext() {
-        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();        
+        if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
         return root != null && !stack.isEmpty();
       }
-      @Override 
-      public T next () {
-        
+
+      @Override
+      public T next() {
+
         if (expectedNodeCount != nodeCount) throw new java.util.ConcurrentModificationException();
 
-        while(trav != null && trav.left != null) {
+        while (trav != null && trav.left != null) {
           stack.push(trav.left);
           trav = trav.left;
         }
-        
+
         Node node = stack.pop();
-        
+
         if (node.right != null) {
           stack.push(node.right);
           trav = node.right;
         }
-        
+
         return node.value;
       }
-      @Override 
+
+      @Override
       public void remove() {
         throw new UnsupportedOperationException();
-      }      
+      }
     };
   }
 
@@ -367,25 +361,8 @@ public class AVLTreeRecursive <T extends Comparable<T>> implements Iterable<T> {
     if (node == null) return true;
     T val = node.value;
     boolean isValid = true;
-    if (node.left  != null) isValid = isValid && node.left.value.compareTo(val)  < 0;
+    if (node.left != null) isValid = isValid && node.left.value.compareTo(val) < 0;
     if (node.right != null) isValid = isValid && node.right.value.compareTo(val) > 0;
     return isValid && validateBSTInvarient(node.left) && validateBSTInvarient(node.right);
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

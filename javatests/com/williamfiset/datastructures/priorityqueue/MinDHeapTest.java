@@ -3,12 +3,12 @@ package javatests.com.williamfiset.datastructures.priorityqueue;
 import static org.junit.Assert.*;
 
 import com.williamfiset.datastructures.priorityqueue.MinDHeap;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.PriorityQueue;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 
 public class MinDHeapTest {
 
@@ -16,7 +16,7 @@ public class MinDHeapTest {
   static final int MAX_SZ = 100;
 
   @Before
-  public void setup() { }
+  public void setup() {}
 
   @Test
   public void testEmpty() {
@@ -28,29 +28,30 @@ public class MinDHeapTest {
   }
 
   @Test
-  public void testHeapProperty () {
-    
+  public void testHeapProperty() {
+
     MinDHeap<Integer> q = new MinDHeap<>(3, 30);
-    Integer[] nums = { 3,2,5,6,7,9,4,8,1 };
+    Integer[] nums = {3, 2, 5, 6, 7, 9, 4, 8, 1};
 
     // Try manually creating heap
     for (int n : nums) q.add(n);
-    for (int i = 1; i <= 9; i++)
-      assertTrue( i == q.poll() );
-    
+    for (int i = 1; i <= 9; i++) assertTrue(i == q.poll());
   }
 
   @Test
   public void testPriorityQueueSizeParam() {
-    for (int i = 1 ; i < LOOPS; i++) {
-      
+    for (int i = 1; i < LOOPS; i++) {
+
       Integer[] lst = genRandArray(i);
 
       MinDHeap<Integer> pq = new MinDHeap<>(i, lst.length);
       PriorityQueue<Integer> pq2 = new PriorityQueue<>(i);
 
-      for(int x : lst) { pq2.add(x); pq.add(x); }
-      while(!pq2.isEmpty()) assertEquals( pq.poll(), pq2.poll() );
+      for (int x : lst) {
+        pq2.add(x);
+        pq.add(x);
+      }
+      while (!pq2.isEmpty()) assertEquals(pq.poll(), pq2.poll());
     }
   }
 
@@ -67,7 +68,7 @@ public class MinDHeapTest {
       }
 
       Integer[] ar = genRandArray(LOOPS);
-      int d = 2 + (int)(Math.random() * 6);
+      int d = 2 + (int) (Math.random() * 6);
       MinDHeap<Integer> pq = new MinDHeap<>(d, LOOPS);
       PriorityQueue<Integer> pq2 = new PriorityQueue<>(LOOPS);
 
@@ -75,11 +76,10 @@ public class MinDHeapTest {
         int e = ar[i];
         double r = Math.random();
         if (0 <= r && r <= p1) {
-          pq.add(e); 
+          pq.add(e);
           pq2.add(e);
         } else if (p1 < r && r <= p2) {
-          if (!pq2.isEmpty()) 
-            assertEquals(pq.poll(), pq2.poll());
+          if (!pq2.isEmpty()) assertEquals(pq.poll(), pq2.poll());
         } else {
           pq.clear();
           pq2.clear();
@@ -89,13 +89,12 @@ public class MinDHeapTest {
       assertEquals(pq.peek(), pq2.peek());
     }
   }
-  
-  
+
   @Test
   public void testClear() {
     String[] strs = {"aa", "bb", "cc", "dd", "ee"};
     MinDHeap<String> q = new MinDHeap<>(2, strs.length);
-    for(String s : strs) q.add(s);
+    for (String s : strs) q.add(s);
     q.clear();
     assertEquals(q.size(), 0);
     assertTrue(q.isEmpty());
@@ -106,7 +105,7 @@ public class MinDHeapTest {
   public void testContainmentRandomized() {
 
     for (int i = 0; i < LOOPS; i++) {
-      
+
       List <Integer> randNums = genRandList(100);
       PriorityQueue <Integer> PQ = new PriorityQueue<>();
       PQueue <Integer> pq = new PQueue<>();
@@ -116,7 +115,7 @@ public class MinDHeapTest {
       }
 
       for (int j = 0; j < randNums.size(); j++) {
-        
+
         int randVal = randNums.get(j);
         assertEquals( pq.contains(randVal), PQ.contains(randVal) );
         pq.remove(randVal); PQ.remove(randVal);
@@ -131,15 +130,15 @@ public class MinDHeapTest {
   public void sequentialRemoving(Integer[] in, Integer[] removeOrder) {
 
     assertEquals(in.length, removeOrder.length);
-    
+
     PQueue <Integer> pq = new PQueue<>(in);
     PriorityQueue <Integer> PQ = new PriorityQueue<>();
     for (int value : in) PQ.offer(value);
-    
+
     assertTrue(pq.isMinHeap(0));
 
     for (int i = 0; i < removeOrder.length; i++) {
-      
+
       int elem = removeOrder[i];
 
       assertTrue(pq.peek() == PQ.peek());
@@ -182,11 +181,11 @@ public class MinDHeapTest {
   @Test
   public void testRemovingDuplicates() {
 
-    Integer[] in = new Integer[] {2,7,2,11,7,13,2};
-    MinDHeap <Integer> pq = new MinDHeap<>(3, in.length+1);
+    Integer[] in = new Integer[] {2, 7, 2, 11, 7, 13, 2};
+    MinDHeap<Integer> pq = new MinDHeap<>(3, in.length + 1);
 
-    for(Integer x : in) pq.add(x);
-    assertTrue(pq.peek()==2);
+    for (Integer x : in) pq.add(x);
+    assertTrue(pq.peek() == 2);
     pq.add(3);
 
     assertTrue(pq.poll() == 2);
@@ -197,14 +196,13 @@ public class MinDHeapTest {
     assertTrue(pq.poll() == 7);
     assertTrue(pq.poll() == 11);
     assertTrue(pq.poll() == 13);
-
   }
   /*
   @Test
   public void testRandomizedPolling() {
 
     for (int i = 0; i < LOOPS; i++) {
-      
+
       int sz = i;
       List <Integer> randNums = genRandList(sz);
       PriorityQueue <Integer> pq1 = new PriorityQueue<>();
@@ -222,10 +220,10 @@ public class MinDHeapTest {
         assertEquals( pq1.size(), pq2.size() );
         assertEquals( pq1.peek(), pq2.peek() );
         assertEquals( pq1.contains(pq1.peek()), pq2.contains(pq2.peek()) );
-        
+
         Integer v1 = pq1.poll();
         Integer v2 = pq2.poll();
-        
+
         assertEquals(v1, v2);
         assertEquals( pq1.peek(), pq2.peek() );
         assertEquals( pq1.size(), pq2.size() );
@@ -241,7 +239,7 @@ public class MinDHeapTest {
   public void testRandomizedRemoving() {
 
     for (int i = 0; i < LOOPS; i++) {
-      
+
       int sz = i;
       List <Integer> randNums = genRandList(sz);
       PriorityQueue <Integer> pq1 = new PriorityQueue<>();
@@ -283,7 +281,7 @@ public class MinDHeapTest {
     PQueue <Integer> pq = new PQueue<>();
 
     for (int sz : SZs) {
-      
+
       pq.clear();
       PQ.clear();
 
@@ -296,7 +294,7 @@ public class MinDHeapTest {
       Collections.shuffle(nums);
 
       for (int i = 0; i < sz/2; i++) {
-        
+
         // Sometimes add a new number into the Pqueue
         if (0.25 < Math.random()) {
           int randNum = (int) (Math.random() * 10000);
@@ -312,7 +310,7 @@ public class MinDHeapTest {
 
         PQ.remove(removeNum);
         pq.remove(removeNum);
-        
+
         assertEquals( PQ.peek(), pq.peek() );
         assertEquals( PQ.size(), pq.size() );
         assertTrue(pq.isMinHeap(0));
@@ -325,36 +323,23 @@ public class MinDHeapTest {
   */
 
   static Integer[] genRandArray(int sz) {
-    Integer [] lst = new Integer[sz];
-    for (int i = 0; i < sz; i++)
-      lst[i] = (int) (Math.random()*MAX_SZ);
+    Integer[] lst = new Integer[sz];
+    for (int i = 0; i < sz; i++) lst[i] = (int) (Math.random() * MAX_SZ);
     return lst;
   }
 
   // Generate a list of random numbers
   static List<Integer> genRandList(int sz) {
     List<Integer> lst = new ArrayList<>(sz);
-    for (int i = 0; i < sz; i++)
-      lst.add( (int) (Math.random()*MAX_SZ) );
+    for (int i = 0; i < sz; i++) lst.add((int) (Math.random() * MAX_SZ));
     return lst;
   }
 
   // Generate a list of unique random numbers
   static List<Integer> genUniqueRandList(int sz) {
     List<Integer> lst = new ArrayList<>(sz);
-    for (int i = 0; i < sz; i++) lst.add( i );
-    Collections.shuffle( lst );
+    for (int i = 0; i < sz; i++) lst.add(i);
+    Collections.shuffle(lst);
     return lst;
-  }  
-
+  }
 }
-
-
-
-
-
-
-
-
-
-

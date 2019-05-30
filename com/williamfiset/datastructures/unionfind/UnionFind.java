@@ -1,17 +1,16 @@
 /**
- * UnionFind/Disjoint Set data structure implementation.
- * This code was inspired by the union find implementation found in 
- * 'Algorithms Fourth Edition' by Robert Sedgewick and Kevin Wayne.
+ * UnionFind/Disjoint Set data structure implementation. This code was inspired by the union find
+ * implementation found in 'Algorithms Fourth Edition' by Robert Sedgewick and Kevin Wayne.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.unionfind;
 
 public class UnionFind {
 
   // The number of elements in this union find
   private int size;
-  
+
   // Used to track the size of each of the component
   private int[] sz;
 
@@ -23,39 +22,35 @@ public class UnionFind {
 
   public UnionFind(int size) {
 
-    if (size <= 0)
-      throw new IllegalArgumentException("Size <= 0 is not allowed");
+    if (size <= 0) throw new IllegalArgumentException("Size <= 0 is not allowed");
 
     this.size = numComponents = size;
     sz = new int[size];
     id = new int[size];
 
-    for(int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
       id[i] = i; // Link to itself (self root)
       sz[i] = 1; // Each component is originally of size one
     }
-
   }
 
   // Find which component/set 'p' belongs to, takes amortized constant time.
   public int find(int p) {
-    
+
     // Find the root of the component/set
     int root = p;
-    while( root != id[root] ) 
-      root = id[root];
+    while (root != id[root]) root = id[root];
 
-    // Compress the path leading back to the root. 
-    // Doing this operation is called "path compression" 
+    // Compress the path leading back to the root.
+    // Doing this operation is called "path compression"
     // and is what gives us amortized time complexity.
-    while(p != root) {
+    while (p != root) {
       int next = id[p];
       id[p] = root;
       p = next;
     }
 
     return root;
-
   }
 
   // This is an alternative recursive formulation for the find method
@@ -72,7 +67,7 @@ public class UnionFind {
 
   // Return the size of the components/set 'p' belongs to
   public int componentSize(int p) {
-    return sz[find(p)];  
+    return sz[find(p)];
   }
 
   // Return the number of elements in this UnionFind/Disjoint set
@@ -80,7 +75,7 @@ public class UnionFind {
     return size;
   }
 
-  // Returns the number of remaining components/sets 
+  // Returns the number of remaining components/sets
   public int components() {
     return numComponents;
   }
@@ -106,16 +101,5 @@ public class UnionFind {
     // Since the roots found are different we know that the
     // number of components/sets has decreased by one
     numComponents--;
-
   }
-
 }
-
-
-
-
-
-
-
-
-

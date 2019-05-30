@@ -3,27 +3,26 @@ package javatests.com.williamfiset.datastructures.priorityqueue;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.williamfiset.datastructures.priorityqueue.MinIndexedBinaryHeap;
-
-import org.junit.*;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
+import org.junit.*;
 
 public class MinIndexedBinaryHeapTest {
 
   @Before
   public void setup() {}
 
-  @Test(expected=IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testIllegalSizeOfNegativeOne() {
     new MinIndexedBinaryHeap<String>(-1);
   }
 
-  @Test(expected=IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testIllegalSizeOfZero() {
     new MinIndexedBinaryHeap<String>(0);
   }
@@ -47,7 +46,7 @@ public class MinIndexedBinaryHeapTest {
     assertThat(pq.contains(3)).isFalse();
   }
 
-  @Test(expected=IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testDuplicateKeys() {
     MinIndexedBinaryHeap<String> pq = new MinIndexedBinaryHeap<String>(10);
     pq.insert(5, "abcdef");
@@ -111,11 +110,10 @@ public class MinIndexedBinaryHeapTest {
       {0, 2}
     };
     sortPairsByValue(pairs);
-    
+
     int n = pairs.length;
     MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(n);
-    for(int i = 0; i < n; i++)
-      pq.insert(pairs[i][0], pairs[i][1]);
+    for (int i = 0; i < n; i++) pq.insert(pairs[i][0], pairs[i][1]);
 
     Integer minIndex;
     for (int i = 0; i < n; i++) {
@@ -143,11 +141,10 @@ public class MinIndexedBinaryHeapTest {
       {0, 2}
     };
     sortPairsByValue(pairs);
-    
+
     int n = pairs.length;
     MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(n);
-    for(int i = 0; i < n; i++)
-      pq.insert(pairs[i][0], pairs[i][1]);
+    for (int i = 0; i < n; i++) pq.insert(pairs[i][0], pairs[i][1]);
 
     Integer minValue;
     for (int i = 0; i < n; i++) {
@@ -163,17 +160,15 @@ public class MinIndexedBinaryHeapTest {
   public void testInsertionAndValueOf() {
     String[] names = {"jackie", "wilson", "catherine", "jason", "bobby", "sia"};
     MinIndexedBinaryHeap<String> pq = new MinIndexedBinaryHeap<String>(names.length);
-    for (int i = 0; i < names.length; i++) 
-      pq.insert(i, names[i]);
-    for (int i = 0; i < names.length; i++) 
-      assertThat(pq.valueOf(i)).isEqualTo(names[i]);
+    for (int i = 0; i < names.length; i++) pq.insert(i, names[i]);
+    for (int i = 0; i < names.length; i++) assertThat(pq.valueOf(i)).isEqualTo(names[i]);
   }
 
   @Test
   public void testOperations() {
     int n = 7;
     MinIndexedBinaryHeap<Integer> pq = new MinIndexedBinaryHeap<Integer>(n);
-    
+
     pq.insert(4, 4);
     assertThat(pq.contains(4)).isTrue();
     assertThat(pq.peekMinValue()).isEqualTo(4);
@@ -206,12 +201,12 @@ public class MinIndexedBinaryHeapTest {
 
   @Test
   public void testRandomInsertionsAndPolls() {
-    for(int n = 1; n < 1500; n++) {
+    for (int n = 1; n < 1500; n++) {
       int bound = 100000;
       int[] randomValues = genRandArray(n, -bound, +bound);
       MinIndexedBinaryHeap<Integer> pq1 = new MinIndexedBinaryHeap<Integer>(n);
       PriorityQueue<Integer> pq2 = new PriorityQueue<Integer>(n);
-      
+
       final double p = Math.random();
 
       for (int i = 0; i < n; i++) {
@@ -238,7 +233,7 @@ public class MinIndexedBinaryHeapTest {
       MinIndexedBinaryHeap<Integer> pq1 = new MinIndexedBinaryHeap<Integer>(n);
       PriorityQueue<Integer> pq2 = new PriorityQueue<Integer>(n);
       List<Integer> indexesToRemove = new ArrayList<>();
-      
+
       final double p = Math.random();
       for (int i = 0; i < n; i++) {
         int ii = indexes.get(i);
@@ -248,9 +243,9 @@ public class MinIndexedBinaryHeapTest {
         assertThat(pq1.isMinHeap()).isTrue();
 
         if (Math.random() < p) {
-          int itemsToRemove = (int)(Math.random() * 10);
+          int itemsToRemove = (int) (Math.random() * 10);
           while (itemsToRemove-- > 0 && indexesToRemove.size() > 0) {
-            int iii = (int)(Math.random() * indexesToRemove.size());
+            int iii = (int) (Math.random() * indexesToRemove.size());
             int indexToRemove = indexesToRemove.get(iii);
             boolean contains1 = pq1.contains(indexToRemove);
             boolean contains2 = pq2.contains(indexToRemove);
@@ -282,19 +277,21 @@ public class MinIndexedBinaryHeapTest {
   }
 
   static void sortPairsByValue(Integer[][] pairs) {
-    Arrays.sort(pairs, new Comparator<Integer[]>(){
-      @Override public int compare(Integer[] pair1, Integer[] pair2) {
-        return pair1[1] - pair2[1];
-      }
-    });
+    Arrays.sort(
+        pairs,
+        new Comparator<Integer[]>() {
+          @Override
+          public int compare(Integer[] pair1, Integer[] pair2) {
+            return pair1[1] - pair2[1];
+          }
+        });
   }
 
   // Generate a list of unique random numbers
   static List<Integer> genUniqueRandList(int sz) {
-    List <Integer> lst = new ArrayList<>(sz);
-    for (int i = 0; i < sz; i++) lst.add( i );
+    List<Integer> lst = new ArrayList<>(sz);
+    for (int i = 0; i < sz; i++) lst.add(i);
     Collections.shuffle(lst);
     return lst;
-  } 
-
+  }
 }

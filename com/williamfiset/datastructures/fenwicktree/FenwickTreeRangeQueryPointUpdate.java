@@ -1,8 +1,8 @@
 /**
- * A Fenwick Tree implementation which supports 
- * point updates and sum range queries
+ * A Fenwick Tree implementation which supports point updates and sum range queries
+ *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.fenwicktree;
 
 public class FenwickTreeRangeQueryPointUpdate {
@@ -17,19 +17,18 @@ public class FenwickTreeRangeQueryPointUpdate {
   public FenwickTreeRangeQueryPointUpdate(int sz) {
     tree = new long[(N = sz + 1)];
   }
-  
-  // Construct a Fenwick tree with an initial set of values. 
-  // The 'values' array MUST BE ONE BASED meaning values[0] 
+
+  // Construct a Fenwick tree with an initial set of values.
+  // The 'values' array MUST BE ONE BASED meaning values[0]
   // does not get used, O(n) construction.
   public FenwickTreeRangeQueryPointUpdate(long[] values) {
 
-    if (values == null)
-      throw new IllegalArgumentException("Values array cannot be null!");
-    
+    if (values == null) throw new IllegalArgumentException("Values array cannot be null!");
+
     N = values.length;
     values[0] = 0L;
 
-    // Make a clone of the values array since we manipulate 
+    // Make a clone of the values array since we manipulate
     // the array in place destroying all its original content.
     tree = values.clone();
 
@@ -37,7 +36,6 @@ public class FenwickTreeRangeQueryPointUpdate {
       int parent = i + lsb(i);
       if (parent < N) tree[parent] += tree[i];
     }
-
   }
 
   // Returns the value of the least significant bit (LSB)
@@ -67,8 +65,7 @@ public class FenwickTreeRangeQueryPointUpdate {
 
   // Returns the sum of the interval [left, right], O(log(n))
   public long sum(int left, int right) {
-    if (right < left) 
-      throw new IllegalArgumentException("Make sure right >= left");
+    if (right < left) throw new IllegalArgumentException("Make sure right >= left");
     return prefixSum(right) - prefixSum(left - 1);
   }
 
@@ -87,11 +84,11 @@ public class FenwickTreeRangeQueryPointUpdate {
 
   // Set index i to be equal to v, O(log(n))
   public void set(int i, long v) {
-    add( i, v - sum(i, i) );
+    add(i, v - sum(i, i));
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return java.util.Arrays.toString(tree);
   }
-
 }

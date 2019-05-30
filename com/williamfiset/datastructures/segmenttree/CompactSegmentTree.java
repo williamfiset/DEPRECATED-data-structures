@@ -1,14 +1,15 @@
 /**
- * A compact array based segment tree implementation.
- * This segment tree supports point updates and range queries.
+ * A compact array based segment tree implementation. This segment tree supports point updates and
+ * range queries.
+ *
  * @author Al.Cash & William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.segmenttree;
 
 public class CompactSegmentTree {
   private int N;
 
-  // Let UNIQUE be a value which does NOT 
+  // Let UNIQUE be a value which does NOT
   // and will not appear in the segment tree
   private long UNIQUE = 8123572096793136074L;
 
@@ -16,13 +17,13 @@ public class CompactSegmentTree {
   private long[] tree;
 
   public CompactSegmentTree(int size) {
-    tree = new long[2*(N = size)];
+    tree = new long[2 * (N = size)];
     java.util.Arrays.fill(tree, UNIQUE);
   }
 
   public CompactSegmentTree(long[] values) {
     this(values.length);
-    for(int i = 0; i < N; i++) modify(i, values[i]);
+    for (int i = 0; i < N; i++) modify(i, values[i]);
   }
 
   // This is the segment tree function we are using for queries.
@@ -42,18 +43,18 @@ public class CompactSegmentTree {
 
   // Adjust point i by a value, O(log(n))
   public void modify(int i, long value) {
-    tree[i + N] = function(tree[i+N],  value);
+    tree[i + N] = function(tree[i + N], value);
     for (i += N; i > 1; i >>= 1) {
-      tree[i>>1] = function(tree[i], tree[i^1]);
+      tree[i >> 1] = function(tree[i], tree[i ^ 1]);
     }
   }
-  
+
   // Query interval [l, r), O(log(n))
   public long query(int l, int r) {
     long res = UNIQUE;
     for (l += N, r += N; l < r; l >>= 1, r >>= 1) {
-      if ((l&1) != 0) res = function(res, tree[l++]);
-      if ((r&1) != 0) res = function(res, tree[--r]);
+      if ((l & 1) != 0) res = function(res, tree[l++]);
+      if ((r & 1) != 0) res = function(res, tree[--r]);
     }
     if (res == UNIQUE) {
       throw new IllegalStateException("UNIQUE should not be the return value.");

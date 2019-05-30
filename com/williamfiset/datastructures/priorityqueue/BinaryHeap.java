@@ -1,14 +1,15 @@
 /**
  * A min priority queue implementation using a binary heap.
+ *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.priorityqueue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class BinaryHeap <T extends Comparable<T>> {
+public class BinaryHeap<T extends Comparable<T>> {
 
   // The number of elements currently inside the heap
   private int heapSize = 0;
@@ -35,22 +36,20 @@ public class BinaryHeap <T extends Comparable<T>> {
 
     heapSize = heapCapacity = elems.length;
     heap = new ArrayList<T>(heapCapacity);
-    
+
     // Place all element in heap
-    for(int i = 0; i < heapSize; i++)
-      heap.add(elems[i]);
+    for (int i = 0; i < heapSize; i++) heap.add(elems[i]);
 
     // Heapify process, O(n)
-    for (int i = Math.max(0, (heapSize/2)-1); i >= 0; i-- )
-      sink(i);
+    for (int i = Math.max(0, (heapSize / 2) - 1); i >= 0; i--) sink(i);
   }
 
   // Priority queue construction, O(nlog(n))
-  public BinaryHeap (Collection<T> elems) {
+  public BinaryHeap(Collection<T> elems) {
     this(elems.size());
-    for(T elem : elems) add(elem);
+    for (T elem : elems) add(elem);
   }
-  
+
   // Returns true/false depending on if the priority queue is empty
   public boolean isEmpty() {
     return heapSize == 0;
@@ -58,8 +57,7 @@ public class BinaryHeap <T extends Comparable<T>> {
 
   // Clears everything inside the heap, O(n)
   public void clear() {
-    for (int i = 0; i < heapCapacity; i++)
-      heap.set(i, null);
+    for (int i = 0; i < heapCapacity; i++) heap.set(i, null);
     heapSize = 0;
   }
 
@@ -69,7 +67,7 @@ public class BinaryHeap <T extends Comparable<T>> {
   }
 
   // Returns the value of the element with the lowest
-  // priority in this priority queue. If the priority 
+  // priority in this priority queue. If the priority
   // queue is empty null is returned.
   public T peek() {
     if (isEmpty()) return null;
@@ -84,16 +82,14 @@ public class BinaryHeap <T extends Comparable<T>> {
   // Test if an element is in heap, O(n)
   public boolean contains(T elem) {
     // Linear scan to check containment
-    for(int i = 0; i < heapSize; i++)
-      if (heap.get(i).equals(elem))
-        return true;
+    for (int i = 0; i < heapSize; i++) if (heap.get(i).equals(elem)) return true;
     return false;
   }
 
-  // Adds an element to the priority queue, the 
+  // Adds an element to the priority queue, the
   // element must not be null, O(log(n))
   public void add(T elem) {
-    
+
     if (elem == null) throw new IllegalArgumentException();
 
     if (heapSize < heapCapacity) {
@@ -103,7 +99,7 @@ public class BinaryHeap <T extends Comparable<T>> {
       heapCapacity++;
     }
 
-    swim(heapSize); 
+    swim(heapSize);
     heapSize++;
   }
 
@@ -117,9 +113,9 @@ public class BinaryHeap <T extends Comparable<T>> {
 
   // Perform bottom up node swim, O(log(n))
   private void swim(int k) {
-    
+
     // Grab the index of the next parent node WRT to k
-    int parent = (k-1) / 2;
+    int parent = (k - 1) / 2;
 
     // Keep swimming while we have not reached the
     // root and while we're less than our parent.
@@ -129,26 +125,25 @@ public class BinaryHeap <T extends Comparable<T>> {
       k = parent;
 
       // Grab the index of the next parent node WRT to k
-      parent = (k-1) / 2;
+      parent = (k - 1) / 2;
     }
   }
 
   // Top down node sink, O(log(n))
   private void sink(int k) {
-    while ( true ) {
-      int left  = 2 * k + 1; // Left  node
+    while (true) {
+      int left = 2 * k + 1; // Left  node
       int right = 2 * k + 2; // Right node
-      int smallest = left;   // Assume left is the smallest node of the two children
+      int smallest = left; // Assume left is the smallest node of the two children
 
       // Find which is smaller left or right
       // If right is smaller set smallest to be right
-      if (right < heapSize && less(right, left))
-        smallest = right;
+      if (right < heapSize && less(right, left)) smallest = right;
 
       // Stop if we're outside the bounds of the tree
       // or stop early if we cannot sink k anymore
       if (left >= heapSize || less(k, smallest)) break;
-      
+
       // Move down the tree following the smallest node
       swap(smallest, k);
       k = smallest;
@@ -163,7 +158,6 @@ public class BinaryHeap <T extends Comparable<T>> {
     heap.set(i, elem_j);
     heap.set(j, elem_i);
   }
-
 
   // Removes a particular element in the heap, O(n)
   public boolean remove(T element) {
@@ -197,8 +191,7 @@ public class BinaryHeap <T extends Comparable<T>> {
     sink(i);
 
     // If sinking did not work try swimming
-    if (heap.get(i).equals(elem))
-      swim(i);
+    if (heap.get(i).equals(elem)) swim(i);
     return removed_data;
   }
 
@@ -207,25 +200,24 @@ public class BinaryHeap <T extends Comparable<T>> {
   // sure the heap invariant is still being maintained
   // Called this method with k=0 to start at the root
   public boolean isMinHeap(int k) {
-    // If we are outside the bounds of the heap return true 
+    // If we are outside the bounds of the heap return true
     if (k >= heapSize) return true;
 
-    int left  = 2 * k + 1;
+    int left = 2 * k + 1;
     int right = 2 * k + 2;
 
     // Make sure that the current node k is less than
     // both of its children left, and right if they exist
     // return false otherwise to indicate an invalid heap
-    if (left  < heapSize  && !less(k, left))  return false;
-    if (right < heapSize  && !less(k, right)) return false;
+    if (left < heapSize && !less(k, left)) return false;
+    if (right < heapSize && !less(k, right)) return false;
 
     // Recurse on both children to make sure they're also valid heaps
     return isMinHeap(left) && isMinHeap(right);
-  }  
-
-  @Override public String toString() {
-    return heap.toString();
   }
 
+  @Override
+  public String toString() {
+    return heap.toString();
+  }
 }
-

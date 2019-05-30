@@ -1,18 +1,19 @@
 /**
  * A linked list implementation of a stack
+ *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.stack;
 
-public class Stack <T> implements Iterable <T> {
+public class Stack<T> implements Iterable<T> {
 
-  private java.util.LinkedList <T> list = new java.util.LinkedList <T>();
+  private java.util.LinkedList<T> list = new java.util.LinkedList<T>();
 
   // Create an empty stack
-  public Stack () { }
+  public Stack() {}
 
   // Create a Stack with an initial element
-  public Stack (T firstElem) {
+  public Stack(T firstElem) {
     push(firstElem);
   }
 
@@ -34,25 +35,20 @@ public class Stack <T> implements Iterable <T> {
   // Pop an element off the stack
   // Throws an error is the stack is empty
   public T pop() {
-    if (isEmpty())
-      throw new java.util.EmptyStackException();
+    if (isEmpty()) throw new java.util.EmptyStackException();
     return list.removeLast();
   }
 
   // Peek the top of the stack without removing an element
   // Throws an exception if the stack is empty
   public T peek() {
-    if (isEmpty()) 
-      throw new java.util.EmptyStackException();
+    if (isEmpty()) throw new java.util.EmptyStackException();
     return list.peekLast();
   }
 
   // Allow users to iterate through the stack using an iterator
-  @Override public java.util.Iterator <T> iterator () {
+  @Override
+  public java.util.Iterator<T> iterator() {
     return list.iterator();
   }
-
 }
-
-
-

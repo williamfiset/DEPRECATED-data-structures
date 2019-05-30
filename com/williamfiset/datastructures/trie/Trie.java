@@ -12,22 +12,24 @@ public class Trie {
     char ch;
     int count = 0;
     boolean isWordEnding = false;
-    java.util.Map <Character, Node> children = new java.util.HashMap<>();
+    java.util.Map<Character, Node> children = new java.util.HashMap<>();
 
-    public Node(char ch) { this.ch = ch; }
+    public Node(char ch) {
+      this.ch = ch;
+    }
 
     public void addChild(Node node, char c) {
       children.put(c, node);
     }
-
   }
 
   // Returns true if the string being inserted
-  // contains a prefix already in the trie  
+  // contains a prefix already in the trie
   public boolean insert(String key, int numInserts) {
-    
+
     if (key == null) throw new IllegalArgumentException("Null not permitted in trie");
-    if (numInserts <= 0) throw new IllegalArgumentException("numInserts has to be greater than zero");
+    if (numInserts <= 0)
+      throw new IllegalArgumentException("numInserts has to be greater than zero");
 
     Node node = root;
     boolean created_new_node = false;
@@ -46,26 +48,23 @@ public class Trie {
         node.addChild(nextNode, ch);
         created_new_node = true;
 
-      // Next character exists in trie.
+        // Next character exists in trie.
       } else {
-        if (nextNode.isWordEnding)
-          is_prefix = true;
+        if (nextNode.isWordEnding) is_prefix = true;
       }
 
       node = nextNode;
       node.count += numInserts;
-
     }
 
     // The root itself is not a word ending. It is simply a placeholder.
     if (node != root) node.isWordEnding = true;
 
     return is_prefix || !created_new_node;
-
   }
 
   // Returns true if the string being inserted
-  // contains a prefix already in the trie  
+  // contains a prefix already in the trie
   public boolean insert(String key) {
     return insert(key, 1);
   }
@@ -79,12 +78,11 @@ public class Trie {
 
     // We cannot delete something that doesn't exist
     if (!contains(key)) return false;
-    
-    if (numDeletions <= 0)
-      throw new IllegalArgumentException("numDeletions has to be positive");
+
+    if (numDeletions <= 0) throw new IllegalArgumentException("numDeletions has to be positive");
 
     Node node = root;
-    for(int i = 0; i < key.length(); i++) {
+    for (int i = 0; i < key.length(); i++) {
 
       char ch = key.charAt(i);
       Node curNode = node.children.get(ch);
@@ -100,7 +98,6 @@ public class Trie {
       }
 
       node = curNode;
-
     }
     return true;
   }
@@ -117,23 +114,20 @@ public class Trie {
   // Returns the count of a particular prefix
   public int count(String key) {
 
-    if (key == null)
-      throw new IllegalArgumentException("Null not permitted");
+    if (key == null) throw new IllegalArgumentException("Null not permitted");
 
     Node node = root;
 
-    // Dig down into trie until we reach the bottom or stop 
+    // Dig down into trie until we reach the bottom or stop
     // early because the string we're looking for doesn't exist
-    for(int i = 0; i < key.length(); i++) {
+    for (int i = 0; i < key.length(); i++) {
       char ch = key.charAt(i);
       if (node == null) return 0;
       node = node.children.get(ch);
     }
 
-    if (node != null) 
-      return node.count;
+    if (node != null) return node.count;
     return 0;
-
   }
 
   // Recursively clear the trie freeing memory to help GC
@@ -149,7 +143,6 @@ public class Trie {
 
     node.children.clear();
     node.children = null;
-
   }
 
   // Clear the trie
@@ -157,14 +150,5 @@ public class Trie {
 
     root.children = null;
     root = new Node(rootCharacter);
-
   }
-
 }
-
-
-
-
-
-
-

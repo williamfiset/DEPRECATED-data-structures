@@ -1,4 +1,17 @@
 apply plugin: 'java'
+apply plugin: "com.github.sherter.google-java-format"
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.8"
+  }
+}
+
 
 // Assume Java 8
 sourceCompatibility = 1.8
@@ -10,7 +23,6 @@ repositories {
 }
 
 dependencies {
-  
   // JUnit framework
   testCompile 'junit:junit:4.+'
   compile 'junit:junit:4.+'
@@ -29,6 +41,9 @@ dependencies {
 
   // Apache commons lang
   compile 'org.apache.commons:commons-lang3:3.6'
+
+  // Google java formatter to format source code.
+  compile 'com.google.googlejavaformat:google-java-format:1.7'
 }
 
 // Tests display stdout and stderr
@@ -36,7 +51,6 @@ test {
   dependsOn cleanTest
   testLogging.showStandardStreams = true
   //useJUnitPlatform()
-
 }
 
 

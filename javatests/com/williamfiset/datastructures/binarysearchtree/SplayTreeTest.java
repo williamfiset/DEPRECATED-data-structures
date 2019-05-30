@@ -24,7 +24,7 @@ class SplayTreeTest {
     List<Integer> data =
         com.williamfiset.datastructures.utils.TestUtils.randomUniformUniqueIntegerList(
             100); // Note : we dont want duplicate values here to test "search" after "delete"
-                  // should assertNull
+    // should assertNull
     for (int i : data) {
       splayTree.insert(i);
       assertEquals(i, splayTree.getRoot().getData());

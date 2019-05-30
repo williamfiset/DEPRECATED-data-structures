@@ -1,14 +1,14 @@
 package javatests.com.williamfiset.datastructures.balancedtree;
 
-import com.williamfiset.datastructures.balancedtree.AVLTreeRecursive;
-
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-import java.util.List;
+
+import com.williamfiset.datastructures.balancedtree.AVLTreeRecursive;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.TreeSet;
+import org.junit.Before;
+import org.junit.Test;
 
 public class AVLTreeTest {
 
@@ -41,7 +41,7 @@ public class AVLTreeTest {
 
   @Test
   public void testLeftLeftCase() {
-    
+
     tree.insert(3);
     tree.insert(2);
     tree.insert(1);
@@ -54,7 +54,6 @@ public class AVLTreeTest {
     assertNull(tree.root.left.right);
     assertNull(tree.root.right.left);
     assertNull(tree.root.right.right);
-
   }
 
   @Test
@@ -72,7 +71,6 @@ public class AVLTreeTest {
     assertNull(tree.root.left.right);
     assertNull(tree.root.right.left);
     assertNull(tree.root.right.right);
-    
   }
 
   @Test
@@ -90,7 +88,6 @@ public class AVLTreeTest {
     assertNull(tree.root.left.right);
     assertNull(tree.root.right.left);
     assertNull(tree.root.right.right);
-    
   }
 
   @Test
@@ -108,7 +105,6 @@ public class AVLTreeTest {
     assertNull(tree.root.left.right);
     assertNull(tree.root.right.left);
     assertNull(tree.root.right.right);
-    
   }
 
   @Test
@@ -136,13 +132,12 @@ public class AVLTreeTest {
       assertEquals(set.size(), tree.size());
       assertTrue(tree.validateBSTInvarient(tree.root));
     }
-
   }
 
   @Test
   public void testTreeHeight() {
     for (int n = 1; n <= TEST_SZ; n++) {
-      
+
       tree.insert(randValue());
       int height = tree.height();
 
@@ -151,20 +146,19 @@ public class AVLTreeTest {
       // https://en.wikipedia.org/wiki/AVL_tree#Comparison_to_other_structures
       double c = 1.441;
       double b = -0.329;
-      double upperBound = c*(Math.log(n+2.0)/Math.log(2)) + b;
+      double upperBound = c * (Math.log(n + 2.0) / Math.log(2)) + b;
 
       assertTrue(height < upperBound);
-
     }
   }
 
-  @Test 
+  @Test
   public void randomRemoveTests() {
     TreeSet<Integer> ts = new TreeSet<>();
     for (int i = 0; i < TEST_SZ; i++) {
-      
+
       int size = i;
-      List <Integer> lst = genRandList(size);
+      List<Integer> lst = genRandList(size);
       for (Integer value : lst) {
         tree.insert(value);
         ts.add(value);
@@ -173,44 +167,26 @@ public class AVLTreeTest {
 
       // Remove all the elements we just placed in the tree.
       for (int j = 0; j < size; j++) {
-        
+
         Integer value = lst.get(j);
 
         assertEquals(ts.remove(value), tree.remove(value));
         assertFalse(tree.contains(value));
         assertEquals(size - j - 1, tree.size());
-
       }
 
       assertTrue(tree.isEmpty());
-
     }
-
-
   }
 
   static List<Integer> genRandList(int sz) {
-    List <Integer> lst = new ArrayList<>(sz);
+    List<Integer> lst = new ArrayList<>(sz);
     for (int i = 0; i < sz; i++) lst.add(i); // unique values.
     Collections.shuffle(lst);
     return lst;
   }
 
   public static int randValue() {
-    return (int)(Math.random() * MAX_RAND_NUM*2) + MIN_RAND_NUM;    
+    return (int) (Math.random() * MAX_RAND_NUM * 2) + MIN_RAND_NUM;
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

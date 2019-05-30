@@ -1,34 +1,36 @@
 /**
- * The StringSet is a probabilistic string set data structure implemented using a bloom filter
- * and positional rolling hashing techniques. This data structure can be very fast (outperforming Java
- * HashSet) if you're doing queries involving all substrings of a particular string.
- * Despite being probabilistic, this DS is very safe to use because the probability of 
- * a false positive can be set to as low as you wish it to be.
+ * The StringSet is a probabilistic string set data structure implemented using a bloom filter and
+ * positional rolling hashing techniques. This data structure can be very fast (outperforming Java
+ * HashSet) if you're doing queries involving all substrings of a particular string. Despite being
+ * probabilistic, this DS is very safe to use because the probability of a false positive can be set
+ * to as low as you wish it to be.
  *
  * @author William Alexandre Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.bloomfilter;
 
 public class StringSet {
 
-  // Our alphabet size is 95 because there are only 95 printable ASCII characters 
+  // Our alphabet size is 95 because there are only 95 printable ASCII characters
   // which are in the range between [32, 127). We also need to add +1 to our alphabet
   // size because we're going to redefine the first ASCII character (the space character)
-  // to be 1 instead of 0 to avoid collisions where the string ' ' hashes to the 
+  // to be 1 instead of 0 to avoid collisions where the string ' ' hashes to the
   // same value as '   ' since 0*95^0 = 0*95^0 + 0*95^1 + 0*95^2
-  private static final int ALPHABET_SZ = 95 + 1;  
+  private static final int ALPHABET_SZ = 95 + 1;
   private static final int[] ALPHABET = new int[127];
 
   private final int N_HASHES;
   private final long POWERS[][];
   private final int[] MODS, MOD_INVERSES;
-  private final long [] rollingHashes;
+  private final long[] rollingHashes;
   private final BloomFilter bloomFilter;
 
-  // More primes: 1009, 1013, 1019, 10007, 10009, 10037, 100003, 100019, 100043, 1000003, 1000033, 1000037,
-  // 10000019, 10000079, 10000103, 100000007, 100000009, 100000023, 1000000007, 1000000009, 1000000021, 1000000033
-  private static final int[] DEFAULT_MODS = { 10009, 100003, 1000003 };
-  
+  // More primes: 1009, 1013, 1019, 10007, 10009, 10037, 100003, 100019, 100043, 1000003, 1000033,
+  // 1000037,
+  // 10000019, 10000079, 10000103, 100000007, 100000009, 100000023, 1000000007, 1000000009,
+  // 1000000021, 1000000033
+  private static final int[] DEFAULT_MODS = {10009, 100003, 1000003};
+
   // Assign a mapping from the printable ASCII characters to the natural numbers
   static {
     for (int i = 32, n = 1; i < ALPHABET.length; i++, n++) {
@@ -43,7 +45,7 @@ public class StringSet {
   // mods - The mod values to use for the bloom filter, they should probably be prime numbers
   // maxLen - The maximum length string we will need to deal with
   public StringSet(int[] mods, int maxLen) {
-    
+
     MODS = mods.clone();
     N_HASHES = mods.length;
     MOD_INVERSES = new int[N_HASHES];
@@ -60,13 +62,12 @@ public class StringSet {
     }
 
     // Precompute powers of the alphabet size mod all the mod values
-    for(int i = 0; i < N_HASHES; i++) {
+    for (int i = 0; i < N_HASHES; i++) {
       POWERS[i][0] = 1L;
-      for(int j = 1; j < maxLen; j++) {
-        POWERS[i][j] = (POWERS[i][j-1]*ALPHABET_SZ) % mods[i];
+      for (int j = 1; j < maxLen; j++) {
+        POWERS[i][j] = (POWERS[i][j - 1] * ALPHABET_SZ) % mods[i];
       }
     }
-
   }
 
   // Returns a shallow copy of the current rolling hash value.
@@ -83,7 +84,6 @@ public class StringSet {
     }
 
     return rollingHashes; // rollingHashes.clone();
-
   }
 
   // This method adds a string to the bloom filter set. If you're adding a lot
@@ -104,29 +104,26 @@ public class StringSet {
       for (int k = 0; k < N_HASHES; k++) {
 
         int rightChar = ALPHABET[str.charAt(i)];
-        int leftChar  = ALPHABET[str.charAt(i-sz)];
+        int leftChar = ALPHABET[str.charAt(i - sz)];
 
         // Add the right character
         rollingHashes[k] = addRight(rollingHashes[k], rightChar, k);
 
         // Remove the leftmost character
         rollingHashes[k] = removeLeft(rollingHashes[k], leftChar, k, sz);
-        
       }
       bloomFilter.add(rollingHashes);
     }
-
   }
 
-  // Adds all the substrings of 'data' into the 
+  // Adds all the substrings of 'data' into the
   // bloom filter using positional hashing
   public void addAllSubstrings(String str) {
 
     int N = str.length();
     int[] values = new int[N];
 
-    for(int i = 0; i < N; i++)
-      values[i] = ALPHABET[str.charAt(i)];
+    for (int i = 0; i < N; i++) values[i] = ALPHABET[str.charAt(i)];
 
     for (int i = 0; i < N; i++) {
 
@@ -135,17 +132,15 @@ public class StringSet {
 
       for (int j = i; j < N; j++) {
 
-        // Compute the next rolling hash value for each hash 
+        // Compute the next rolling hash value for each hash
         // function with a different modulus value
         for (int k = 0; k < N_HASHES; k++) {
           rollingHashes[k] = addRight(rollingHashes[k], values[j], k);
         }
-        
+
         // Add this substring to the bloom filter
         bloomFilter.add(rollingHashes);
-
       }
-
     }
   }
 
@@ -154,15 +149,17 @@ public class StringSet {
     rollingHash = (rollingHash * ALPHABET_SZ + lastValue) % MODS[modIndex];
     return (rollingHash + MODS[modIndex]) % MODS[modIndex];
   }
+
   public long addRight(long rollingHash, char lastValue, int modIndex) {
     return addRight(rollingHash, ALPHABET[lastValue], modIndex);
   }
-  
+
   // This function adds a character to the beginning of the rolling hash
   public long addLeft(long rollingHash, int firstValue, int modIndex, int len) {
     rollingHash = (firstValue * POWERS[modIndex][len] + rollingHash) % MODS[modIndex];
     return (rollingHash + MODS[modIndex]) % MODS[modIndex];
   }
+
   public long addLeft(long rollingHash, char firstValue, int modIndex, int len) {
     return addLeft(rollingHash, ALPHABET[firstValue], modIndex, len);
   }
@@ -173,17 +170,19 @@ public class StringSet {
   //
   // firstValue - This is x_n, the first character of this string
   public long removeLeft(long rollingHash, int firstValue, int modIndex, int len) {
-    rollingHash = (rollingHash - firstValue * POWERS[modIndex][len-1]) % MODS[modIndex];
+    rollingHash = (rollingHash - firstValue * POWERS[modIndex][len - 1]) % MODS[modIndex];
     return (rollingHash + MODS[modIndex]) % MODS[modIndex];
   }
+
   public long removeLeft(long rollingHash, char firstValue, int modIndex, int len) {
     return removeLeft(rollingHash, ALPHABET[firstValue], modIndex, len);
   }
 
   public long removeRight(long rollingHash, int lastValue, int modIndex) {
-    rollingHash = (((rollingHash-lastValue)%MODS[modIndex])+MODS[modIndex]) % MODS[modIndex];
+    rollingHash = (((rollingHash - lastValue) % MODS[modIndex]) + MODS[modIndex]) % MODS[modIndex];
     return (rollingHash * MOD_INVERSES[modIndex]) % MODS[modIndex];
   }
+
   public long removeRight(long rollingHash, char lastValue, int modIndex) {
     return removeRight(rollingHash, ALPHABET[lastValue], modIndex);
   }
@@ -199,17 +198,8 @@ public class StringSet {
     return bloomFilter.contains(computeHash(str));
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return bloomFilter.toString();
   }
-
 }
-
-
-
-
-
-
-
-
-

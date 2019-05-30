@@ -3,13 +3,12 @@ package javatests.com.williamfiset.datastructures.suffixarray;
 import static org.junit.Assert.*;
 
 import com.williamfiset.datastructures.suffixarray.SuffixArray;
-import com.williamfiset.datastructures.suffixarray.SuffixArraySlow;
-import com.williamfiset.datastructures.suffixarray.SuffixArrayMed;
 import com.williamfiset.datastructures.suffixarray.SuffixArrayFast;
-import org.junit.*;
+import com.williamfiset.datastructures.suffixarray.SuffixArrayMed;
+import com.williamfiset.datastructures.suffixarray.SuffixArraySlow;
 import java.security.SecureRandom;
-import java.math.BigInteger;
 import java.util.Random;
+import org.junit.*;
 
 public class SuffixArrayTest {
 
@@ -29,11 +28,11 @@ public class SuffixArrayTest {
   @Test
   public void suffixArrayLength() {
     String str = "ABCDE";
-    
+
     SuffixArray sa1 = new SuffixArraySlow(str);
     SuffixArray sa2 = new SuffixArrayMed(str);
     SuffixArray sa3 = new SuffixArrayFast(str);
-    
+
     assertEquals(str.length(), sa1.getSa().length);
     assertEquals(str.length(), sa2.getSa().length);
     assertEquals(str.length(), sa3.getSa().length);
@@ -41,11 +40,11 @@ public class SuffixArrayTest {
 
   @Test
   public void lcsUniqueCharacters() {
-    
+
     SuffixArray sa1 = new SuffixArraySlow(ASCII_LETTERS);
-    SuffixArray sa2 =  new SuffixArrayMed(ASCII_LETTERS);
+    SuffixArray sa2 = new SuffixArrayMed(ASCII_LETTERS);
     SuffixArray sa3 = new SuffixArrayFast(ASCII_LETTERS);
-    
+
     SuffixArray[] suffixArrays = {sa1, sa2, sa3};
 
     for (SuffixArray sa : suffixArrays) {
@@ -53,18 +52,17 @@ public class SuffixArrayTest {
         assertEquals(0, sa.getLcpArray()[i]);
       }
     }
-    
   }
 
   @Test
   public void increasingLCPTest() {
-    
+
     String UNIQUE_CHARS = "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK";
-    
+
     SuffixArray sa1 = new SuffixArraySlow(UNIQUE_CHARS);
-    SuffixArray sa2 =  new SuffixArrayMed(UNIQUE_CHARS);
+    SuffixArray sa2 = new SuffixArrayMed(UNIQUE_CHARS);
     SuffixArray sa3 = new SuffixArrayFast(UNIQUE_CHARS);
-    
+
     SuffixArray[] suffixArrays = {sa1, sa2, sa3};
 
     for (SuffixArray sa : suffixArrays) {
@@ -72,19 +70,18 @@ public class SuffixArrayTest {
         assertEquals(i, sa.getLcpArray()[i]);
       }
     }
-    
   }
 
   @Test
   public void lcpTest1() {
-    
+
     String text = "ABBABAABAA";
-    int[] lcpValues = {0,1,2,1,4,2,0,3,2,1};
+    int[] lcpValues = {0, 1, 2, 1, 4, 2, 0, 3, 2, 1};
 
     SuffixArray sa1 = new SuffixArraySlow(text);
-    SuffixArray sa2 =  new SuffixArrayMed(text);
+    SuffixArray sa2 = new SuffixArrayMed(text);
     SuffixArray sa3 = new SuffixArrayFast(text);
-    
+
     SuffixArray[] suffixArrays = {sa1, sa2, sa3};
 
     for (SuffixArray sa : suffixArrays) {
@@ -92,18 +89,17 @@ public class SuffixArrayTest {
         assertEquals(lcpValues[i], sa.getLcpArray()[i]);
       }
     }
-    
   }
 
   @Test
   public void lcpTest2() {
     String text = "ABABABAABB";
-    int[] lcpValues = {0,1,3,5,2,0,1,2,4,1};
+    int[] lcpValues = {0, 1, 3, 5, 2, 0, 1, 2, 4, 1};
 
     SuffixArray sa1 = new SuffixArraySlow(text);
-    SuffixArray sa2 =  new SuffixArrayMed(text);
+    SuffixArray sa2 = new SuffixArrayMed(text);
     SuffixArray sa3 = new SuffixArrayFast(text);
-    
+
     SuffixArray[] suffixArrays = {sa1, sa2, sa3};
 
     for (SuffixArray sa : suffixArrays) {
@@ -120,12 +116,12 @@ public class SuffixArrayTest {
     String text = "BAAAAB0ABAAAAB1BABA2ABA3AAB4BBBB5BB";
 
     SuffixArray sa1 = new SuffixArraySlow(text);
-    SuffixArray sa2 =  new SuffixArrayMed(text);
+    SuffixArray sa2 = new SuffixArrayMed(text);
     SuffixArray sa3 = new SuffixArrayFast(text);
     SuffixArray[] suffixArrays = {sa1, sa2, sa3};
 
     for (int i = 0; i < suffixArrays.length; i++) {
-      for (int j = i+1; j < suffixArrays.length; j++) {
+      for (int j = i + 1; j < suffixArrays.length; j++) {
         SuffixArray s1 = suffixArrays[i];
         SuffixArray s2 = suffixArrays[j];
         for (int k = 0; k < s1.getSa().length; k++) {

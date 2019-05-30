@@ -17,16 +17,15 @@ public class TreePrinter {
 
     // Get text to be printed
     public String getText();
-
   }
 
   // Print a binary tree.
   public static String getTreeDisplay(PrintableNode root) {
-    
+
     StringBuilder sb = new StringBuilder();
-    List<List<String>>  lines = new ArrayList<List<String>>();
+    List<List<String>> lines = new ArrayList<List<String>>();
     List<PrintableNode> level = new ArrayList<PrintableNode>();
-    List<PrintableNode> next  = new ArrayList<PrintableNode>();
+    List<PrintableNode> next = new ArrayList<PrintableNode>();
 
     level.add(root);
     int nn = 1;

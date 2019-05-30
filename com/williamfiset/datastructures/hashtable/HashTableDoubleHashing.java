@@ -1,15 +1,15 @@
 /**
- * An implementation of a hashtable using double hashing
- * as a collision resolution technique.
+ * An implementation of a hashtable using double hashing as a collision resolution technique.
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
- **/
+ */
 package com.williamfiset.datastructures.hashtable;
 
 import java.math.BigInteger;
 
 @SuppressWarnings("unchecked")
-public class HashTableDoubleHashing <K extends SecondaryHash, V> extends HashTableOpenAddressingBase<K, V> {
+public class HashTableDoubleHashing<K extends SecondaryHash, V>
+    extends HashTableOpenAddressingBase<K, V> {
 
   private int hash;
 
@@ -39,16 +39,14 @@ public class HashTableDoubleHashing <K extends SecondaryHash, V> extends HashTab
   protected int probe(int x) {
     return x * hash;
   }
-  
+
   // Adjust the capacity until it is a prime number. The reason for
-  // doing this is to help ensure that the GCD(hash, capacity) = 1 when 
+  // doing this is to help ensure that the GCD(hash, capacity) = 1 when
   // probing so that all the cells can be reached.
   @Override
   protected void adjustCapacity() {
-    while(!(new BigInteger(String.valueOf(capacity)).isProbablePrime(20))) {
+    while (!(new BigInteger(String.valueOf(capacity)).isProbablePrime(20))) {
       capacity++;
     }
   }
-
 }
-

@@ -1,7 +1,7 @@
 package javatests.com.williamfiset.datastructures.stack;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.williamfiset.datastructures.stack.Stack;
 import org.junit.Before;
@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class StackTest {
 
-  Stack <Integer> stack;
+  Stack<Integer> stack;
 
   @Before
   public void setup() {
@@ -21,37 +21,37 @@ public class StackTest {
     assertTrue(stack.isEmpty());
     assertEquals(stack.size(), 0);
   }
-  
-  @Test(expected=Exception.class)
+
+  @Test(expected = Exception.class)
   public void testPopOnEmpty() {
-    stack.pop(); 
+    stack.pop();
   }
-  
-  @Test(expected=Exception.class)
+
+  @Test(expected = Exception.class)
   public void testPeekOnEmpty() {
-    stack.peek(); 
+    stack.peek();
   }
- 
+
   @Test
   public void testPush() {
     stack.push(2);
     assertEquals(stack.size(), 1);
   }
-  
+
   @Test
   public void testPeek() {
     stack.push(2);
     assertTrue(stack.peek() == 2);
     assertEquals(stack.size(), 1);
   }
-  
+
   @Test
   public void testPop() {
     stack.push(2);
     assertTrue(stack.pop() == 2);
     assertEquals(stack.size(), 0);
   }
-  
+
   @Test
   public void testExhaustively() {
     assertTrue(stack.isEmpty());
@@ -69,6 +69,4 @@ public class StackTest {
     assertEquals(stack.size(), 0);
     assertTrue(stack.isEmpty());
   }
-
 }
-

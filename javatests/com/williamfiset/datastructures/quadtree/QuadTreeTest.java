@@ -4,9 +4,9 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.*;
 
 import com.williamfiset.datastructures.quadtree.QuadTree;
+import java.util.*;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.*;
 
 public class QuadTreeTest {
 
@@ -20,17 +20,17 @@ public class QuadTreeTest {
   @Test
   public void testRectIntersection() {
 
-    QuadTree.Rect r1 = new QuadTree.Rect(0,0, 5,5);
+    QuadTree.Rect r1 = new QuadTree.Rect(0, 0, 5, 5);
 
-    QuadTree.Rect r1Center   = new QuadTree.Rect(1,1, 4,4);
-    QuadTree.Rect r1NWCorner = new QuadTree.Rect(-1,5, 0,6);
-    QuadTree.Rect r1SWCorner = new QuadTree.Rect(-1,-1, 0,0);
-    QuadTree.Rect r1SECorner = new QuadTree.Rect(5,-1, 6,0);
-    QuadTree.Rect r1NECorner = new QuadTree.Rect(5,5, 6,6);
-    QuadTree.Rect r1Above = new QuadTree.Rect(2,6, 3,8);
-    QuadTree.Rect r1Below = new QuadTree.Rect(2,-5, 5,-1);
-    QuadTree.Rect r1Left  = new QuadTree.Rect(-5,-4, -1,8);
-    QuadTree.Rect r1Right = new QuadTree.Rect(6,-3, 7,8);
+    QuadTree.Rect r1Center = new QuadTree.Rect(1, 1, 4, 4);
+    QuadTree.Rect r1NWCorner = new QuadTree.Rect(-1, 5, 0, 6);
+    QuadTree.Rect r1SWCorner = new QuadTree.Rect(-1, -1, 0, 0);
+    QuadTree.Rect r1SECorner = new QuadTree.Rect(5, -1, 6, 0);
+    QuadTree.Rect r1NECorner = new QuadTree.Rect(5, 5, 6, 6);
+    QuadTree.Rect r1Above = new QuadTree.Rect(2, 6, 3, 8);
+    QuadTree.Rect r1Below = new QuadTree.Rect(2, -5, 5, -1);
+    QuadTree.Rect r1Left = new QuadTree.Rect(-5, -4, -1, 8);
+    QuadTree.Rect r1Right = new QuadTree.Rect(6, -3, 7, 8);
 
     assertThat(r1.intersects(r1)).isTrue();
 
@@ -60,23 +60,22 @@ public class QuadTreeTest {
 
     assertThat(r1.intersects(r1Right)).isFalse();
     assertThat(r1Right.intersects(r1)).isFalse();
-
   }
 
   @Test
   public void testRectContainment() {
 
-    QuadTree.Rect r1 = new QuadTree.Rect(0,0, 5,5);
+    QuadTree.Rect r1 = new QuadTree.Rect(0, 0, 5, 5);
 
-    QuadTree.Rect r1Center   = new QuadTree.Rect(1,1, 4,4);
-    QuadTree.Rect r1NWCorner = new QuadTree.Rect(-1,5, 0,6);
-    QuadTree.Rect r1SWCorner = new QuadTree.Rect(-1,-1, 0,0);
-    QuadTree.Rect r1SECorner = new QuadTree.Rect(5,-1, 6,0);
-    QuadTree.Rect r1NECorner = new QuadTree.Rect(5,5, 6,6);
-    QuadTree.Rect r1Above = new QuadTree.Rect(2,6, 3,8);
-    QuadTree.Rect r1Below = new QuadTree.Rect(2,-5, 5,-1);
-    QuadTree.Rect r1Left  = new QuadTree.Rect(-5,-4, -1,8);
-    QuadTree.Rect r1Right = new QuadTree.Rect(6,-3, 7,8);
+    QuadTree.Rect r1Center = new QuadTree.Rect(1, 1, 4, 4);
+    QuadTree.Rect r1NWCorner = new QuadTree.Rect(-1, 5, 0, 6);
+    QuadTree.Rect r1SWCorner = new QuadTree.Rect(-1, -1, 0, 0);
+    QuadTree.Rect r1SECorner = new QuadTree.Rect(5, -1, 6, 0);
+    QuadTree.Rect r1NECorner = new QuadTree.Rect(5, 5, 6, 6);
+    QuadTree.Rect r1Above = new QuadTree.Rect(2, 6, 3, 8);
+    QuadTree.Rect r1Below = new QuadTree.Rect(2, -5, 5, -1);
+    QuadTree.Rect r1Left = new QuadTree.Rect(-5, -4, -1, 8);
+    QuadTree.Rect r1Right = new QuadTree.Rect(6, -3, 7, 8);
 
     assertThat(r1.contains(r1)).isTrue();
 
@@ -106,19 +105,18 @@ public class QuadTreeTest {
 
     assertThat(r1.contains(r1Right)).isFalse();
     assertThat(r1Right.contains(r1)).isFalse();
-
   }
 
   @Test
   public void testPointContainment() {
 
-    QuadTree.Rect r1 = new QuadTree.Rect(0,0, 5,5);
+    QuadTree.Rect r1 = new QuadTree.Rect(0, 0, 5, 5);
 
     // Corner check
-    assertThat(r1.contains(0,0)).isTrue();
-    assertThat(r1.contains(0,5)).isTrue();
-    assertThat(r1.contains(5,0)).isTrue();
-    assertThat(r1.contains(5,5)).isTrue();
+    assertThat(r1.contains(0, 0)).isTrue();
+    assertThat(r1.contains(0, 5)).isTrue();
+    assertThat(r1.contains(5, 0)).isTrue();
+    assertThat(r1.contains(5, 5)).isTrue();
 
     // Side check
     assertThat(r1.contains(0, 1)).isTrue();
@@ -157,7 +155,6 @@ public class QuadTreeTest {
     assertThat(r1.contains(3, 6)).isFalse();
     assertThat(r1.contains(3, -6)).isFalse();
     assertThat(r1.contains(-3, 6)).isFalse();
-
   }
 
   @Test
@@ -168,36 +165,32 @@ public class QuadTreeTest {
     QuadTree quadTree = new QuadTree(region);
 
     // Add points on a diagonal
-    for (int i = 0; i <= SZ; i++)
-      quadTree.add(i, i);
+    for (int i = 0; i <= SZ; i++) quadTree.add(i, i);
 
     // Query entire region there should be 101 points
     assertThat(quadTree.count(region)).isEqualTo(101);
-
   }
 
   public int bruteForceCount(int[][] grid, int x1, int y1, int x2, int y2) {
     int sum = 0;
-    for (int i = y1; i <= y2; i++)
-      for (int j = x1; j <= x2; j++)
-        sum += grid[i][j];
+    for (int i = y1; i <= y2; i++) for (int j = x1; j <= x2; j++) sum += grid[i][j];
     return sum;
   }
 
   @Test
   public void randomizedQueryTests() {
 
-    for (int test = 0; test < LOOPS; test++ ) {
-      
+    for (int test = 0; test < LOOPS; test++) {
+
       int W = 1 + (int) (Math.random() * MAX_RAND_NUM);
       int H = 1 + (int) (Math.random() * MAX_RAND_NUM);
 
-      QuadTree quadTree = new QuadTree(new QuadTree.Rect(0,0,W,H));
-      int[][] grid = new int[H+1][W+1];
+      QuadTree quadTree = new QuadTree(new QuadTree.Rect(0, 0, W, H));
+      int[][] grid = new int[H + 1][W + 1];
 
       for (int i = 0; i < TEST_SZ; i++) {
-        int x = (int)(Math.random() * (W+1) );
-        int y = (int)(Math.random() * (H+1) );
+        int x = (int) (Math.random() * (W + 1));
+        int y = (int) (Math.random() * (H + 1));
         assertThat(quadTree.add(x, y)).isTrue();
         grid[y][x]++;
         // System.out.printf("(%d, %d)\n",x,y);
@@ -205,33 +198,31 @@ public class QuadTreeTest {
 
       // for (int i = H; i >= 0; i--) System.out.println(Arrays.toString(grid[i]));
 
-      for (int i = 0; i < TEST_SZ;) {
+      for (int i = 0; i < TEST_SZ; ) {
 
-        int x1 = (int)(Math.random() * (W) );
-        int y1 = (int)(Math.random() * (H) );
-        int x2 = x1 + (int)(Math.random() * (W-x1) );
-        int y2 = y1 + (int)(Math.random() * (H-y1) );
+        int x1 = (int) (Math.random() * (W));
+        int y1 = (int) (Math.random() * (H));
+        int x2 = x1 + (int) (Math.random() * (W - x1));
+        int y2 = y1 + (int) (Math.random() * (H - y1));
 
         // Make sure region is valid
         if (x1 <= x2 && y1 <= y2) {
-          
+
           // System.out.printf("(%d, %d) (%d %d)\n", x1,y1,x2,y2);
 
-          QuadTree.Rect region = new QuadTree.Rect(x1,y1,x2,y2);
-          int expectedPts = bruteForceCount(grid,x1,y1,x2,y2);
+          QuadTree.Rect region = new QuadTree.Rect(x1, y1, x2, y2);
+          int expectedPts = bruteForceCount(grid, x1, y1, x2, y2);
           int quadTreeCount = quadTree.count(region);
           // System.out.printf("EXPECTED: %d, GOT: %d\n", expectedPts, quadTreeCount);
           assertThat(quadTreeCount).isEqualTo(expectedPts);
 
           // Increment because we have a valid region
           i++;
-
         }
-      }      
+      }
     }
-
   }
-  
+
   /*
   @Test
   public void testKNN1() {
@@ -280,17 +271,4 @@ public class QuadTreeTest {
   }
   */
 
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

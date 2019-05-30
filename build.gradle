@@ -14,6 +14,9 @@ dependencies {
   // JUnit framework
   testCompile 'junit:junit:4.+'
   compile 'junit:junit:4.+'
+  //JUnit 5 / Jupiter
+  testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+  testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
    
   // Test mocking framework
   testCompile "org.mockito:mockito-core:1.+"
@@ -32,7 +35,10 @@ dependencies {
 test {
   dependsOn cleanTest
   testLogging.showStandardStreams = true
+  //useJUnitPlatform()
+
 }
+
 
 String javaPackage = "com/williamfiset/datastructures";
 String javatestsPackage = "javatests/com/williamfiset/datastructures";

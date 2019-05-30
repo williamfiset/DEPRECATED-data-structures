@@ -11,6 +11,7 @@ Data structures are amongst the most fundamental ingredients in the recipe for e
     * [Avl Tree (recursive, mildly optimized)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/balancedtree/AVLTreeRecursiveOptimized.java)
     * [Red Black Tree(recursive)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/balancedtree/RedBlackTree.java)
 * [:movie_camera:](https://www.youtube.com/watch?v=JfSdGQdAzq8)[Binary Search Tree](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/binarysearchtree/BinarySearchTree.java)
+* [Splay Tree](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/binarysearchtree/SplayTree.java)
 * [Bloom Filter](https://github.com/williamfiset/data-structures/tree/master/com/williamfiset/datastructures/bloomfilter)
 * [:movie_camera:](https://www.youtube.com/watch?v=PEnFFiQe1pM)[Dynamic Array](https://github.com/williamfiset/data-structures/tree/master/com/williamfiset/datastructures/dynamicarray)
     * [Dynamic array (integer only, fast)](https://github.com/williamfiset/data-structures/blob/master/com/williamfiset/datastructures/dynamicarray/IntArray.java)

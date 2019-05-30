@@ -70,7 +70,8 @@ The procedure to add a new data structure named **Foo** is the following:
 3) Add tests for Foo in **javatests/com/williamfiset/datastrutures/Foo/FooTest.java**
 4) Edit the **build.gradle** file and add Foo to the project.
 5) Add tests for your data structure :kissing_heart:
-6) Send pull request for review :open_mouth:
+6) Run 'gradle goJF' to format your Java code.
+7) Send pull request for review :open_mouth:
 
 ### Testing
 

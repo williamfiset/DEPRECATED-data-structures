@@ -5,82 +5,79 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Standard Splay Tree Implementation,supports generic data(must implement Comparable)
+ * Standard Splay Tree Implementation, supports generic data(must implement Comparable)
+ *
+ * <p>The Basic Concept of SplayTree is to keep frequently used nodes close to the root of the tree
+ * It performs basic operations such as insertion,search,delete,findMin,findMax in O(log n)
+ * amortized time Having frequently-used nodes near to the root can be useful in implementing many
+ * algorithms. e.g: Implementing caches, garbage collection algorithms etc Primary disadvantage of
+ * the splay tree can be the fact that its height can go linear. This causes the worst case running
+ * times to go O(n) However, the amortized costs of this worst case situation is logarithmic, O(log
+ * n)
  *
  * @author Ashiqur Rahman,https://github.com/ashiqursuperfly
  */
-
-/*The Basic Concept of SplayTree is to keep frequently used nodes close to the root of the tree
- *  It performs basic operations such as insertion,search,delete,findMin,findMax in O(log n) amortized time
- *  Having frequently-used nodes near to the root can be useful in implementing many algorithms.
- *  e.g: Implementing caches,garbage collection algorithms etc
- *  Primary disadvantage of the splay tree can be the fact that its height can go linear.
- *  This causes the worst case running times to go O(n)
- *  However, the amortized costs of this worst case situation is logarithmic, O(log n)
- *  */
-
-class BinaryTree<T extends Comparable<T>> implements TreePrinter.PrintableNode {
-
-  private BinaryTree<T> leftChild, rightChild;
-  private T data;
-
-  public BinaryTree(T data) {
-    if (data == null) {
-      try {
-        throw new Exception("Null data not allowed into tree");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    } else this.data = data;
-  }
-
-  @Override
-  public BinaryTree<T> getLeft() {
-    return leftChild;
-  }
-
-  public void setLeft(BinaryTree<T> leftChild) {
-    this.leftChild = leftChild;
-  }
-
-  @Override
-  public BinaryTree<T> getRight() {
-    return rightChild;
-  }
-
-  public void setRight(BinaryTree<T> rightChild) {
-    this.rightChild = rightChild;
-  }
-
-  @Override
-  public String getText() {
-    return data.toString();
-  }
-
-  public T getData() {
-    return data;
-  }
-
-  public void setData(T data) {
-    if (data == null) {
-      try {
-        throw new Exception("Null data not allowed into tree");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    } else this.data = data;
-  }
-
-  @Override
-  public String toString() {
-
-    return TreePrinter.getTreeDisplay(this);
-  }
-}
-
 public class SplayTree<T extends Comparable<T>> {
 
   private BinaryTree<T> root;
+
+  public static class BinaryTree<T extends Comparable<T>> implements TreePrinter.PrintableNode {
+    private T data;
+    private BinaryTree<T> leftChild, rightChild;
+
+    public BinaryTree(T data) {
+      if (data == null) {
+        try {
+          throw new Exception("Null data not allowed into tree");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      } else this.data = data;
+    }
+
+    @Override
+    public BinaryTree<T> getLeft() {
+      return leftChild;
+    }
+
+    public void setLeft(BinaryTree<T> leftChild) {
+      this.leftChild = leftChild;
+    }
+
+    @Override
+    public BinaryTree<T> getRight() {
+      return rightChild;
+    }
+
+    public void setRight(BinaryTree<T> rightChild) {
+      this.rightChild = rightChild;
+    }
+
+    @Override
+    public String getText() {
+      return data.toString();
+    }
+
+    public T getData() {
+      return data;
+    }
+
+    public void setData(T data) {
+      if (data == null) {
+        try {
+          throw new Exception("Null data not allowed into tree");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      } else this.data = data;
+    }
+
+    @Override
+    public String toString() {
+
+      return TreePrinter.getTreeDisplay(this);
+    }
+  }
 
   /** Public Methods * */
   public SplayTree() {
@@ -104,7 +101,7 @@ public class SplayTree<T extends Comparable<T>> {
     return this.root.getData().compareTo(node) == 0 ? this.root : null;
   }
 
-  /** Inserts a node into the tree and splays it on top,returns the new root* */
+  /** Inserts a node into the tree and splays it on top, returns the new root* */
   public BinaryTree<T> insert(T node) {
     if (root == null) {
       root = new BinaryTree<>(node);

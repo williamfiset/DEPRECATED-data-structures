@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.williamfiset.datastructures.binarysearchtree.SplayTree;
+import com.williamfiset.datastructures.utils.TestUtils;
 import java.util.*;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +12,7 @@ class SplayTreeTest {
   @Test
   void getRoot() {
     SplayTree<Integer> splayTree = new SplayTree<>();
-    List<Integer> data =
-        com.williamfiset.datastructures.utils.TestUtils.randomIntegerList(100, MIN, MAX);
+    List<Integer> data = TestUtils.randomIntegerList(100, MIN, MAX);
     for (int i : data) {
       splayTree.insert(i);
       assertEquals(i, splayTree.getRoot().getData());
@@ -22,7 +23,7 @@ class SplayTreeTest {
   void splayInsertDeleteSearch() {
     SplayTree<Integer> splayTree = new SplayTree<>();
     List<Integer> data =
-        com.williamfiset.datastructures.utils.TestUtils.randomUniformUniqueIntegerList(
+        TestUtils.randomUniformUniqueIntegerList(
             100); // Note : we dont want duplicate values here to test "search" after "delete"
     // should assertNull
     for (int i : data) {
@@ -41,8 +42,7 @@ class SplayTreeTest {
   @Test
   void insertSearch() {
     SplayTree<Integer> splayTree = new SplayTree<>();
-    List<Integer> data =
-        com.williamfiset.datastructures.utils.TestUtils.randomIntegerList(100, MIN, MAX);
+    List<Integer> data = TestUtils.randomIntegerList(100, MIN, MAX);
     for (int i : data) {
       splayTree.insert(i);
       assertEquals(i, splayTree.getRoot().getData());
@@ -52,7 +52,7 @@ class SplayTreeTest {
   @Test
   void findMax() {
     SplayTree<Integer> splayTree = new SplayTree<>();
-    List<Integer> data = com.williamfiset.datastructures.utils.TestUtils.sortedIntegerList(-50, 50);
+    List<Integer> data = TestUtils.sortedIntegerList(-50, 50);
     for (int i : data) {
       splayTree.insert(i);
       assertEquals(i, splayTree.findMax(splayTree.getRoot()));
@@ -63,8 +63,7 @@ class SplayTreeTest {
   @Test
   void splayTreePriorityQueueConsistencyTest() {
     SplayTree<Integer> splayTree = new SplayTree<>();
-    List<Integer> data =
-        com.williamfiset.datastructures.utils.TestUtils.randomUniformUniqueIntegerList(100);
+    List<Integer> data = TestUtils.randomUniformUniqueIntegerList(100);
     Queue<Integer> pq = new PriorityQueue<>(100, Collections.reverseOrder());
 
     // insertion

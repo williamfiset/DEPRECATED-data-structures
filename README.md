@@ -51,7 +51,7 @@ Data structures are amongst the most fundamental ingredients in the recipe for e
 
 # Contributing
 
-This repository is contribution friendly :smiley:. If you're a data structures enthusiast (like me!) and want to add or improve a data structure your contribution is welcome! Please be sure to checkout the [Wiki](https://github.com/williamfiset/datastructures/wiki) for instructions.
+This repository is contribution friendly :smiley:. If you're a data structures enthusiast (like me!) and want to add or improve a data structure your contribution is welcome! Please be sure to checkout the [Wiki](https://github.com/williamfiset/data-structures/wiki) for instructions.
 
 # License
 

@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: "com.github.sherter.google-java-format"
 
+
+// https://github.com/sherter/google-java-format-gradle-plugin
 buildscript {
   repositories {
     maven {
@@ -41,9 +43,6 @@ dependencies {
 
   // Apache commons lang
   compile 'org.apache.commons:commons-lang3:3.6'
-
-  // Google java formatter to format source code.
-  compile 'com.google.googlejavaformat:google-java-format:1.7'
 }
 
 // Tests display stdout and stderr

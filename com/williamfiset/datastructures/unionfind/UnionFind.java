@@ -36,6 +36,7 @@ public class UnionFind {
 
   // Find which component/set 'p' belongs to, takes amortized constant time.
   public int find(int p) {
+    int ogP = p; //original p
 
     // Find the root of the component/set
     int root = p;
@@ -47,6 +48,7 @@ public class UnionFind {
     while (p != root) {
       int next = id[p];
       id[p] = root;
+      if(p!=ogP) sz[p] = 1; //because you're compressing paths for nodes on the way back, these all become size 1
       p = next;
     }
 

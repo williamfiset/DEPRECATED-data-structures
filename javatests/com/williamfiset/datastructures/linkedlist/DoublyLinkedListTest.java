@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.*;
 
-public class LinkedListTest {
+public class DoublyLinkedListTest {
 
   static final int LOOPS = 10000;
   static final int TEST_SZ = 40;
@@ -303,6 +303,13 @@ public class LinkedListTest {
         while (iter1.hasNext()) assertEquals(iter1.next(), iter2.next());
       }
     }
+  }
+
+  @Test
+  public void testContains() {
+    list.add(1);
+    assertTrue(list.contains(1));
+    assertFalse(list.contains(2));
   }
 
   // Generate a list of random numbers

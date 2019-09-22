@@ -305,13 +305,6 @@ public class DoublyLinkedListTest {
     }
   }
 
-  @Test
-  public void testContains() {
-    list.add(1);
-    assertTrue(list.contains(1));
-    assertFalse(list.contains(2));
-  }
-
   // Generate a list of random numbers
   static List<Integer> genRandList(int sz) {
     List<Integer> lst = new ArrayList<>(sz);

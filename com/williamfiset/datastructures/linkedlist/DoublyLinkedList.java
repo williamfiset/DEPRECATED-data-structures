@@ -3,7 +3,7 @@
  *
  * @author William Fiset, william.alexandre.fiset@gmail.com
  */
-package com.williamfiset.algorithms.datastructures.linkedlist;
+package com.williamfiset.datastructures.linkedlist;
 
 public class DoublyLinkedList<T> implements Iterable<T> {
   private int size = 0;

@@ -47,7 +47,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
   // Is this linked list empty?
   public boolean isEmpty() {
-    return size() == 0;
+    return size()==0;
   }
 
   // Add an element to the tail of the linked list, O(1)
@@ -135,8 +135,14 @@ public class DoublyLinkedList<T> implements Iterable<T> {
   private T remove(Node<T> node) {
     // If the node to remove is somewhere either at the
     // head or the tail handle those independently
-    if (node.prev == null) return removeFirst();
-    if (node.next == null) return removeLast();
+    if (node.prev == null) 
+    {
+      return removeFirst();
+    }
+    if (node.next == null)
+    {
+      return removeLast();
+    }
 
     // Make the pointers of adjacent nodes skip over 'node'
     node.next.prev = node.prev;

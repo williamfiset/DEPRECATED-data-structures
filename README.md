@@ -1,6 +1,6 @@
 # Project status
 
-This data-structures repository was moved to [https://github.com/williamfiset/Algorithms](https://github.com/williamfiset/Algorithms)
+This data-structures repository was moved to [https://github.com/williamfiset/Algorithms](https://github.com/williamfiset/Algorithms) in mid 2019.
 
 # License
 

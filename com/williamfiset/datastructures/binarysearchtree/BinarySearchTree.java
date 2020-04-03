@@ -116,7 +116,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
         Node rightChild = node.right;
 
         node.data = null;
-        node = null;
 
         return rightChild;
 
@@ -128,7 +127,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
         Node leftChild = node.left;
 
         node.data = null;
-        node = null;
 
         return leftChild;
 

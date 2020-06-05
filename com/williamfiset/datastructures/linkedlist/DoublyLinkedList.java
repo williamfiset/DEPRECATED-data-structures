@@ -260,10 +260,11 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     StringBuilder sb = new StringBuilder();
     sb.append("[ ");
     Node<T> trav = head;
-    while (trav != null) {
+    while (trav.next != null) {
       sb.append(trav.data + ", ");
       trav = trav.next;
     }
+    sb.append(tail.data);
     sb.append(" ]");
     return sb.toString();
   }

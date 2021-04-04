@@ -44,7 +44,7 @@ public class UnionFind {
     // Compress the path leading back to the root.
     // Doing this operation is called "path compression"
     // and is what gives us amortized time complexity.
-    while (p != root) {
+    while (id[p] != root) {
       int next = id[p];
       id[p] = root;
       p = next;

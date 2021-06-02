@@ -4,7 +4,7 @@
 
 ### Project status
 
-This data-structures repository is deprecated. It was moved to [https://github.com/williamfiset/Algorithms](https://github.com/williamfiset/Algorithms) in mid 2019. This repository is not longer being actively maintained or watched. Please submit pull requests to the [Algorithms](https://github.com/williamfiset/Algorithms) repo.
+This data-structures repository is deprecated. It is no longer being actively maintained or watched. The data structures in this repository were moved to the [Algorithms](https://github.com/williamfiset/Algorithms) repo in mid 2019. Please submit pull requests and issues to the [Algorithms](https://github.com/williamfiset/Algorithms) repo. 
 
 ### License
 

@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.*;
 
-public class LinkedListTest {
+public class DoublyLinkedListTest {
 
   static final int LOOPS = 10000;
   static final int TEST_SZ = 40;
